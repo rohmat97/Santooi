@@ -19,7 +19,21 @@ const images = {
   chevronRight: require('../Images/Icons/chevron-right.png'),
   hamburger: require('../Images/Icons/hamburger.png'),
   backButton: require('../Images/Icons/back-button.png'),
-  closeButton: require('../Images/Icons/close-button.png')
+  closeButton: require('../Images/Icons/close-button.png'),
+  iconHome: require('../Images/Icons/HomeIcon.png'),
+  iconAccount: require('../Images/Icons/IconAccount.png'),
+  iconJournal: require('../Images/Icons/IconJournal.png'),
+  backgroundAuth: require('../Images/BackgroundAuth.png'),
+  backgroundMain: require('../Images/BackgroundMain.png'),
+  coverMain: require('../Images/CoverMain.png'),
+  berhitung: require('../Images/ItemHome/Berhitung.png'),
+  curhat: require('../Images/ItemHome/Curhat.png'),
+  fotofavorit: require('../Images/ItemHome/FotoFavorit.png'),
+  jalanyuk: require('../Images/ItemHome/JalanYuk.png'),
+  kalimatbijak: require('../Images/ItemHome/KalimatBijak.png'),
+  koneseling: require('../Images/ItemHome/Konseling.png'),
+  mediasi: require('../Images/ItemHome/Mediasi.png'),
+  iconNotification: require('../Images/Icons/IconNotification.png'),
 }
 
 export default images
