@@ -2,14 +2,25 @@ import React from 'react'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { FirstLoginScreen } from '../Containers/Auth/FirstLoginScreen';
+import { LoginScreen } from '../Containers/Auth/LoginScreen';
+import { YourName } from '../Containers/Auth/YourName';
+import { Welcome } from '../Containers/Auth/Welcome';
+import { PhoneNumber } from '../Containers/Auth/PhoneNumber';
 import LaunchScreen from '../Containers/LaunchScreen'
 import MainScreen from '../Containers/Main/MainScreen'
 
 import styles from './Styles/NavigationStyles'
+import { DateBirth } from '../Containers/Auth/DateBirth';
 
 // Manifest of possible screens
 const AuthNavigator = createStackNavigator({
-  LaunchScreen: { screen: LaunchScreen }
+  LaunchScreen: { screen: FirstLoginScreen },
+  LoginScreen: { screen: LoginScreen },
+  YourNameScreen: { screen:YourName },
+  WelcomeScreen: { screen:Welcome },
+  DateBirthScreen: { screen:DateBirth },
+  PhoneNumberScreen: { screen:PhoneNumber }
 }, {
   // Default config for all screens
   headerMode: 'none',
@@ -22,7 +33,7 @@ const AuthNavigator = createStackNavigator({
 const MainNavigator = createSwitchNavigator({
   LaunchScreen: { screen: LaunchScreen },
   MainScreen: { screen: MainScreen }
-},{
+}, {
   // Default config for all screens
   headerMode: 'none',
   initialRouteName: 'MainScreen',
@@ -33,7 +44,7 @@ const MainNavigator = createSwitchNavigator({
 
 const HomeNavigator = createSwitchNavigator({
   LaunchScreen: { screen: LaunchScreen }
-},{
+}, {
   // Default config for all screens
   headerMode: 'none',
   initialRouteName: 'LaunchScreen',
@@ -44,7 +55,7 @@ const HomeNavigator = createSwitchNavigator({
 
 const JurnalNavigator = createSwitchNavigator({
   LaunchScreen: { screen: LaunchScreen }
-},{
+}, {
   // Default config for all screens
   headerMode: 'none',
   initialRouteName: 'LaunchScreen',
@@ -55,7 +66,7 @@ const JurnalNavigator = createSwitchNavigator({
 
 const AccountNavigator = createSwitchNavigator({
   LaunchScreen: { screen: LaunchScreen }
-},{
+}, {
   // Default config for all screens
   headerMode: 'none',
   initialRouteName: 'LaunchScreen',
@@ -66,7 +77,7 @@ const AccountNavigator = createSwitchNavigator({
 
 const KonselingNavigator = createStackNavigator({
   LaunchScreen: { screen: LaunchScreen }
-},{
+}, {
   // Default config for all screens
   headerMode: 'none',
   initialRouteName: 'LaunchScreen',
@@ -75,9 +86,9 @@ const KonselingNavigator = createStackNavigator({
   }
 })
 
-const CusrhatNavigator = createBottomTabNavigator({
+const CurhatNavigator = createBottomTabNavigator({
   LaunchScreen: { screen: LaunchScreen }
-},{
+}, {
   // Default config for all screens
   headerMode: 'none',
   initialRouteName: 'LaunchScreen',
@@ -91,4 +102,4 @@ const CusrhatNavigator = createBottomTabNavigator({
 //   Auth: AuthNavigator,
 //   Main: MainNavigator,
 // })
-export default createAppContainer(MainNavigator)
+export default createAppContainer(AuthNavigator)

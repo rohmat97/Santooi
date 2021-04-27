@@ -1,5 +1,7 @@
 import { StyleSheet } from 'react-native'
 import { Metrics, ApplicationStyles } from '../../Themes/'
+import { Screen } from '../../Transforms/Screen'
+import { Colors } from '../../Themes'
 
 export default StyleSheet.create({
   ...ApplicationStyles.screen,
@@ -14,5 +16,51 @@ export default StyleSheet.create({
   },
   centered: {
     alignItems: 'center'
+  },
+  textbox: {
+    marginVertical: 8
+  },
+  textInput: {
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+    backgroundColor: '#662D91',
+    borderColor: Colors.transparent, 
+  },
+  textInputNoHeader: {
+    borderWidth: 1, 
+    height: Screen.height * 0.15, 
+    width: Screen.width * 0.9, 
+    marginBottom: Screen.height * 0.05, 
+    borderRadius: 20, 
+    textAlign: 'center', 
+    backgroundColor: '#67308F', 
+    borderColor: Colors.transparent, 
+    opacity: 0.85,
+    color:'white'
+  },
+  containerTextbox : {
+    borderWidth: 1, 
+    height: Screen.height * 0.17, 
+    width: Screen.width * 0.9, 
+    marginBottom: Screen.height * 0.05, 
+    borderRadius: 20, 
+    textAlign: 'center', 
+    backgroundColor: '#67308F', 
+    borderColor: Colors.transparent, 
+    opacity: 0.85,
+    color:'white',
+    padding:15
+  }, 
+  textBorder: {
+    borderColor:'white',
+    alignItems:'center',
+    // padding:10,
+    flexDirection:'row', 
+    borderWidth:1, 
+    borderRadius:10, 
+    width:'100%', 
+    marginTop:10
   }
 })
