@@ -34,6 +34,7 @@ const images = {
   koneseling: require('../Images/ItemHome/Konseling.png'),
   mediasi: require('../Images/ItemHome/Mediasi.png'),
   iconNotification: require('../Images/Icons/IconNotification.png'),
+  iconNext: require('../Images/Icons/IconNext.png'),
 }
 
 export default images

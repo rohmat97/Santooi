@@ -12,8 +12,15 @@ import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'
 import { Colors } from '../../Themes'
 import images from '../../Themes/Images';
+import { OverlayHomepage } from '../../Components/OverlayHomepage';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 function MainScreen (props) {
+  const [visible, setVisible] = useState(false);
+
+  const toggleOverlay = () => {
+    setVisible(!visible);
+  };
     return (
       <TempateBackground>
         <View style={styles.mainContainer}>
@@ -51,11 +58,12 @@ function MainScreen (props) {
                   <Text>Hi, Mario!</Text>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'space-around'}}>
-                  <TextInput 
-                    placeholder="Bagaimana Perasaanmu Hari ini"
-                    
-                    style={{borderWidth:1, height:Screen.height*0.15, width:Screen.width*0.9, marginBottom:Screen.height*0.1, borderRadius:20, textAlign:'center', backgroundColor:'white',borderColor:Colors.transparent}}
-                    />
+                  <TouchableOpacity onPress={toggleOverlay}>
+                    <View
+                      style={{borderWidth:1, height:Screen.height*0.15, width:Screen.width*0.9, marginBottom:Screen.height*0.1, borderRadius:20, alignItems:'center',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
+                      <Text>Bagaimana Perasaanmu Hari ini</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
                 <View style={{backgroundColor:'#67308F',width:Screen.width*0.35, alignItems:'center', borderRadius:100, padding:Screen.width*0.02,marginVertical:-Screen.height*0.025}}>
                   <Text style={{color:'white'}}>Kendalikan Yuk!</Text>
@@ -69,6 +77,7 @@ function MainScreen (props) {
             </ScrollView>
                 <CustomBottomTab />
         </View>
+        <OverlayHomepage visible ={visible} toggleOverlay={toggleOverlay}/>
       </TempateBackground>
     )
 }
