@@ -40,6 +40,8 @@ const images = {
   apple: require('../Images/Icons/apple.png'),
   arrowRight: require('../Images/Icons/arrow-right.png'),
   date: require('../Images/Icons/date.png'),
+  eye: require('../Images/Icons/eye.png'),
+  ok: require('../Images/Icons/ok.png'),
 }
 
 export default images

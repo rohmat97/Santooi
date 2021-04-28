@@ -7,9 +7,9 @@ import { TemplateBackground } from '../../Components/TemplateBackground'
 import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'
 import images from '../../Themes/Images';
+import { Colors } from '../../Themes';
 import { PasswordEye } from '../../Components/PasswordEye'
 import RoundedButton from '../../Components/RoundedButton'
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export function LoginScreen(props) {
     const { navigation } = props
@@ -19,13 +19,23 @@ export function LoginScreen(props) {
     const [password, setPassword] = useState('')
     const [errorPassword, setErrorPassword] = useState()
     const [secureTextEntry, setSecureTextEntry] = useState(true)
-
-    const renderPasswordAccessory = (flag) => {
-        return <PasswordEye onPress={onAccessoryPress} flag={flag} />
-    }
+    const [validateEmail, setValidateEmail] = useState(false)
 
     const onAccessoryPress = () => {
         setSecureTextEntry(!secureTextEntry)
+    }
+
+    const validate = (email) => {
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+        if (reg.test(email) === false) {
+            setEmail(email)
+            setValidateEmail(false)
+            return false
+        }
+        else {
+            setEmail(email)
+            setValidateEmail(true)
+        }
     }
 
     return (
@@ -36,47 +46,59 @@ export function LoginScreen(props) {
                         <Image source={images.logoSantui} style={{ width: Screen.width * 0.2, marginBottom: 20 }} resizeMode='contain' />
                     </View>
                     <View style={styles.textbox}>
-                        <TextInput
-                            label="Email atau Nomor Telepon"
-                            value={email}
-                            onChangeText={email => setEmail(email)}
-                            placeholder="Your Email"
-                            inputRef={(ref) => (this.email = ref)}
-                            keyboardType="email-address"
-                            autoCapitalize="none"
-                            error={errorEmail}
-                            returnKeyType="next"
-                            onSubmitEditing={() => {
-                                this.password.focus()
-                            }}
-                            style={styles.textInput}
-                            theme={{
-                                colors: {
-                                    primary: 'white',
-                                    placeholder: 'white',
-                                }
-                            }}
-                        />
+                        <View style={{ flex: 1 }}>
+                            <TextInput
+                                label="Email atau Nomor Telepon"
+                                value={email}
+                                onChangeText={email => validate(email)}
+                                inputRef={(ref) => (this.email = ref)}
+                                keyboardType="email-address"
+                                autoCapitalize="none"
+                                error={errorEmail}
+                                returnKeyType="next"
+                                onSubmitEditing={() => {
+                                    this.password.focus()
+                                }}
+                                theme={{
+                                    colors: {
+                                        placeholder: 'white',
+                                        text: 'white',
+                                        primary: 'white',
+                                    }
+                                }}
+                                style={styles.textInput}
+                                selectionColor={'#939598'}
+                            />
+                        </View>
+                        {validateEmail &&
+                            <Image source={images.ok} style={{ margin: 10 }} resizeMode='center'></Image>
+                        }
                     </View>
                     <View style={styles.textbox}>
-                        <TextInput
-                            inputRef={(ref) => (this.password = ref)}
-                            label="Kata Sandi"
-                            value={password}
-                            error={errorPassword}
-                            onChangeText={password => setPassword(password)}
-                            placeholder="Password"
-                            secureTextEntry={secureTextEntry}
-                            renderAccessory={() => renderPasswordAccessory(secureTextEntry)}
-                            returnKeyType="done"
-                            style={styles.textInput}
-                            theme={{
-                                colors: {
-                                    primary: 'white',
-                                    placeholder: 'white'
-                                }
-                            }}
-                        />
+                        <View style={{ flex: 1 }}>
+                            <TextInput
+                                inputRef={(ref) => (this.password = ref)}
+                                label="Kata Sandi"
+                                value={password}
+                                error={errorPassword}
+                                onChangeText={password => setPassword(password)}
+                                secureTextEntry={secureTextEntry}
+                                renderAccessory={() => onAccessoryPress(secureTextEntry)}
+                                returnKeyType="done"
+                                style={styles.textInput}
+                                theme={{
+                                    colors: {
+                                        placeholder: 'white',
+                                        text: 'white',
+                                        primary: 'white',
+                                    }
+                                }}
+                                selectionColor={'#939598'}
+                            />
+                        </View>
+                        <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
+                            <Image source={images.eye} style={{ margin: 10 }} resizeMode='center'></Image>
+                        </TouchableOpacity>
                     </View>
                     <View style={{ marginTop: Screen.width * 0.1 }} />
                     <RoundedButton

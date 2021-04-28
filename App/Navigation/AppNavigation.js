@@ -5,22 +5,16 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { FirstLoginScreen } from '../Containers/Auth/FirstLoginScreen';
 import { LoginScreen } from '../Containers/Auth/LoginScreen';
 import { YourName } from '../Containers/Auth/YourName';
-import { Welcome } from '../Containers/Auth/Welcome';
-import { PhoneNumber } from '../Containers/Auth/PhoneNumber';
 import LaunchScreen from '../Containers/LaunchScreen'
 import MainScreen from '../Containers/Main/MainScreen'
 
 import styles from './Styles/NavigationStyles'
-import { DateBirth } from '../Containers/Auth/DateBirth';
 
 // Manifest of possible screens
 const AuthNavigator = createStackNavigator({
   LaunchScreen: { screen: FirstLoginScreen },
   LoginScreen: { screen: LoginScreen },
   YourNameScreen: { screen:YourName },
-  WelcomeScreen: { screen:Welcome },
-  DateBirthScreen: { screen:DateBirth },
-  PhoneNumberScreen: { screen:PhoneNumber }
 }, {
   // Default config for all screens
   headerMode: 'none',
