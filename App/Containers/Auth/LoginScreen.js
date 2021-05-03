@@ -47,28 +47,35 @@ export function LoginScreen(props) {
                     </View>
                     <View style={styles.textbox}>
                         <View style={{ flex: 1 }}>
-                            <TextInput
-                                label="Email atau Nomor Telepon"
-                                value={email}
-                                onChangeText={email => validate(email)}
-                                inputRef={(ref) => (this.email = ref)}
-                                keyboardType="email-address"
-                                autoCapitalize="none"
-                                error={errorEmail}
-                                returnKeyType="next"
-                                onSubmitEditing={() => {
-                                    this.password.focus()
-                                }}
-                                theme={{
-                                    colors: {
-                                        placeholder: 'white',
-                                        text: 'white',
-                                        primary: 'white',
-                                    }
-                                }}
-                                style={styles.textInput}
-                                selectionColor={'#939598'}
-                            />
+                            <View style={{
+                                    borderRadius: 4,
+                                    height: 55,
+                                    marginVertical:12,
+                                    overflow: 'hidden',
+                                }}>
+                                <TextInput
+                                    label="Email atau Nomor Telepon"
+                                    value={email}
+                                    onChangeText={email => validate(email)}
+                                    inputRef={(ref) => (this.email = ref)}
+                                    keyboardType="email-address"
+                                    autoCapitalize="none"
+                                    error={errorEmail}
+                                    returnKeyType="next"
+                                    onSubmitEditing={() => {
+                                        this.password.focus()
+                                    }}
+                                    theme={{
+                                        colors: {
+                                            placeholder: 'white',
+                                            text: 'white',
+                                            primary: 'white',
+                                        }
+                                    }}
+                                    style={styles.textInput}
+                                    selectionColor={'#939598'}
+                                />
+                            </View>
                         </View>
                         {validateEmail &&
                             <Image source={images.ok} style={{ margin: 10 }} resizeMode='center'></Image>
@@ -76,25 +83,32 @@ export function LoginScreen(props) {
                     </View>
                     <View style={styles.textbox}>
                         <View style={{ flex: 1 }}>
-                            <TextInput
-                                inputRef={(ref) => (this.password = ref)}
-                                label="Kata Sandi"
-                                value={password}
-                                error={errorPassword}
-                                onChangeText={password => setPassword(password)}
-                                secureTextEntry={secureTextEntry}
-                                renderAccessory={() => onAccessoryPress(secureTextEntry)}
-                                returnKeyType="done"
-                                style={styles.textInput}
-                                theme={{
-                                    colors: {
-                                        placeholder: 'white',
-                                        text: 'white',
-                                        primary: 'white',
-                                    }
-                                }}
-                                selectionColor={'#939598'}
-                            />
+                            <View style={{
+                                        borderRadius: 4,
+                                        height: 55,
+                                        marginVertical:12,
+                                        overflow: 'hidden',
+                                    }}>
+                                <TextInput
+                                    inputRef={(ref) => (this.password = ref)}
+                                    label="Kata Sandi"
+                                    value={password}
+                                    error={errorPassword}
+                                    onChangeText={password => setPassword(password)}
+                                    secureTextEntry={secureTextEntry}
+                                    renderAccessory={() => onAccessoryPress(secureTextEntry)}
+                                    returnKeyType="done"
+                                    style={styles.textInput}
+                                    theme={{
+                                        colors: {
+                                            placeholder: 'white',
+                                            text: 'white',
+                                            primary: 'white',
+                                        }
+                                    }}
+                                    selectionColor={'#939598'}
+                                />
+                            </View>
                         </View>
                         <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
                             <Image source={images.eye} style={{ margin: 10 }} resizeMode='center'></Image>
