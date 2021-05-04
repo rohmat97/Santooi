@@ -4,7 +4,7 @@ import { Avatar } from "react-native-elements";
 import LinearGradient from 'react-native-linear-gradient';
 import { connect } from 'react-redux'
 import { CustomBottomTab } from '../../Components/CustomButtomTab'
-import { TempateBackground } from '../../Components/TemplateBackground'
+import { TemplateBackground } from '../../Components/TemplateBackground'
 import { ContentHome } from '../../Components/ContentHome'
 
 // Styles
@@ -22,7 +22,7 @@ function MainScreen (props) {
     setVisible(!visible);
   };
     return (
-      <TempateBackground>
+      <TemplateBackground first={true}>
         <View style={styles.mainContainer}>
             <ScrollView>
               <View style={styles.section} >
@@ -78,7 +78,7 @@ function MainScreen (props) {
                 <CustomBottomTab />
         </View>
         <OverlayHomepage visible ={visible} toggleOverlay={toggleOverlay}/>
-      </TempateBackground>
+        </TemplateBackground>
     )
 }
 

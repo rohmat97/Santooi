@@ -24,8 +24,10 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.11.0",
+    "@react-native-community/datetimepicker": "^3.4.7",
     "@react-native-community/masked-view": "^0.1.10",
     "apisauce": "^1.1.1",
+    "datetimepicker": "0.1.39",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "format-json": "^1.0.3",

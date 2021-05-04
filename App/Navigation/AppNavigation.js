@@ -2,6 +2,9 @@ import React from 'react'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { FirstLoginScreen } from '../Containers/Auth/FirstLoginScreen';
+import { LoginScreen } from '../Containers/Auth/LoginScreen';
+import { YourName } from '../Containers/Auth/YourName';
 import LaunchScreen from '../Containers/LaunchScreen'
 import MainScreen from '../Containers/Main/MainScreen'
 
@@ -9,7 +12,9 @@ import styles from './Styles/NavigationStyles'
 
 // Manifest of possible screens
 const AuthNavigator = createStackNavigator({
-  LaunchScreen: { screen: LaunchScreen }
+  LaunchScreen: { screen: FirstLoginScreen },
+  LoginScreen: { screen: LoginScreen },
+  YourNameScreen: { screen: YourName },
 }, {
   // Default config for all screens
   headerMode: 'none',
@@ -21,7 +26,7 @@ const AuthNavigator = createStackNavigator({
 
 const MainNavigator = createStackNavigator({
   MainScreen: { screen: MainScreen }
-},{
+}, {
   // Default config for all screens
   headerMode: 'none',
   navigationOptions: {
