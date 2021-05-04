@@ -30,13 +30,13 @@ const MainNavigator = createStackNavigator({
 })
 
 const PrimaryNav = createSwitchNavigator({
-  LaunchScreen: { screen: LaunchScreen },
+  // LaunchScreen: { screen: LaunchScreen },
   Auth: AuthNavigator,
   Main: MainNavigator,
 },{
   // Default config for all screens
   headerMode: 'none',
-  initialRouteName: 'LaunchScreen',
+  initialRouteName: 'Auth',
   navigationOptions: {
     headerStyle: styles.header
   }
