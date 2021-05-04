@@ -34,6 +34,15 @@ const images = {
   koneseling: require('../Images/ItemHome/Konseling.png'),
   mediasi: require('../Images/ItemHome/Mediasi.png'),
   iconNotification: require('../Images/Icons/IconNotification.png'),
+  iconNext: require('../Images/Icons/IconNext.png'),
+  logoSantui: require('../Images/Icons/LogoSantui.png'),
+  google: require('../Images/Icons/google.png'),
+  fb: require('../Images/Icons/fb.png'),
+  apple: require('../Images/Icons/apple.png'),
+  arrowRight: require('../Images/Icons/arrow-right.png'),
+  date: require('../Images/Icons/date.png'),
+  eye: require('../Images/Icons/eye.png'),
+  ok: require('../Images/Icons/ok.png'),
 }
 
 export default images

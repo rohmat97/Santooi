@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { TouchableOpacity, Text } from 'react-native'
+import { TouchableOpacity, Text, View, Image} from 'react-native'
 import styles from './Styles/RoundedButtonStyles'
 import ExamplesRegistry from '../Services/ExamplesRegistry'
+import { Metrics } from '../Themes'
 
 // Note that this file (App/Components/RoundedButton) needs to be
 // imported in your app somewhere, otherwise your component won't be
@@ -25,15 +26,26 @@ export default class RoundedButton extends Component {
     navigator: PropTypes.object
   }
 
-  getText () {
-    const buttonText = this.props.text || this.props.children || ''
-    return buttonText.toUpperCase()
-  }
+  // getText () {
+  //   const buttonText = this.props.text || this.props.children || ''
+  //   return buttonText.toUpperCase()
+  // }
 
-  render () {
+  render() {
     return (
-      <TouchableOpacity style={styles.button} onPress={this.props.onPress}>
-        <Text style={styles.buttonText}>{this.getText()}</Text>
+      <TouchableOpacity style={{
+        height: 45,
+        borderRadius: 100,
+        marginVertical: Metrics.baseMargin,
+        justifyContent: 'center',
+        backgroundColor: this.props.backgroundColor
+      }} onPress={this.props.onPress}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems:'center' }}>
+          {this.props.image != null &&
+            <Image source={this.props.image} style={{width:this.props.width,height:this.props.height, marginEnd:10}}/>
+          }
+          <Text style={styles.buttonText}>{this.props.text}</Text>
+        </View>
       </TouchableOpacity>
     )
   }
