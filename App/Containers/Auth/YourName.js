@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { View, Image, TextInput, Text, TouchableOpacity } from 'react-native'
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import { RadioButton } from 'react-native-paper'
-import { CalendarList } from 'react-native-calendars'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
@@ -17,13 +17,24 @@ export function YourName(props) {
     const [state, setState] = useState(0)
     const [show, setShow] = useState(false)
     const [greeting, setGreeting] = useState('')
-    const today = new Date();
-    const [dateBirth, setDateBirth] = useState('')
+
+    const d = new Date()
+    const formattedDate = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear()
+    const [date, setDate] = useState(d)
+    const [dateBirth, setDateBirth] = useState(formattedDate)
     const [showCalendar, setShowCalendar] = useState(false)
+    const [phoneNumber, setPhoneNumber] = useState('')
 
     const onNameChange = (name) => {
         setName(name)
         setShow(true)
+    }
+
+    const onPhoneChange = (number) => {
+        setPhoneNumber(number)
+        if (phoneNumber.length >= 8) {
+            setShow(true)
+        }
     }
 
     const onGreetingChange = (value) => {
@@ -31,11 +42,25 @@ export function YourName(props) {
         setShow(true)
     }
 
-    const onDateChange = (day) => {
-        setDateBirth(day)
-        setShowCalendar(!showCalendar)
-        if (dateBirth != '') {
-            setShow(true)
+    const onDateChange = (event, selectedDate) => {
+        if (selectedDate != null) {
+            if (showCalendar) {
+                setShowCalendar(false)
+            }
+
+            const date = selectedDate || dateBirth
+            setDate(date)
+
+            const formattedDate = date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear()
+            setDateBirth(formattedDate)
+
+            if (dateBirth != null) {
+                setShow(true)
+            }
+        } else {
+            if (showCalendar) {
+                setShowCalendar(false)
+            }
         }
     }
 
@@ -92,22 +117,23 @@ export function YourName(props) {
                                     {state == 2 &&
                                         <View >
                                             <Text style={{ color: 'white', fontSize: Fonts.size.regular }}>Kapan ulang {greeting == 'kamu' ? 'tahunmu?' : 'tahun anda?'}</Text>
-                                            <TouchableOpacity onPress={() => setShowCalendar(!showCalendar)} style={styles.textBorder}>
+                                            <TouchableOpacity onPress={() => !showCalendar ? setShowCalendar(true) : setShowCalendar(false)} style={styles.textBorder}>
                                                 <Text style={{ color: 'white', flex: 1, padding: 10 }}>{dateBirth}</Text>
                                                 <Image source={images.date} style={{ width: 20, height: 20, margin: 10 }}></Image>
                                             </TouchableOpacity>
-                                            {showCalendar &&
-                                                <View style={{ backgroundColor: 'white', height: Screen.height * 0.4 }}>
-                                                    <CalendarList
-                                                        hideArrows={false}
-                                                        futureScrollRange={0}
-                                                        scrollEnabled={true}
-                                                        pagingEnabled={true}
-                                                        hideExtraDays={false}
-                                                        onPress={(day) => onDateChange(day)}
-                                                    />
-                                                </View>
-                                            }
+
+                                            {showCalendar && (
+                                                <DateTimePicker
+                                                    testID="dateTimePicker"
+                                                    value={date}
+                                                    maximumDate={new Date()}
+                                                    mode={'date'}
+                                                    is24Hour={true}
+                                                    // display="calendar"
+                                                    onChange={onDateChange}
+                                                />
+                                            )}
+
                                         </View>
                                     }
                                     {state == 3 &&
@@ -116,19 +142,26 @@ export function YourName(props) {
                                             <View style={styles.textBorder}>
                                                 <Text style={{ color: 'white', paddingHorizontal: 10 }}>+62</Text>
                                                 <View style={{ width: 1, height: Screen.height * 0.055, backgroundColor: 'white', marginEnd: 10 }}></View>
-                                                <TextInput style={{ color: 'white', flex: 1 }}>{82317145555}</TextInput>
+                                                <TextInput style={{ color: 'white', flex: 1 }}
+                                                    value={phoneNumber}
+                                                    onChangeText={number => onPhoneChange(number)}
+                                                    inputRef={(ref) => (this.number = ref)}></TextInput>
                                             </View>
                                         </View>}
                                 </View>
                             }
                         </View>
                     }
-                    {state <= 3 ? show &&
+                    {state <= 4 ? state != 4 ? show &&
                         <TouchableOpacity onPress={() => onClick()} style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginEnd: 10 }}>
                             <Text style={{ color: 'white', marginEnd: 15, fontSize: Fonts.size.regular }}>{state != 0 ? 'Selanjutnya' : 'Masuk'}</Text>
                             <Image source={images.arrowRight} style={{ width: 20, height: 20 }} />
                         </TouchableOpacity>
-                        : <View />}
+                        : <View /> :
+                        <TouchableOpacity onPress={() => navigate('Main')} style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginEnd: 10 }}>
+                            <Text style={{ color: 'white', marginEnd: 15, fontSize: Fonts.size.regular }}>{Selanjutnya}</Text>
+                            <Image source={images.arrowRight} style={{ width: 20, height: 20 }} />
+                        </TouchableOpacity>}
                 </View>
             </View>
         </TemplateBackground >

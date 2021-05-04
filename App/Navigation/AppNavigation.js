@@ -96,4 +96,15 @@ const CurhatNavigator = createBottomTabNavigator({
 //   Auth: AuthNavigator,
 //   Main: MainNavigator,
 // })
-export default createAppContainer(AuthNavigator)
+
+export default createAppContainer(createSwitchNavigator(
+  {
+    // AuthLoading: AuthLoadingScreen,
+    Main: MainNavigator,
+    Auth: AuthNavigator,
+  },
+  {
+    initialRouteName: 'Auth',
+  }
+));
+// export default createAppContainer(AuthNavigator)

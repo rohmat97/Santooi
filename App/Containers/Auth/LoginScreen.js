@@ -50,7 +50,7 @@ export function LoginScreen(props) {
                             <View style={{
                                     borderRadius: 4,
                                     height: 55,
-                                    marginVertical:12,
+                                    marginBottom:12,
                                     overflow: 'hidden',
                                 }}>
                                 <TextInput
@@ -86,7 +86,7 @@ export function LoginScreen(props) {
                             <View style={{
                                         borderRadius: 4,
                                         height: 55,
-                                        marginVertical:12,
+                                        marginBottom:12,
                                         overflow: 'hidden',
                                     }}>
                                 <TextInput
