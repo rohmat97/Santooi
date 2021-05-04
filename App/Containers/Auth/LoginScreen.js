@@ -117,7 +117,10 @@ export function LoginScreen(props) {
                     <View style={{ marginTop: Screen.width * 0.1 }} />
                     <RoundedButton
                         text={'Lanjut'}
-                        onPress={() => navigate('YourNameScreen')}
+                        onPress={() => navigate('Main', {
+                            screen: 'MainScreen',
+                            initial: true,
+                          })}
                         backgroundColor={'#266CF5'} />
                     <View style={{ flexDirection: 'row', marginVertical: 10, justifyContent: 'center', alignItems: 'center' }}>
                         <View

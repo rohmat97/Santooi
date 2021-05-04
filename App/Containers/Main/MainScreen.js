@@ -22,7 +22,7 @@ function MainScreen (props) {
     setVisible(!visible);
   };
     return (
-      <TemplateBackground first={true}>
+      <TemplateBackground cover={true}>
         <View style={styles.mainContainer}>
             <ScrollView>
               <View style={styles.section} >
@@ -78,7 +78,7 @@ function MainScreen (props) {
                 <CustomBottomTab />
         </View>
         <OverlayHomepage visible ={visible} toggleOverlay={toggleOverlay}/>
-        </TemplateBackground>
+      </TemplateBackground>
     )
 }
 
