@@ -14,7 +14,7 @@ import styles from './Styles/NavigationStyles'
 const AuthNavigator = createStackNavigator({
   LaunchScreen: { screen: FirstLoginScreen },
   LoginScreen: { screen: LoginScreen },
-  YourNameScreen: { screen:YourName },
+  YourNameScreen: { screen: YourName },
 }, {
   // Default config for all screens
   headerMode: 'none',
@@ -24,7 +24,7 @@ const AuthNavigator = createStackNavigator({
   }
 })
 
-const MainNavigator = createSwitchNavigator({
+const MainNavigator = createStackNavigator({
   LaunchScreen: { screen: LaunchScreen },
   MainScreen: { screen: MainScreen }
 }, {
@@ -36,75 +36,16 @@ const MainNavigator = createSwitchNavigator({
   }
 })
 
-const HomeNavigator = createSwitchNavigator({
-  LaunchScreen: { screen: LaunchScreen }
+const PrimaryNav = createSwitchNavigator({
+  // LaunchScreen: { screen: LaunchScreen },
+  Auth: AuthNavigator,
+  Main: MainNavigator,
 }, {
-  // Default config for all screens
   headerMode: 'none',
-  initialRouteName: 'LaunchScreen',
+  initialRouteName: 'Main',
   navigationOptions: {
     headerStyle: styles.header
   }
 })
 
-const JurnalNavigator = createSwitchNavigator({
-  LaunchScreen: { screen: LaunchScreen }
-}, {
-  // Default config for all screens
-  headerMode: 'none',
-  initialRouteName: 'LaunchScreen',
-  navigationOptions: {
-    headerStyle: styles.header
-  }
-})
-
-const AccountNavigator = createSwitchNavigator({
-  LaunchScreen: { screen: LaunchScreen }
-}, {
-  // Default config for all screens
-  headerMode: 'none',
-  initialRouteName: 'LaunchScreen',
-  navigationOptions: {
-    headerStyle: styles.header
-  }
-})
-
-const KonselingNavigator = createStackNavigator({
-  LaunchScreen: { screen: LaunchScreen }
-}, {
-  // Default config for all screens
-  headerMode: 'none',
-  initialRouteName: 'LaunchScreen',
-  navigationOptions: {
-    headerStyle: styles.header
-  }
-})
-
-const CurhatNavigator = createBottomTabNavigator({
-  LaunchScreen: { screen: LaunchScreen }
-}, {
-  // Default config for all screens
-  headerMode: 'none',
-  initialRouteName: 'LaunchScreen',
-  navigationOptions: {
-    headerStyle: styles.header
-  }
-})
-
-// const PrimaryNav = createSwitchNavigator({
-//   // LaunchScreen: { screen: LaunchScreen },
-//   Auth: AuthNavigator,
-//   Main: MainNavigator,
-// })
-
-export default createAppContainer(createSwitchNavigator(
-  {
-    // AuthLoading: AuthLoadingScreen,
-    Main: MainNavigator,
-    Auth: AuthNavigator,
-  },
-  {
-    initialRouteName: 'Auth',
-  }
-));
-// export default createAppContainer(AuthNavigator)
+export default createAppContainer(PrimaryNav)

@@ -158,7 +158,10 @@ export function YourName(props) {
                             <Image source={images.arrowRight} style={{ width: 20, height: 20 }} />
                         </TouchableOpacity>
                         : <View /> :
-                        <TouchableOpacity onPress={() => navigate('Main')} style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginEnd: 10 }}>
+                        <TouchableOpacity onPress={() => navigate('Main', {
+                            screen:'MainScreen',
+                            initial: true
+                        })} style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginEnd: 10 }}>
                             <Text style={{ color: 'white', marginEnd: 15, fontSize: Fonts.size.regular }}>{Selanjutnya}</Text>
                             <Image source={images.arrowRight} style={{ width: 20, height: 20 }} />
                         </TouchableOpacity>}
