@@ -3,6 +3,7 @@ import { View, Image, TextInput, Text, TouchableOpacity } from 'react-native'
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import { RadioButton } from 'react-native-paper'
 import DateTimePicker from '@react-native-community/datetimepicker';
+import ErrorButton from '../../Components/ErrorButton'
 
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
@@ -10,7 +11,7 @@ import { Screen } from '../../Transforms/Screen'
 import images from '../../Themes/Images';
 import { Colors, Fonts } from '../../Themes'
 
-export function YourName(props) {
+export function SignUp(props) {
     const { navigation } = props
     const { navigate } = navigation
     const [name, setName] = useState('')
@@ -21,9 +22,10 @@ export function YourName(props) {
     const d = new Date()
     const formattedDate = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear()
     const [date, setDate] = useState(d)
-    const [dateBirth, setDateBirth] = useState(formattedDate)
+    const [dateBirth, setDateBirth] = useState('Pilih tanggal kelahiran...')
     const [showCalendar, setShowCalendar] = useState(false)
     const [phoneNumber, setPhoneNumber] = useState('')
+    const [validatePhoneNumber, setValidatePhoneNumber] = useState(false)
 
     const onNameChange = (name) => {
         setName(name)
@@ -32,7 +34,8 @@ export function YourName(props) {
 
     const onPhoneChange = (number) => {
         setPhoneNumber(number)
-        if (phoneNumber.length >= 8) {
+        if (phoneNumber.length >= 10) {
+            setValidatePhoneNumber(true)
             setShow(true)
         }
     }
@@ -65,8 +68,12 @@ export function YourName(props) {
     }
 
     const onClick = () => {
-        setState(state + 1)
-        setShow(false)
+        if (state == 3) {
+            navigate('SplashScreen')
+        } else {
+            setState(state + 1)
+            setShow(false)
+        }
     }
 
     return (
@@ -147,24 +154,37 @@ export function YourName(props) {
                                                     onChangeText={number => onPhoneChange(number)}
                                                     inputRef={(ref) => (this.number = ref)}></TextInput>
                                             </View>
+                                            {!validatePhoneNumber &&
+                                                <View style={{ marginTop: Screen.height * 0.06, marginBottom: 20, marginHorizontal: -15 }}>
+                                                    <ErrorButton text={'Nomor ponsel minimal 11 angka'} />
+                                                </View>
+                                            }
                                         </View>}
                                 </View>
                             }
                         </View>
                     }
-                    {state <= 4 ? state != 4 ? show &&
-                        <TouchableOpacity onPress={() => onClick()} style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginEnd: 10 }}>
-                            <Text style={{ color: 'white', marginEnd: 15, fontSize: Fonts.size.regular }}>{state != 0 ? 'Selanjutnya' : 'Masuk'}</Text>
-                            <Image source={images.arrowRight} style={{ width: 20, height: 20 }} />
+
+                    {!validatePhoneNumber && <View style={{ marginTop: 20 }} />}
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <TouchableOpacity onPress={() => state == 0 ? navigation.pop() : setState(state)} style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginStart: 10 }}>
+                            <Image source={images.arrowLeft} style={{ width: 20, height: 20 }} />
+                            <Text style={{ color: 'white', marginStart: 15, fontSize: Fonts.size.regular }}>Kembali</Text>
                         </TouchableOpacity>
-                        : <View /> :
-                        <TouchableOpacity onPress={() => navigate('Main', {
-                            screen:'MainScreen',
-                            initial: true
-                        })} style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginEnd: 10 }}>
-                            <Text style={{ color: 'white', marginEnd: 15, fontSize: Fonts.size.regular }}>{Selanjutnya}</Text>
-                            <Image source={images.arrowRight} style={{ width: 20, height: 20 }} />
-                        </TouchableOpacity>}
+
+                        {state <= 3 ? show &&
+                            <TouchableOpacity onPress={() => onClick()} style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginEnd: 10 }}>
+                                <Text style={{ color: 'white', marginEnd: 15, fontSize: Fonts.size.regular }}>{state != 0 ? 'Selanjutnya' : 'Masuk'}</Text>
+                                <Image source={images.arrowRight} style={{ width: 20, height: 20 }} />
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity onPress={() => navigate('SplashScreen')} style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginEnd: 10 }}>
+                                <Text style={{ color: 'white', marginEnd: 15, fontSize: Fonts.size.regular }}>{Selanjutnya}</Text>
+                                <Image source={images.arrowRight} style={{ width: 20, height: 20 }} />
+                            </TouchableOpacity>
+                        }
+                    </View>
+
                 </View>
             </View>
         </TemplateBackground >

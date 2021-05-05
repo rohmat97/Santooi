@@ -10,16 +10,19 @@ import images from '../../Themes/Images';
 import { Colors } from '../../Themes';
 import { PasswordEye } from '../../Components/PasswordEye'
 import RoundedButton from '../../Components/RoundedButton'
+import ErrorButton from '../../Components/ErrorButton'
 
 export function LoginScreen(props) {
     const { navigation } = props
     const { navigate } = navigation
+    const { type } = navigation.state.params
     const [email, setEmail] = useState('')
     const [errorEmail, setErrorEmail] = useState()
     const [password, setPassword] = useState('')
     const [errorPassword, setErrorPassword] = useState()
     const [secureTextEntry, setSecureTextEntry] = useState(true)
     const [validateEmail, setValidateEmail] = useState(false)
+    const [loginSuccess, setLoginSuccess] = useState(true)
 
     const onAccessoryPress = () => {
         setSecureTextEntry(!secureTextEntry)
@@ -45,14 +48,19 @@ export function LoginScreen(props) {
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
                         <Image source={images.logoSantui} style={{ width: Screen.width * 0.2, marginBottom: 20 }} resizeMode='contain' />
                     </View>
+
+                    {type == 'login' ? !loginSuccess &&
+                        <ErrorButton text={'Kombinasi email dan password tidak tepat'} /> : <View />
+                    }
+
                     <View style={styles.textbox}>
                         <View style={{ flex: 1 }}>
                             <View style={{
-                                    borderRadius: 4,
-                                    height: 55,
-                                    marginBottom:12,
-                                    overflow: 'hidden',
-                                }}>
+                                borderRadius: 4,
+                                height: 55,
+                                marginBottom: 12,
+                                overflow: 'hidden',
+                            }}>
                                 <TextInput
                                     label="Email atau Nomor Telepon"
                                     value={email}
@@ -81,14 +89,21 @@ export function LoginScreen(props) {
                             <Image source={images.ok} style={{ margin: 10 }} resizeMode='center'></Image>
                         }
                     </View>
+
+                    {!validateEmail ? email.length > 0 &&
+                        <View style={{ marginBottom: 10 }}>
+                            <ErrorButton text={'Email tidak terdaftar'} />
+                        </View>
+                        : <View />}
+
                     <View style={styles.textbox}>
                         <View style={{ flex: 1 }}>
                             <View style={{
-                                        borderRadius: 4,
-                                        height: 55,
-                                        marginBottom:12,
-                                        overflow: 'hidden',
-                                    }}>
+                                borderRadius: 4,
+                                height: 55,
+                                marginBottom: 12,
+                                overflow: 'hidden',
+                            }}>
                                 <TextInput
                                     inputRef={(ref) => (this.password = ref)}
                                     label="Kata Sandi"
@@ -111,17 +126,43 @@ export function LoginScreen(props) {
                             </View>
                         </View>
                         <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
-                            <Image source={images.eye} style={{ margin: 10 }} resizeMode='center'></Image>
+                            <Image source={secureTextEntry? images.closeEye : images.eye} style={{ margin: 10 }} resizeMode='center'></Image>
                         </TouchableOpacity>
                     </View>
+
+                    {password.length > 0 ? password.length < 8 &&
+                        <View style={{ marginBottom: 10 }}>
+                            <ErrorButton text={'Password minimal 8 karakter'} />
+                        </View>
+                        : <View />}
+
+                    {type == 'login' &&
+                        <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
+                            <Text style={{ color: 'white', fontSize: 13, marginRight: 10 }}>Lupa password?</Text>
+                            <TouchableOpacity onPress={() => navigate('ForgotPasswordScreen')}>
+                                <Text style={{ color: 'white', fontSize: 13, fontWeight: 'bold', textDecorationLine: 'underline' }}>Buat password baru</Text>
+                            </TouchableOpacity>
+                        </View>
+                    }
+
                     <View style={{ marginTop: Screen.width * 0.1 }} />
-                    <RoundedButton
-                        text={'Lanjut'}
-                        onPress={() => navigate('Main', {
-                            screen: 'MainScreen',
-                            initial: true,
-                          })}
-                        backgroundColor={'#266CF5'} />
+                    {type == 'signup' &&
+                        <RoundedButton
+                            text={'Lanjut'}
+                            onPress={() => navigate('SignUpScreen')}
+                            backgroundColor={'#266CF5'} />
+                    }
+
+                    {type == 'login' &&
+                        <RoundedButton
+                            text={'Lanjut'}
+                            onPress={() => navigate('Main', {
+                                screen: 'MainScreen',
+                                initial: true,
+                            })}
+                            backgroundColor={'#266CF5'} />
+                    }
+
                     <View style={{ flexDirection: 'row', marginVertical: 10, justifyContent: 'center', alignItems: 'center' }}>
                         <View
                             style={{
@@ -153,13 +194,13 @@ export function LoginScreen(props) {
                         image={images.fb}
                         width={10}
                         height={20} />
-                    <RoundedButton
+                    {/* <RoundedButton
                         text={'Masuk dengan Apple'}
                         onPress={() => navigate('LoginScreen')}
                         backgroundColor={'#000000'}
                         image={images.apple}
                         width={15}
-                        height={15} />
+                        height={15} /> */}
                 </View>
             </View>
         </TemplateBackground>
