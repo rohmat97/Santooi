@@ -80,7 +80,7 @@ export function CreateNewPasswordSuccess(props) {
                     <View style={{ marginTop: Screen.width * 0.05}} />
                     <RoundedButton
                         text={'Cek Email'}
-                        onPress={() => navigate('LoginScreen')}
+                        onPress={() => navigate('LoginScreen', {type : 'login'})}
                         backgroundColor={'#266CF5'} />
                 </View>
             </View>

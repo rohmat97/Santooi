@@ -34,8 +34,6 @@ export function CreateNewPassword(props) {
     const checkingPassword1 = (password) => {
         setPassword1(password)
 
-        console.log((password1.length+1) + " " + password2.length)
-
         if (password2.length == password1.length+1) {
             if (password2.toString == password1.toString+1) {
                 setPasswordMatch(true)
@@ -50,8 +48,6 @@ export function CreateNewPassword(props) {
 
     const checkingPassword2 = (password) => {
         setPassword2(password)
-
-        console.log(password1.length + " " + (password2.length+1))
 
         if (password1.length == password2.length+1) {
             if (password2.toString == password1.toString) {

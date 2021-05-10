@@ -6,8 +6,6 @@ import com.facebook.react.ReactActivityDelegate;
 import com.facebook.react.ReactRootView;
 import com.swmansion.gesturehandler.react.RNGestureHandlerEnabledRootView;
 import android.os.Bundle;
-import io.branch.rnbranch.*;
-import android.content.Intent;
 
 public class MainActivity extends ReactActivity {
 
@@ -36,15 +34,15 @@ public class MainActivity extends ReactActivity {
     return "Santooi";
   }
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    RNBranchModule.initSession(getIntent().getData(), this);
-  }
+  // @Override
+  // protected void onStart() {
+  //   super.onStart();
+  //   RNBranchModule.initSession(getIntent().getData(), this);
+  // }
 
-  @Override
-  public void onNewIntent(Intent intent) {
-      super.onNewIntent(intent);
-      setIntent(intent);
-  }
+  // @Override
+  // public void onNewIntent(Intent intent) {
+  //     super.onNewIntent(intent);
+  //     setIntent(intent);
+  // }
 }

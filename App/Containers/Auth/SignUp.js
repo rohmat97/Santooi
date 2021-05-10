@@ -69,7 +69,10 @@ export function SignUp(props) {
 
     const onClick = () => {
         if (state == 3) {
-            navigate('SplashScreen')
+            navigation.navigate('Main', {
+                screen: 'MainScreen',
+                initial: true,
+            })
         } else {
             setState(state + 1)
             setShow(false)

@@ -10,7 +10,6 @@ import { LoginScreen } from '../Containers/Auth/LoginScreen';
 import { SignUp } from '../Containers/Auth/SignUp';
 import LaunchScreen from '../Containers/LaunchScreen'
 import MainScreen from '../Containers/Main/MainScreen'
-import { SplashScreen } from '../Containers/SplashScreen';
 
 import styles from './Styles/NavigationStyles'
 
@@ -22,7 +21,6 @@ const AuthNavigator = createStackNavigator({
   ForgotPasswordScreen: { screen: ForgotPassword },
   CreateNewPasswordScreen: { screen: CreateNewPassword },
   CreateNewPasswordSuccessScreen: { screen: CreateNewPasswordSuccess },
-  SplashScreen: { screen: SplashScreen },
 }, {
   // Default config for all screens
   headerMode: 'none',
