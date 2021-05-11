@@ -47,7 +47,7 @@ const PrimaryNav = createSwitchNavigator({
 },{
   // Default config for all screens
   headerMode: 'none',
-  initialRouteName: 'Main',
+  initialRouteName: 'Auth',
   navigationOptions: {
     headerStyle: styles.header
   }
