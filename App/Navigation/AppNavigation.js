@@ -2,9 +2,12 @@ import React from 'react'
 import { createAppContainer, createSwitchNavigator } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { CreateNewPassword } from '../Containers/Auth/CreateNewPassword';
+import { CreateNewPasswordSuccess } from '../Containers/Auth/CreateNewPasswordSuccess';
 import { FirstLoginScreen } from '../Containers/Auth/FirstLoginScreen';
+import { ForgotPassword } from '../Containers/Auth/ForgotPassword';
 import { LoginScreen } from '../Containers/Auth/LoginScreen';
-import { YourName } from '../Containers/Auth/YourName';
+import { SignUp } from '../Containers/Auth/SignUp';
 import LaunchScreen from '../Containers/LaunchScreen'
 import MainScreen from '../Containers/Main/MainScreen'
 
@@ -14,7 +17,10 @@ import styles from './Styles/NavigationStyles'
 const AuthNavigator = createStackNavigator({
   LaunchScreen: { screen: FirstLoginScreen },
   LoginScreen: { screen: LoginScreen },
-  YourNameScreen: { screen: YourName },
+  SignUpScreen: { screen: SignUp },
+  ForgotPasswordScreen: { screen: ForgotPassword },
+  CreateNewPasswordScreen: { screen: CreateNewPassword },
+  CreateNewPasswordSuccessScreen: { screen: CreateNewPasswordSuccess },
 }, {
   // Default config for all screens
   headerMode: 'none',

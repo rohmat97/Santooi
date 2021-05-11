@@ -130,6 +130,7 @@ android {
 
     defaultConfig {
         applicationId "com.vodjo.surface"
+        multiDexEnabled true
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

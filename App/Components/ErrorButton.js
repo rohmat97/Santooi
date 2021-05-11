@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { TouchableOpacity, Text, View, Image} from 'react-native'
-import styles from './Styles/RoundedButtonStyles'
+import { TouchableOpacity, Text, View, Image } from 'react-native'
+import styles from './Styles/ErrorButtonStyles'
 import ExamplesRegistry from '../Services/ExamplesRegistry'
 import { Metrics } from '../Themes'
 
@@ -18,7 +18,7 @@ ExamplesRegistry.addComponentExample('Rounded Button', () =>
   />
 )
 
-export default class RoundedButton extends Component {
+export default class ErrorButton extends Component {
   static propTypes = {
     onPress: PropTypes.func,
     text: PropTypes.string,
@@ -33,20 +33,12 @@ export default class RoundedButton extends Component {
 
   render() {
     return (
-      <TouchableOpacity style={{
-        height: 50,
-        borderRadius: 100,
-        marginVertical: Metrics.baseMargin,
-        justifyContent: 'center',
-        backgroundColor: this.props.backgroundColor
-      }} onPress={this.props.onPress}>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems:'center' }}>
-          {this.props.image != null &&
-            <Image source={this.props.image} style={{width:this.props.width,height:this.props.height, marginEnd:10}}/>
-          }
-          <Text style={styles.buttonText}>{this.props.text}</Text>
-        </View>
-      </TouchableOpacity>
+      <View style={styles.button}>
+        {this.props.image != null &&
+          <Image source={this.props.image} style={{ width: this.props.width, height: this.props.height, marginEnd: 10 }} />
+        }
+        <Text style={styles.buttonText}>{this.props.text}</Text>
+      </View>
     )
   }
 }
