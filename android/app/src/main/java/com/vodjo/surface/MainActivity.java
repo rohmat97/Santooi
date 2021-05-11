@@ -1,4 +1,4 @@
-package com.santooi;
+package com.vodjo.surface;
 
 import com.facebook.react.ReactActivity;
 
