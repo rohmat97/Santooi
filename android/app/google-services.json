@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "838643060564",
+    "project_id": "santooi",
+    "storage_bucket": "santooi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838643060564:android:e0ddf3305337c710e942c1",
+        "android_client_info": {
+          "package_name": "com.vodjo.surface"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838643060564-1792hmu7p2eg32iq7vrodh155mhjb216.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vodjo.surface",
+            "certificate_hash": "497c5d1803416eefbed42c67737fd07592a20eb5"
+          }
+        },
+        {
+          "client_id": "838643060564-93i9d5c1d86hq1gmdr5hlhccta5hcn4n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL4tiuGl-vXeasuFKW5MzX7Nd-q_-57tw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838643060564-93i9d5c1d86hq1gmdr5hlhccta5hcn4n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

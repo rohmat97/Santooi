@@ -17,10 +17,16 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 function MainScreen (props) {
   const [visible, setVisible] = useState(false);
-
+  const [quote, setquote]= useState('')
+  const [categoryData] = useState([{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 1' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 2' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 3' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 4' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 5' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 6' }])
+  const [PickedEmoticon,setPickedEmoticon] = useState([])
   const toggleOverlay = () => {
     setVisible(!visible);
   };
+
+  useEffect(()=>{
+    console.log(PickedEmoticon)
+  },[PickedEmoticon])
     return (
       <TemplateBackground cover={true}>
         <View style={styles.mainContainer}>
@@ -61,7 +67,7 @@ function MainScreen (props) {
                   <TouchableOpacity onPress={toggleOverlay}>
                     <View
                       style={{borderWidth:1, height:Screen.height*0.15, width:Screen.width*0.9, marginBottom:Screen.height*0.1, borderRadius:20, alignItems:'center',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
-                      <Text>Bagaimana Perasaanmu Hari ini</Text>
+                      <Text>{quote?quote:'Bagaimana Perasaanmu Hari ini'}</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -77,7 +83,7 @@ function MainScreen (props) {
             </ScrollView>
                 <CustomBottomTab />
         </View>
-        <OverlayHomepage visible ={visible} toggleOverlay={toggleOverlay}/>
+        <OverlayHomepage visible ={visible} toggleOverlay={toggleOverlay} setquote={setquote} quote={quote} categoryData={categoryData} PickedEmoticon={PickedEmoticon} setPickedEmoticon={setPickedEmoticon} />
       </TemplateBackground>
     )
 }
