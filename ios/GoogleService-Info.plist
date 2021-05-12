@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>838643060564-f1fovlcepj9k7fs6pfgkk6smd5f0d6oi.apps.googleusercontent.com</string>
+	<string>838643060564-gp1g93mqutc0i7f9orekffrbosntovji.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.838643060564-f1fovlcepj9k7fs6pfgkk6smd5f0d6oi</string>
+	<string>com.googleusercontent.apps.838643060564-gp1g93mqutc0i7f9orekffrbosntovji</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>838643060564-1792hmu7p2eg32iq7vrodh155mhjb216.apps.googleusercontent.com</string>
+	<string>838643060564-sbv369u07fflda9mdqmd663seafkkb0n.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCVI7R0gkV2Dyw-Q0zPl3KaaLwmf9QGmc0</string>
 	<key>GCM_SENDER_ID</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.app.surface</string>
+	<string>com.vodjo.surfaceios</string>
 	<key>PROJECT_ID</key>
 	<string>santooi</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:838643060564:ios:10a620486330be93e942c1</string>
+	<string>1:838643060564:ios:79251663df507480e942c1</string>
 </dict>
 </plist>
