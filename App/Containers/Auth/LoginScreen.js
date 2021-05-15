@@ -6,7 +6,15 @@ import {
     GoogleSigninButton,
     statusCodes,
   } from '@react-native-google-signin/google-signin';
-  import auth from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
+import {
+    AccessToken,
+    AuthenticationToken,
+    LoginButton,
+    LoginManager,
+    Settings
+  } from 'react-native-fbsdk-next';
+
 
 // Component
 import { TemplateBackground } from '../../Components/TemplateBackground'
@@ -56,11 +64,7 @@ export function LoginScreen(props) {
             setValidateEmail(true)
         }
     }
-     const signIn =async()=> {
-        await GoogleSignin.configure({
-            webClientId: '838643060564-l0m9kf3sempgvroimh4nhng3lo8elobq.apps.googleusercontent.com',
-            offlineAccess: true
-          })
+     const signInGoogle =async()=> {
         try {
         await GoogleSignin.hasPlayServices();
         const data = await GoogleSignin.signIn();
@@ -93,6 +97,36 @@ export function LoginScreen(props) {
           }
         }
       }
+      const signInFacebook =async()=> {
+        // if (Platform.OS === "android") {
+            // await LoginManager.setLoginBehavior('web_only')
+        // }
+        await LoginManager.logInWithPermissions(["public_profile", "email"]).then(
+            function (result) {
+            if (result.isCancelled) {
+            console.log("Login Cancelled " + JSON.stringify(result))
+            } else {
+            console.log("Login success with  permisssions: " + result.grantedPermissions.toString());
+            console.log("Login Success " + JSON.stringify(result));
+            AccessToken.getCurrentAccessToken().then(
+                async(data) => {
+                  console.log('success',JSON.stringify(data))
+                // console.log('credential',credential)
+                await auth().signInWithCredential(auth.FacebookAuthProvider.credential(data.accessToken)).then(naise =>{
+                    console.log('naise', naise)
+                }).catch(err =>{
+                    console.log('error ', err)
+                })
+                }
+              ).catch(err =>{
+                  console.log('error', JSON.stringify(err))
+              })
+            }
+            },
+            function (error) {
+            alert("Login failed with error: " + error);
+            })
+        }
     const signOut = async () => {
         try {
         await GoogleSignin.revokeAccess();
@@ -106,6 +140,20 @@ export function LoginScreen(props) {
     };
 
 
+    useEffect(()=>{
+        async function Setup() {
+            // You can await here
+            await GoogleSignin.configure({
+                webClientId: '838643060564-l0m9kf3sempgvroimh4nhng3lo8elobq.apps.googleusercontent.com',
+                offlineAccess: true
+              })
+            // Ask for consent first if necessary
+            // Possibly only do this for iOS if no need to handle a GDPR-type flow
+           await Settings.initializeSDK();
+            // ...
+          }
+        Setup()
+    },[])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -247,14 +295,14 @@ export function LoginScreen(props) {
                     </View>
                     <RoundedButton
                         text={'Masuk dengan Google'}
-                        onPress={() => signIn()}
+                        onPress={() => signInGoogle()}
                         backgroundColor={'#5B87E4'}
                         image={images.google}
                         width={15}
                         height={15} />
                     <RoundedButton
                         text={'Masuk dengan Facebook'}
-                        onPress={() => navigate('LoginScreen')}
+                        onPress={() => signInFacebook()}
                         backgroundColor={'#374F8B'}
                         image={images.fb}
                         width={10}
@@ -266,13 +314,6 @@ export function LoginScreen(props) {
                         title="LogOut"
                         color="red"></Button>
                     )}
-                    {/* <RoundedButton
-                        text={'Masuk dengan Apple'}
-                        onPress={() => navigate('LoginScreen')}
-                        backgroundColor={'#000000'}
-                        image={images.apple}
-                        width={15}
-                        height={15} /> */}
                 </View>
             </View>
         </TemplateBackground>
