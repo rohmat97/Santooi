@@ -29,7 +29,17 @@ import RoundedButton from '../../Components/RoundedButton'
 import ErrorButton from '../../Components/ErrorButton'
 
 
-
+async function Setup() {
+    // You can await here
+    await GoogleSignin.configure({
+        webClientId: '838643060564-l0m9kf3sempgvroimh4nhng3lo8elobq.apps.googleusercontent.com',
+        offlineAccess: true
+      })
+    // Ask for consent first if necessary
+    // Possibly only do this for iOS if no need to handle a GDPR-type flow
+   await Settings.initializeSDK();
+    // ...
+  }
 
 export function LoginScreen(props) {
     const { navigation } = props
@@ -141,17 +151,6 @@ export function LoginScreen(props) {
 
 
     useEffect(()=>{
-        async function Setup() {
-            // You can await here
-            await GoogleSignin.configure({
-                webClientId: '838643060564-l0m9kf3sempgvroimh4nhng3lo8elobq.apps.googleusercontent.com',
-                offlineAccess: true
-              })
-            // Ask for consent first if necessary
-            // Possibly only do this for iOS if no need to handle a GDPR-type flow
-           await Settings.initializeSDK();
-            // ...
-          }
         Setup()
     },[])
     return (
