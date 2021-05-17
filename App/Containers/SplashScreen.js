@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Text, Image, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Text, Image, View, Linking } from 'react-native'
 import { TemplateBackground } from '../Components/TemplateBackground'
 
 //redux
@@ -10,40 +10,65 @@ import { Screen } from '../Transforms/Screen'
 import images from '../Themes/Images';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { get } from 'lodash';
 
  function SplashScreen(props) {
     const { navigation, login } = props
     const { navigate, getParam } = navigation
+    const [url, setUrl] = useState(null);
+    const [processing, setProcessing] = useState(true);
+
 
     useEffect(()=>{
-        const params = getParam('params')
-        console.log(params)
-        if(params && params.type ==='transition'){
-            setTimeout(() => {
-                    navigate(params.root, {
-                        screen: params.screen,
-                        initial: true,
-                    }) 
-            }, 3000);
-        }else{
-            setTimeout(() => {
-                if(login){
-                    navigate('Main', {
-                        screen: 'LoginScreen',
-                        initial: true,
-                    }) 
-                }else{
-                    navigate('Auth', {
-                        screen: 'MainScreen',
-                        initial: true,
-                    }) 
-                }   
-            }, 3000);
+        // const params = getParam('params')
+        const getUrlAsync = async () => {
+            // Get the deep link used to open the app
+         const initialUrl = await Linking.getInitialURL();
+      
+            // The setTimeout is just for testing purpose
+          //   setTimeout(() => {
+              setUrl(initialUrl);
+              setProcessing(false);
+          //   }, 1000);
+          };
+          getUrlAsync();
+         
+        // if(processing) {
+        //     Linking.canOpenURL(initialUrl)
+        // }
+        // if(params && params.type ==='transition'){
+        //     setTimeout(() => {
+        //             navigate(params.root, {
+        //                 screen: params.screen,
+        //                 initial: true,
+        //             }) 
+        //     }, 3000);
+        // }else{
+        //     setTimeout(() => {
+        //         if(login){
+        //             navigate('Main', {
+        //                 screen: 'LoginScreen',
+        //                 initial: true,
+        //             }) 
+        //         }else{
+        //             navigate('Auth', {
+        //                 screen: 'MainScreen',
+        //                 initial: true,
+        //             }) 
+        //         }   
+        //     }, 3000);
 
-        }
+        // }
     },[])
 
+    useEffect(()=>{
+        if(!processing){
+          const route = url && url.replace(/.*?:\/\//g, '');
+          const param = route && route.match(/\/([^\/]+)\/?$/)
+          const routeName = route && route.split('/')[0]
+            console.log('  param='+param )
+            console.log('  name='+routeName )
+        }
+    },[processing])
     return (
         <TemplateBackground cover={false}>
             <View style={styles.mainContainer}>
@@ -53,6 +78,11 @@ import { get } from 'lodash';
                     </View>
                     <View style={{justifyContent:'center', alignItems:'center', height:Screen.height*0.5, marginHorizontal:Screen.width*0.1, zIndex:1}}>
                         <Text style={{ color: '#35385D', fontSize: Screen.width*0.1, fontWeight: "bold", textAlign:'center' }}>Tenangkan pikiranmu setiap saat</Text>
+                        <Text>
+                            {processing
+                            ? `Processing the initial url from a deep link`
+                            : `The deep link is: ${url || "None"}`}
+                        </Text>
                     </View>
                     <Image source={images.circleSplash} style={{ width: Screen.width*0.95, marginHorizontal:Screen.width*0.05,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain'></Image>
                 </View>
