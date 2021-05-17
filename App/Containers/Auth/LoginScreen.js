@@ -128,9 +128,9 @@ function LoginScreen(props) {
         }
       }
       const signInFacebook =async()=> {
-        // if (Platform.OS === "android") {
-            // await LoginManager.setLoginBehavior('web_only')
-        // }
+        if (Platform.OS === "android") {
+            await LoginManager.setLoginBehavior('web_only')
+        }
         await LoginManager.logInWithPermissions(["public_profile", "email"]).then(
             function (result) {
             if (result.isCancelled) {
