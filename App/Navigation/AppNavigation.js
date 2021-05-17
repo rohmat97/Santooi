@@ -6,10 +6,9 @@ import { CreateNewPassword } from '../Containers/Auth/CreateNewPassword';
 import { CreateNewPasswordSuccess } from '../Containers/Auth/CreateNewPasswordSuccess';
 import { FirstLoginScreen } from '../Containers/Auth/FirstLoginScreen';
 import { ForgotPassword } from '../Containers/Auth/ForgotPassword';
-import { LoginScreen } from '../Containers/Auth/LoginScreen';
-import { SignUp } from '../Containers/Auth/SignUp';
-import { SplashScreen } from '../Containers/SplashScreen'
-import LaunchScreen from '../Containers/LaunchScreen'
+import LoginScreen  from '../Containers/Auth/LoginScreen';
+import SignUp from '../Containers/Auth/SignUp';
+import SplashScreen from '../Containers/SplashScreen'
 import MainScreen from '../Containers/Main/MainScreen'
 
 import styles from './Styles/NavigationStyles'
@@ -46,10 +45,11 @@ const PrimaryNav = createSwitchNavigator({
   // LaunchScreen: { screen: LaunchScreen },
   Auth: AuthNavigator,
   Main: MainNavigator,
+  Splash:SplashScreen
 },{
   // Default config for all screens
   headerMode: 'none',
-  initialRouteName: 'Auth',
+  initialRouteName: 'Splash',
   navigationOptions: {
     headerStyle: styles.header
   }

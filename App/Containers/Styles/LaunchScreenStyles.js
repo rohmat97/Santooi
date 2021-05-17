@@ -48,7 +48,7 @@ export default StyleSheet.create({
   },
   containerTextbox : {
     borderWidth: 1, 
-    height: Screen.height * 0.17, 
+    height: Screen.height * 0.2, 
     width: Screen.width * 0.9, 
     marginBottom: Screen.height * 0.05, 
     borderRadius: 20, 

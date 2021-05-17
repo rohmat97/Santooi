@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { Platform, StyleSheet } from 'react-native'
 import { Fonts, Colors, Metrics } from '../../Themes/'
 
 export default StyleSheet.create({
@@ -9,12 +9,13 @@ export default StyleSheet.create({
     justifyContent: 'center',
     borderColor: '#EB0D8C',
     borderWidth: 1,
-    padding:15,
+    padding:Platform.OS==='android'? 15:0,
     opacity: 0.65,
   },
   buttonText: {
     color: '#67308F',
     fontSize: Fonts.size.small,
-    marginVertical: Metrics.baseMargin
+    marginVertical: Platform.OS==='android'?Metrics.baseMargin:0,
+    marginHorizontal:Metrics.baseMargin
   }
 })

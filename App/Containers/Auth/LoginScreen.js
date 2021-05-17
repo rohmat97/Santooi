@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { Text, Image, View, TouchableOpacity, Alert, Button } from 'react-native'
+import { Text, Image, View, TouchableOpacity, Alert, Button, ActivityIndicator } from 'react-native'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 import { TextInput } from 'react-native-paper';
 import {
     GoogleSignin,
@@ -15,9 +17,11 @@ import {
     Settings
   } from 'react-native-fbsdk-next';
 
-
 // Component
 import { TemplateBackground } from '../../Components/TemplateBackground'
+// Redux 
+
+import LoginRedux from '../../Redux/LoginRedux'
 
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
@@ -27,6 +31,8 @@ import { Colors } from '../../Themes';
 import { PasswordEye } from '../../Components/PasswordEye'
 import RoundedButton from '../../Components/RoundedButton'
 import ErrorButton from '../../Components/ErrorButton'
+import { Overlay } from 'react-native-elements';
+import SignUp from './SignUp';
 
 
 async function Setup() {
@@ -41,8 +47,8 @@ async function Setup() {
     // ...
   }
 
-export function LoginScreen(props) {
-    const { navigation } = props
+function LoginScreen(props) {
+    const { navigation, LoginRequest, login, errorLogin } = props
     const { navigate } = navigation
     const { type } = navigation.state.params
     // for form login/register and validation
@@ -57,6 +63,7 @@ export function LoginScreen(props) {
     const [loggedIn, setloggedIn] = useState(false);
     const [userInfo, setuserInfo] = useState([]);
     const [error, setError] =useState('')
+    const [visible, setvisible] = useState(false)
     //show/hide password
     const onAccessoryPress = () => {
         setSecureTextEntry(!secureTextEntry)
@@ -148,8 +155,41 @@ export function LoginScreen(props) {
         console.log('error logout',error)
         }
     };
+    
+    const LoginByEmail = () =>{
+        setvisible(true)
+        setTimeout(() => {
+            LoginRequest({
+                'email': 'user1@mailinator.com',
+                'password': '123456'
+            })
+        }, 1000);
+       
+    }
+    useEffect(()=>{
+        console.log('LOGIN BOIS',login)
+        if(login) {
+            setvisible(false)
+            // navigate('Main', {
+            //     screen: 'MainScreen',
+            //     initial: true,
+            // })
+        }
+        if(errorLogin){
+            setvisible(false)
+            alert(JSON.stringify(errorLogin))
+        }
+    },[login,errorLogin])
 
-
+    const Register =()=>{
+        if(validateEmail && password.length>7) {
+            navigate('SignUpScreen',{ params : {
+                email: email,
+                password: password
+            }})
+        }
+       
+    }
     useEffect(()=>{
         Setup()
     },[])
@@ -261,17 +301,14 @@ export function LoginScreen(props) {
                     {type == 'signup' &&
                         <RoundedButton
                             text={'Lanjut'}
-                            onPress={() => navigate('SignUpScreen')}
+                            onPress={() =>  Register()}
                             backgroundColor={'#266CF5'} />
                     }
 
                     {type == 'login' &&
                         <RoundedButton
-                            text={'Lanjut'}
-                            onPress={() => navigate('Main', {
-                                screen: 'MainScreen',
-                                initial: true,
-                            })}
+                            text={'Login'}
+                            onPress={() => LoginByEmail()}
                             backgroundColor={'#266CF5'} />
                     }
 
@@ -315,6 +352,22 @@ export function LoginScreen(props) {
                     )}
                 </View>
             </View>
+            <Overlay visible={visible} overlayStyle={{width:Screen.width, height:Screen.height, backgroundColor:'transparent',justifyContent:'center',alignContent:'center'}}>
+                <ActivityIndicator  color={'#9A5EBA'} size='large'/>
+            </Overlay>
         </TemplateBackground>
     )
 }
+
+
+const mapStateToProps = (state) => {
+  return {
+    login: state.login.payload,
+    errorLogin: state.login.error
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(Object.assign(LoginRedux), dispatch)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen)
