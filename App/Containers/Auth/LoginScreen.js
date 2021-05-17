@@ -94,22 +94,35 @@ function LoginScreen(props) {
             data.accessToken,
         );
         // console.log('credential',credential)
-        await auth().signInWithCredential(credential);
+        await auth().signInWithCredential(credential).then(
+            sucess =>{
+                Alert.alert('Login Success')
+                navigation.navigate('Splash', {
+                    screen: 'SplashScreen',
+                    initial: true,
+                    params : {
+                        type:'transition',
+                        root:'Main',
+                        screen:'MainScreen'
+                    }
+                })
+            }
+        )
         //  Alert.alert(data)
         // console.log('credential',credential)
         } catch (error) {
           if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             // when user cancels sign in process,
-            Alert.alert('Process Cancelled');
+            // Alert.alert('Process Cancelled');
           } else if (error.code === statusCodes.IN_PROGRESS) {
             // when in progress already
-            Alert.alert('Process in progress');
+            // Alert.alert('Process in progress');
           } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
             // when play services not available
-            Alert.alert('Play services are not available');
+            // Alert.alert('Play services are not available');
           } else {
             // some other error
-            Alert.alert('Something else went wrong... ', error.toString());
+            // Alert.alert('Something else went wrong... ', error.toString());
             setError(error);
           }
         }
@@ -121,22 +134,32 @@ function LoginScreen(props) {
         await LoginManager.logInWithPermissions(["public_profile", "email"]).then(
             function (result) {
             if (result.isCancelled) {
-            console.log("Login Cancelled " + JSON.stringify(result))
+            // console.log("Login Cancelled " + JSON.stringify(result))
             } else {
-            console.log("Login success with  permisssions: " + result.grantedPermissions.toString());
-            console.log("Login Success " + JSON.stringify(result));
+            // console.log("Login success with  permisssions: " + result.grantedPermissions.toString());
+            // console.log("Login Success " + JSON.stringify(result));
             AccessToken.getCurrentAccessToken().then(
                 async(data) => {
-                  console.log('success',JSON.stringify(data))
+                //   console.log('success',JSON.stringify(data))
                 // console.log('credential',credential)
                 await auth().signInWithCredential(auth.FacebookAuthProvider.credential(data.accessToken)).then(naise =>{
-                    console.log('naise', naise)
+                    // console.log('naise', naise)
+                    Alert.alert('Login Success')
+                    navigation.navigate('Splash', {
+                        screen: 'SplashScreen',
+                        initial: true,
+                        params : {
+                            type:'transition',
+                            root:'Main',
+                            screen:'MainScreen'
+                        }
+                    })
                 }).catch(err =>{
-                    console.log('error ', err)
+                    // console.log('error ', err)
                 })
                 }
               ).catch(err =>{
-                  console.log('error', JSON.stringify(err))
+                //   console.log('error', JSON.stringify(err))
               })
             }
             },
@@ -167,13 +190,22 @@ function LoginScreen(props) {
        
     }
     useEffect(()=>{
-        console.log('LOGIN BOIS',login)
+        // console.log('LOGIN BOIS',login)
         if(login) {
             setvisible(false)
             // navigate('Main', {
             //     screen: 'MainScreen',
             //     initial: true,
             // })
+            navigation.navigate('Splash', {
+                screen: 'SplashScreen',
+                initial: true,
+                params : {
+                    type:'transition',
+                    root:'Main',
+                    screen:'MainScreen'
+                }
+            })
         }
         if(errorLogin){
             setvisible(false)
@@ -343,13 +375,6 @@ function LoginScreen(props) {
                         image={images.fb}
                         width={10}
                         height={20} />
-                    {!loggedIn && <Text>You are currently logged out</Text>}
-                    {loggedIn && (
-                        <Button
-                        onPress={()=>signOut()}
-                        title="LogOut"
-                        color="red"></Button>
-                    )}
                 </View>
             </View>
             <Overlay visible={visible} overlayStyle={{width:Screen.width, height:Screen.height, backgroundColor:'transparent',justifyContent:'center',alignContent:'center'}}>
