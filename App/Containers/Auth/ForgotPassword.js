@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, Image, View, TouchableOpacity } from 'react-native'
 import { TextInput } from 'react-native-paper';
 import { TemplateBackground } from '../../Components/TemplateBackground'
-
+//redux
+import ResetPasswordRedux from '../../Redux/ResetPasswordRedux';
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'
@@ -11,9 +12,11 @@ import { Colors } from '../../Themes';
 import { PasswordEye } from '../../Components/PasswordEye'
 import RoundedButton from '../../Components/RoundedButton'
 import ErrorButton from '../../Components/ErrorButton'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-export function ForgotPassword(props) {
-    const { navigation } = props
+function ForgotPassword(props) {
+    const { navigation, ResetPasswordRequest, data } = props
     const { navigate } = navigation
     const [email, setEmail] = useState('')
     const [errorEmail, setErrorEmail] = useState()
@@ -31,7 +34,19 @@ export function ForgotPassword(props) {
             setValidateEmail(true)
         }
     }
+    const SubmitResetPassword= () =>{
+        if(validateEmail){
+            ResetPasswordRequest({
+                'email':email
+            })
+        }
+    }
 
+    useEffect(()=>{
+        if(data){
+            navigate('CreateNewPasswordScreen')
+        }
+    },[data])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -88,10 +103,21 @@ export function ForgotPassword(props) {
                     <View style={{ marginTop: Screen.width * 0.1 }} />
                     <RoundedButton
                         text={'Lanjut'}
-                        onPress={() => navigate('CreateNewPasswordScreen')}
+                        onPress={() => SubmitResetPassword()}
                         backgroundColor={'#266CF5'} />
                 </View>
             </View>
         </TemplateBackground>
     )
 }
+
+const mapStateToProps = (state) => {
+  return {
+    data: state.resetpass.payload
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(Object.assign(ResetPasswordRedux), dispatch)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword)
