@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { Text, Image, View, Linking } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { Text, Image, View, Linking, AppState } from 'react-native'
 import { TemplateBackground } from '../Components/TemplateBackground'
 
 //redux
@@ -16,22 +16,44 @@ import { connect } from 'react-redux';
     const { navigate, getParam } = navigation
     const [url, setUrl] = useState(null);
     const [processing, setProcessing] = useState(true);
-
-
-    useEffect(()=>{
+    // const appState = useRef(AppState.currentState);
+    // const [appStateVisible, setAppStateVisible] = useState(appState.current);
+    
+    // const _handleAppStateChange = (nextAppState) => {
+    //     if (
+    //       appState.current.match(/inactive|background/) &&
+    //       nextAppState === "active"
+    //     ) {
+    //       console.log("App has come to the foreground!");
+    //     }
+    
+    //     appState.current = nextAppState;
+    //     setAppStateVisible(appState.current);
+    //     console.log("AppState", appState.current);
+    //   };
+      useEffect(() => {
+        // Linking.addEventListener("url",getUrlAsync )
+        Linking.addEventListener('url',(url)=>{ 
+            console.log('this is the url: ',url);
+            setUrl(url.url);
+            setTimeout(() => {
+                setProcessing(false)
+            }, 1000);
+        });
+        // AppState.addEventListener("change", _handleAppStateChange);
+        return () => {
+        //   Linking.removeEventListener("url",getUrlAsync )
+        Linking.removeEventListener('url',(url)=>{ 
+            console.log('this is the url: ',url);
+            setUrl(url.url);
+            setProcessing(true)
+        });
+        //   AppState.removeEventListener("change", _handleAppStateChange);
+        };
+      }, []);
+    // useEffect(()=>{
         // const params = getParam('params')
-        const getUrlAsync = async () => {
-            // Get the deep link used to open the app
-         const initialUrl = await Linking.getInitialURL();
-      
-            // The setTimeout is just for testing purpose
-          //   setTimeout(() => {
-              setUrl(initialUrl);
-              setProcessing(false);
-          //   }, 1000);
-          };
-          getUrlAsync();
-         
+        // Linking.addEventListener('url', getUrlAsync());
         // if(processing) {
         //     Linking.canOpenURL(initialUrl)
         // }
@@ -58,17 +80,19 @@ import { connect } from 'react-redux';
         //     }, 3000);
 
         // }
-    },[])
+    // },[])
 
     useEffect(()=>{
-        if(!processing){
+        if(!processing && url){
           const route = url && url.replace(/.*?:\/\//g, '');
-          const param = route && route.match(/\/([^\/]+)\/?$/)
-          const routeName = route && route.split('/')[0]
-            console.log('  param='+param )
-            console.log('  name='+routeName )
+          const paramName = route && route.split('?')
+          const email = paramName && paramName[1].match(/email=([^&]*)/)
+          const token = paramName && paramName[1].match(/token=([^&]*)/)
+            console.log('  param',paramName)
+            console.log('  email ',email )
+            console.log('  token ',token )
         }
-    },[processing])
+    },[processing,url])
     return (
         <TemplateBackground cover={false}>
             <View style={styles.mainContainer}>
