@@ -26,7 +26,7 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.vodjo.surfaceios</string>
+			<string>santooi</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.838643060564-gp1g93mqutc0i7f9orekffrbosntovji</string>
@@ -35,9 +35,21 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>santooi</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>fb262449948948691</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>santooi</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>santooi</string>
 			</array>
 		</dict>
 	</array>

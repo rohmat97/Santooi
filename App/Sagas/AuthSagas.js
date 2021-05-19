@@ -2,6 +2,7 @@ import { call, put } from 'redux-saga/effects'
 import { path } from 'ramda'
 import LoginRedux from '../Redux/LoginRedux'
 import RegisterRedux from '../Redux/RegisterRedux'
+import ResetPasswordRedux from '../Redux/ResetPasswordRedux'
 
 export function * getLogin (api, action) {
   // make the call to the api
@@ -35,14 +36,13 @@ export function * getSignup (api, action) {
 export function * getForgotPassword (api, action) {
   const { data } = action
   // make the call to the api
-  const response = yield call(api.getUser, data)
+  const response = yield call(api.getForgotPassword, data)
 
   if (response.ok) {
-    
     // do data conversion here if needed
-    yield put(GithubActions.userSuccess(avatar))
+    yield put(ResetPasswordRedux.ResetPasswordSuccess(response.data))
   } else {
-    yield put(GithubActions.userFailure())
+    yield put(ResetPasswordRedux.ResetPasswordFailure(response))
   }
 }
 

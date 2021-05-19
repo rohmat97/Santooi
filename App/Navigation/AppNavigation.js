@@ -19,7 +19,7 @@ const AuthNavigator = createStackNavigator({
   LoginScreen: { screen: LoginScreen },
   SignUpScreen: { screen: SignUp },
   ForgotPasswordScreen: { screen: ForgotPassword },
-  CreateNewPasswordScreen: { screen: CreateNewPassword },
+  CreateNewPasswordScreen: { screen: CreateNewPassword,path: 'newpass/:id' },
   CreateNewPasswordSuccessScreen: { screen: CreateNewPasswordSuccess },
   SplashScreen: {screen: SplashScreen}
 }, {
@@ -32,7 +32,7 @@ const AuthNavigator = createStackNavigator({
 })
 
 const MainNavigator = createStackNavigator({
-  MainScreen: { screen: MainScreen }
+  MainScreen: { screen: MainScreen, path: 'main' }
 }, {
   // Default config for all screens
   headerMode: 'none',

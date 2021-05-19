@@ -9,12 +9,14 @@ import { StartupTypes } from '../Redux/StartupRedux'
 import { GithubTypes } from '../Redux/GithubRedux'
 import { LoginTypes } from '../Redux/LoginRedux'
 import { RegisterTypes } from '../Redux/RegisterRedux'
+import { ResetPasswordTypes } from '../Redux/ResetPasswordRedux'
 
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
 import { getUserAvatar } from './GithubSagas'
 import { getLogin,getLogout,getSignup,getForgotPassword} from './AuthSagas';
+import { get } from 'lodash'
 
 /* ------------- API ------------- */
 
@@ -32,6 +34,7 @@ export default function * root () {
     // some sagas receive extra parameters in addition to an action
     takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api),
     takeLatest(LoginTypes.LOGIN_REQUEST, getLogin, api),
-    takeLatest(RegisterTypes.REGISTER_REQUEST, getSignup, api)
+    takeLatest(RegisterTypes.REGISTER_REQUEST, getSignup, api),
+    takeLatest(ResetPasswordTypes.RESETPASSWORD_REQUEST, getForgotPassword, api)
   ])
 }
