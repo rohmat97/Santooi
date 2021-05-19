@@ -31,26 +31,28 @@ import { connect } from 'react-redux';
     //     setAppStateVisible(appState.current);
     //     console.log("AppState", appState.current);
     //   };
-      useEffect(() => {
-        // Linking.addEventListener("url",getUrlAsync )
-        Linking.addEventListener('url',(url)=>{ 
-            console.log('this is the url: ',url);
-            setUrl(url.url);
-            setTimeout(() => {
-                setProcessing(false)
-            }, 1000);
-        });
-        // AppState.addEventListener("change", _handleAppStateChange);
-        return () => {
-        //   Linking.removeEventListener("url",getUrlAsync )
-        Linking.removeEventListener('url',(url)=>{ 
-            console.log('this is the url: ',url);
-            setUrl(url.url);
-            setProcessing(true)
-        });
-        //   AppState.removeEventListener("change", _handleAppStateChange);
-        };
-      }, []);
+
+    //   useEffect(() => {
+    //     // Linking.addEventListener("url",getUrlAsync )
+    //     Linking.addEventListener('url',(url)=>{ 
+    //         console.log('this is the url: ',url);
+    //         setUrl(url.url);
+    //         setTimeout(() => {
+    //             setProcessing(false)
+    //         }, 1000);
+    //     });
+    //     // AppState.addEventListener("change", _handleAppStateChange);
+    //     return () => {
+    //     //   Linking.removeEventListener("url",getUrlAsync )
+    //     Linking.removeEventListener('url',(url)=>{ 
+    //         console.log('this is the url: ',url);
+    //         setUrl(url.url);
+    //         setProcessing(true)
+    //     });
+    //     //   AppState.removeEventListener("change", _handleAppStateChange);
+    //     };
+    //   }, []);
+      
     // useEffect(()=>{
         // const params = getParam('params')
         // Linking.addEventListener('url', getUrlAsync());

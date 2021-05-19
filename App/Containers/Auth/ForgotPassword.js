@@ -44,7 +44,7 @@ function ForgotPassword(props) {
 
     useEffect(()=>{
         if(data){
-            navigate('CreateNewPasswordScreen')
+            navigate('LoginScreen')
         }
     },[data])
     return (

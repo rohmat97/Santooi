@@ -36,6 +36,7 @@ export function * getSignup (api, action) {
 export function * getForgotPassword (api, action) {
   const { data } = action
   // make the call to the api
+  console.log('data', data)
   const response = yield call(api.getForgotPassword, data)
 
   if (response.ok) {
