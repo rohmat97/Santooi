@@ -11,7 +11,7 @@ export const reducers = combineReducers({
   search: require('./SearchRedux').reducer,
   login: require('./LoginRedux').reducer,
   regist: require('./RegisterRedux').reducer,
-  resetpass: require('./ResetPasswordRedux').reducer,
+  forgot: require('./ForgotRedux').reducer
 })
 
 export default () => {

@@ -2,7 +2,7 @@ import { call, put } from 'redux-saga/effects'
 import { path } from 'ramda'
 import LoginRedux from '../Redux/LoginRedux'
 import RegisterRedux from '../Redux/RegisterRedux'
-import ResetPasswordRedux from '../Redux/ResetPasswordRedux'
+import ForgotRedux from '../Redux/ForgotRedux'
 
 export function * getLogin (api, action) {
   // make the call to the api
@@ -41,9 +41,9 @@ export function * getForgotPassword (api, action) {
 
   if (response.ok) {
     // do data conversion here if needed
-    yield put(ResetPasswordRedux.ResetPasswordSuccess(response.data))
+    yield put(ForgotRedux.ForgotSuccess(response.data))
   } else {
-    yield put(ResetPasswordRedux.ResetPasswordFailure(response))
+    yield put(ForgotRedux.ForgotFailure(response))
   }
 }
 

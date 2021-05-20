@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { CreateNewPassword } from '../Containers/Auth/CreateNewPassword';
 import { CreateNewPasswordSuccess } from '../Containers/Auth/CreateNewPasswordSuccess';
 import { FirstLoginScreen } from '../Containers/Auth/FirstLoginScreen';
-import { ForgotPassword } from '../Containers/Auth/ForgotPassword';
+import ForgotPassword  from '../Containers/Auth/ForgotPassword';
 import LoginScreen  from '../Containers/Auth/LoginScreen';
 import SignUp from '../Containers/Auth/SignUp';
 import SplashScreen from '../Containers/SplashScreen'
@@ -19,7 +19,7 @@ const AuthNavigator = createStackNavigator({
   LoginScreen: { screen: LoginScreen },
   SignUpScreen: { screen: SignUp },
   ForgotPasswordScreen: { screen: ForgotPassword },
-  CreateNewPasswordScreen: { screen: CreateNewPassword,path: 'newpass/:id' },
+  CreateNewPasswordScreen: { screen: CreateNewPassword },
   CreateNewPasswordSuccessScreen: { screen: CreateNewPasswordSuccess },
   SplashScreen: {screen: SplashScreen}
 }, {
@@ -32,7 +32,7 @@ const AuthNavigator = createStackNavigator({
 })
 
 const MainNavigator = createStackNavigator({
-  MainScreen: { screen: MainScreen, path: 'main' }
+  MainScreen: { screen: MainScreen }
 }, {
   // Default config for all screens
   headerMode: 'none',

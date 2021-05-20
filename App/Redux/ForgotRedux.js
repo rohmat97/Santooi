@@ -4,12 +4,12 @@ import Immutable from 'seamless-immutable'
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
-  ResetPasswordRequest: ['data'],
-  ResetPasswordSuccess: ['payload'],
-  ResetPasswordFailure: null
+  ForgotRequest: ['data'],
+  ForgotSuccess: ['payload'],
+  ForgotFailure: null
 })
 
-export const ResetPasswordTypes = Types
+export const ForgotTypes = Types
 export default Creators
 
 /* ------------- Initial State ------------- */
@@ -17,13 +17,13 @@ export default Creators
 export const INITIAL_STATE = Immutable({
   data: null,
   fetching: null,
-  payload: null||undefined,
+  payload: null,
   error: null
 })
 
 /* ------------- Selectors ------------- */
 
-export const ResetPasswordSelectors = {
+export const ForgotSelectors = {
   getData: state => state.data
 }
 
@@ -46,7 +46,7 @@ export const failure = state =>
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.RESETPASSWORD_REQUEST]: request,
-  [Types.RESETPASSWORD_SUCCESS]: success,
-  [Types.RESETPASSWORD_FAILURE]: failure
+  [Types.FORGOT_REQUEST]: request,
+  [Types.FORGOT_SUCCESS]: success,
+  [Types.FORGOT_FAILURE]: failure
 })

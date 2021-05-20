@@ -3,7 +3,7 @@ import { Text, Image, View, TouchableOpacity } from 'react-native'
 import { TextInput } from 'react-native-paper';
 import { TemplateBackground } from '../../Components/TemplateBackground'
 //redux
-import ResetPasswordRedux from '../../Redux/ResetPasswordRedux';
+import ForgotRedux from '../../Redux/ForgotRedux';
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'
@@ -16,8 +16,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 function ForgotPassword(props) {
-    const { navigation, ResetPasswordRequest, data } = props
-    const { navigate } = navigation
+    const { navigation, ResetPasswordRequest, forgot } = props
+    const { navigate, getParam } = navigation
     const [email, setEmail] = useState('')
     const [errorEmail, setErrorEmail] = useState()
     const [validateEmail, setValidateEmail] = useState(false)
@@ -43,10 +43,14 @@ function ForgotPassword(props) {
     }
 
     useEffect(()=>{
-        if(data){
+        const params = getParam('params')
+        console.log(params)
+    },[])
+    useEffect(()=>{
+        if(forgot){
             navigate('LoginScreen')
         }
-    },[data])
+    },[forgot])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -113,11 +117,11 @@ function ForgotPassword(props) {
 
 const mapStateToProps = (state) => {
   return {
-    data: state.resetpass.payload
+    forgot: state.forgot.payload
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(Object.assign(ResetPasswordRedux), dispatch)
+  return bindActionCreators(Object.assign(ForgotRedux), dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword)

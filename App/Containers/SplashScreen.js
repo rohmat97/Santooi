@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Text, Image, View, Linking, AppState } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Text, Image, View } from 'react-native'
 import { TemplateBackground } from '../Components/TemplateBackground'
 
 //redux
@@ -10,91 +10,53 @@ import { Screen } from '../Transforms/Screen'
 import images from '../Themes/Images';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleDeeplink';
 
  function SplashScreen(props) {
     const { navigation, login } = props
     const { navigate, getParam } = navigation
     const [url, setUrl] = useState(null);
-    const [processing, setProcessing] = useState(true);
-    // const appState = useRef(AppState.currentState);
-    // const [appStateVisible, setAppStateVisible] = useState(appState.current);
-    
-    // const _handleAppStateChange = (nextAppState) => {
-    //     if (
-    //       appState.current.match(/inactive|background/) &&
-    //       nextAppState === "active"
-    //     ) {
-    //       console.log("App has come to the foreground!");
-    //     }
-    
-    //     appState.current = nextAppState;
-    //     setAppStateVisible(appState.current);
-    //     console.log("AppState", appState.current);
-    //   };
+    const [came, setCame] = useState(false);
+    const [nextStep, setnextStep] = useState(false);
 
-    //   useEffect(() => {
-    //     // Linking.addEventListener("url",getUrlAsync )
-    //     Linking.addEventListener('url',(url)=>{ 
-    //         console.log('this is the url: ',url);
-    //         setUrl(url.url);
-    //         setTimeout(() => {
-    //             setProcessing(false)
-    //         }, 1000);
-    //     });
-    //     // AppState.addEventListener("change", _handleAppStateChange);
-    //     return () => {
-    //     //   Linking.removeEventListener("url",getUrlAsync )
-    //     Linking.removeEventListener('url',(url)=>{ 
-    //         console.log('this is the url: ',url);
-    //         setUrl(url.url);
-    //         setProcessing(true)
-    //     });
-    //     //   AppState.removeEventListener("change", _handleAppStateChange);
-    //     };
-    //   }, []);
-      
-    // useEffect(()=>{
-        // const params = getParam('params')
-        // Linking.addEventListener('url', getUrlAsync());
-        // if(processing) {
-        //     Linking.canOpenURL(initialUrl)
-        // }
-        // if(params && params.type ==='transition'){
-        //     setTimeout(() => {
-        //             navigate(params.root, {
-        //                 screen: params.screen,
-        //                 initial: true,
-        //             }) 
-        //     }, 3000);
-        // }else{
-        //     setTimeout(() => {
-        //         if(login){
-        //             navigate('Main', {
-        //                 screen: 'LoginScreen',
-        //                 initial: true,
-        //             }) 
-        //         }else{
-        //             navigate('Auth', {
-        //                 screen: 'MainScreen',
-        //                 initial: true,
-        //             }) 
-        //         }   
-        //     }, 3000);
-
-        // }
-    // },[])
+      useEffect(() => {
+        Initiate(setUrl,setCame )
+        Transition(navigate, getParam)
+        return () => {
+        RemoveEvent(setUrl)
+        };
+      }, []);
 
     useEffect(()=>{
-        if(!processing && url){
-          const route = url && url.replace(/.*?:\/\//g, '');
-          const paramName = route && route.split('?')
-          const email = paramName && paramName[1].match(/email=([^&]*)/)
-          const token = paramName && paramName[1].match(/token=([^&]*)/)
-            console.log('  param',paramName)
-            console.log('  email ',email )
-            console.log('  token ',token )
+        if(came){
+            if(url){
+                ExtractURL(url, navigate)
+            }else{
+                setnextStep(true)
+            }
         }
-    },[processing,url])
+    },[came,url])
+
+    useEffect(()=>{
+        if(nextStep){
+            setTimeout(() => {
+                if(login){
+                    navigate('Main', {
+                        screen: 'MainScreen',
+                        initial: true,
+                    }) 
+                }else{
+                    navigate('Auth', {
+                        screen: 'LoginScreen',
+                        initial: true,
+                    }) 
+                }  
+                setCame(false)
+                setnextStep(false) 
+            }, 2000);
+        }
+    },[nextStep,login])
+    
     return (
         <TemplateBackground cover={false}>
             <View style={styles.mainContainer}>
@@ -105,7 +67,7 @@ import { connect } from 'react-redux';
                     <View style={{justifyContent:'center', alignItems:'center', height:Screen.height*0.5, marginHorizontal:Screen.width*0.2, zIndex:1}}>
                         <Text style={{ color: '#35385D', fontSize: Screen.width*0.07, fontWeight: "bold", textAlign:'center' }}>Tenangkan pikiranmu setiap saat</Text>
                         <Text>
-                            {processing
+                            {!url
                             ? `Processing the initial url from a deep link`
                             : `The deep link is: ${url || "None"}`}
                         </Text>
