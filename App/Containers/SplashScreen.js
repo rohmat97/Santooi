@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, Image, View } from 'react-native'
 import { TemplateBackground } from '../Components/TemplateBackground'
 
@@ -10,40 +10,53 @@ import { Screen } from '../Transforms/Screen'
 import images from '../Themes/Images';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { get } from 'lodash';
+import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleDeeplink';
 
  function SplashScreen(props) {
     const { navigation, login } = props
     const { navigate, getParam } = navigation
+    const [url, setUrl] = useState(null);
+    const [came, setCame] = useState(false);
+    const [nextStep, setnextStep] = useState(false);
+
+      useEffect(() => {
+        Initiate(setUrl,setCame )
+        Transition(navigate, getParam)
+        return () => {
+        RemoveEvent(setUrl)
+        };
+      }, []);
 
     useEffect(()=>{
-        const params = getParam('params')
-        console.log(params)
-        if(params && params.type ==='transition'){
-            setTimeout(() => {
-                    navigate(params.root, {
-                        screen: params.screen,
-                        initial: true,
-                    }) 
-            }, 3000);
-        }else{
+        if(came){
+            if(url){
+                ExtractURL(url, navigate)
+            }else{
+                setnextStep(true)
+            }
+        }
+    },[came,url])
+
+    useEffect(()=>{
+        if(nextStep){
             setTimeout(() => {
                 if(login){
                     navigate('Main', {
-                        screen: 'LoginScreen',
+                        screen: 'MainScreen',
                         initial: true,
                     }) 
                 }else{
                     navigate('Auth', {
-                        screen: 'MainScreen',
+                        screen: 'LoginScreen',
                         initial: true,
                     }) 
-                }   
-            }, 3000);
-
+                }  
+                setCame(false)
+                setnextStep(false) 
+            }, 2000);
         }
-    },[])
-
+    },[nextStep,login])
+    
     return (
         <TemplateBackground cover={false}>
             <View style={styles.mainContainer}>
@@ -51,10 +64,15 @@ import { get } from 'lodash';
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Image source={images.logoSantui} style={{ width: Screen.width * 0.2, marginBottom: 20 }} resizeMode='contain' />
                     </View>
-                    <View style={{justifyContent:'center', alignItems:'center', height:Screen.height*0.5, marginHorizontal:Screen.width*0.1, zIndex:1}}>
-                        <Text style={{ color: '#35385D', fontSize: Screen.width*0.1, fontWeight: "bold", textAlign:'center' }}>Tenangkan pikiranmu setiap saat</Text>
+                    <View style={{justifyContent:'center', alignItems:'center', height:Screen.height*0.5, marginHorizontal:Screen.width*0.2, zIndex:1}}>
+                        <Text style={{ color: '#35385D', fontSize: Screen.width*0.07, fontWeight: "bold", textAlign:'center' }}>Tenangkan pikiranmu setiap saat</Text>
+                        <Text>
+                            {!url
+                            ? `Processing the initial url from a deep link`
+                            : `The deep link is: ${url || "None"}`}
+                        </Text>
                     </View>
-                    <Image source={images.circleSplash} style={{ width: Screen.width*0.95, marginHorizontal:Screen.width*0.05,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain'></Image>
+                    <Image source={images.circleSplash} style={{ width: Screen.width*0.8, marginHorizontal:Screen.width*0.1,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain'></Image>
                 </View>
             </View>
         </TemplateBackground>

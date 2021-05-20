@@ -93,9 +93,10 @@ function LoginScreen(props) {
             data.idToken,
             data.accessToken,
         );
-        // console.log('credential',credential)
+        console.log('credential',JSON.stringify(credential))
         await auth().signInWithCredential(credential).then(
             sucess =>{
+                console.log('success login', JSON.stringify(sucess))
                 Alert.alert('Login Success')
                 navigation.navigate('Splash', {
                     screen: 'SplashScreen',
@@ -134,16 +135,16 @@ function LoginScreen(props) {
         await LoginManager.logInWithPermissions(["public_profile", "email"]).then(
             function (result) {
             if (result.isCancelled) {
-            // console.log("Login Cancelled " + JSON.stringify(result))
+            console.log("Login Cancelled " + JSON.stringify(result))
             } else {
             // console.log("Login success with  permisssions: " + result.grantedPermissions.toString());
-            // console.log("Login Success " + JSON.stringify(result));
+            console.log("Login Success " + JSON.stringify(result));
             AccessToken.getCurrentAccessToken().then(
                 async(data) => {
-                //   console.log('success',JSON.stringify(data))
-                // console.log('credential',credential)
+                //  console.log('success',JSON.stringify(data))
+                // console.log('credential',data.accessToken)
                 await auth().signInWithCredential(auth.FacebookAuthProvider.credential(data.accessToken)).then(naise =>{
-                    // console.log('naise', naise)
+                    console.log('naise', naise)
                     Alert.alert('Login Success')
                     navigation.navigate('Splash', {
                         screen: 'SplashScreen',
@@ -155,16 +156,16 @@ function LoginScreen(props) {
                         }
                     })
                 }).catch(err =>{
-                    // console.log('error ', err)
+                    console.log('error ', err)
                 })
                 }
               ).catch(err =>{
-                //   console.log('error', JSON.stringify(err))
+                  console.log('error', JSON.stringify(err))
               })
             }
             },
             function (error) {
-            alert("Login failed with error: " + error);
+            Alert.alert("Login failed with error: " + error);
             })
         }
     const signOut = async () => {

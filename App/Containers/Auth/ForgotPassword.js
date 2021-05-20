@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, Image, View, TouchableOpacity } from 'react-native'
 import { TextInput } from 'react-native-paper';
 import { TemplateBackground } from '../../Components/TemplateBackground'
-
+//redux
+import ForgotRedux from '../../Redux/ForgotRedux';
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'
@@ -11,10 +12,12 @@ import { Colors } from '../../Themes';
 import { PasswordEye } from '../../Components/PasswordEye'
 import RoundedButton from '../../Components/RoundedButton'
 import ErrorButton from '../../Components/ErrorButton'
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
-export function ForgotPassword(props) {
-    const { navigation } = props
-    const { navigate } = navigation
+function ForgotPassword(props) {
+    const { navigation, ResetPasswordRequest, forgot } = props
+    const { navigate, getParam } = navigation
     const [email, setEmail] = useState('')
     const [errorEmail, setErrorEmail] = useState()
     const [validateEmail, setValidateEmail] = useState(false)
@@ -31,7 +34,23 @@ export function ForgotPassword(props) {
             setValidateEmail(true)
         }
     }
+    const SubmitResetPassword= () =>{
+        if(validateEmail){
+            ResetPasswordRequest({
+                'email':email
+            })
+        }
+    }
 
+    useEffect(()=>{
+        const params = getParam('params')
+        console.log(params)
+    },[])
+    useEffect(()=>{
+        if(forgot){
+            navigate('LoginScreen')
+        }
+    },[forgot])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -88,10 +107,21 @@ export function ForgotPassword(props) {
                     <View style={{ marginTop: Screen.width * 0.1 }} />
                     <RoundedButton
                         text={'Lanjut'}
-                        onPress={() => navigate('CreateNewPasswordScreen')}
+                        onPress={() => SubmitResetPassword()}
                         backgroundColor={'#266CF5'} />
                 </View>
             </View>
         </TemplateBackground>
     )
 }
+
+const mapStateToProps = (state) => {
+  return {
+    forgot: state.forgot.payload
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(Object.assign(ForgotRedux), dispatch)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword)

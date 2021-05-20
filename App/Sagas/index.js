@@ -9,6 +9,7 @@ import { StartupTypes } from '../Redux/StartupRedux'
 import { GithubTypes } from '../Redux/GithubRedux'
 import { LoginTypes } from '../Redux/LoginRedux'
 import { RegisterTypes } from '../Redux/RegisterRedux'
+import { ForgotTypes } from '../Redux/ForgotRedux'
 
 /* ------------- Sagas ------------- */
 
@@ -32,6 +33,7 @@ export default function * root () {
     // some sagas receive extra parameters in addition to an action
     takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api),
     takeLatest(LoginTypes.LOGIN_REQUEST, getLogin, api),
-    takeLatest(RegisterTypes.REGISTER_REQUEST, getSignup, api)
+    takeLatest(RegisterTypes.REGISTER_REQUEST, getSignup, api),
+    takeLatest(ForgotTypes.FORGOT_REQUEST, getForgotPassword, api)
   ])
 }

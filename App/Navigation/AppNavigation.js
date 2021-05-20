@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { CreateNewPassword } from '../Containers/Auth/CreateNewPassword';
 import { CreateNewPasswordSuccess } from '../Containers/Auth/CreateNewPasswordSuccess';
 import { FirstLoginScreen } from '../Containers/Auth/FirstLoginScreen';
-import { ForgotPassword } from '../Containers/Auth/ForgotPassword';
+import ForgotPassword  from '../Containers/Auth/ForgotPassword';
 import LoginScreen  from '../Containers/Auth/LoginScreen';
 import SignUp from '../Containers/Auth/SignUp';
 import SplashScreen from '../Containers/SplashScreen'
