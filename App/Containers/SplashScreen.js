@@ -71,15 +71,15 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Image source={images.logoSantui} style={{ width: Screen.width * 0.2, marginBottom: 20 }} resizeMode='contain' />
                     </View>
-                    <View style={{justifyContent:'center', alignItems:'center', height:Screen.height*0.65, marginHorizontal:Screen.width*0.2, zIndex:1}}>
-                        <Text style={{ color: '#35385D', fontSize: Screen.width*0.07, fontWeight: "bold", textAlign:'center', paddingVertical:Screen.width*0.2 }}>Tenangkan pikiranmu setiap saat</Text>
+                    <View style={{justifyContent:'center', alignItems:'center', height:Screen.height*0.8, zIndex:1,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, marginHorizontal:Screen.width*0.3}}>
+                        <Text style={{ color: '#35385D', fontSize: 32, fontWeight: "bold", textAlign:'center', }}>Tenangkan pikiranmu setiap saat</Text>
                         {/* <Text>
                             {!url
                             ? `Processing the initial url from a deep link`
                             : `The deep link is: ${url || "None"}`}
                         </Text> */}
                     </View>
-                    <Image source={images.circleSplash} style={{ width: Screen.width*0.8, marginHorizontal:Screen.width*0.1,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center'}} resizeMode='contain'></Image>
+                    <Image source={images.circleSplash} style={{ width: Screen.width*0.8, marginHorizontal:Screen.width*0.1,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} resizeMode='contain'></Image>
                 </View>
             </View>
         </TemplateBackground>

@@ -209,7 +209,8 @@ function LoginScreen(props) {
         }
         if(errorLogin){
             setvisible(false)
-            alert(JSON.stringify(errorLogin))
+            console.log(errorLogin)
+            // alert(JSON.stringify(errorLogin))
         }
     },[login,errorLogin])
 
