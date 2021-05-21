@@ -32,6 +32,7 @@ export default class RoundedButton extends Component {
   // }
 
   render() {
+    console.log(this.props.disabled)
     return (
       <TouchableOpacity style={{
         height: 50,
@@ -39,7 +40,8 @@ export default class RoundedButton extends Component {
         marginVertical: Metrics.baseMargin,
         justifyContent: 'center',
         backgroundColor: this.props.backgroundColor
-      }} onPress={this.props.onPress}>
+      }} onPress={this.props.onPress}
+      disabled={this.props.disabled}>
         <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems:'center' }}>
           {this.props.image != null &&
             <Image source={this.props.image} style={{width:this.props.width,height:this.props.height, marginEnd:10}}/>

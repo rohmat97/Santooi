@@ -11,7 +11,7 @@ export function * getLogin (api, action) {
   // make the call to the api
   // console.log(action.data)
   const response = yield call(api.getLogin, action.data)
-  // console.log('response',response)
+  console.log('response',response)
   if (response.ok) {
     
     // do data conversion here if needed

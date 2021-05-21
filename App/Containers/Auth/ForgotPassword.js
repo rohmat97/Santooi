@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, Image, View, TouchableOpacity } from 'react-native'
+import { Text, Image, View, TouchableOpacity, Alert } from 'react-native'
 import { TextInput } from 'react-native-paper';
 import { TemplateBackground } from '../../Components/TemplateBackground'
 //redux
@@ -43,6 +43,7 @@ function ForgotPassword(props) {
     }
     useEffect(()=>{
         if(forgot){
+            Alert.alert('Email berhasil dikirimkan');
             navigate('LoginScreen')
         }
     },[forgot])
@@ -103,7 +104,8 @@ function ForgotPassword(props) {
                     <RoundedButton
                         text={'Lanjut'}
                         onPress={() => SubmitResetPassword()}
-                        backgroundColor={'#266CF5'} />
+                        disabled={validateEmail ? false : true}
+                        backgroundColor={validateEmail ? '#266CF5' : '#b3b3cc'} />
                 </View>
             </View>
         </TemplateBackground>
