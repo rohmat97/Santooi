@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text, Image, View, TouchableOpacity } from 'react-native'
 import { TextInput } from 'react-native-paper';
 import { TemplateBackground } from '../../Components/TemplateBackground'
 
+// Redux
+import ResetPasswordRedux from '../../Redux/ResetPasswordRedux';
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'
@@ -11,10 +13,12 @@ import { Colors } from '../../Themes';
 import { PasswordEye } from '../../Components/PasswordEye'
 import RoundedButton from '../../Components/RoundedButton'
 import ErrorButton from '../../Components/ErrorButton'
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-export function CreateNewPassword(props) {
-    const { navigation } = props
-    const { navigate } = navigation
+function CreateNewPassword(props) {
+    const { navigation, ResetPasswordRequest,data } = props
+    const { navigate, getParam } = navigation
     const [password1, setPassword1] = useState('')
     const [password2, setPassword2] = useState('')
     const [errorPassword1, setErrorPassword1] = useState()
@@ -61,6 +65,23 @@ export function CreateNewPassword(props) {
 
     }
 
+    const Submit = () =>{
+
+        const params = getParam('params')
+        const data = {
+            'email':params.email,
+            'token':params.token,
+            'password':password1
+        }
+        ResetPasswordRequest(data)
+    }
+
+    useEffect(()=>{
+        if(data){
+            const params = getParam('params')
+            navigate('CreateNewPasswordSuccessScreen',{email:params.email})
+        }
+    },[data])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -165,10 +186,23 @@ export function CreateNewPassword(props) {
                     <View style={{ marginTop: Screen.width * 0.1 }} />
                     <RoundedButton
                         text={'Konfirmasi'}
-                        onPress={() => navigate('CreateNewPasswordSuccessScreen')}
+                        onPress={() => Submit()}
                         backgroundColor={'#266CF5'} />
                 </View>
             </View>
         </TemplateBackground>
     )
 }
+
+
+
+const mapStateToProps = (state) => {
+    return {
+      data: state.resetPassword.payload
+    }
+  }
+  
+  const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(Object.assign(ResetPasswordRedux), dispatch)
+  }
+export default connect(mapStateToProps, mapDispatchToProps)(CreateNewPassword)

@@ -16,7 +16,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 function ForgotPassword(props) {
-    const { navigation, ResetPasswordRequest, forgot } = props
+    const { navigation, ForgotRequest, forgot } = props
     const { navigate, getParam } = navigation
     const [email, setEmail] = useState('')
     const [errorEmail, setErrorEmail] = useState()
@@ -36,16 +36,11 @@ function ForgotPassword(props) {
     }
     const SubmitResetPassword= () =>{
         if(validateEmail){
-            ResetPasswordRequest({
+            ForgotRequest({
                 'email':email
             })
         }
     }
-
-    useEffect(()=>{
-        const params = getParam('params')
-        console.log(params)
-    },[])
     useEffect(()=>{
         if(forgot){
             navigate('LoginScreen')

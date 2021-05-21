@@ -2,7 +2,7 @@ import React , {  } from 'react';
 import { Linking } from "react-native";
 
 
-export const Initiate = (setUrl,setCame ) =>{
+export const Initiate = (setUrl,setCame,navigate,routeName,goBack ) =>{
     Linking.getInitialURL().then(URL1 => {
         // this.navigate(url);
             console.log('INITIAL: ',URL1);
@@ -13,9 +13,10 @@ export const Initiate = (setUrl,setCame ) =>{
       });
 
     Linking.addEventListener('url',(URL)=>{ 
-        console.log('this is the url didmount: ',URL);
+        console.log('this is the url didmount: ',URL.url);
         if(URL){
             setUrl(URL.url);
+            ExtractURL(URL.url, navigate, routeName, goBack)
         }
         setCame(true)
     });
@@ -31,17 +32,19 @@ export const RemoveEvent =(setUrl) =>{
 
 export const Transition = (navigate, getParam) =>{
     const params = getParam('params')
-    if(params && params.type ==='transition'){
-        setTimeout(() => {
-            navigate(params.root, {
-                screen: params.screen,
-                initial: true,
-            }) 
-    }, 2000);
-}
+    console.log('masuk', params);
+        if(params.type ==='transition'){
+            setTimeout(() => {
+                navigate(params.root, {
+                    screen: params.screen,
+                    initial: true,
+                }) 
+        }, 500);
+    }
+    
 }
 
-export const ExtractURL =(url, navigate) =>{
+export const ExtractURL =(url, navigate, routeName,goBack) =>{
     const route = url && url.replace(/.*?:\/\//g, '');
     const paramName = route && route.split('?')
     const email = paramName && paramName[1].match(/email=([^&]*)/)
@@ -50,10 +53,10 @@ export const ExtractURL =(url, navigate) =>{
       console.log('  email ',email )
       console.log('  token ',token )
     setTimeout(() => {
-        navigate('CreateNewPasswordScreen', {
+        navigate(paramName[0], {
             params :{
-                email:email,
-                token:token
+                email:email[1],
+                token:token[1]
             }
         })
     }, 1000);

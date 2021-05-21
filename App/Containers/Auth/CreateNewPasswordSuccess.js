@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Text, Image, View, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Text, Image, View, TouchableOpacity, Linking, Alert } from 'react-native'
 import { TextInput } from 'react-native-paper';
 import { TemplateBackground } from '../../Components/TemplateBackground'
 
@@ -14,7 +14,7 @@ import ErrorButton from '../../Components/ErrorButton'
 
 export function CreateNewPasswordSuccess(props) {
     const { navigation } = props
-    const { navigate } = navigation
+    const { navigate, getParam } = navigation
     const [password1, setPassword1] = useState('')
     const [password2, setPassword2] = useState('')
     const [errorPassword1, setErrorPassword1] = useState()
@@ -22,6 +22,7 @@ export function CreateNewPasswordSuccess(props) {
     const [secureTextEntry1, setSecureTextEntry1] = useState(true)
     const [secureTextEntry2, setSecureTextEntry2] = useState(true)
     const [passwordMatch, setPasswordMatch] = useState(false)
+    const [openUrl,setOpenUrl] = useState('')
 
     const onAccessoryPress1 = () => {
         setSecureTextEntry1(!secureTextEntry1)
@@ -65,6 +66,12 @@ export function CreateNewPasswordSuccess(props) {
 
     }
 
+    useEffect(()=>{
+       const email = getParam('email') 
+       const split = email.split('@')
+       setOpenUrl(split[1])
+       console.log(split)
+    },[])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -80,7 +87,18 @@ export function CreateNewPasswordSuccess(props) {
                     <View style={{ marginTop: Screen.width * 0.05}} />
                     <RoundedButton
                         text={'Cek Email'}
-                        onPress={() => navigate('LoginScreen', {type : 'login'})}
+                        onPress={async() =>{
+                            const supported = await Linking.canOpenURL('https://'+openUrl);
+
+                            if (supported) {
+                              // Opening the link with some app, if the URL scheme is "http" the web link should be opened
+                              // by some browser in the mobile
+                              await Linking.openURL('https://'+openUrl);
+                              navigation.popToTop()
+                            } else {
+                              Alert.alert(`Don't know how to open this URL: ${openUrl}`);
+                            }
+                        }}
                         backgroundColor={'#266CF5'} />
                 </View>
             </View>

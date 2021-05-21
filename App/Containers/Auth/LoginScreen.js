@@ -22,6 +22,8 @@ import { TemplateBackground } from '../../Components/TemplateBackground'
 // Redux 
 
 import LoginRedux from '../../Redux/LoginRedux'
+import CallbackFacebookRedux from '../../Redux/CallbackFacebookRedux'
+import CallbackGoogleRedux from '../../Redux/CallbackGoogleRedux'
 
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
@@ -48,7 +50,7 @@ async function Setup() {
   }
 
 function LoginScreen(props) {
-    const { navigation, LoginRequest, login, errorLogin } = props
+    const { navigation, LoginRequest, login, errorLogin, CallbackGoogleRequest, CallbackFacebookRequest, callbackgoogle, callbackfacebook } = props
     const { navigate } = navigation
     const { type } = navigation.state.params
     // for form login/register and validation
@@ -63,6 +65,7 @@ function LoginScreen(props) {
     const [loggedIn, setloggedIn] = useState(false);
     const [userInfo, setuserInfo] = useState([]);
     const [error, setError] =useState('')
+    const [method, setmethod] = useState('')
     const [visible, setvisible] = useState(false)
     //show/hide password
     const onAccessoryPress = () => {
@@ -82,30 +85,27 @@ function LoginScreen(props) {
         }
     }
      const signInGoogle =async()=> {
+        setmethod('google')
         try {
         await GoogleSignin.hasPlayServices();
         const data = await GoogleSignin.signIn();
 
-        console.log('data',data)
+        // console.log('data',data)
         // console.log('idToken',idToken)
         setloggedIn(true);
         const credential = auth.GoogleAuthProvider.credential(
             data.idToken,
             data.accessToken,
         );
-        console.log('credential',JSON.stringify(credential))
+        // console.log('credential',JSON.stringify(credential))
         await auth().signInWithCredential(credential).then(
             sucess =>{
-                console.log('success login', JSON.stringify(sucess))
-                Alert.alert('Login Success')
-                navigation.navigate('Splash', {
-                    screen: 'SplashScreen',
-                    initial: true,
-                    params : {
-                        type:'transition',
-                        root:'Main',
-                        screen:'MainScreen'
-                    }
+                // console.log('success login', JSON.stringify(sucess))
+                CallbackGoogleRequest({
+                    'email':sucess.user.email,
+                    'uid':sucess.user.uid,
+                    'displayName':sucess.user.displayName,
+                    'photoURL':sucess.user.photoURL
                 })
             }
         )
@@ -114,21 +114,22 @@ function LoginScreen(props) {
         } catch (error) {
           if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             // when user cancels sign in process,
-            // Alert.alert('Process Cancelled');
+            Alert.alert('Process Cancelled');
           } else if (error.code === statusCodes.IN_PROGRESS) {
             // when in progress already
-            // Alert.alert('Process in progress');
+            Alert.alert('Process in progress');
           } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
             // when play services not available
-            // Alert.alert('Play services are not available');
+            Alert.alert('Play services are not available');
           } else {
             // some other error
-            // Alert.alert('Something else went wrong... ', error.toString());
+            Alert.alert('Something else went wrong... ', error.toString());
             setError(error);
           }
         }
       }
       const signInFacebook =async()=> {
+        setmethod('facebook')
         if (Platform.OS === "android") {
             await LoginManager.setLoginBehavior('web_only')
         }
@@ -144,17 +145,13 @@ function LoginScreen(props) {
                 //  console.log('success',JSON.stringify(data))
                 // console.log('credential',data.accessToken)
                 await auth().signInWithCredential(auth.FacebookAuthProvider.credential(data.accessToken)).then(naise =>{
-                    console.log('naise', naise)
-                    Alert.alert('Login Success')
-                    navigation.navigate('Splash', {
-                        screen: 'SplashScreen',
-                        initial: true,
-                        params : {
-                            type:'transition',
-                            root:'Main',
-                            screen:'MainScreen'
-                        }
+                    CallbackFacebookRequest({
+                        'email':naise.user.email,
+                        'uid':naise.user.uid,
+                        'displayName':naise.user.displayName,
+                        'photoURL':naise.user.photoURL
                     })
+                    console.log('naise', naise)
                 }).catch(err =>{
                     console.log('error ', err)
                 })
@@ -184,8 +181,8 @@ function LoginScreen(props) {
         setvisible(true)
         setTimeout(() => {
             LoginRequest({
-                'email': 'user1@mailinator.com',
-                'password': '123456'
+                'email': email?email:'user1@mailinator.com',
+                'password': password?password:'123456'
             })
         }, 1000);
        
@@ -198,6 +195,8 @@ function LoginScreen(props) {
             //     screen: 'MainScreen',
             //     initial: true,
             // })
+
+            Alert.alert('Login Success')
             navigation.navigate('Splash', {
                 screen: 'SplashScreen',
                 initial: true,
@@ -226,6 +225,38 @@ function LoginScreen(props) {
     useEffect(()=>{
         Setup()
     },[])
+
+    useEffect(()=>{
+        if(callbackgoogle){
+            Alert.alert('Login Success')
+            navigation.navigate('Splash', {
+                screen: 'SplashScreen',
+                initial: true,
+                params : {
+                    type:'transition',
+                    root:'Main',
+                    screen:'MainScreen'
+                }
+            })
+        }
+    },[callbackgoogle])
+
+    useEffect(()=>{
+        if(callbackfacebook){
+            Alert.alert('Login Success')
+              navigation.navigate('Splash', {
+                screen: 'SplashScreen',
+                initial: true,
+                params : {
+                    type:'transition',
+                    root:'Main',
+                    screen:'MainScreen',
+                    method:method
+                }
+            })
+            
+        }
+    },[callbackfacebook])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -389,11 +420,13 @@ function LoginScreen(props) {
 const mapStateToProps = (state) => {
   return {
     login: state.login.payload,
-    errorLogin: state.login.error
+    errorLogin: state.login.error,
+    callbackgoogle: state.callbackGoogle.payload,
+    callbackfacebook: state.callbackFacebook.payload
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(Object.assign(LoginRedux), dispatch)
+  return bindActionCreators(Object.assign(LoginRedux, CallbackGoogleRedux, CallbackFacebookRedux), dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen)

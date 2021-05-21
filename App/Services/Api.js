@@ -46,6 +46,8 @@ const create = (baseURL = staging) => {
   const getResetPassword = payload => api.post('/auth/reset-password',payload)
   const getChangePassword = payload => api.post('/auth/change-password', payload.body,{headers: { Authorization: `Bearer ${token.token}` }})
   const getRegister = payload => api.post('/account/user',payload)
+  const getCallBackGoogle = payload => api.post('/auth/google/callback', payload)
+  const getCallBackFacebook = payload => api.post('/auth/facebook/callback', payload)
   // ------
   // STEP 3
   // ------
@@ -68,7 +70,9 @@ const create = (baseURL = staging) => {
     getForgotPassword,
     getLogout,
     getResetPassword,
-    getRegister
+    getRegister,
+    getCallBackFacebook,
+    getCallBackGoogle
   }
 }
 
