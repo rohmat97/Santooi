@@ -307,11 +307,11 @@ function LoginScreen(props) {
                         }
                     </View>
 
-                    {!validateEmail ? email.length > 0 &&
+                    {type == 'login' ? !validateEmail ? email.length > 0 &&
                         <View style={{ marginBottom: 10 }}>
                             <ErrorButton text={'Email tidak terdaftar'} />
                         </View>
-                        : <View />}
+                        : <View /> : <View/>}
 
                     <View style={styles.textbox}>
                         <View style={{ flex: 1 }}>
@@ -367,14 +367,16 @@ function LoginScreen(props) {
                         <RoundedButton
                             text={'Lanjut'}
                             onPress={() =>  Register()}
-                            backgroundColor={'#266CF5'} />
+                            disabled={validateEmail && password.length>7 ? false : true}
+                            backgroundColor={validateEmail && password.length>7 ? '#266CF5' : '#b3b3cc'} />
                     }
 
                     {type == 'login' &&
                         <RoundedButton
                             text={'Login'}
                             onPress={() => LoginByEmail()}
-                            backgroundColor={'#266CF5'} />
+                            disabled={validateEmail && password.length>7 ? false : true}
+                            backgroundColor={validateEmail && password.length>7 ? '#266CF5' : '#b3b3cc'} />
                     }
 
                     <View style={{ flexDirection: 'row', marginVertical: 10, justifyContent: 'center', alignItems: 'center' }}>
