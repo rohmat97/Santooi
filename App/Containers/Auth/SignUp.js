@@ -23,7 +23,7 @@ function SignUp(props) {
     const [name, setName] = useState('')
     const [state, setState] = useState(0)
     const [show, setShow] = useState(false)
-    const [greeting, setGreeting] = useState('')
+    const [greeting, setGreeting] = useState('2')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [visible, setvisible] = useState(false)
@@ -37,14 +37,27 @@ function SignUp(props) {
 
     const onNameChange = (name) => {
         setName(name)
-        setShow(true)
+
+        if (name.length > 0) {
+            setShow(true)
+        } else {
+            setShow(false)
+        }
     }
 
     const onPhoneChange = (number) => {
         setPhoneNumber(number)
-        if (phoneNumber.length >= 10) {
-            setValidatePhoneNumber(true)
-            setShow(true)
+        if (number.length >= 10) {
+            if (number.length > 13) {
+                setValidatePhoneNumber(false)
+                setShow(false)
+            } else {
+                setValidatePhoneNumber(true)
+                setShow(true)
+            }
+        } else {
+            setValidatePhoneNumber(false)
+            setShow(false)
         }
     }
 
@@ -81,8 +94,28 @@ function SignUp(props) {
             Signup()
         } else {
             setState(state + 1)
-            setShow(false)
+
+            if (state == 0) {
+                setShow(true)
+            } else {
+                if (state == 1 && dateBirth.length > 0) {
+                  setShow(true)
+                } else if (state == 2 && phoneNumber.length > 9) {
+                    if (phoneNumber.length > 13) {
+                        setShow(false)
+                    } else {
+                        setShow(true)
+                    }
+                } else {
+                    setShow(false)
+                } 
+            }
         }
+    }
+
+    const onBackClick = () => {
+        state == 0 ? navigation.pop() : setState(state-1)
+        setShow(true)
     }
 
     const Signup =() =>{
@@ -162,10 +195,10 @@ function SignUp(props) {
                                                     {
                                                         Platform.OS==='ios'?
                                                         <View style={{borderWidth:1,borderColor:'white', borderRadius:40, backgroundColor:'transparent'}}>
-                                                            <RadioButton color='white' uncheckedColor='black' value="2" />
+                                                            <RadioButton color='white' uncheckedColor='white' value="2"/>
                                                         </View>
                                                         :
-                                                        <RadioButton color='white' uncheckedColor='black' value="2" />
+                                                        <RadioButton color='white' uncheckedColor='white' value="2"/>
                                                     }
                                                     
                                                     <Text style={{ color: 'white', fontSize: Fonts.size.medium, marginStart: 10 }}>Kamu</Text>
@@ -174,10 +207,10 @@ function SignUp(props) {
                                                     {
                                                          Platform.OS==='ios'?
                                                          <View style={{borderWidth:1,borderColor:'white', borderRadius:40, backgroundColor:'transparent'}}>
-                                                             <RadioButton color='white' uncheckedColor='white' value="1" />
+                                                             <RadioButton color='white' uncheckedColor='white' value="1"/>
                                                          </View>
                                                          :
-                                                         <RadioButton color='white' uncheckedColor='white' value="1" />
+                                                         <RadioButton color='white' uncheckedColor='white' value="1"/>
                                                     }
                                                     <Text style={{ color: 'white', fontSize: Fonts.size.medium, marginStart: 10 }}>Anda</Text>
                                                 </View>
@@ -202,11 +235,12 @@ function SignUp(props) {
                                                 <TextInput style={{ color: 'white', flex: 1 }}
                                                     value={phoneNumber}
                                                     onChangeText={number => onPhoneChange(number)}
+                                                    keyboardType={'numeric'}
                                                     inputRef={(ref) => (this.number = ref)}></TextInput>
                                             </View>
                                             {!validatePhoneNumber &&
-                                                <View style={{ marginTop: Screen.height * 0.06, marginBottom: 20, marginHorizontal: -15 }}>
-                                                    <ErrorButton text={'Nomor ponsel minimal 11 angka'} />
+                                                <View style={{ marginTop: 10, marginHorizontal: -5 }}>
+                                                    <ErrorButton text={'Nomor ponsel minimal 11 angka dan maksimal 15 angka'} />
                                                 </View>
                                             }
                                         </View>}
@@ -217,14 +251,14 @@ function SignUp(props) {
 
                     {!validatePhoneNumber && <View style={{ marginTop: 20 }} />}
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <TouchableOpacity onPress={() => state == 0 ? navigation.pop() : setState(state-1)} style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginStart: 10 }}>
+                        <TouchableOpacity onPress={() => onBackClick()} style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', marginStart: 10 }}>
                             <Image source={images.arrowLeft} style={{ width: 20, height: 20 }} />
                             <Text style={{ color: 'white', marginStart: 15, fontSize: Fonts.size.regular }}>Kembali</Text>
                         </TouchableOpacity>
 
                         {state <= 3 ? show &&
                             <TouchableOpacity onPress={() => onClick()} style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', marginEnd: 10 }}>
-                                <Text style={{ color: 'white', marginEnd: 15, fontSize: Fonts.size.regular }}>{state != 0 ? 'Selanjutnya' : 'Masuk'}</Text>
+                                <Text style={{ color: 'white', marginEnd: 15, fontSize: Fonts.size.regular }}>Selanjutnya</Text>
                                 <Image source={images.arrowRight} style={{ width: 20, height: 20 }} />
                             </TouchableOpacity>
                             :

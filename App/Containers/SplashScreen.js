@@ -71,7 +71,7 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Image source={images.logoSantui} style={{ width: Screen.width * 0.2, marginBottom: 20 }} resizeMode='contain' />
                     </View>
-                    <View style={{justifyContent:'center', alignItems:'center', height:Screen.height*0.65, marginHorizontal:Screen.width*0.2, zIndex:1}}>
+                    <View style={{justifyContent:'center', alignItems:'center', height:Screen.height*0.5, marginHorizontal:Screen.width*0.2, zIndex:1}}>
                         <Text style={{ color: '#35385D', fontSize: Screen.width*0.07, fontWeight: "bold", textAlign:'center', paddingVertical:Screen.width*0.2 }}>Tenangkan pikiranmu setiap saat</Text>
                         {/* <Text>
                             {!url
