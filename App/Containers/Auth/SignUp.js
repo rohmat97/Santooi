@@ -98,8 +98,8 @@ function SignUp(props) {
             if (state == 0) {
                 setShow(true)
             } else {
-                if (state == 1 && dateBirth.length > 0) {
-                  setShow(true)
+                if (state == 1 && dateBirth !== 'Pilih tanggal kelahiran...') {
+                    setShow(true)
                 } else if (state == 2 && phoneNumber.length > 9) {
                     if (phoneNumber.length > 13) {
                         setShow(false)
@@ -108,55 +108,55 @@ function SignUp(props) {
                     }
                 } else {
                     setShow(false)
-                } 
+                }
             }
         }
     }
 
     const onBackClick = () => {
-        state == 0 ? navigation.pop() : setState(state-1)
+        state == 0 ? navigation.pop() : setState(state - 1)
         setShow(true)
     }
 
-    const Signup =() =>{
-        const params ={
-            'name':name,
-            'email':email,
-            'password':password,
-            'call':greeting,
-            'birt_date':dateBirth,
-            'phone_number':phoneNumber
+    const Signup = () => {
+        const params = {
+            'name': name,
+            'email': email,
+            'password': password,
+            'call': greeting,
+            'birt_date': dateBirth,
+            'phone_number': phoneNumber
         }
         // console.log(params)
         setTimeout(() => {
             RegisterRequest(params)
         }, 1000);
     }
-    useEffect(()=>{
+    useEffect(() => {
         const params = getParam('params')
         setEmail(params.email)
         setPassword(params.password)
-    },[])
+    }, [])
 
-    useEffect(()=>{
-        if(regist && regist.status ){
+    useEffect(() => {
+        if (regist && regist.status) {
             // console.log('register',JSON.stringify(regist))
             setvisible(false)
             navigation.navigate('Splash', {
                 screen: 'SplashScreen',
                 initial: true,
-                params : {
-                    type:'transition',
-                    root:'Main',
-                    screen:'MainScreen'
+                params: {
+                    type: 'transition',
+                    root: 'Main',
+                    screen: 'MainScreen'
                 }
             })
         }
-        if(registerror){
+        if (registerror) {
             setvisible(false)
             alert(JSON.stringify(registerror))
         }
-    },[regist,registerror])
+    }, [regist, registerror])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -191,26 +191,26 @@ function SignUp(props) {
                                         <View>
                                             <Text style={{ color: 'white', fontSize: Fonts.size.regular, marginBottom: 10 }}>Bagaimana kamu ingin disapa?</Text>
                                             <RadioButton.Group onValueChange={newValue => onGreetingChange(newValue)} value={greeting}>
-                                                <View style={{ flexDirection: 'row', alignItems: 'center' ,paddingBottom:12}}>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', paddingBottom: 12 }}>
                                                     {
-                                                        Platform.OS==='ios'?
-                                                        <View style={{borderWidth:1,borderColor:'white', borderRadius:40, backgroundColor:'transparent'}}>
-                                                            <RadioButton color='white' uncheckedColor='white' value="2"/>
-                                                        </View>
-                                                        :
-                                                        <RadioButton color='white' uncheckedColor='white' value="2"/>
+                                                        Platform.OS === 'ios' ?
+                                                            <View style={{ borderWidth: 1, borderColor: 'white', borderRadius: 40, backgroundColor: 'transparent' }}>
+                                                                <RadioButton color='white' uncheckedColor='white' value="2" />
+                                                            </View>
+                                                            :
+                                                            <RadioButton color='white' uncheckedColor='white' value="2" />
                                                     }
-                                                    
+
                                                     <Text style={{ color: 'white', fontSize: Fonts.size.medium, marginStart: 10 }}>Kamu</Text>
                                                 </View>
                                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                     {
-                                                         Platform.OS==='ios'?
-                                                         <View style={{borderWidth:1,borderColor:'white', borderRadius:40, backgroundColor:'transparent'}}>
-                                                             <RadioButton color='white' uncheckedColor='white' value="1"/>
-                                                         </View>
-                                                         :
-                                                         <RadioButton color='white' uncheckedColor='white' value="1"/>
+                                                        Platform.OS === 'ios' ?
+                                                            <View style={{ borderWidth: 1, borderColor: 'white', borderRadius: 40, backgroundColor: 'transparent' }}>
+                                                                <RadioButton color='white' uncheckedColor='white' value="1" />
+                                                            </View>
+                                                            :
+                                                            <RadioButton color='white' uncheckedColor='white' value="1" />
                                                     }
                                                     <Text style={{ color: 'white', fontSize: Fonts.size.medium, marginStart: 10 }}>Anda</Text>
                                                 </View>
@@ -271,35 +271,35 @@ function SignUp(props) {
 
                 </View>
             </View>
-                            {
-                                Platform.OS==='ios'?
-                                <Overlay visible={showCalendar} overlayStyle={{width:Screen.width, height:Screen.height*0.5}} onBackdropPress={()=>setShowCalendar(false)}>
-                                    <DateTimePicker
-                                        testID="dateTimePicker"
-                                        value={date}
-                                        maximumDate={new Date()}
-                                        mode={'date'}
-                                        is24Hour={true}
-                                        display='inline'
-                                        onChange={onDateChange}
-                                    />
-                                </Overlay>:
-                                 showCalendar && (
-                                    <DateTimePicker
-                                        testID="dateTimePicker"
-                                        value={date}
-                                        maximumDate={new Date()}
-                                        mode={'date'}
-                                        is24Hour={true}
-                                        // display="calendar"
-                                        onChange={onDateChange}
-                                    />
-                                )
-                            }
-                            
-                            <Overlay visible={visible} overlayStyle={{width:Screen.width, height:Screen.height, backgroundColor:'transparent',justifyContent:'center', alignItems:'center'}}>
-                                <ActivityIndicator  color={'#9A5EBA'} size='large'/>
-                            </Overlay>
+            {
+                Platform.OS === 'ios' ?
+                    <Overlay visible={showCalendar} overlayStyle={{ width: Screen.width, height: Screen.height * 0.5 }} onBackdropPress={() => setShowCalendar(false)}>
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            value={date}
+                            maximumDate={new Date()}
+                            mode={'date'}
+                            is24Hour={true}
+                            display='inline'
+                            onChange={onDateChange}
+                        />
+                    </Overlay> :
+                    showCalendar && (
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            value={date}
+                            maximumDate={new Date()}
+                            mode={'date'}
+                            is24Hour={true}
+                            // display="calendar"
+                            onChange={onDateChange}
+                        />
+                    )
+            }
+
+            <Overlay visible={visible} overlayStyle={{ width: Screen.width, height: Screen.height, backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator color={'#9A5EBA'} size='large' />
+            </Overlay>
 
         </TemplateBackground >
     )
@@ -308,12 +308,12 @@ function SignUp(props) {
 
 const mapStateToProps = (state) => {
     return {
-      regist: state.regist.payload,
-      registerror: state.regist.error,
+        regist: state.regist.payload,
+        registerror: state.regist.error,
     }
-  }
-  
-  const mapDispatchToProps = (dispatch) => {
+}
+
+const mapDispatchToProps = (dispatch) => {
     return bindActionCreators(Object.assign(RegisterRedux), dispatch)
-  }
-  export default connect(mapStateToProps, mapDispatchToProps)(SignUp)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(SignUp)

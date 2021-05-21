@@ -114,16 +114,16 @@ function LoginScreen(props) {
         } catch (error) {
           if (error.code === statusCodes.SIGN_IN_CANCELLED) {
             // when user cancels sign in process,
-            // Alert.alert('Process Cancelled');
+            Alert.alert('Process Cancelled');
           } else if (error.code === statusCodes.IN_PROGRESS) {
             // when in progress already
-            // Alert.alert('Process in progress');
+            Alert.alert('Process in progress');
           } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
             // when play services not available
-            // Alert.alert('Play services are not available');
+            Alert.alert('Play services are not available');
           } else {
             // some other error
-            // Alert.alert('Something else went wrong... ', error.toString());
+            Alert.alert('Something else went wrong... ', error.toString());
             setError(error);
           }
         }
@@ -162,7 +162,7 @@ function LoginScreen(props) {
             }
             },
             function (error) {
-            // Alert.alert("Login failed with error: " + error);
+            Alert.alert("Login failed with error: " + error);
             })
         }
     const signOut = async () => {
@@ -196,7 +196,7 @@ function LoginScreen(props) {
             //     initial: true,
             // })
 
-            // Alert.alert('Login Success')
+            Alert.alert('Login Success')
             navigation.navigate('Splash', {
                 screen: 'SplashScreen',
                 initial: true,
@@ -209,7 +209,7 @@ function LoginScreen(props) {
         }
         if(errorLogin){
             setvisible(false)
-            // alert(JSON.stringify(errorLogin))
+            alert(JSON.stringify(errorLogin))
         }
     },[login,errorLogin])
 
@@ -228,7 +228,7 @@ function LoginScreen(props) {
 
     useEffect(()=>{
         if(callbackgoogle){
-            // Alert.alert('Login Success')
+            Alert.alert('Login Success')
             navigation.navigate('Splash', {
                 screen: 'SplashScreen',
                 initial: true,
@@ -243,7 +243,7 @@ function LoginScreen(props) {
 
     useEffect(()=>{
         if(callbackfacebook){
-            // Alert.alert('Login Success')
+            Alert.alert('Login Success')
               navigation.navigate('Splash', {
                 screen: 'SplashScreen',
                 initial: true,
@@ -306,11 +306,11 @@ function LoginScreen(props) {
                         }
                     </View>
 
-                    {!validateEmail ? email.length > 0 &&
+                    {type == 'login' ? !validateEmail ? email.length > 0 &&
                         <View style={{ marginBottom: 10 }}>
                             <ErrorButton text={'Email tidak terdaftar'} />
                         </View>
-                        : <View />}
+                        : <View /> : <View/>}
 
                     <View style={styles.textbox}>
                         <View style={{ flex: 1 }}>
@@ -366,14 +366,16 @@ function LoginScreen(props) {
                         <RoundedButton
                             text={'Lanjut'}
                             onPress={() =>  Register()}
-                            backgroundColor={'#266CF5'} />
+                            disabled={validateEmail && password.length>7 ? false : true}
+                            backgroundColor={validateEmail && password.length>7 ? '#266CF5' : '#b3b3cc'} />
                     }
 
                     {type == 'login' &&
                         <RoundedButton
                             text={'Login'}
                             onPress={() => LoginByEmail()}
-                            backgroundColor={'#266CF5'} />
+                            disabled={validateEmail && password.length>7 ? false : true}
+                            backgroundColor={validateEmail && password.length>7 ? '#266CF5' : '#b3b3cc'} />
                     }
 
                     <View style={{ flexDirection: 'row', marginVertical: 10, justifyContent: 'center', alignItems: 'center' }}>
