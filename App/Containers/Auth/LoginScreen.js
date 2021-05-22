@@ -209,7 +209,7 @@ function LoginScreen(props) {
         }
         if(errorLogin){
             setvisible(false)
-            alert(JSON.stringify(errorLogin))
+            // alert(JSON.stringify(errorLogin))
         }
     },[login,errorLogin])
 
@@ -375,7 +375,8 @@ function LoginScreen(props) {
                             text={'Login'}
                             onPress={() => LoginByEmail()}
                             disabled={validateEmail && password.length>7 ? false : true}
-                            backgroundColor={validateEmail && password.length>7 ? '#266CF5' : '#b3b3cc'} />
+                            backgroundColor={validateEmail && password.length>7 ? '#266CF5' : '#b3b3cc'}
+                             />
                     }
 
                     <View style={{ flexDirection: 'row', marginVertical: 10, justifyContent: 'center', alignItems: 'center' }}>

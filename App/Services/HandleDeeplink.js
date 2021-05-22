@@ -39,7 +39,7 @@ export const Transition = (navigate, getParam) =>{
                     screen: params.screen,
                     initial: true,
                 }) 
-        }, 500);
+        }, 1000);
     }
     
 }

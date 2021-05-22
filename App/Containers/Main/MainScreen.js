@@ -66,12 +66,12 @@ function MainScreen (props) {
                 <View style={{flexDirection:'row', justifyContent:'space-around'}}>
                   <TouchableOpacity onPress={toggleOverlay}>
                     <View
-                      style={{borderWidth:1, height:Screen.height*0.15, width:Screen.width*0.9, marginBottom:Screen.height*0.1, borderRadius:20, alignItems:'center',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
-                      <Text>{quote?quote:'Bagaimana Perasaanmu Hari ini'}</Text>
+                      style={{borderWidth:1, minHeight:80, width:Screen.width*0.9, marginBottom:Screen.height*0.1, borderRadius:20, alignItems:'center',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
+                      <Text style={{color:'#662D91', fontStyle:'italic'}}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
-                <View style={{backgroundColor:'#67308F',width:Screen.width*0.35, alignItems:'center', borderRadius:100, padding:Screen.width*0.02,marginVertical:-Screen.height*0.025}}>
+                <View style={{backgroundColor:'#67308F',width:Screen.width*0.35, alignItems:'center', borderRadius:100, padding:8,marginTop:-32,marginBottom:-20}}>
                   <Text style={{color:'white'}}>Kendalikan Yuk!</Text>
                 </View>
                 <ContentHome />
@@ -79,7 +79,7 @@ function MainScreen (props) {
               {
                 //Space
               }
-              <View style={{height:Screen.height*0.2}}/>
+              <View style={{height:100}}/>
             </ScrollView>
                 <CustomBottomTab />
         </View>
