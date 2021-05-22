@@ -34,7 +34,7 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
             if(url){
                 ExtractURL(url, navigate,routeName,goBack)
             }else{
-                // setnextStep(true)
+                setnextStep(true)
             }
         }
     },[came,url])
