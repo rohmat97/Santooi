@@ -34,7 +34,7 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
             if(url){
                 ExtractURL(url, navigate,routeName,goBack)
             }else{
-                setnextStep(true)
+                // setnextStep(true)
             }
         }
     },[came,url])
@@ -79,8 +79,8 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
                     {/* <View style={{ width: Screen.width*0.95, position:'absolute',top:0,margin:Screen.width*0.05, zIndex:1}}>
                         <Text style={{ color: '#35385D', fontSize: 32, fontWeight: "bold", textAlign:'center'}}>Tenangkan pikiranmu setiap saat</Text>
                     </View> */}
-                    <ImageBackground source={images.circleSplash} style={[styles.backgroundImage,{marginTop:-Screen.height*0.2}]} resizeMode='contain'>
-                    <Text style={{ color: '#35385D', fontSize: 32, fontWeight: "bold", textAlign:'center'}}>Tenangkan pikiranmu setiap saat</Text>
+                    <ImageBackground source={images.circleSplash} style={[styles.backgroundImage,{marginTop:-Screen.height*0.2,alignItems:'center'}]} resizeMode='contain'>
+                        <Text style={{ color: '#35385D', fontSize: 32, fontWeight: "bold", textAlign:'justify'}}>Tenangkan{'\n'}pikiranmu {'\n'}setiap saat</Text>
                     </ImageBackground>
                     {/* <Image source={images.circleSplash} style={{ width: Screen.width*0.95, position:'absolute',top:0,margin:Screen.width*0.05}} resizeMode='contain'></Image> */}
                 </View>
