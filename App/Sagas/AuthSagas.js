@@ -6,6 +6,7 @@ import ForgotRedux from '../Redux/ForgotRedux'
 import ResetPasswordRedux from '../Redux/ResetPasswordRedux'
 import CallbackFacebookRedux from '../Redux/CallbackFacebookRedux'
 import CallbackGoogleRedux from '../Redux/CallbackGoogleRedux'
+import { Alert } from 'react-native'
 
 export function * getLogin (api, action) {
   // make the call to the api
@@ -15,9 +16,15 @@ export function * getLogin (api, action) {
   if (response.ok) {
     
     // do data conversion here if needed
-    yield put(LoginRedux.LoginSuccess(response.data))
+    if(response.data.data.user.role ===1){
+      Alert.alert("Account Unauthorized")
+      yield put(LoginRedux.LoginFailure())
+    }else{
+      yield put(LoginRedux.LoginSuccess(response.data))
+    }
   } else {
     yield put(LoginRedux.LoginFailure(response))
+    Alert.alert(response.data.message)
   }
 }
 
@@ -32,7 +39,8 @@ export function * getSignup (api, action) {
     // do data conversion here if needed
     yield put(RegisterRedux.RegisterSuccess(response.data))
   } else {
-    yield put(RegisterRedux.RegisterFailure(response))
+    yield put(RegisterRedux.RegisterFailure())
+    Alert.alert(response.data.message)
   }
 }
 
@@ -47,6 +55,7 @@ export function * getForgotPassword (api, action) {
     yield put(ForgotRedux.ForgotSuccess(response.data))
   } else {
     yield put(ForgotRedux.ForgotFailure(response))
+    Alert.alert(response.data.message)
   }
 }
 
@@ -62,6 +71,7 @@ export function * getResetPassword (api, action) {
     yield put(ResetPasswordRedux.ResetPasswordSuccess(response.data))
   } else {
     yield put(ResetPasswordRedux.ResetPasswordFailure(response))
+    Alert.alert(response.data.message)
   }
 }
 
@@ -76,6 +86,7 @@ export function * getLogout (api, action) {
     yield put(GithubActions.userSuccess(response.data))
   } else {
     yield put(GithubActions.userFailure(response))
+    Alert.alert(response.data.message)
   }
 }
 
@@ -91,6 +102,7 @@ export function * getCallBackFacebook (api, action) {
     yield put(CallbackFacebookRedux.CallbackFacebookSuccess(response.data))
   } else {
     yield put(CallbackFacebookRedux.CallbackFacebookFailure(response))
+    Alert.alert(response.data.message)
   }
 }
 
@@ -106,5 +118,6 @@ export function * getCallBackGoogle (api, action) {
     yield put(CallbackGoogleRedux.CallbackGoogleSuccess(response.data))
   } else {
     yield put(CallbackGoogleRedux.CallbackGoogleFailure(response))
+    Alert.alert(response.data.message)
   }
 }

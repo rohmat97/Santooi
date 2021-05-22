@@ -154,7 +154,6 @@ function SignUp(props) {
         }
         if (registerror) {
             setvisible(false)
-            alert(JSON.stringify(registerror))
         }
     }, [regist, registerror])
     return (

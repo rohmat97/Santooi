@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, Image, View } from 'react-native'
+import { Text, Image, View, ImageBackground } from 'react-native'
 import { TemplateBackground } from '../Components/TemplateBackground'
 
 //redux
@@ -42,20 +42,26 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
     useEffect(()=>{
         if(nextStep){
             setTimeout(() => {
-                if(login){
+                if(login &&login.status === 200) {
+                    setvisible(false)
+                    // navigate('Main', {
+                    //     screen: 'MainScreen',
+                    //     initial: true,
+                    // })
                     navigate('Main', {
                         screen: 'MainScreen',
                         initial: true,
                     }) 
+                       
                 }else{
                     navigate('Auth', {
                         screen: 'LoginScreen',
                         initial: true,
                     }) 
-                }  
+                }
                 setCame(false)
                 setnextStep(false) 
-            }, 2000);
+            }, 2000 );
         }
     },[nextStep,login])
     
@@ -71,15 +77,13 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Image source={images.logoSantui} style={{ width: Screen.width * 0.2, marginBottom: 20 }} resizeMode='contain' />
                     </View>
-                    <View style={{justifyContent:'center', alignItems:'center', height:Screen.height*0.8, zIndex:1,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, marginHorizontal:Screen.width*0.3}}>
-                        <Text style={{ color: '#35385D', fontSize: 32, fontWeight: "bold", textAlign:'center', }}>Tenangkan pikiranmu setiap saat</Text>
-                        {/* <Text>
-                            {!url
-                            ? `Processing the initial url from a deep link`
-                            : `The deep link is: ${url || "None"}`}
-                        </Text> */}
-                    </View>
-                    <Image source={images.circleSplash} style={{ width: Screen.width*0.8, marginHorizontal:Screen.width*0.1,position: 'absolute', top: 0, left: 0, right: 0, bottom: 0}} resizeMode='contain'></Image>
+                    {/* <View style={{ width: Screen.width*0.95, position:'absolute',top:0,margin:Screen.width*0.05, zIndex:1}}>
+                        <Text style={{ color: '#35385D', fontSize: 32, fontWeight: "bold", textAlign:'center'}}>Tenangkan pikiranmu setiap saat</Text>
+                    </View> */}
+                    <ImageBackground source={images.circleSplash} style={[styles.backgroundImage,{marginTop:-Screen.height*0.2}]} resizeMode='contain'>
+                    <Text style={{ color: '#35385D', fontSize: 32, fontWeight: "bold", textAlign:'center'}}>Tenangkan pikiranmu setiap saat</Text>
+                    </ImageBackground>
+                    {/* <Image source={images.circleSplash} style={{ width: Screen.width*0.95, position:'absolute',top:0,margin:Screen.width*0.05}} resizeMode='contain'></Image> */}
                 </View>
             </View>
         </TemplateBackground>
