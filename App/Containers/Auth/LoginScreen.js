@@ -24,6 +24,7 @@ import { TemplateBackground } from '../../Components/TemplateBackground'
 import LoginRedux from '../../Redux/LoginRedux'
 import CallbackFacebookRedux from '../../Redux/CallbackFacebookRedux'
 import CallbackGoogleRedux from '../../Redux/CallbackGoogleRedux'
+import TokenRedux from '../../Redux/TokenRedux'
 
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
@@ -50,7 +51,7 @@ async function Setup() {
   }
 
 function LoginScreen(props) {
-    const { navigation, LoginRequest, login, errorLogin, CallbackGoogleRequest, CallbackFacebookRequest, callbackgoogle, callbackfacebook } = props
+    const { navigation, LoginRequest, login, errorLogin, CallbackGoogleRequest, CallbackFacebookRequest, callbackgoogle, callbackfacebook, token } = props
     const { navigate } = navigation
     const { type } = navigation.state.params
     // for form login/register and validation
@@ -195,8 +196,16 @@ function LoginScreen(props) {
             //     screen: 'MainScreen',
             //     initial: true,
             // })
-
             Alert.alert('Login Success')
+        }
+        if(errorLogin){
+            setvisible(false)
+            Alert.alert(login.data.message)
+        }
+    },[login,errorLogin])
+
+    useEffect(()=>{
+        if(token){
             navigation.navigate('Splash', {
                 screen: 'SplashScreen',
                 initial: true,
@@ -207,12 +216,7 @@ function LoginScreen(props) {
                 }
             })
         }
-        if(errorLogin){
-            setvisible(false)
-            // alert(JSON.stringify(errorLogin))
-        }
-    },[login,errorLogin])
-
+    },[token])
     const Register =()=>{
         if(validateEmail && password.length>7) {
             navigate('SignUpScreen',{ params : {
@@ -423,6 +427,7 @@ function LoginScreen(props) {
 const mapStateToProps = (state) => {
   return {
     login: state.login.payload,
+    token: state.token.payload,
     errorLogin: state.login.error,
     callbackgoogle: state.callbackGoogle.payload,
     callbackfacebook: state.callbackFacebook.payload
@@ -430,6 +435,6 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(Object.assign(LoginRedux, CallbackGoogleRedux, CallbackFacebookRedux), dispatch)
+  return bindActionCreators(Object.assign(LoginRedux, CallbackGoogleRedux, CallbackFacebookRedux,TokenRedux), dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen)

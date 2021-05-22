@@ -6,6 +6,7 @@ import ForgotRedux from '../Redux/ForgotRedux'
 import ResetPasswordRedux from '../Redux/ResetPasswordRedux'
 import CallbackFacebookRedux from '../Redux/CallbackFacebookRedux'
 import CallbackGoogleRedux from '../Redux/CallbackGoogleRedux'
+import TokenRedux from '../Redux/TokenRedux'
 import { Alert } from 'react-native'
 
 export function * getLogin (api, action) {
@@ -21,6 +22,7 @@ export function * getLogin (api, action) {
       yield put(LoginRedux.LoginFailure())
     }else{
       yield put(LoginRedux.LoginSuccess(response.data))
+      yield put(TokenRedux.TokenSuccess(response.data))
     }
   } else {
     yield put(LoginRedux.LoginFailure(response))
@@ -100,6 +102,7 @@ export function * getCallBackFacebook (api, action) {
     
     // do data conversion here if needed
     yield put(CallbackFacebookRedux.CallbackFacebookSuccess(response.data))
+    yield put(TokenRedux.TokenSuccess(response.data))
   } else {
     yield put(CallbackFacebookRedux.CallbackFacebookFailure(response))
     Alert.alert(response.data.message)
@@ -116,6 +119,7 @@ export function * getCallBackGoogle (api, action) {
     
     // do data conversion here if needed
     yield put(CallbackGoogleRedux.CallbackGoogleSuccess(response.data))
+    yield put(TokenRedux.TokenSuccess(response.data))
   } else {
     yield put(CallbackGoogleRedux.CallbackGoogleFailure(response))
     Alert.alert(response.data.message)

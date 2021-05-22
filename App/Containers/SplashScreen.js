@@ -3,7 +3,7 @@ import { Text, Image, View, ImageBackground } from 'react-native'
 import { TemplateBackground } from '../Components/TemplateBackground'
 
 //redux
-import LoginRedux from '../Redux/LoginRedux';
+import TokenRedux from '../Redux/TokenRedux';
 // Styles
 import styles from '../Containers/Styles/LaunchScreenStyles'
 import { Screen } from '../Transforms/Screen'
@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleDeeplink';
 
  function SplashScreen(props) {
-    const { navigation, login, } = props
+    const { navigation, token } = props
     const { navigate, getParam,state,goBack } = navigation
     const { routeName } = state
     const [url, setUrl] = useState(null);
@@ -42,8 +42,7 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
     useEffect(()=>{
         if(nextStep){
             setTimeout(() => {
-                if(login &&login.status === 200) {
-                    setvisible(false)
+                if(token) {
                     // navigate('Main', {
                     //     screen: 'MainScreen',
                     //     initial: true,
@@ -61,9 +60,9 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
                 }
                 setCame(false)
                 setnextStep(false) 
-            }, 2000 );
+            }, 3000 );
         }
-    },[nextStep,login])
+    },[nextStep,token])
     
     useEffect(()=>{
         if(params){
@@ -93,11 +92,11 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
 
 const mapStateToProps = (state) => {
     return {
-      login: state.login.payload
+      token: state.token.payload
     }
   }
   
   const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Object.assign(LoginRedux), dispatch)
+    return bindActionCreators(Object.assign(TokenRedux), dispatch)
   }
 export default connect(mapStateToProps, mapDispatchToProps)(SplashScreen)
