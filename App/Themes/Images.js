@@ -46,6 +46,7 @@ const images = {
   ok: require('../Images/Icons/ok.png'),
   circleSplash: require('../Images/circleSplash.png'),
   closeEye: require('../Images/Icons/close-eye.png'),
+  editQuote: require('../Images/Icons/editQuote.png')
 }
 
 export default images

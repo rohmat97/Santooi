@@ -6,27 +6,53 @@ import { connect } from 'react-redux'
 import { CustomBottomTab } from '../../Components/CustomButtomTab'
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import { ContentHome } from '../../Components/ContentHome'
-
+//redux 
+import EmoticonRedux from '../../Redux/Dashboard/EmoticonRedux'
+import TokenRedux from '../../Redux/TokenRedux';
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'
 import { Colors } from '../../Themes'
 import images from '../../Themes/Images';
-import { OverlayHomepage } from '../../Components/OverlayHomepage';
+import { OverlayHomepage, style } from '../../Components/OverlayHomepage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { bindActionCreators } from 'redux';
 
 function MainScreen (props) {
+  const { EmoticonRequest, emoticon, token } = props
   const [visible, setVisible] = useState(false);
   const [quote, setquote]= useState('')
-  const [categoryData] = useState([{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 1' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 2' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 3' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 4' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 5' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 6' }])
-  const [PickedEmoticon,setPickedEmoticon] = useState([])
+  const [listEmoticon, setlistEmoticon] = useState([])
+  const [picked, setpicked] = useState([])
   const toggleOverlay = () => {
     setVisible(!visible);
   };
 
+  const RemovePickedEmotion = (payload) =>{
+
+    console.log('will remove',payload[0].name)
+    const check = picked.filter(data => data.name !== payload[0].name)
+    // const indexOfTaskToDelete = picked.findIndex(
+    //   task => task.name === payload.name
+    // );
+    setpicked(check)
+    console.log('removed',check)
+  }
   useEffect(()=>{
-    console.log(PickedEmoticon)
-  },[PickedEmoticon])
+    EmoticonRequest(token.data.access_token)
+    // console.log('token',token.data.access_token)
+  },[])
+  
+  useEffect(()=>{
+    if(emoticon && emoticon.data && emoticon.data.rows){
+      // console.log('emoticon',emoticon.data.rows.data)
+      setlistEmoticon(emoticon.data.rows.data)
+    }
+  },[emoticon])
+
+  useEffect(()=>{
+    console.log('picker',picked)
+  },[picked])
     return (
       <TemplateBackground cover={true}>
         <View style={styles.mainContainer}>
@@ -66,8 +92,25 @@ function MainScreen (props) {
                 <View style={{flexDirection:'row', justifyContent:'space-around'}}>
                   <TouchableOpacity onPress={toggleOverlay}>
                     <View
-                      style={{borderWidth:1, minHeight:80, width:Screen.width*0.9, marginBottom:Screen.height*0.1, borderRadius:20, alignItems:'center',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
-                      <Text style={{color:'#662D91', fontStyle:'italic'}}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
+                      style={{borderWidth:1, minHeight:80, width:Screen.width*0.9, marginBottom:Screen.height*0.1, borderRadius:20,paddingBottom:12, alignItems:'flex-start',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
+                      {
+                        picked.length>0?
+                          <Image source={{uri:picked[0].image.url}} style={[quote?style.iconDashboard:style.icon]} resizeMode='contain'/>
+                        :null
+                      }
+                      <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:picked.length>0?-12:quote?14:0}}>{picked.length>0?'':quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
+                      {
+                        picked.length>0 || quote?
+                        <View style={{width:'100%', justifyContent:'flex-end', flexDirection:'row', marginTop:24}}>
+                        <TouchableOpacity 
+                          onPress={toggleOverlay}
+                          style={{backgroundColor:'#67308F', flexDirection:'row',alignItems:'center',justifyContent:'center', height:30, borderRadius:16, marginRight:12}}>
+                          <Image source={images.editQuote} style={[style.iconDashboard]} resizeMode='contain'/>
+                          <Text style={{color:'#fff', marginLeft:-6, paddingRight:12}}>Edit</Text>
+                        </TouchableOpacity>
+                        </View>
+                        :null
+                      }
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -83,19 +126,20 @@ function MainScreen (props) {
             </ScrollView>
                 <CustomBottomTab />
         </View>
-        <OverlayHomepage visible ={visible} toggleOverlay={toggleOverlay} setquote={setquote} quote={quote} categoryData={categoryData} PickedEmoticon={PickedEmoticon} setPickedEmoticon={setPickedEmoticon} />
+        <OverlayHomepage visible ={visible} toggleOverlay={toggleOverlay} setquote={setquote} quote={quote} listEmoticon={listEmoticon} picked={picked} RemovePickedEmotion={RemovePickedEmotion} setpicked ={setpicked}/>
       </TemplateBackground>
     )
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//     data: state.local.payload
-//   }
-// }
+const mapStateToProps = (state) => {
+  return {
+    emoticon: state.emoticon.payload,
+    token: state.token.payload
+  }
+}
 
-// const mapDispatchToProps = (dispatch) => {
-//   return bindActionCreators(Object.assign(DataLocalRedux), dispatch)
-// }
-// export default connect(mapStateToProps, mapDispatchToProps)(MainScreen)
-export default connect(null,null)(MainScreen)
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(Object.assign(EmoticonRedux,TokenRedux), dispatch)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(MainScreen)
+// export default connect(null,null)(MainScreen)

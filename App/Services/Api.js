@@ -39,15 +39,17 @@ const create = (baseURL = staging) => {
   const getRoot = () => api.get('')
   const getRate = () => api.get('rate_limit')
   const getUser = (username) => api.get('search/users', {q: username})
-  
+  //authentication
   const getLogin = payload => api.post('/auth/login',payload,{})
   const getLogout = token => api.post('/auth/logout',{},{headers: { Authorization: `Bearer ${token}` }})
   const getForgotPassword = payload => api.post('/auth/forgot-password',payload)
   const getResetPassword = payload => api.post('/auth/reset-password',payload)
-  const getChangePassword = payload => api.post('/auth/change-password', payload.body,{headers: { Authorization: `Bearer ${token.token}` }})
+  const getChangePassword = payload => api.post('/auth/change-password', payload.body,{headers: { Authorization: `Bearer ${payload.token}` }})
   const getRegister = payload => api.post('/account/user',payload)
   const getCallBackGoogle = payload => api.post('/auth/google/callback', payload)
   const getCallBackFacebook = payload => api.post('/auth/facebook/callback', payload)
+  //dashboard
+  const getEmoticon = payload => api.get('/emoticon?limit=10&page=1','',{headers: { Authorization: `Bearer ${payload}` }})
   // ------
   // STEP 3
   // ------
@@ -72,7 +74,8 @@ const create = (baseURL = staging) => {
     getResetPassword,
     getRegister,
     getCallBackFacebook,
-    getCallBackGoogle
+    getCallBackGoogle,
+    getEmoticon
   }
 }
 
