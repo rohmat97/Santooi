@@ -2,7 +2,9 @@
 import apisauce from 'apisauce'
 
 // our "constructor"
-const create = (baseURL = 'https://api.github.com/') => {
+const staging = 'https://happiness-api.demoapp.xyz/api'
+const production = 'https://happiness-api.demoapp.xyz/api'
+const create = (baseURL = staging) => {
   // ------
   // STEP 1
   // ------
@@ -14,7 +16,7 @@ const create = (baseURL = 'https://api.github.com/') => {
     baseURL,
     // here are some default headers
     headers: {
-      'Cache-Control': 'no-cache'
+      'Cache-Control': 'no-cache',
     },
     // 10 second timeout...
     timeout: 10000
@@ -37,7 +39,15 @@ const create = (baseURL = 'https://api.github.com/') => {
   const getRoot = () => api.get('')
   const getRate = () => api.get('rate_limit')
   const getUser = (username) => api.get('search/users', {q: username})
-
+  
+  const getLogin = payload => api.post('/auth/login',payload,{})
+  const getLogout = token => api.post('/auth/logout',{},{headers: { Authorization: `Bearer ${token}` }})
+  const getForgotPassword = payload => api.post('/auth/forgot-password',payload)
+  const getResetPassword = payload => api.post('/auth/reset-password',payload)
+  const getChangePassword = payload => api.post('/auth/change-password', payload.body,{headers: { Authorization: `Bearer ${token.token}` }})
+  const getRegister = payload => api.post('/account/user',payload)
+  const getCallBackGoogle = payload => api.post('/auth/google/callback', payload)
+  const getCallBackFacebook = payload => api.post('/auth/facebook/callback', payload)
   // ------
   // STEP 3
   // ------
@@ -54,7 +64,15 @@ const create = (baseURL = 'https://api.github.com/') => {
     // a list of the API functions from step 2
     getRoot,
     getRate,
-    getUser
+    getUser,
+    getLogin,
+    getChangePassword,
+    getForgotPassword,
+    getLogout,
+    getResetPassword,
+    getRegister,
+    getCallBackFacebook,
+    getCallBackGoogle
   }
 }
 

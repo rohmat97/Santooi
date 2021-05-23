@@ -7,11 +7,18 @@ import DebugConfig from '../Config/DebugConfig'
 
 import { StartupTypes } from '../Redux/StartupRedux'
 import { GithubTypes } from '../Redux/GithubRedux'
+import { LoginTypes } from '../Redux/LoginRedux'
+import { RegisterTypes } from '../Redux/RegisterRedux'
+import { ForgotTypes } from '../Redux/ForgotRedux'
+import { ResetPasswordTypes } from '../Redux/ResetPasswordRedux'
+import { CallbackFacebookTypes } from '../Redux/CallbackFacebookRedux'
+import { CallbackGoogleTypes } from '../Redux/CallbackGoogleRedux'
 
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
 import { getUserAvatar } from './GithubSagas'
+import { getLogin,getLogout,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword} from './AuthSagas';
 
 /* ------------- API ------------- */
 
@@ -27,6 +34,12 @@ export default function * root () {
     takeLatest(StartupTypes.STARTUP, startup),
 
     // some sagas receive extra parameters in addition to an action
-    takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api)
+    takeLatest(GithubTypes.USER_REQUEST, getUserAvatar, api),
+    takeLatest(LoginTypes.LOGIN_REQUEST, getLogin, api),
+    takeLatest(RegisterTypes.REGISTER_REQUEST, getSignup, api),
+    takeLatest(ForgotTypes.FORGOT_REQUEST, getForgotPassword, api),
+    takeLatest(ResetPasswordTypes.RESET_PASSWORD_REQUEST, getResetPassword, api),
+    takeLatest(CallbackFacebookTypes.CALLBACK_FACEBOOK_REQUEST, getCallBackFacebook, api),
+    takeLatest(CallbackGoogleTypes.CALLBACK_GOOGLE_REQUEST, getCallBackGoogle, api),
   ])
 }

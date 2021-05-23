@@ -17,10 +17,16 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 function MainScreen (props) {
   const [visible, setVisible] = useState(false);
-
+  const [quote, setquote]= useState('')
+  const [categoryData] = useState([{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 1' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 2' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 3' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 4' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 5' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 6' }])
+  const [PickedEmoticon,setPickedEmoticon] = useState([])
   const toggleOverlay = () => {
     setVisible(!visible);
   };
+
+  useEffect(()=>{
+    console.log(PickedEmoticon)
+  },[PickedEmoticon])
     return (
       <TemplateBackground cover={true}>
         <View style={styles.mainContainer}>
@@ -60,12 +66,12 @@ function MainScreen (props) {
                 <View style={{flexDirection:'row', justifyContent:'space-around'}}>
                   <TouchableOpacity onPress={toggleOverlay}>
                     <View
-                      style={{borderWidth:1, height:Screen.height*0.15, width:Screen.width*0.9, marginBottom:Screen.height*0.1, borderRadius:20, alignItems:'center',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
-                      <Text>Bagaimana Perasaanmu Hari ini</Text>
+                      style={{borderWidth:1, minHeight:80, width:Screen.width*0.9, marginBottom:Screen.height*0.1, borderRadius:20, alignItems:'center',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
+                      <Text style={{color:'#662D91', fontStyle:'italic'}}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
                     </View>
                   </TouchableOpacity>
                 </View>
-                <View style={{backgroundColor:'#67308F',width:Screen.width*0.35, alignItems:'center', borderRadius:100, padding:Screen.width*0.02,marginVertical:-Screen.height*0.025}}>
+                <View style={{backgroundColor:'#67308F',width:Screen.width*0.35, alignItems:'center', borderRadius:100, padding:8,marginTop:-32,marginBottom:-20}}>
                   <Text style={{color:'white'}}>Kendalikan Yuk!</Text>
                 </View>
                 <ContentHome />
@@ -73,11 +79,11 @@ function MainScreen (props) {
               {
                 //Space
               }
-              <View style={{height:Screen.height*0.2}}/>
+              <View style={{height:100}}/>
             </ScrollView>
                 <CustomBottomTab />
         </View>
-        <OverlayHomepage visible ={visible} toggleOverlay={toggleOverlay}/>
+        <OverlayHomepage visible ={visible} toggleOverlay={toggleOverlay} setquote={setquote} quote={quote} categoryData={categoryData} PickedEmoticon={PickedEmoticon} setPickedEmoticon={setPickedEmoticon} />
       </TemplateBackground>
     )
 }

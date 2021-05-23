@@ -40,9 +40,12 @@ const images = {
   fb: require('../Images/Icons/fb.png'),
   apple: require('../Images/Icons/apple.png'),
   arrowRight: require('../Images/Icons/arrow-right.png'),
+  arrowLeft: require('../Images/Icons/arrow-left.png'),
   date: require('../Images/Icons/date.png'),
   eye: require('../Images/Icons/eye.png'),
   ok: require('../Images/Icons/ok.png'),
+  circleSplash: require('../Images/circleSplash.png'),
+  closeEye: require('../Images/Icons/close-eye.png'),
 }
 
 export default images

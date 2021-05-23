@@ -4,5 +4,6 @@
   "examples": "classic",
   "navigation": "react-navigation",
   "askToOverwrite": true,
-  "boilerplateVersion": "4.3.0"
+  "boilerplateVersion": "4.3.0",
+  "generators": {}
 }
