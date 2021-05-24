@@ -26,7 +26,7 @@ export default StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     // justifyContent:'center',
-    alignItems:'center'
+    alignItems: 'center'
   },
   textInput: {
     overflow: 'hidden',
@@ -37,36 +37,53 @@ export default StyleSheet.create({
     borderBottomRightRadius: 10,
   },
   textInputNoHeader: {
-    height: Screen.height * 0.15, 
-    width: Screen.width * 0.9, 
-    marginBottom: Screen.height * 0.05, 
-    borderRadius: 20,  
-    backgroundColor: '#67308F', 
+    height: Screen.height * 0.15,
+    width: Screen.width * 0.9,
+    marginBottom: Screen.height * 0.05,
+    borderRadius: 20,
+    backgroundColor: '#67308F',
     opacity: 0.85,
-    paddingHorizontal:20,
-    color:'white'
+    paddingHorizontal: 20,
+    color: 'white'
   },
-  containerTextbox : {
-    borderWidth: 1, 
-    height: Screen.height * 0.2+24, 
-    width: Screen.width * 0.9, 
-    marginBottom: Screen.height * 0.05, 
-    borderRadius: 20, 
-    textAlign: 'center', 
-    backgroundColor: '#67308F', 
-    borderColor: Colors.transparent, 
+  containerTextbox: {
+    borderWidth: 1,
+    height: Screen.height * 0.2,
+    width: Screen.width * 0.9,
+    marginBottom: Screen.height * 0.05,
+    borderRadius: 20,
+    textAlign: 'center',
+    backgroundColor: '#67308F',
+    borderColor: Colors.transparent,
     opacity: 0.85,
-    color:'white',
-    padding:15,
-  }, 
+    color: 'white',
+    padding: 15
+  },
+
+  containerSearch: {
+    borderWidth: 1,
+    borderRadius: 10,
+    textAlign: 'center',
+    backgroundColor: '#67308F',
+    borderColor: Colors.transparent,
+    opacity: 0.85,
+    color: 'white',
+    paddingVertical: 5,
+    paddingHorizontal:20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical:30, 
+    // marginHorizontal:10
+  },
+
   textBorder: {
-    borderColor:'white',
-    alignItems:'center',
+    borderColor: 'white',
+    alignItems: 'center',
     // padding:10,
-    flexDirection:'row', 
-    borderWidth:1, 
-    borderRadius:10, 
-    width:'100%', 
-    marginTop:10
+    flexDirection: 'row',
+    borderWidth: 1,
+    borderRadius: 10,
+    width: '100%',
+    marginTop: 10
   }
 })

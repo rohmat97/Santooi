@@ -19,28 +19,29 @@ function BerhitungYuk(props) {
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
-                <ScrollView>
-                    <View style={styles.section}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <TouchableOpacity 
-                                onPress={()=> pop()}
-                                style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image source={images.arrowBack} style={{ width: 18, height: 18 }} resizeMode='contain' />
-                                <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Berhitung yuk!</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={toggleOverlay}>
-                                <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.25, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>
-                                    <Image source={images.speaker} style={{ width: 20, height: 20 }} resizeMode='contain' />
-                                    <Text style={{ color: 'white', marginLeft: 10, fontWeight: 'bold' }}>Suara</Text>
-                                </View>
-                            </TouchableOpacity>
-                        </View>
+                <View style={styles.section}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                        <TouchableOpacity
+                            onPress={() => pop()}
+                            style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={images.arrowBack} style={{ width: 18, height: 18 }} resizeMode='contain' />
+                            <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Berhitung yuk!</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={toggleOverlay}>
+                            <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.25, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>
+                                <Image source={images.speaker} style={{ width: 20, height: 20 }} resizeMode='contain' />
+                                <Text style={{ color: 'white', marginLeft: 10, fontWeight: 'bold' }}>Suara</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    <ScrollView>
                         <Text style={{ color: '#67308F', fontSize: 130, textAlign: 'center', marginVertical: Screen.width * 0.13 }}>00:30</Text>
                         <Image source={images.start} style={{ width: Screen.width * 0.7, height: Screen.width * 0.5, alignSelf: 'center' }} resizeMode='contain' />
                         <Image source={images.reset} style={{ width: Screen.width * 0.5, height: Screen.width * 0.18, alignSelf: 'center', marginVertical: Screen.width * 0.1 }} resizeMode='contain' />
                         <OverlayBerhitung visible={visible} toggleOverlay={toggleOverlay} />
-                    </View>
-                </ScrollView>
+                    </ScrollView>
+                </View>
+
             </View>
         </TemplateBackground>
     )

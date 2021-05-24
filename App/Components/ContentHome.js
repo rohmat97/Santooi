@@ -11,12 +11,12 @@ export function ContentHome({navigate}) {
                 <TouchableOpacity onPress={() => navigate('BerhitungYuk')}>
                     <Image source={images.berhitung} style={{ height: Screen.height * 0.18, width: Screen.width * 0.5, aspectRatio: 1.5 }} />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigate('JalanYuk')}>
                     <Image source={images.jalanyuk} style={{ height: Screen.height * 0.18, width: Screen.width * 0.5, aspectRatio: 1.5, marginRight: 12 }} />
                 </TouchableOpacity>
             </View>
             <View style={{ width: Screen.width, flexDirection: 'row', justifyContent: 'space-around' }}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigate('FotoFavorit')}>
                     <Image source={images.fotofavorit} style={{ height: Screen.height * 0.18, width: Screen.width * 0.5, aspectRatio: 1.5 }} />
                 </TouchableOpacity>
                 <TouchableOpacity>
