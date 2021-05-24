@@ -32,7 +32,7 @@ export default class RoundedButton extends Component {
   // }
 
   render() {
-    console.log(this.props.disabled)
+    // console.log(this.props.disabled)
     return (
       <TouchableOpacity style={{
         height: 50,
