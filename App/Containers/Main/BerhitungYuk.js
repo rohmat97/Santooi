@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import { OverlayBerhitung } from '../../Components/OverlayBerhitung';
 
 function BerhitungYuk(props) {
+    const { navigation } = props
+    const { pop } = navigation
     const [visible, setVisible] = useState(false);
     const toggleOverlay = () => {
         setVisible(!visible);
@@ -20,10 +22,12 @@ function BerhitungYuk(props) {
                 <ScrollView>
                     <View style={styles.section}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <TouchableOpacity 
+                                onPress={()=> pop()}
+                                style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <Image source={images.arrowBack} style={{ width: 18, height: 18 }} resizeMode='contain' />
                                 <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Berhitung yuk!</Text>
-                            </View>
+                            </TouchableOpacity>
                             <TouchableOpacity onPress={toggleOverlay}>
                                 <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.25, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>
                                     <Image source={images.speaker} style={{ width: 20, height: 20 }} resizeMode='contain' />
