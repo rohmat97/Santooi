@@ -1,9 +1,10 @@
 name: Android
 
 on:
-  push:
+  pull_request:
     branchs:
-      - master 
+      - master
+      - merging
 
 jobs:
   build:

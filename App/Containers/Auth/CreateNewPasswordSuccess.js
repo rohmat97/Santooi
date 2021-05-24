@@ -35,7 +35,7 @@ export function CreateNewPasswordSuccess(props) {
     const checkingPassword1 = (password) => {
         setPassword1(password)
 
-        console.log((password1.length + 1) + " " + password2.length)
+        // console.log((password1.length + 1) + " " + password2.length)
 
         if (password2.length == password1.length + 1) {
             if (password2.toString == password1.toString + 1) {
@@ -52,7 +52,7 @@ export function CreateNewPasswordSuccess(props) {
     const checkingPassword2 = (password) => {
         setPassword2(password)
 
-        console.log(password1.length + " " + (password2.length + 1))
+        // console.log(password1.length + " " + (password2.length + 1))
 
         if (password1.length == password2.length + 1) {
             if (password2.toString == password1.toString) {
@@ -70,7 +70,7 @@ export function CreateNewPasswordSuccess(props) {
        const email = getParam('email') 
        const split = email.split('@')
        setOpenUrl(split[1])
-       console.log(split)
+    //    console.log(split)
     },[])
     return (
         <TemplateBackground cover={true}>

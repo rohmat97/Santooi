@@ -10,8 +10,7 @@ import { OverlayBerhitung } from '../../Components/OverlayBerhitung';
 
 function BerhitungYuk(props) {
     const { navigation } = props
-    const { navigate } = navigation
-
+    const { pop } = navigation
     const [visible, setVisible] = useState(false);
     const toggleOverlay = () => {
         setVisible(!visible);
@@ -20,14 +19,13 @@ function BerhitungYuk(props) {
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
-
                 <View style={styles.section}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <TouchableOpacity onPress={() => navigation.pop()}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Image source={images.arrowBack} style={{ width: 18, height: 18 }} resizeMode='contain' />
-                                <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Berhitung yuk!</Text>
-                            </View>
+                        <TouchableOpacity
+                            onPress={() => pop()}
+                            style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Image source={images.arrowBack} style={{ width: 18, height: 18 }} resizeMode='contain' />
+                            <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Berhitung yuk!</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={toggleOverlay}>
                             <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.25, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>

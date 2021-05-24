@@ -6,7 +6,8 @@ import { connect } from 'react-redux'
 import { CustomBottomTab } from '../../Components/CustomButtomTab'
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import { ContentHome } from '../../Components/ContentHome'
-
+//redux
+import TokenRedux from '../../Redux/TokenRedux';
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'
@@ -14,9 +15,10 @@ import { Colors } from '../../Themes'
 import images from '../../Themes/Images';
 import { OverlayHomepage } from '../../Components/OverlayHomepage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { bindActionCreators } from 'redux';
 
 function MainScreen (props) {
-  const { navigation } = props
+  const { navigation,token } = props
   const { navigate } = navigation
   const [visible, setVisible] = useState(false);
   const [quote, setquote]= useState('')
@@ -27,8 +29,11 @@ function MainScreen (props) {
   };
 
   useEffect(()=>{
-    console.log(PickedEmoticon)
-  },[PickedEmoticon])
+    // console.log('token',token.data)
+  },[])
+  // useEffect(()=>{
+  //   console.log(PickedEmoticon)
+  // },[PickedEmoticon])
     return (
       <TemplateBackground cover={true}>
         <View style={styles.mainContainer}>
@@ -90,14 +95,14 @@ function MainScreen (props) {
     )
 }
 
-// const mapStateToProps = (state) => {
-//   return {
-//     data: state.local.payload
-//   }
-// }
+const mapStateToProps = (state) => {
+  return {
+    token: state.token.payload
+  }
+}
 
-// const mapDispatchToProps = (dispatch) => {
-//   return bindActionCreators(Object.assign(DataLocalRedux), dispatch)
-// }
-// export default connect(mapStateToProps, mapDispatchToProps)(MainScreen)
-export default connect(null,null)(MainScreen)
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(Object.assign(TokenRedux), dispatch)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(MainScreen)
+// export default connect(null,null)(MainScreen)

@@ -48,6 +48,7 @@ const create = (baseURL = staging) => {
   const getRegister = payload => api.post('/account/user',payload)
   const getCallBackGoogle = payload => api.post('/auth/google/callback', payload)
   const getCallBackFacebook = payload => api.post('/auth/facebook/callback', payload)
+  const checkEmail = payload => api.get('/auth/is-available/email?key='+payload)
   // ------
   // STEP 3
   // ------
@@ -72,7 +73,8 @@ const create = (baseURL = staging) => {
     getResetPassword,
     getRegister,
     getCallBackFacebook,
-    getCallBackGoogle
+    getCallBackGoogle,
+    checkEmail
   }
 }
 

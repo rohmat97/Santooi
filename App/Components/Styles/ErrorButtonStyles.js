@@ -3,13 +3,13 @@ import { Fonts, Colors, Metrics } from '../../Themes/'
 
 export default StyleSheet.create({
   button: {
-    height: 30,
+    height: undefined,
     borderRadius: 10,
     backgroundColor: 'white',
     justifyContent: 'center',
     borderColor: '#EB0D8C',
     borderWidth: 1,
-    padding:Platform.OS==='android'? 15:0,
+    padding:Platform.OS==='android'? 15:8,
     opacity: 0.65,
   },
   buttonText: {
