@@ -14,6 +14,7 @@ import MainScreen from '../Containers/Main/MainScreen'
 import styles from './Styles/NavigationStyles'
 import BerhitungYuk from '../Containers/Main/BerhitungYuk';
 import JalanYuk from '../Containers/Main/JalanYuk';
+import FotoFavorit from '../Containers/Main/FotoFavorit';
 
 // Manifest of possible screens
 const AuthNavigator = createStackNavigator({
@@ -36,7 +37,8 @@ const AuthNavigator = createStackNavigator({
 const MainNavigator = createStackNavigator({
   MainScreen: { screen: MainScreen },
   BerhitungYuk: { screen: BerhitungYuk },
-  JalanYuk: { screen: JalanYuk }
+  JalanYuk: { screen: JalanYuk },
+  FotoFavorit: { screen: FotoFavorit },
 }, {
   // Default config for all screens
   headerMode: 'none',

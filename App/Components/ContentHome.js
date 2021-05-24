@@ -16,7 +16,7 @@ export function ContentHome({navigate}) {
                 </TouchableOpacity>
             </View>
             <View style={{ width: Screen.width, flexDirection: 'row', justifyContent: 'space-around' }}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigate('FotoFavorit')}>
                     <Image source={images.fotofavorit} style={{ height: Screen.height * 0.18, width: Screen.width * 0.5, aspectRatio: 1.5 }} />
                 </TouchableOpacity>
                 <TouchableOpacity>
