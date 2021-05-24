@@ -32,7 +32,7 @@ export const RemoveEvent =(setUrl) =>{
 
 export const Transition = (navigate, getParam) =>{
     const params = getParam('params')
-    console.log('masuk', params);
+    // console.log('masuk', params);
         if(params.type ==='transition'){
             setTimeout(() => {
                 navigate(params.root, {
@@ -49,9 +49,9 @@ export const ExtractURL =(url, navigate, routeName,goBack) =>{
     const paramName = route && route.split('?')
     const email = paramName && paramName[1].match(/email=([^&]*)/)
     const token = paramName && paramName[1].match(/token=([^&]*)/)
-      console.log('  param',paramName)
-      console.log('  email ',email )
-      console.log('  token ',token )
+    //   console.log('  param',paramName)
+    //   console.log('  email ',email )
+    //   console.log('  token ',token )
     setTimeout(() => {
         navigate(paramName[0], {
             params :{
