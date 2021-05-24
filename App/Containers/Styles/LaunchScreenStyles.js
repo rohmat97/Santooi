@@ -48,7 +48,7 @@ export default StyleSheet.create({
   },
   containerTextbox : {
     borderWidth: 1, 
-    height: Screen.height * 0.2, 
+    height: Screen.height * 0.2+24, 
     width: Screen.width * 0.9, 
     marginBottom: Screen.height * 0.05, 
     borderRadius: 20, 
@@ -57,7 +57,7 @@ export default StyleSheet.create({
     borderColor: Colors.transparent, 
     opacity: 0.85,
     color:'white',
-    padding:15
+    padding:15,
   }, 
   textBorder: {
     borderColor:'white',

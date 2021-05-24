@@ -120,7 +120,7 @@ function CreateNewPassword(props) {
                             </View>
                         </View>
 
-                        {passwordMatch &&
+                        {passwordMatch && password1.length>0 &&
                             <Image source={images.ok} style={{ margin: 10 }} resizeMode='center'></Image>
                         }
 
@@ -166,7 +166,7 @@ function CreateNewPassword(props) {
                                 />
                             </View>
                         </View>
-                        {passwordMatch &&
+                        {passwordMatch&& password2.length>0 &&
                             <Image source={images.ok} style={{ margin: 10 }} resizeMode='center'></Image>
                         }
 
@@ -177,7 +177,7 @@ function CreateNewPassword(props) {
                         }
                     </View>
 
-                    {password1.length >= 8 && password2.length >= 8 ? !passwordMatch &&
+                    {password1 !== password2 ? !passwordMatch &&
                         <View style={{ marginBottom: 10 }}>
                             <ErrorButton text={'Password tidak sesuai'} />
                         </View> : <View />
@@ -187,7 +187,7 @@ function CreateNewPassword(props) {
                     <RoundedButton
                         text={'Konfirmasi'}
                         onPress={() => Submit()}
-                        backgroundColor={'#266CF5'} />
+                        backgroundColor={ password1.length>7 && password2.length>7&&passwordMatch ? '#266CF5' : '#b3b3cc'}  />
                 </View>
             </View>
         </TemplateBackground>

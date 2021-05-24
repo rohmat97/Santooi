@@ -7,13 +7,14 @@ import ResetPasswordRedux from '../Redux/ResetPasswordRedux'
 import CallbackFacebookRedux from '../Redux/CallbackFacebookRedux'
 import CallbackGoogleRedux from '../Redux/CallbackGoogleRedux'
 import TokenRedux from '../Redux/TokenRedux'
+import CheckEmailRedux from '../Redux/CheckEmailRedux'
 import { Alert } from 'react-native'
 
 export function * getLogin (api, action) {
   // make the call to the api
   // console.log(action.data)
   const response = yield call(api.getLogin, action.data)
-  console.log('response',response)
+  console.log('response',response.data)
   if (response.ok) {
     
     // do data conversion here if needed
@@ -33,13 +34,14 @@ export function * getLogin (api, action) {
 export function * getSignup (api, action) {
   const { data } = action
   // make the call to the api
-  console.log('data', data)
+  // console.log('data', data)
   const response = yield call(api.getRegister, data)
 
   if (response.ok) {
-    
     // do data conversion here if needed
+    Alert.alert(response.data.message)
     yield put(RegisterRedux.RegisterSuccess(response.data))
+    yield put(TokenRedux.TokenSuccess(response.data))
   } else {
     yield put(RegisterRedux.RegisterFailure())
     Alert.alert(response.data.message)
@@ -97,9 +99,8 @@ export function * getCallBackFacebook (api, action) {
   const { data } = action
   // make the call to the api
   const response = yield call(api.getCallBackFacebook, data)
-  console.log('data callback facebook', data)
   if (response.ok) {
-    
+    console.log('data callback facebook', response.data)
     // do data conversion here if needed
     yield put(CallbackFacebookRedux.CallbackFacebookSuccess(response.data))
     yield put(TokenRedux.TokenSuccess(response.data))
@@ -113,15 +114,31 @@ export function * getCallBackGoogle (api, action) {
   const { data } = action
   // make the call to the api
   const response = yield call(api.getCallBackGoogle, data)
-  console.log('data callback google', response)
 
   if (response.ok) {
+    console.log('data callback google', response.data)
     
     // do data conversion here if needed
     yield put(CallbackGoogleRedux.CallbackGoogleSuccess(response.data))
     yield put(TokenRedux.TokenSuccess(response.data))
   } else {
-    yield put(CallbackGoogleRedux.CallbackGoogleFailure(response))
+    yield put(CallbackGoogleRedux.CallbackGoogleFailure())
+    yield put(CallbackGoogleRedux.CallbackGoogleSuccess(response.data))
     Alert.alert(response.data.message)
+  }
+}
+
+export function * getCheckEmail (api, action) {
+  const { data } = action
+  // make the call to the api
+  const response = yield call(api.checkEmail, data)
+  console.log('email', response.data)
+
+  if (response.ok) {
+    
+    // do data conversion here if needed
+    yield put(CheckEmailRedux.CheckEmailSuccess(response.data))
+  } else {
+    yield put(CheckEmailRedux.CheckEmailFailure())
   }
 }
