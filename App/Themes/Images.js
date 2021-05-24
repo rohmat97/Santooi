@@ -48,18 +48,20 @@ const images = {
   closeEye: require('../Images/Icons/close-eye.png'),
   reset: require('../Images/ItemHome/reset.png'),
   start: require('../Images/ItemHome/start.png'),
-  addFill: require('../Images/ItemHome/add fill.png'),
+  addFill: require('../Images/ItemHome/add-fill.png'),
   share: require('../Images/ItemHome/share.png'),
   star: require('../Images/ItemHome/star.png'),
   add: require('../Images/ItemHome/add.png'),
-  addChartOutline: require('../Images/ItemHome/add to chart outline.png'),
+  addChartOutline: require('../Images/ItemHome/add-to-chart-outline.png'),
   location: require('../Images/ItemHome/location.png'),
-  addChart: require('../Images/ItemHome/add to chart.png'),
+  addChart: require('../Images/ItemHome/add-to-chart.png'),
   search: require('../Images/ItemHome/search.png'),
   play: require('../Images/ItemHome/play.png'),
   key: require('../Images/ItemHome/key.png'),
   speaker: require('../Images/ItemHome/speaker.png'),
   arrowBack: require('../Images/ItemHome/arrow-back.png'),
+  close: require('../Images/ItemHome/close.png'),
+  kopiKenangan: require('../Images/ItemHome/kopi-kenangan.png'),
 }
 
 export default images
