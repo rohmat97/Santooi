@@ -18,7 +18,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { bindActionCreators } from 'redux';
 
 function MainScreen (props) {
-  const { token } = props
+  const { navigation,token } = props
+  const { navigate } = navigation
   const [visible, setVisible] = useState(false);
   const [quote, setquote]= useState('')
   const [categoryData] = useState([{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 1' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 2' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 3' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 4' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 5' },{gambar:'http://1.bp.blogspot.com/-h9c_h58CPLQ/VBgtbFj9EUI/AAAAAAAAAck/uU5QRi275uI/s1600/emoticon.png', category:'Smile 6' }])
@@ -80,7 +81,7 @@ function MainScreen (props) {
                 <View style={{backgroundColor:'#67308F',width:Screen.width*0.35, alignItems:'center', borderRadius:100, padding:8,marginTop:-32,marginBottom:-20}}>
                   <Text style={{color:'white'}}>Kendalikan Yuk!</Text>
                 </View>
-                <ContentHome />
+                <ContentHome navigate={navigate}/>
               </View>
               {
                 //Space

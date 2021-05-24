@@ -12,6 +12,7 @@ import SplashScreen from '../Containers/SplashScreen'
 import MainScreen from '../Containers/Main/MainScreen'
 
 import styles from './Styles/NavigationStyles'
+import BerhitungYuk from '../Containers/Main/BerhitungYuk';
 
 // Manifest of possible screens
 const AuthNavigator = createStackNavigator({
@@ -32,7 +33,8 @@ const AuthNavigator = createStackNavigator({
 })
 
 const MainNavigator = createStackNavigator({
-  MainScreen: { screen: MainScreen }
+  MainScreen: { screen: MainScreen },
+  BerhitungYuk: { screen: BerhitungYuk }
 }, {
   // Default config for all screens
   headerMode: 'none',
