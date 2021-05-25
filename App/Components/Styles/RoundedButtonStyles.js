@@ -16,5 +16,5 @@ export default StyleSheet.create({
     // fontWeight: 'bold',
     fontSize: Fonts.size.medium,
     marginVertical: Metrics.baseMargin
-  }
+  },
 })

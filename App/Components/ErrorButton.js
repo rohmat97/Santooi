@@ -37,7 +37,7 @@ export default class ErrorButton extends Component {
         {this.props.image != null &&
           <Image source={this.props.image} style={{ width: this.props.width, height: this.props.height, marginEnd: 10 }} />
         }
-        <Text style={styles.buttonText}>{this.props.text}</Text>
+        <Text style={styles.buttonText}numberOfLines={2}>{this.props.text}</Text>
       </View>
     )
   }
