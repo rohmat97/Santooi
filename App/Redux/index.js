@@ -17,6 +17,7 @@ export const reducers = combineReducers({
   callbackGoogle: require('./CallbackGoogleRedux').reducer,
   resetPassword: require('./ResetPasswordRedux').reducer,
   checkEmail: require('./CheckEmailRedux').reducer,
+  checkPhone: require('./CheckPhoneRedux').reducer,
 
 })
 

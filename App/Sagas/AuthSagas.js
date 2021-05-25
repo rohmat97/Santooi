@@ -8,13 +8,14 @@ import CallbackFacebookRedux from '../Redux/CallbackFacebookRedux'
 import CallbackGoogleRedux from '../Redux/CallbackGoogleRedux'
 import TokenRedux from '../Redux/TokenRedux'
 import CheckEmailRedux from '../Redux/CheckEmailRedux'
+import CheckPhoneRedux from '../Redux/CheckPhoneRedux'
 import { Alert } from 'react-native'
 
 export function * getLogin (api, action) {
   // make the call to the api
   // console.log(action.data)
   const response = yield call(api.getLogin, action.data)
-  console.log('response',response.data)
+  console.log('response login',response.data)
   if (response.ok) {
     
     // do data conversion here if needed
@@ -132,7 +133,7 @@ export function * getCheckEmail (api, action) {
   const { data } = action
   // make the call to the api
   const response = yield call(api.checkEmail, data)
-  console.log('email', response.data)
+  // console.log('email', response.data)
 
   if (response.ok) {
     
@@ -140,5 +141,20 @@ export function * getCheckEmail (api, action) {
     yield put(CheckEmailRedux.CheckEmailSuccess(response.data))
   } else {
     yield put(CheckEmailRedux.CheckEmailFailure())
+  }
+}
+
+export function * getCheckPhone (api, action) {
+  const { data } = action
+  // make the call to the api
+  const response = yield call(api.checkPhone, data)
+  // console.log('email', response.data)
+
+  if (response.ok) {
+    
+    // do data conversion here if needed
+    yield put(CheckPhoneRedux.CheckPhoneSuccess(response.data))
+  } else {
+    yield put(CheckPhoneRedux.CheckPhoneFailure())
   }
 }

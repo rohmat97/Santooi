@@ -24,7 +24,7 @@ export function FirstLoginScreen(props) {
                     </View>
                     <Text style={{ color: '#35385D', fontSize: 16, maxWidth: Screen.width * 0.7, marginBottom: Screen.height * 0.12 }}>Membantu kendalikan emosi dengan energi positifmu.</Text>
                     <RoundedButton
-                        text={'Lanjut'}
+                        text={'Daftar'}
                         onPress={() => navigate('LoginScreen', {type:'signup'})}
                         backgroundColor={'#266CF5'}/>
                     <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10 }}>

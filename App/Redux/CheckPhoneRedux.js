@@ -4,12 +4,12 @@ import Immutable from 'seamless-immutable'
 /* ------------- Types and Action Creators ------------- */
 
 const { Types, Creators } = createActions({
-  CheckEmailRequest: ['data'],
-  CheckEmailSuccess: ['payload'],
-  CheckEmailFailure: null
+  CheckPhoneRequest: ['data'],
+  CheckPhoneSuccess: ['payload'],
+  CheckPhoneFailure: null
 })
 
-export const CheckEmailTypes = Types
+export const CheckPhoneTypes = Types
 export default Creators
 
 /* ------------- Initial State ------------- */
@@ -23,7 +23,7 @@ export const INITIAL_STATE = Immutable({
 
 /* ------------- Selectors ------------- */
 
-export const CheckEmailSelectors = {
+export const CheckPhoneSelectors = {
   getData: state => state.data
 }
 
@@ -46,7 +46,7 @@ export const failure = state =>
 /* ------------- Hookup Reducers To Types ------------- */
 
 export const reducer = createReducer(INITIAL_STATE, {
-  [Types.CHECK_EMAIL_REQUEST]: request,
-  [Types.CHECK_EMAIL_SUCCESS]: success,
-  [Types.CHECK_EMAIL_FAILURE]: failure
+  [Types.CHECK_PHONE_REQUEST]: request,
+  [Types.CHECK_PHONE_SUCCESS]: success,
+  [Types.CHECK_PHONE_FAILURE]: failure
 })
