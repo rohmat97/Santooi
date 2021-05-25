@@ -19,7 +19,7 @@ export function ContentHome({navigate}) {
                 <TouchableOpacity onPress={() => navigate('FotoFavorit')}>
                     <Image source={images.fotofavorit} style={{ height: Screen.height * 0.18, width: Screen.width * 0.5, aspectRatio: 1.5 }} />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=> navigate('KalimatBijak')}>
                     <Image source={images.kalimatbijak} style={{ height: Screen.height * 0.18, width: Screen.width * 0.5, aspectRatio: 1.5, marginRight: 12 }} />
                 </TouchableOpacity>
             </View>

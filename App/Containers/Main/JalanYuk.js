@@ -10,7 +10,7 @@ import { OverlayJalanYuk } from '../../Components/OverlayJalanYuk';
 
 function JalanYuk(props) {
     const { navigation } = props
-    const { navigate } = navigation
+    const { navigate,pop } = navigation
 
     const [visible, setVisible] = useState(false);
     const toggleOverlay = () => {
@@ -21,7 +21,7 @@ function JalanYuk(props) {
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
                 <View style={styles.section}>
-                    <TouchableOpacity onPress={() => navigation.pop()}>
+                    <TouchableOpacity onPress={() => pop()}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={images.arrowBack} style={{ width: 18, height: 18 }} resizeMode='contain' />
                             <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Jalan yuk!</Text>
