@@ -16,6 +16,8 @@ import BerhitungYuk from '../Containers/Main/BerhitungYuk';
 import JalanYuk from '../Containers/Main/JalanYuk';
 import FotoFavorit from '../Containers/Main/FotoFavorit';
 import KalimatBijak from '../Containers/Main/KalimatBijak'
+import Konseling from '../Containers/Main/Konseling';
+import KonselingWaiting from '../Containers/Main/KonselingWaiting';
 
 // Manifest of possible screens
 const AuthNavigator = createStackNavigator({
@@ -40,7 +42,9 @@ const MainNavigator = createStackNavigator({
   BerhitungYuk: { screen: BerhitungYuk },
   JalanYuk: { screen: JalanYuk },
   FotoFavorit: { screen: FotoFavorit },
-  KalimatBijak: { screen: KalimatBijak }
+  KalimatBijak: { screen: KalimatBijak },
+  Konseling: { screen: Konseling },
+  KonselingWaiting: { screen: KonselingWaiting },
 }, {
   // Default config for all screens
   headerMode: 'none',

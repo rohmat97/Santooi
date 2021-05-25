@@ -27,7 +27,7 @@ export function ContentHome({navigate}) {
                 <TouchableOpacity>
                     <Image source={images.curhat} style={{ height: Screen.width * 0.3, width: Screen.width * 0.3, aspectRatio: 1 }} />
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=> navigate('Konseling')}>
                     <Image source={images.koneseling} style={{ height: Screen.width * 0.3, width: Screen.width * 0.3, aspectRatio: 1 }} />
                 </TouchableOpacity>
                 <TouchableOpacity>
