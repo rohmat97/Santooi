@@ -314,7 +314,7 @@ function LoginScreen(props) {
                                 overflow: 'hidden',
                             }}>
                                 <TextInput
-                                    label="Email atau Nomor Telepon"
+                                    label={type == 'signup'?"Email":"Email atau Nomor Telepon"}
                                     value={email}
                                     onChangeText={email => validate(email)}
                                     inputRef={(ref) => (this.email = ref)}
@@ -337,8 +337,11 @@ function LoginScreen(props) {
                                 />
                             </View>
                         </View>
-                        {validateEmail && !avail &&
-                            <Image source={images.ok} style={{ margin: 10 }} resizeMode='center'></Image>
+                        {type == 'login' ? validateEmail && avail &&
+                            <Image source={images.ok} style={{ margin: 10 }} resizeMode='center'></Image>: <View />
+                        }
+                        {type == 'signup' ? validateEmail && !avail &&
+                            <Image source={images.ok} style={{ margin: 10 }} resizeMode='center'></Image>: <View />
                         }
                     </View>
 
@@ -346,7 +349,7 @@ function LoginScreen(props) {
                         <View style={{ marginBottom: 10 }}>
                             <ErrorButton text={'Email tidak valid'} />
                         </View>: 
-                            avail&&
+                            !avail&&
                             <View style={{ marginBottom: 10 }}>
                                 <ErrorButton text={'Email tidak terdaftar'} />
                             </View>: <View/>}
@@ -411,7 +414,7 @@ function LoginScreen(props) {
                     <View style={{ marginTop: Screen.width * 0.1 }} />
                     {type == 'signup' &&
                         <RoundedButton
-                            text={'Lanjut'}
+                            text={'Daftar'}
                             onPress={() =>  Register()}
                             disabled={validateEmail && password.length>7 && !avail? false : true}
                             backgroundColor={validateEmail && password.length>7 && !avail? '#266CF5' : '#b3b3cc'} />
@@ -421,8 +424,8 @@ function LoginScreen(props) {
                         <RoundedButton
                             text={'Login'}
                             onPress={() => LoginByEmail()}
-                            disabled={validateEmail && password.length>7 && !avail ? false : true}
-                            backgroundColor={validateEmail && password.length>7&& !avail  ? '#266CF5' : '#b3b3cc'}
+                            disabled={validateEmail && password.length>7 && avail ? false : true}
+                            backgroundColor={validateEmail && password.length>7&& avail  ? '#266CF5' : '#b3b3cc'}
                              />
                     }
 

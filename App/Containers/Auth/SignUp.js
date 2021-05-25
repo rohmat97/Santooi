@@ -125,7 +125,7 @@ function SignUp(props) {
             'password': password,
             'call': greeting,
             'birt_date': dateBirth,
-            'phone_number': phoneNumber,
+            'phone_number': '0'+phoneNumber,
             'uid':bundleLogin && bundleLogin.uid,
             'driver':bundleLogin && bundleLogin.driver,
             'photoURL':bundleLogin && bundleLogin.photoURL
