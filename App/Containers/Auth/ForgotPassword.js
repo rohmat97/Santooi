@@ -119,7 +119,7 @@ function ForgotPassword(props) {
                     <RoundedButton
                         text={'Lanjut'}
                         onPress={() => SubmitResetPassword()}
-                        disabled={validateEmail && !avail ? false : true}
+                        disabled={validateEmail && avail ? false : true}
                         backgroundColor={validateEmail && avail ? '#266CF5' : '#b3b3cc'} />
                 </View>
             </View>

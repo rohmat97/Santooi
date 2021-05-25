@@ -29,7 +29,7 @@ function MainScreen (props) {
   };
 
   useEffect(()=>{
-    // console.log('token',token.data)
+    console.log('token',token.data.user.name)
   },[])
   // useEffect(()=>{
   //   console.log(PickedEmoticon)
@@ -68,7 +68,7 @@ function MainScreen (props) {
                     }}
                   />
                   </LinearGradient>
-                  <Text>Hi, Mario!</Text>
+                  <Text>Hi,{ token.data.user.name}!</Text>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'space-around'}}>
                   <TouchableOpacity onPress={toggleOverlay}>

@@ -9,18 +9,18 @@ export function ContentHome({navigate}) {
         <View style={{ height: Screen.height * 0.6, margin: -Metrics.section * 0.5, paddingTop: 52 }}>
             <View style={{ width: Screen.width, flexDirection: 'row', justifyContent: 'space-around' }}>
                 <TouchableOpacity onPress={() => navigate('BerhitungYuk')}>
-                    <Image source={images.berhitung} style={{ height: Screen.height * 0.18, width: Screen.width * 0.5, aspectRatio: 1.5 }} />
+                    <Image source={images.berhitung} style={{ height: Screen.height * 0.15, width: Screen.width * 0.45, }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => navigate('JalanYuk')}>
-                    <Image source={images.jalanyuk} style={{ height: Screen.height * 0.18, width: Screen.width * 0.5, aspectRatio: 1.5, marginRight: 12 }} />
+                    <Image source={images.jalanyuk} style={{ height: Screen.height * 0.15, width: Screen.width * 0.45, marginRight: 12 }} />
                 </TouchableOpacity>
             </View>
             <View style={{ width: Screen.width, flexDirection: 'row', justifyContent: 'space-around' }}>
                 <TouchableOpacity onPress={() => navigate('FotoFavorit')}>
-                    <Image source={images.fotofavorit} style={{ height: Screen.height * 0.18, width: Screen.width * 0.5, aspectRatio: 1.5 }} />
+                    <Image source={images.fotofavorit} style={{ height: Screen.height * 0.15, width: Screen.width * 0.45 }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=> navigate('KalimatBijak')}>
-                    <Image source={images.kalimatbijak} style={{ height: Screen.height * 0.18, width: Screen.width * 0.5, aspectRatio: 1.5, marginRight: 12 }} />
+                    <Image source={images.kalimatbijak} style={{ height: Screen.height * 0.15, width: Screen.width * 0.45, marginRight: 12 }} />
                 </TouchableOpacity>
             </View>
             <View style={{ width: Screen.width, minHeight: 10, flexDirection: 'row', justifyContent: 'space-around', marginTop: 12 }}>
