@@ -62,6 +62,10 @@ const images = {
   arrowBack: require('../Images/ItemHome/arrow-back.png'),
   close: require('../Images/ItemHome/close.png'),
   kopiKenangan: require('../Images/ItemHome/kopi-kenangan.png'),
+  sample1: require('../Images/sampleIcon/Group.png'),
+  sample2: require('../Images/sampleIcon/Group-1.png'),
+  editButton: require('../Images/sampleIcon/EditButton.png'),
+  burgerIcon: require('../Images/sampleIcon/burgerIcon.png'),
 }
 
 export default images

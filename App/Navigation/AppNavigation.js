@@ -15,6 +15,7 @@ import styles from './Styles/NavigationStyles'
 import BerhitungYuk from '../Containers/Main/BerhitungYuk';
 import JalanYuk from '../Containers/Main/JalanYuk';
 import FotoFavorit from '../Containers/Main/FotoFavorit';
+import KalimatBijak from '../Containers/Main/KalimatBijak'
 
 // Manifest of possible screens
 const AuthNavigator = createStackNavigator({
@@ -39,6 +40,7 @@ const MainNavigator = createStackNavigator({
   BerhitungYuk: { screen: BerhitungYuk },
   JalanYuk: { screen: JalanYuk },
   FotoFavorit: { screen: FotoFavorit },
+  KalimatBijak: { screen: KalimatBijak }
 }, {
   // Default config for all screens
   headerMode: 'none',
