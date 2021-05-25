@@ -11,6 +11,7 @@ import { TemplateBackground } from '../../Components/TemplateBackground'
 import ErrorButton from '../../Components/ErrorButton'
 // Redux
 import RegisterRedux from '../../Redux/RegisterRedux';
+import CheckPhoneRedux from '../../Redux/CheckPhoneRedux';
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'
@@ -18,7 +19,7 @@ import images from '../../Themes/Images';
 import { Colors, Fonts } from '../../Themes'
 
 function SignUp(props) {
-    const { navigation, RegisterRequest, regist, registerror } = props
+    const { navigation, RegisterRequest, regist, registerror,check, CheckPhoneRequest } = props
     const { navigate, getParam } = navigation
     const [name, setName] = useState('')
     const [state, setState] = useState(0)
@@ -35,6 +36,8 @@ function SignUp(props) {
     const [phoneNumber, setPhoneNumber] = useState('')
     const [validatePhoneNumber, setValidatePhoneNumber] = useState(false)
     const [bundleLogin, setbundleLogin] = useState()
+    const [avail, setavail] = useState(false)
+    const [submitted, setsubmitted] = useState(false)
 
     const onNameChange = (name) => {
         setName(name)
@@ -47,6 +50,7 @@ function SignUp(props) {
     }
 
     const onPhoneChange = (number) => {
+        setsubmitted(false)
         if(number.length<16){
             setPhoneNumber(number)
         }
@@ -119,22 +123,9 @@ function SignUp(props) {
     }
 
     const Signup = () => {
-        const params = {
-            'name': name,
-            'email': email,
-            'password': password,
-            'call': greeting,
-            'birt_date': dateBirth,
-            'phone_number': '0'+phoneNumber,
-            'uid':bundleLogin && bundleLogin.uid,
-            'driver':bundleLogin && bundleLogin.driver,
-            'photoURL':bundleLogin && bundleLogin.photoURL
-
-        }
-        // console.log(params)
-        setTimeout(() => {
-            RegisterRequest(params)
-        }, 1000);
+        setsubmitted(true)
+        CheckPhoneRequest('0'+phoneNumber)
+        
     }
     useEffect(() => {
         const params = getParam('params')
@@ -154,14 +145,8 @@ function SignUp(props) {
         if (regist && regist.status) {
             // console.log('register',regist)
             setvisible(false)
-            navigation.navigate('Splash', {
-                screen: 'SplashScreen',
-                initial: true,
-                params: {
-                    type: 'transition',
-                    root: 'Main',
-                    screen: 'MainScreen'
-                }
+            navigation.navigate('Main', {
+                screen: 'MainScreen'
             })
         }
         if (registerror) {
@@ -176,6 +161,34 @@ function SignUp(props) {
             setShow(true)
         }
     },[bundleLogin])
+
+    useEffect(()=>{
+        if(check){
+            setvisible(false)
+            if(check.status){
+                setavail(true)
+                let newdate = dateBirth.split("-").reverse().join("-");
+                const params = {
+                    'name': name,
+                    'email': email,
+                    'password': password,
+                    'call': greeting,
+                    'birt_date': newdate,
+                    'phone_number': '0'+phoneNumber,
+                    'uid':bundleLogin && bundleLogin.uid,
+                    'driver':bundleLogin && bundleLogin.driver,
+                    'photoURL':bundleLogin && bundleLogin.photoURL
+        
+                }
+                console.log(params)
+                // setTimeout(() => {
+                    RegisterRequest(params)
+                // }, 1000);
+            }else{
+                setavail(false)
+            }
+        }
+    },[check])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -262,6 +275,11 @@ function SignUp(props) {
                                                     <ErrorButton text={'Nomor ponsel minimal 11 angka dan maksimal 15 angka'} />
                                                 </View>
                                             }
+                                             {validatePhoneNumber && !avail && submitted &&
+                                                <View style={{ marginTop: 10, marginHorizontal: -5 }}>
+                                                    <ErrorButton text={'Nomor sudah digunakan'} />
+                                                </View>
+                                            }
                                         </View>}
                                 </View>
                             }
@@ -325,10 +343,11 @@ const mapStateToProps = (state) => {
     return {
         regist: state.regist.payload,
         registerror: state.regist.error,
+        check: state.checkPhone.payload
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Object.assign(RegisterRedux), dispatch)
+    return bindActionCreators(Object.assign(RegisterRedux,CheckPhoneRedux), dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(SignUp)

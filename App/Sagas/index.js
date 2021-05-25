@@ -14,12 +14,13 @@ import { ResetPasswordTypes } from '../Redux/ResetPasswordRedux'
 import { CallbackFacebookTypes } from '../Redux/CallbackFacebookRedux'
 import { CallbackGoogleTypes } from '../Redux/CallbackGoogleRedux'
 import { CheckEmailTypes } from '../Redux/CheckEmailRedux'
+import { CheckPhoneTypes } from '../Redux/CheckPhoneRedux'
 
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
 import { getUserAvatar } from './GithubSagas'
-import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword} from './AuthSagas';
+import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword, getCheckPhone} from './AuthSagas';
 
 /* ------------- API ------------- */
 
@@ -43,5 +44,6 @@ export default function * root () {
     takeLatest(CallbackFacebookTypes.CALLBACK_FACEBOOK_REQUEST, getCallBackFacebook, api),
     takeLatest(CallbackGoogleTypes.CALLBACK_GOOGLE_REQUEST, getCallBackGoogle, api),
     takeLatest(CheckEmailTypes.CHECK_EMAIL_REQUEST, getCheckEmail, api),
+    takeLatest(CheckPhoneTypes.CHECK_PHONE_REQUEST, getCheckPhone, api),
   ])
 }

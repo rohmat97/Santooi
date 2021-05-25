@@ -38,31 +38,26 @@ function CreateNewPassword(props) {
     const checkingPassword1 = (password) => {
         setPassword1(password)
 
-        if (password2.length == password.length) {
-            if (password2.toString == password.toString) {
-                setPasswordMatch(true)
-            } else {
-                setPasswordMatch(false)
-            }
-        } else {
-            setPasswordMatch(false)
-        }
+        // if (password2.length == password.length) {
+        //     if (password2.toString == password.toString) {
+        //         setPasswordMatch(true)
+        //     } else {
+        //         setPasswordMatch(false)
+        //     }
+        // } else {
+        //     setPasswordMatch(false)
+        // }
 
     }
 
     const checkingPassword2 = (password) => {
         setPassword2(password)
 
-        if (password1.length == password.length) {
-            if (password.toString == password1.toString) {
+        if (password1 == password) {
                 setPasswordMatch(true)
             } else {
                 setPasswordMatch(false)
             }
-        } else {
-            setPasswordMatch(false)
-        }
-
     }
 
     const Submit = () =>{
@@ -126,7 +121,7 @@ function CreateNewPassword(props) {
 
                         {!passwordMatch &&
                             <TouchableOpacity onPress={() => setSecureTextEntry1(!secureTextEntry1)}>
-                                <Image source={secureTextEntry1 ? images.closeEye : images.eye} style={{ margin: 10 }} resizeMode='center'></Image>
+                                <Image source={secureTextEntry1 ? images.closeEye : images.eye} style={{ margin: 10,maxWidth:25,maxHeight:25 }} resizeMode='contain'></Image>
                             </TouchableOpacity>
                         }
                     </View>
@@ -172,7 +167,7 @@ function CreateNewPassword(props) {
 
                         {!passwordMatch &&
                             <TouchableOpacity onPress={() => setSecureTextEntry2(!secureTextEntry2)}>
-                                <Image source={secureTextEntry2 ? images.closeEye : images.eye} style={{ margin: 10 }} resizeMode='center'></Image>
+                                <Image source={secureTextEntry2 ? images.closeEye : images.eye} style={{ margin: 10,maxWidth:25,maxHeight:25 }} resizeMode='contain' ></Image>
                             </TouchableOpacity>
                         }
                     </View>
@@ -186,8 +181,12 @@ function CreateNewPassword(props) {
                     <View style={{ marginTop: Screen.width * 0.1 }} />
                     <RoundedButton
                         text={'Konfirmasi'}
-                        onPress={() => Submit()}
-                        backgroundColor={ password1.length>7 && password2.length>7&&passwordMatch ? '#266CF5' : '#b3b3cc'}  />
+                        onPress={() => {
+                            if(passwordMatch){
+                                Submit()
+                            }
+                        }}
+                        backgroundColor={passwordMatch ? '#266CF5' : '#b3b3cc'}  />
                 </View>
             </View>
         </TemplateBackground>

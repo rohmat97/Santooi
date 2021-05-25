@@ -18,17 +18,18 @@ import { connect } from 'react-redux';
 import { CheckEmail } from './Function';
 
 function ForgotPassword(props) {
-    const { navigation, ForgotRequest, forgot, ForgotSuccess,check, CheckEmailRequest } = props
+    const { navigation, ForgotRequest, forgot, ForgotSuccess,check, CheckEmailRequest,CheckEmailSuccess } = props
     const { navigate, getParam } = navigation
     const [email, setEmail] = useState('')
     const [errorEmail, setErrorEmail] = useState()
     const [validateEmail, setValidateEmail] = useState(false)
     const [avail, setavail] = useState(false)
+    const [submitted, setsubmitted] = useState(false)
 
     const validate = (email) => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
         setEmail(email)
-        CheckEmailRequest(email)
+        setsubmitted(false)
         if (reg.test(email) === false) {
             setValidateEmail(false)
             return false
@@ -39,9 +40,7 @@ function ForgotPassword(props) {
     }
     const SubmitResetPassword= () =>{
         if(validateEmail){
-            ForgotRequest({
-                'email':email
-            })
+            CheckEmailRequest(email)
         }
     }
     useEffect(()=>{
@@ -54,7 +53,7 @@ function ForgotPassword(props) {
 
     useEffect(()=>{
         if(check){
-            CheckEmail(setavail, 'forgot', check)
+            CheckEmail(setavail,'forgot', check,email,null,null,null,setsubmitted,navigate,CheckEmailSuccess,ForgotRequest)
         }
     },[check])
     return (
@@ -64,7 +63,6 @@ function ForgotPassword(props) {
                     <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 20 }}>
                         <Image source={images.logoSantui} style={{ width: Screen.width * 0.2, marginBottom: 20 }} resizeMode='contain' />
                     </View>
-
                     <View style={styles.textbox}>
                         <View style={{ flex: 1 }}>
                             <View style={{
@@ -97,7 +95,8 @@ function ForgotPassword(props) {
                                 />
                             </View>
                         </View>
-                        {validateEmail && avail &&
+                        {submitted ?!avail &&
+                            <Image source={images.ok} style={{ margin: 10 }} resizeMode='center'></Image> :validateEmail &&
                             <Image source={images.ok} style={{ margin: 10 }} resizeMode='center'></Image>
                         }
                     </View>
@@ -106,11 +105,10 @@ function ForgotPassword(props) {
                         <View style={{ marginBottom: 10 }}>
                             <ErrorButton text={'Email tidak valid'} />
                         </View>
-                        :!avail?
+                        :avail && submitted?
                         <View style={{ marginBottom: 10 }}>
                             <ErrorButton text={'Email tidak terdaftar'} />
-                        </View>
-                        :
+                        </View>:
                         <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
                             <Text style={{ color: 'white', fontSize: 13, marginRight: 10 }}>Kami akan mengirimkan email konfirmasi untuk mengganti password-mu</Text>
                         </View>}
@@ -119,8 +117,8 @@ function ForgotPassword(props) {
                     <RoundedButton
                         text={'Lanjut'}
                         onPress={() => SubmitResetPassword()}
-                        disabled={validateEmail && avail ? false : true}
-                        backgroundColor={validateEmail && avail ? '#266CF5' : '#b3b3cc'} />
+                        disabled={validateEmail ? false : true}
+                        backgroundColor={validateEmail  ? '#266CF5' : '#b3b3cc'} />
                 </View>
             </View>
         </TemplateBackground>
