@@ -14,13 +14,15 @@ import { ResetPasswordTypes } from '../Redux/ResetPasswordRedux'
 import { CallbackFacebookTypes } from '../Redux/CallbackFacebookRedux'
 import { CallbackGoogleTypes } from '../Redux/CallbackGoogleRedux'
 import { EmoticonTypes } from '../Redux/Dashboard/EmoticonRedux'
+import { CheckEmailTypes } from '../Redux/CheckEmailRedux'
+import { CheckPhoneTypes } from '../Redux/CheckPhoneRedux'
 
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
 import { getUserAvatar } from './GithubSagas'
-import { getLogin,getLogout,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword} from './AuthSagas';
 import { getEmoticon } from './DashboardSagas';
+import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword, getCheckPhone} from './AuthSagas';
 
 /* ------------- API ------------- */
 
@@ -43,6 +45,8 @@ export default function * root () {
     takeLatest(ResetPasswordTypes.RESET_PASSWORD_REQUEST, getResetPassword, api),
     takeLatest(CallbackFacebookTypes.CALLBACK_FACEBOOK_REQUEST, getCallBackFacebook, api),
     takeLatest(CallbackGoogleTypes.CALLBACK_GOOGLE_REQUEST, getCallBackGoogle, api),
-    takeLatest(EmoticonTypes.EMOTICON_REQUEST, getEmoticon, api)
+    takeLatest(EmoticonTypes.EMOTICON_REQUEST, getEmoticon, api),
+    takeLatest(CheckEmailTypes.CHECK_EMAIL_REQUEST, getCheckEmail, api),
+    takeLatest(CheckPhoneTypes.CHECK_PHONE_REQUEST, getCheckPhone, api),
   ])
 }

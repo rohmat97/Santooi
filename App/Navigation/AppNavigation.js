@@ -12,6 +12,16 @@ import SplashScreen from '../Containers/SplashScreen'
 import MainScreen from '../Containers/Main/MainScreen'
 
 import styles from './Styles/NavigationStyles'
+import BerhitungYuk from '../Containers/Main/BerhitungYuk';
+import JalanYuk from '../Containers/Main/JalanYuk';
+import FotoFavorit from '../Containers/Main/FotoFavorit';
+import KalimatBijak from '../Containers/Main/KalimatBijak'
+import Konseling from '../Containers/Main/Konseling';
+import KonselingWaiting from '../Containers/Main/KonselingWaiting';
+import SelectKonseling from '../Containers/Main/SelectKonseling ';
+import CurhatKeTeman from '../Containers/Main/CurhatKeTeman';
+import CurhatKeTemanContact from '../Containers/Main/CurhatKeTemanContact';
+import CurhatKeTemanContactDetail from '../Containers/Main/CurhatKeTemanContactDetail';
 
 // Manifest of possible screens
 const AuthNavigator = createStackNavigator({
@@ -32,7 +42,17 @@ const AuthNavigator = createStackNavigator({
 })
 
 const MainNavigator = createStackNavigator({
-  MainScreen: { screen: MainScreen }
+  MainScreen: { screen: MainScreen },
+  BerhitungYuk: { screen: BerhitungYuk },
+  JalanYuk: { screen: JalanYuk },
+  FotoFavorit: { screen: FotoFavorit },
+  KalimatBijak: { screen: KalimatBijak },
+  Konseling: { screen: Konseling },
+  KonselingWaiting: { screen: KonselingWaiting },
+  SelectKonseling: { screen: SelectKonseling },
+  CurhatKeTeman: { screen: CurhatKeTeman },
+  CurhatKeTemanContact: { screen: CurhatKeTemanContact },
+  CurhatKeTemanContactDetail: { screen: CurhatKeTemanContactDetail },
 }, {
   // Default config for all screens
   headerMode: 'none',

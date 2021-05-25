@@ -16,7 +16,9 @@ export const reducers = combineReducers({
   callbackFacebook: require('./CallbackFacebookRedux').reducer,
   callbackGoogle: require('./CallbackGoogleRedux').reducer,
   resetPassword: require('./ResetPasswordRedux').reducer,
-  emoticon: require('./Dashboard/EmoticonRedux').reducer
+  emoticon: require('./Dashboard/EmoticonRedux').reducer,
+  checkEmail: require('./CheckEmailRedux').reducer,
+  checkPhone: require('./CheckPhoneRedux').reducer,
 
 })
 

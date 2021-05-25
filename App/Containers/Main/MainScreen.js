@@ -8,6 +8,7 @@ import { TemplateBackground } from '../../Components/TemplateBackground'
 import { ContentHome } from '../../Components/ContentHome'
 //redux 
 import EmoticonRedux from '../../Redux/Dashboard/EmoticonRedux'
+//redux
 import TokenRedux from '../../Redux/TokenRedux';
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
@@ -19,7 +20,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { bindActionCreators } from 'redux';
 
 function MainScreen (props) {
-  const { EmoticonRequest, emoticon, token } = props
+  const { EmoticonRequest, emoticon, token,navigation } = props
+  const { navigate } = navigation
   const [visible, setVisible] = useState(false);
   const [quote, setquote]= useState('')
   const [listEmoticon, setlistEmoticon] = useState([])
@@ -87,7 +89,7 @@ function MainScreen (props) {
                     }}
                   />
                   </LinearGradient>
-                  <Text>Hi, Mario!</Text>
+                  <Text>Hi,{ token.data.user.name}!</Text>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'space-around'}}>
                   <TouchableOpacity onPress={toggleOverlay}>
@@ -117,7 +119,7 @@ function MainScreen (props) {
                 <View style={{backgroundColor:'#67308F',width:Screen.width*0.35, alignItems:'center', borderRadius:100, padding:8,marginTop:-32,marginBottom:-20}}>
                   <Text style={{color:'white'}}>Kendalikan Yuk!</Text>
                 </View>
-                <ContentHome />
+                <ContentHome navigate={navigate}/>
               </View>
               {
                 //Space

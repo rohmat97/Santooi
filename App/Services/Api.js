@@ -50,6 +50,8 @@ const create = (baseURL = staging) => {
   const getCallBackFacebook = payload => api.post('/auth/facebook/callback', payload)
   //dashboard
   const getEmoticon = payload => api.get('/emoticon?limit=10&page=1','',{headers: { Authorization: `Bearer ${payload}` }})
+  const checkEmail = payload => api.get('/auth/is-available/email?key='+payload)
+  const checkPhone = payload => api.get('/auth/is-available/phone?key='+payload)
   // ------
   // STEP 3
   // ------
@@ -75,7 +77,9 @@ const create = (baseURL = staging) => {
     getRegister,
     getCallBackFacebook,
     getCallBackGoogle,
-    getEmoticon
+    getEmoticon,
+    checkEmail,
+    checkPhone
   }
 }
 

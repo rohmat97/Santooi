@@ -48,7 +48,11 @@ static void InitializeFlipper(UIApplication *application) {
   UIViewController *rootViewController = [UIViewController new];
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
+  if (@available(iOS 13, *)) {
+      self.window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+  }
   [self.window makeKeyAndVisible];
+  
   return YES;
 }
 

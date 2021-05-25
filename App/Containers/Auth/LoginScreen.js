@@ -25,6 +25,8 @@ import LoginRedux from '../../Redux/LoginRedux'
 import CallbackFacebookRedux from '../../Redux/CallbackFacebookRedux'
 import CallbackGoogleRedux from '../../Redux/CallbackGoogleRedux'
 import TokenRedux from '../../Redux/TokenRedux'
+import CheckEmailRedux from '../../Redux/CheckEmailRedux'
+import CheckPhoneRedux from '../../Redux/CheckPhoneRedux'
 
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
@@ -36,6 +38,7 @@ import RoundedButton from '../../Components/RoundedButton'
 import ErrorButton from '../../Components/ErrorButton'
 import { Overlay } from 'react-native-elements';
 import SignUp from './SignUp';
+import { CheckEmail, CheckPhone, isNumeric } from './Function';
 
 
 async function Setup() {
@@ -51,7 +54,11 @@ async function Setup() {
   }
 
 function LoginScreen(props) {
-    const { navigation, LoginRequest, login, errorLogin, CallbackGoogleRequest, CallbackFacebookRequest, callbackgoogle, callbackfacebook, token } = props
+    const { 
+        navigation, LoginRequest, login, errorLogin, CallbackGoogleRequest, 
+        CallbackFacebookRequest, callbackgoogle, callbackfacebook, token, check,
+        CheckEmailRequest,CheckEmailSuccess, CheckPhoneRequest, checkPhone 
+    } = props
     const { navigate } = navigation
     const { type } = navigation.state.params
     // for form login/register and validation
@@ -68,6 +75,12 @@ function LoginScreen(props) {
     const [error, setError] =useState('')
     const [method, setmethod] = useState('')
     const [visible, setvisible] = useState(false)
+    const [bundleLogin, setbundleLogin] = useState()
+    const [avail, setavail] = useState(false)
+    const [availPhone, setavailPhone] = useState(false)
+    const [submitted, setsubmitted] = useState(false)
+    const [isEmail, setisEmail] = useState(false)
+    const [validatePhoneNumber, setValidatePhoneNumber] = useState(false)
     //show/hide password
     const onAccessoryPress = () => {
         setSecureTextEntry(!secureTextEntry)
@@ -75,14 +88,32 @@ function LoginScreen(props) {
     // validation email
     const validate = (email) => {
         let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-        if (reg.test(email) === false) {
+        let validation =isNumeric(email)
+        // console.log(validation)
+        setsubmitted(false)
+        if(validation){
+            if(email.length<16){
+                // setPhoneNumber(number)
+                setEmail(email)
+            }
+            if (email.length >= 10) {
+                if (email.length < 16) {
+                    setValidatePhoneNumber(true)
+                }
+            } else {
+                setValidatePhoneNumber(false)
+            }
+            setisEmail(false)
+        }else{
             setEmail(email)
-            setValidateEmail(false)
-            return false
-        }
-        else {
-            setEmail(email)
-            setValidateEmail(true)
+            setisEmail(true)
+            if (reg.test(email) === false) {
+                setValidateEmail(false)
+                return false
+            }
+            else {
+                setValidateEmail(true)
+            }
         }
     }
      const signInGoogle =async()=> {
@@ -104,9 +135,16 @@ function LoginScreen(props) {
                 // console.log('success login', JSON.stringify(sucess))
                 CallbackGoogleRequest({
                     'email':sucess.user.email,
+                    // 'uid':sucess.user.uid,
+                    // 'displayName':sucess.user.displayName,
+                    // 'photoURL':sucess.user.photoURL
+                })
+                setbundleLogin({
+                    'email':sucess.user.email,
                     'uid':sucess.user.uid,
                     'displayName':sucess.user.displayName,
-                    'photoURL':sucess.user.photoURL
+                    'photoURL':sucess.user.photoURL,
+                    'driver':'facebook'
                 })
             }
         )
@@ -137,10 +175,10 @@ function LoginScreen(props) {
         await LoginManager.logInWithPermissions(["public_profile", "email"]).then(
             function (result) {
             if (result.isCancelled) {
-            console.log("Login Cancelled " + JSON.stringify(result))
+            // console.log("Login Cancelled " + JSON.stringify(result))
             } else {
             // console.log("Login success with  permisssions: " + result.grantedPermissions.toString());
-            console.log("Login Success " + JSON.stringify(result));
+            // console.log("Login Success " + JSON.stringify(result));
             AccessToken.getCurrentAccessToken().then(
                 async(data) => {
                 //  console.log('success',JSON.stringify(data))
@@ -148,11 +186,18 @@ function LoginScreen(props) {
                 await auth().signInWithCredential(auth.FacebookAuthProvider.credential(data.accessToken)).then(naise =>{
                     CallbackFacebookRequest({
                         'email':naise.user.email,
+                        // 'uid':naise.user.uid,
+                        // 'displayName':naise.user.displayName,
+                        // 'photoURL':naise.user.photoURL
+                    })
+                    setbundleLogin({
+                        'email':naise.user.email,
                         'uid':naise.user.uid,
                         'displayName':naise.user.displayName,
-                        'photoURL':naise.user.photoURL
+                        'photoURL':naise.user.photoURL,
+                        'driver':'facebook'
                     })
-                    console.log('naise', naise)
+                    // console.log('naise', naise)
                 }).catch(err =>{
                     console.log('error ', err)
                 })
@@ -178,15 +223,14 @@ function LoginScreen(props) {
         }
     };
     
-    const LoginByEmail = () =>{
-        setvisible(true)
-        setTimeout(() => {
-            LoginRequest({
-                'email': email?email:'user1@mailinator.com',
-                'password': password?password:'123456'
-            })
-        }, 1000);
-       
+    const LoginByEmail = (type) =>{
+        if(type==='email'){
+            setvisible(true)
+            CheckEmailRequest(email)
+        }else if( type==='phone'){
+            setvisible(true)
+            CheckPhoneRequest(email)
+        }
     }
     useEffect(()=>{
         // console.log('LOGIN BOIS',login)
@@ -196,11 +240,10 @@ function LoginScreen(props) {
             //     screen: 'MainScreen',
             //     initial: true,
             // })
-            Alert.alert('Login Success')
+            // Alert.alert('Login Success')
         }
         if(errorLogin){
             setvisible(false)
-            Alert.alert(login.data.message)
         }
     },[login,errorLogin])
 
@@ -217,12 +260,10 @@ function LoginScreen(props) {
             })
         }
     },[token])
+
     const Register =()=>{
         if(validateEmail && password.length>7) {
-            navigate('SignUpScreen',{ params : {
-                email: email,
-                password: password
-            }})
+            CheckEmailRequest(email)
         }
        
     }
@@ -232,35 +273,56 @@ function LoginScreen(props) {
 
     useEffect(()=>{
         if(callbackgoogle){
-            Alert.alert('Login Success')
-            navigation.navigate('Splash', {
-                screen: 'SplashScreen',
-                initial: true,
-                params : {
-                    type:'transition',
-                    root:'Main',
-                    screen:'MainScreen'
-                }
-            })
+            if(callbackgoogle.status){
+                Alert.alert('Login Success')
+            }else{
+                navigate('SignUpScreen',{ bundleLogin : bundleLogin})
+            }
+            // navigation.navigate('Splash', {
+            //     screen: 'SplashScreen',
+            //     initial: true,
+            //     params : {
+            //         type:'transition',
+            //         root:'Main',
+            //         screen:'MainScreen'
+            //     }
+            // })
         }
     },[callbackgoogle])
 
     useEffect(()=>{
         if(callbackfacebook){
-            Alert.alert('Login Success')
-              navigation.navigate('Splash', {
-                screen: 'SplashScreen',
-                initial: true,
-                params : {
-                    type:'transition',
-                    root:'Main',
-                    screen:'MainScreen',
-                    method:method
-                }
-            })
+            if(callbackfacebook.status){
+                Alert.alert('Login Success')
+            }else{
+                navigate('SignUpScreen',{ bundleLogin :bundleLogin})
+            }
+            //   navigation.navigate('Splash', {
+            //     screen: 'SplashScreen',
+            //     initial: true,
+            //     params : {
+            //         type:'transition',
+            //         root:'Main',
+            //         screen:'MainScreen',
+            //         method:method
+            //     }
+            // })
             
         }
     },[callbackfacebook])
+
+    useEffect(()=>{
+        if(check){
+            CheckEmail(setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess)
+        }
+    },[check])
+
+    useEffect(()=>{
+        if(checkPhone){
+            console.log(checkPhone)
+            CheckPhone(setavailPhone,checkPhone,setsubmitted,LoginRequest,email,password,setvisible)
+        }
+    },[checkPhone])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -305,17 +367,43 @@ function LoginScreen(props) {
                                 />
                             </View>
                         </View>
-                        {validateEmail &&
+                        {validateEmail && !avail &&
                             <Image source={images.ok} style={{ margin: 10 }} resizeMode='center'></Image>
                         }
                     </View>
 
-                    {type == 'login' ? !validateEmail ? email.length > 0 &&
+                    {type == 'login' ? !validateEmail ? email.length > 0 &&isEmail &&
+                        <View style={{ marginBottom: 10 }}>
+                            <ErrorButton text={'Email tidak valid'} />
+                        </View>: <View />: <View/>}
+                    {
+                        type == 'login' && avail && submitted && email.length > 0 && isEmail &&
                         <View style={{ marginBottom: 10 }}>
                             <ErrorButton text={'Email tidak terdaftar'} />
                         </View>
-                        : <View /> : <View/>}
-
+                    }
+                    {
+                        type == 'login' && !validatePhoneNumber && email.length > 0 && !isEmail && 
+                        <View style={{ marginBottom: 10 }}>
+                            <ErrorButton text={'Nomor tidak valid'} />
+                        </View>
+                    }
+                     {
+                        type == 'login' && availPhone && submitted && email.length > 0 && !isEmail &&
+                        <View style={{ marginBottom: 10 }}>
+                            <ErrorButton text={'Nomor tidak terdaftar'} />
+                        </View>
+                    }
+                     {type == 'signup' ? !validateEmail ? email.length > 0 && 
+                        <View style={{ marginBottom: 10 }}>
+                            <ErrorButton text={'Email tidak valid'} />
+                        </View>: <View/>: <View/>}
+                    {
+                        type == 'signup' && avail && submitted && email.length > 0 &&
+                        <View style={{ marginBottom: 10 }}>
+                            <ErrorButton text={'Email sudah digunakan'} />
+                        </View>
+                    }
                     <View style={styles.textbox}>
                         <View style={{ flex: 1 }}>
                             <View style={{
@@ -346,7 +434,7 @@ function LoginScreen(props) {
                             </View>
                         </View>
                         <TouchableOpacity onPress={() => setSecureTextEntry(!secureTextEntry)}>
-                            <Image source={secureTextEntry? images.closeEye : images.eye} style={{ margin: 10 }} resizeMode='center'></Image>
+                            <Image source={secureTextEntry? images.closeEye : images.eye} style={{ margin: 10, width:30,height:30, aspectRatio:0.75 }} resizeMode='contain'></Image>
                         </TouchableOpacity>
                     </View>
 
@@ -368,20 +456,27 @@ function LoginScreen(props) {
                     <View style={{ marginTop: Screen.width * 0.1 }} />
                     {type == 'signup' &&
                         <RoundedButton
-                            text={'Lanjut'}
+                            text={'Daftar'}
                             onPress={() =>  Register()}
-                            disabled={validateEmail && password.length>7 ? false : true}
+                            disabled={validateEmail && password.length>7? false : true}
                             backgroundColor={validateEmail && password.length>7 ? '#266CF5' : '#b3b3cc'} />
                     }
 
-                    {type == 'login' &&
+                    {type === 'login' && isEmail ?
                         <RoundedButton
                             text={'Login'}
-                            onPress={() => LoginByEmail()}
-                            disabled={validateEmail && password.length>7 ? false : true}
+                            onPress={() => LoginByEmail('email')}
+                            disabled={validateEmail && password.length>7  ? false : true}
                             backgroundColor={validateEmail && password.length>7 ? '#266CF5' : '#b3b3cc'}
+                             />:
+                        <RoundedButton
+                            text={'Login'}
+                            onPress={() => LoginByEmail('phone')}
+                            disabled={validatePhoneNumber && password.length>7  ? false : true}
+                            backgroundColor={validatePhoneNumber && password.length>7 ? '#266CF5' : '#b3b3cc'}
                              />
                     }
+                    
 
                     <View style={{ flexDirection: 'row', marginVertical: 10, justifyContent: 'center', alignItems: 'center' }}>
                         <View
@@ -401,14 +496,14 @@ function LoginScreen(props) {
                         />
                     </View>
                     <RoundedButton
-                        text={'Masuk dengan Google'}
+                        text={type == 'signup' ?'Daftar dengan Google' :'Masuk dengan Google'}
                         onPress={() => signInGoogle()}
                         backgroundColor={'#5B87E4'}
                         image={images.google}
                         width={15}
                         height={15} />
                     <RoundedButton
-                        text={'Masuk dengan Facebook'}
+                        text={type == 'signup' ?'Daftar dengan Facebook' :'Masuk dengan Facebook'}
                         onPress={() => signInFacebook()}
                         backgroundColor={'#374F8B'}
                         image={images.fb}
@@ -430,11 +525,13 @@ const mapStateToProps = (state) => {
     token: state.token.payload,
     errorLogin: state.login.error,
     callbackgoogle: state.callbackGoogle.payload,
-    callbackfacebook: state.callbackFacebook.payload
+    callbackfacebook: state.callbackFacebook.payload,
+    check: state.checkEmail.payload,
+    checkPhone: state.checkPhone.payload
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(Object.assign(LoginRedux, CallbackGoogleRedux, CallbackFacebookRedux,TokenRedux), dispatch)
+  return bindActionCreators(Object.assign(LoginRedux, CallbackGoogleRedux, CallbackFacebookRedux,TokenRedux,CheckEmailRedux,CheckPhoneRedux), dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen)
