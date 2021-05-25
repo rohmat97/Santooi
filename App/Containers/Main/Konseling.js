@@ -49,7 +49,7 @@ function Konseling(props) {
                                 justifyContent: 'center',
                                 backgroundColor: 'linear-gradient(73.44deg, rgba(231, 232, 245, 0.9) 7.15%, rgba(220, 227, 251, 0.9) 88.8%);'
                             }}
-                            //  onPress={() => this.props.onPress}
+                             onPress={() => navigation.navigate('SelectKonseling')}
                             >
                                 <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                                     <Text style={{
