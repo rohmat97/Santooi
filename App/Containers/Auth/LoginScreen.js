@@ -244,6 +244,8 @@ function LoginScreen(props) {
         }
         if(errorLogin){
             setvisible(false)
+
+            login && Alert.alert(login.message)
         }
     },[login,errorLogin])
 
@@ -312,7 +314,7 @@ function LoginScreen(props) {
     },[callbackfacebook])
 
     useEffect(()=>{
-        if(check){
+        if(check&& !check.status){
             CheckEmail(setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess)
         }
     },[check])
@@ -458,21 +460,21 @@ function LoginScreen(props) {
                         <RoundedButton
                             text={'Daftar'}
                             onPress={() =>  Register()}
-                            disabled={validateEmail && password.length>7? false : true}
+                            disabled={validateEmail && password.length>7? null : true}
                             backgroundColor={validateEmail && password.length>7 ? '#266CF5' : '#b3b3cc'} />
                     }
 
-                    {type === 'login' && isEmail ?
-                        <RoundedButton
+                    {isEmail ?
+                        type === 'login' && <RoundedButton
                             text={'Login'}
                             onPress={() => LoginByEmail('email')}
-                            disabled={validateEmail && password.length>7  ? false : true}
+                            disabled={validateEmail && password.length>7  ? null : true}
                             backgroundColor={validateEmail && password.length>7 ? '#266CF5' : '#b3b3cc'}
                              />:
-                        <RoundedButton
+                        type === 'login' && <RoundedButton
                             text={'Login'}
                             onPress={() => LoginByEmail('phone')}
-                            disabled={validatePhoneNumber && password.length>7  ? false : true}
+                            disabled={validatePhoneNumber && password.length>7  ? null : true}
                             backgroundColor={validatePhoneNumber && password.length>7 ? '#266CF5' : '#b3b3cc'}
                              />
                     }

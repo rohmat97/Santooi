@@ -1,6 +1,5 @@
-export const CheckEmail =(setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess)=>{
-    if(type == 'login'){
-
+export const CheckEmail =(setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess,ForgotRequest)=>{
+    if(type === 'login'){
         setsubmitted(true)
         if(check.status) {
             setavail(true)
@@ -12,13 +11,6 @@ export const CheckEmail =(setavail, type, check,email,password,LoginRequest,setv
             })
             setavail(false)
             setvisible(false)
-        }
-    }else if(type==='forgot'){
-        setsubmitted(true)
-        if(check.status) {
-            setavail(true)
-        }else{
-            setavail(false)
         }
     }else{
         setsubmitted(true)

@@ -27,8 +27,8 @@ export function * getLogin (api, action) {
       yield put(TokenRedux.TokenSuccess(response.data))
     }
   } else {
+    yield put(LoginRedux.LoginSuccess(response.data))
     yield put(LoginRedux.LoginFailure(response))
-    Alert.alert(response.data.message)
   }
 }
 
@@ -53,7 +53,7 @@ export function * getForgotPassword (api, action) {
   const { data } = action
   // make the call to the api
   const response = yield call(api.getForgotPassword, data)
-  console.log('data Reset', response)
+  // console.log('data Reset', response)
 
   if (response.ok) {
     // do data conversion here if needed
@@ -133,10 +133,9 @@ export function * getCheckEmail (api, action) {
   const { data } = action
   // make the call to the api
   const response = yield call(api.checkEmail, data)
-  // console.log('email', response.data)
+  console.log('email', response.data)
 
   if (response.ok) {
-    
     // do data conversion here if needed
     yield put(CheckEmailRedux.CheckEmailSuccess(response.data))
   } else {
