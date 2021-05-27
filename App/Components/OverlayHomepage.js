@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { FlatList, TextInput, View, ScrollView, TouchableOpacity, StyleSheet  } from "react-native";
+import { FlatList, TextInput, View, ScrollView, TouchableOpacity, StyleSheet,KeyboardAvoidingView  } from "react-native";
 import { Divider, Image, Overlay, Text } from "react-native-elements";
 import { Colors, Images } from "../Themes";
 import { Screen } from "../Transforms/Screen";
@@ -23,9 +23,10 @@ export const OverlayHomepage =({visible,toggleOverlay,setquote,listEmoticon, pic
     return (
         <Overlay 
             isVisible={visible} 
-            // onBackdropPress={toggleOverlay}
-            overlayStyle={{width: Screen.width*0.9, borderRadius:20, minHeight: Screen.height*0.4}}
+            onBackdropPress={()=>toggleOverlay()}
+            overlayStyle={{width: Screen.width*0.95, borderRadius:20, minHeight: Screen.height*0.4}}
             >
+                <KeyboardAvoidingView behavior = 'height' >
             <Text style={{color:'#67308F', fontWeight:'700'}}>Pilih Emosimu :</Text>
             <View style={{height:Screen.height*0.4}}>
                 <ScrollView>
@@ -82,7 +83,7 @@ export const OverlayHomepage =({visible,toggleOverlay,setquote,listEmoticon, pic
                         <Image source={Images.iconNext} style={{width:20, height:20}} resizeMode='contain' />
                     </View>
                  </TouchableOpacity>
-            </View>
+            </View></KeyboardAvoidingView>
         </Overlay>
     )
 }

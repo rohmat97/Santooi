@@ -57,7 +57,7 @@ function LoginScreen(props) {
     const { 
         navigation, LoginRequest, login, errorLogin, CallbackGoogleRequest, 
         CallbackFacebookRequest, callbackgoogle, callbackfacebook, token, check,
-        CheckEmailRequest,CheckEmailSuccess, CheckPhoneRequest, checkPhone 
+        CheckEmailRequest,CheckEmailSuccess, CheckPhoneRequest, checkPhone ,LoginSuccess
     } = props
     const { navigate } = navigation
     const { type } = navigation.state.params
@@ -233,21 +233,25 @@ function LoginScreen(props) {
         }
     }
     useEffect(()=>{
-        // console.log('LOGIN BOIS',login)
+        login && console.log('LOGIN BOIS',login.status)
         if(login) {
             setvisible(false)
+            if(login.status === 200){
+                login && Alert.alert(login.data.message)
+            }else if(login.status === 401){
+                login && Alert.alert(login.data.message)
+                LoginSuccess(null)
+            }
             // navigate('Main', {
             //     screen: 'MainScreen',
             //     initial: true,
             // })
             // Alert.alert('Login Success')
         }
-        if(errorLogin){
-            setvisible(false)
+        
+       
+    },[login])
 
-            login && Alert.alert(login.message)
-        }
-    },[login,errorLogin])
 
     useEffect(()=>{
         if(token){

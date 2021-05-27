@@ -27,8 +27,8 @@ export function * getLogin (api, action) {
       yield put(TokenRedux.TokenSuccess(response.data))
     }
   } else {
-    yield put(LoginRedux.LoginSuccess(response.data))
     yield put(LoginRedux.LoginFailure(response))
+    yield put(LoginRedux.LoginSuccess(response))
   }
 }
 

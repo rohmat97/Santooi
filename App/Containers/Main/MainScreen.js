@@ -26,6 +26,7 @@ function MainScreen (props) {
   const [quote, setquote]= useState('')
   const [listEmoticon, setlistEmoticon] = useState([])
   const [picked, setpicked] = useState([])
+  const [ImageProfile, setImageProfile] = useState()
   const toggleOverlay = () => {
     setVisible(!visible);
   };
@@ -42,6 +43,8 @@ function MainScreen (props) {
   }
   useEffect(()=>{
     EmoticonRequest(token.data.access_token)
+    console.log('token',token.data.user.photo)
+    setImageProfile(token.data.user.photo.url)
     // console.log('token',token.data.access_token)
   },[])
   
@@ -76,7 +79,7 @@ function MainScreen (props) {
                     size='medium'
                     title="M"
                     source={{
-                      uri:
+                      uri:ImageProfile?ImageProfile:
                         'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
                     }}
                     containerStyle={{
