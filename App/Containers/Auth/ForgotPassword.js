@@ -15,7 +15,6 @@ import RoundedButton from '../../Components/RoundedButton'
 import ErrorButton from '../../Components/ErrorButton'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { CheckEmail } from './Function';
 
 function ForgotPassword(props) {
     const { navigation, ForgotRequest, forgot, ForgotSuccess,check, CheckEmailRequest,CheckEmailSuccess } = props
@@ -47,13 +46,22 @@ function ForgotPassword(props) {
         if(forgot){
             Alert.alert('Email berhasil dikirimkan');
             navigate('LoginScreen')
-            ForgotSuccess(null)
+            setTimeout(() => {
+                ForgotSuccess(null)
+            }, 1000);
         }
     },[forgot])
 
     useEffect(()=>{
         if(check){
-            CheckEmail(setavail,'forgot', check,email,null,null,null,setsubmitted,navigate,CheckEmailSuccess,ForgotRequest)
+                console.log(check)
+                setsubmitted(true)
+                if(check.status) {
+                    setavail(true)
+                }else{
+                    ForgotRequest(email)
+                    setavail(false)
+                }
         }
     },[check])
     return (
@@ -117,7 +125,7 @@ function ForgotPassword(props) {
                     <RoundedButton
                         text={'Lanjut'}
                         onPress={() => SubmitResetPassword()}
-                        disabled={validateEmail ? false : true}
+                        disabled={validateEmail ? null : true}
                         backgroundColor={validateEmail  ? '#266CF5' : '#b3b3cc'} />
                 </View>
             </View>
