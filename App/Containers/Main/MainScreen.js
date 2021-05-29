@@ -42,11 +42,13 @@ function MainScreen (props) {
     console.log('removed',check)
   }
   useEffect(()=>{
-    EmoticonRequest(token.data.access_token)
-    console.log('token',token.data.user.photo)
-    setImageProfile(token.data.user.photo.url)
-    // console.log('token',token.data.access_token)
-  },[])
+    if(token){
+      EmoticonRequest(token.data.access_token)
+      // console.log('token',token.data.user.photo)
+      setImageProfile(token.data.user.photo && token.data.user.photo.url)
+      console.log('token',token) 
+    }
+  },[token])
   
   useEffect(()=>{
     if(emoticon && emoticon.data && emoticon.data.rows){
@@ -77,10 +79,9 @@ function MainScreen (props) {
                   <Avatar
                     rounded
                     size='medium'
-                    title="M"
+                    title={token.data.user.name.charAt(0)}
                     source={{
-                      uri:ImageProfile?ImageProfile:
-                        'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                      uri:ImageProfile?ImageProfile:'',
                     }}
                     containerStyle={{
                       // marginRight:8,
