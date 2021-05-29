@@ -89,6 +89,13 @@ const images = {
   video: require('../Images/ItemHome/video.png'),
   waiting: require('../Images/ItemHome/waiting.png'),
   arrowRightPurple: require('../Images/ItemHome/arrowRightPurple.png'),
+  Checked: require('../Images/Icons/Checked.png'),
+  unChecked: require('../Images/Icons/unChecked.png'),
+  StarChecked: require('../Images/Icons/StarChecked.png'),
+  StarUncheck: require('../Images/Icons/StarUncheck.png'),
+  Share: require('../Images/Icons/Share.png'),
+  checklist: require('../Images/Icons/checklist.png'),
+
 
 }
 

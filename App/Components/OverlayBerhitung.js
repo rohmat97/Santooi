@@ -1,18 +1,18 @@
 
 import React, { useState } from "react";
 import { FlatList, TextInput, View, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
-import { Divider, Image, Overlay, Text } from "react-native-elements";
+import { CheckBox, Divider, Image, Overlay, Text } from "react-native-elements";
 import { Colors, Images } from "../Themes";
 import { Screen } from "../Transforms/Screen";
 import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
 export const OverlayBerhitung = ({ visible, toggleOverlay }) => {
-    const [music, setMusic] = useState('2')
+    const [music, setMusic] = useState()
     const [pemandu, setPemandu] = useState('')
     return (
         <Overlay
             isVisible={visible}
-            // onBackdropPress={toggleOverlay}
+            onBackdropPress={()=>toggleOverlay()}
             overlayStyle={{ width: Screen.width * 0.9, borderRadius: 20, minHeight: Screen.height * 0.4, padding: Screen.width * 0.05 }}
         >
             <ScrollView>
@@ -25,44 +25,57 @@ export const OverlayBerhitung = ({ visible, toggleOverlay }) => {
                     </TouchableOpacity>
                 </View>
 
-                <RadioButton.Group onValueChange={newValue => setMusic(newValue)} value={music}>
                 <View style={{ flexDirection: 'row', justifyContent:'space-between',alignItems: 'center', marginBottom: 10 }}>
                     <Text style={{ color: '#67308F', fontSize: 13, marginStart: 10 }}>Off</Text>
-                    <RadioButton color='#67308F' uncheckedColor='#67308F' value="1" />
+                    <CheckBox
+                        checkedIcon={<Image source={images.Checked} style={{width:20,height:20}} resizeMode='contain'/>}
+                        uncheckedIcon={<Image source={images.unChecked} style={{width:20,height:20}} resizeMode='contain'/>}
+                        checked={music===1?true:false}
+                        onPress={() => setMusic(1)}
+                    />
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                     <View style={{ flexDirection: 'row', alignContent: 'center' }}>
                         <Text style={{ color: '#67308F', marginLeft: 10 }}>Body Relaxion</Text>
-                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10 }} resizeMode='contain' />
+                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10,marginTop:-4 }} resizeMode='contain' />
                     </View>
-                    <RadioButton color='#67308F' uncheckedColor='#67308F' value="2" />
+                    <CheckBox
+                        checkedIcon={<Image source={images.Checked} style={{width:20,height:20}} resizeMode='contain'/>}
+                        uncheckedIcon={<Image source={images.unChecked} style={{width:20,height:20}} resizeMode='contain'/>}
+                        checked={music===2?true:false}
+                        onPress={() => setMusic(2)}
+                    />
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                     <View style={{ flexDirection: 'row', alignContent: 'center' }}>
                         <Text style={{ color: '#67308F', marginLeft: 10 }}>Piano Moods</Text>
-                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10 }} resizeMode='contain' />
+                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10,marginTop:-4 }} resizeMode='contain' />
                     </View>
-                    <RadioButton color='#67308F' uncheckedColor='#67308F' value="3" />
+                    <CheckBox
+                        checkedIcon={<Image source={images.Checked} style={{width:20,height:20}} resizeMode='contain'/>}
+                        uncheckedIcon={<Image source={images.unChecked} style={{width:20,height:20}} resizeMode='contain'/>}
+                        checked={music===3?true:false}
+                        onPress={() => setMusic(3)}
+                    />
                 </View>
-                </RadioButton.Group>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                     <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                        <Text style={{ color: '#67308F', marginLeft: 10 }}>The Colors of the Winds</Text>
-                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10 }} resizeMode='contain' />
+                        <Text style={{ color: '#67308F', marginLeft: 10,marginTop:4 }}>The Colors of the Winds</Text>
+                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10}} resizeMode='contain' />
                     </View>
                     <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.18, alignItems: 'center', borderRadius: 100, padding: 2, flexDirection: 'row', justifyContent: 'center' }}>
-                        <Image source={images.key} style={{ width: 20, height: 20 }} resizeMode='contain' />
+                        <Image source={images.key} style={{ width: 20, height: 20,marginTop:-4 }} resizeMode='contain' />
                         <Text style={{ color: 'white', fontWeight: '500', marginLeft: 5, fontSize: 13 }}>Beli</Text>
                     </View>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                        <Text style={{ color: '#67308F', marginLeft: 10 }}>Discover your spirit</Text>
+                        <Text style={{ color: '#67308F', marginLeft: 10,marginTop:4 }}>Discover your spirit</Text>
                         <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10 }} resizeMode='contain' />
                     </View>
                     <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.18, alignItems: 'center', borderRadius: 100, padding: 2, flexDirection: 'row', justifyContent: 'center' }}>
-                        <Image source={images.key} style={{ width: 20, height: 20 }} resizeMode='contain' />
+                        <Image source={images.key} style={{ width: 20, height: 20 ,marginTop:-4 }} resizeMode='contain' />
                         <Text style={{ color: 'white', fontWeight: '500', marginLeft: 5, fontSize: 13 }}>Beli</Text>
                     </View>
                 </View>
@@ -81,27 +94,27 @@ export const OverlayBerhitung = ({ visible, toggleOverlay }) => {
                 </View>
                 <RadioButton.Group onValueChange={newValue => setPemandu(newValue)} value={pemandu}>
                 <View style={{ flexDirection: 'row', justifyContent:'space-between',alignItems: 'center', marginBottom: 10 }}>
-                    <Text style={{ color: '#67308F', fontSize: 13, marginStart: 10 }}>Off</Text>
+                    <Text style={{ color: '#67308F', fontSize: 13, marginStart: 10, opacity:0.5 }}>Off</Text>
                     <RadioButton color='#67308F' uncheckedColor='#67308F' value="1" disabled={true}/>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                     <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                        <Text style={{ color: '#67308F', marginLeft: 10 }}>Eva Green</Text>
-                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10 }} resizeMode='contain' />
+                        <Text style={{ color: '#67308F', marginLeft: 10, opacity:0.5 }}>Eva Green</Text>
+                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10, opacity:0.5,marginTop:-4 }} resizeMode='contain' />
                     </View>
                     <RadioButton color='#67308F' uncheckedColor='#67308F' value="2" disabled={true}/>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                     <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                        <Text style={{ color: '#67308F', marginLeft: 10 }}>Matthew McConaughey</Text>
-                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10 }} resizeMode='contain' />
+                        <Text style={{ color: '#67308F', marginLeft: 10, opacity:0.5 }}>Matthew McConaughey</Text>
+                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10, opacity:0.5,marginTop:-4 }} resizeMode='contain' />
                     </View>
                     <RadioButton color='#67308F' uncheckedColor='#67308F' value="3" disabled={true}/>
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                     <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                        <Text style={{ color: '#67308F', marginLeft: 10 }}>Lucy Liu</Text>
-                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10 }} resizeMode='contain' />
+                        <Text style={{ color: '#67308F', marginLeft: 10, opacity:0.5 }}>Lucy Liu</Text>
+                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10, opacity:0.5,marginTop:-4 }} resizeMode='contain' />
                     </View>
                     <RadioButton color='#67308F' uncheckedColor='#67308F' value="4" disabled={true}/>
                 </View>

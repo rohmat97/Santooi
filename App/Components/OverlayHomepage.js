@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { Platform } from "react-native";
 import { FlatList, TextInput, View, ScrollView, TouchableOpacity, StyleSheet,KeyboardAvoidingView  } from "react-native";
 import { Divider, Image, Overlay, Text } from "react-native-elements";
 import { Colors, Images } from "../Themes";
@@ -20,13 +21,14 @@ export const OverlayHomepage =({visible,toggleOverlay,setquote,listEmoticon, pic
         
         console.log('validasi', filter)
     }
+    const [onKeyboardView, setonKeyboardView] = useState(0)
     return (
         <Overlay 
             isVisible={visible} 
             onBackdropPress={()=>toggleOverlay()}
-            overlayStyle={{width: Screen.width*0.95, borderRadius:20, minHeight: Screen.height*0.4}}
+            overlayStyle={{width: Screen.width*0.9,paddingVertical:24, borderRadius:20, minHeight: Screen.height*0.4}}
             >
-                <KeyboardAvoidingView behavior = 'height' >
+        <ScrollView>
             <Text style={{color:'#67308F', fontWeight:'700'}}>Pilih Emosimu :</Text>
             <View style={{height:Screen.height*0.4}}>
                 <ScrollView>
@@ -73,17 +75,21 @@ export const OverlayHomepage =({visible,toggleOverlay,setquote,listEmoticon, pic
             <View style={{flexDirection:'column',justifyContent:'flex-start'}}>
                 <TextInput 
                     value={quote}
+                    onTouchStart={()=>setonKeyboardView(Screen.height*0.4)}
+                    onEndEditing={()=>setonKeyboardView(0)}
                     placeholder="Bagaimana Perasaanmu Hari ini"   
                     style={{borderWidth:1, height:Screen.height*0.15, width:'100%', marginBottom:24, borderRadius:20, textAlign:'center', backgroundColor:'white',borderColor:'#67308F', marginTop:12}}
                     onChangeText={text => ValidateTextForEmoticon(text)}
                  />
                  <TouchableOpacity onPress={toggleOverlay}>
                     <View style={{flexDirection:'row', justifyContent:'flex-end',alignItems:'center'}}>
-                        <Text style={{color:'#67308F', fontWeight:'500', fontSize:14, marginRight:12}}>Selesai</Text>
+                        <Text style={{color:'#67308F', fontWeight:'500', fontSize:14,marginRight:2}}>Selesai</Text>
                         <Image source={Images.iconNext} style={{width:20, height:20}} resizeMode='contain' />
                     </View>
                  </TouchableOpacity>
-            </View></KeyboardAvoidingView>
+            </View>
+            <View  style={{height:onKeyboardView}}/>
+            </ScrollView>
         </Overlay>
     )
 }

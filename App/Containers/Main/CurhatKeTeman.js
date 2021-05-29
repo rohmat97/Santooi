@@ -41,7 +41,7 @@ function CurhatKeTeman(props) {
                     </TouchableOpacity>
 
                     <View style={{ flexDirection: 'row', height: Screen.width * 0.15, alignItems: 'center' }}>
-                        <Image source={images.pp} style={{ width: 50, height: 50 }} resizeMode='contain' />
+                        <Image source={images.pp} style={{ width: 40, height: 40,marginTop:-24 }} resizeMode='contain' />
                         <View style={{ marginLeft: 20, flex: Screen.width * 0.8 }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flex: 0.9 }}>
@@ -55,9 +55,8 @@ function CurhatKeTeman(props) {
                             <View style={{ height: 1, width: '100%', borderRadius: 1, borderWidth: 0.5, borderColor: 'white', zIndex: 0, marginVertical: 15 }} />
                         </View>
                     </View>
-
                     <View style={{ flexDirection: 'row', height: Screen.width * 0.15, alignItems: 'center' }}>
-                        <Image source={images.pp} style={{ width: 50, height: 50 }} resizeMode='contain' />
+                        <Image source={images.pp} style={{ width: 40, height: 40,marginTop:-24 }} resizeMode='contain' />
                         <View style={{ marginLeft: 20, flex: Screen.width * 0.8 }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flex: 0.9 }}>

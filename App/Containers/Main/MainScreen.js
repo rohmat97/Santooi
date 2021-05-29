@@ -103,7 +103,7 @@ function MainScreen (props) {
                           <Image source={{uri:picked[0].image.url}} style={[quote?style.iconDashboard:style.icon]} resizeMode='contain'/>
                         :null
                       }
-                      <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:picked.length>0?-12:quote?14:0}}>{picked.length>0?'':quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
+                      <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:picked.length>0?-12:quote?14:0}}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
                       {
                         picked.length>0 || quote?
                         <View style={{width:'100%', justifyContent:'flex-end', flexDirection:'row', marginTop:24}}>

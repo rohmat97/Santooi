@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
-import { FlatList, TextInput, View, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import { FlatList, View, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import { TextInput } from 'react-native-paper';
 import { Divider, Image, Overlay, Text } from "react-native-elements";
 import { Colors, Images } from "../Themes";
 import { Screen } from "../Transforms/Screen";
@@ -15,8 +16,6 @@ export const OverlayDaftarPsikolog = ({ visible, toggleOverlay }) => {
             overlayStyle={{ width: Screen.width * 0.9, borderRadius: 20, minHeight: Screen.height * 0.65, padding: Screen.width * 0.05 }}
         >
             <Text style={{ color: '#67308F', fontWeight: '500', marginBottom: 20 }}>Profil Psikolog</Text>
-
-            <View style={{ flex: 1 }}>
                 <TextInput
                     // inputRef={(ref) => (this.password = ref)}
                     label="Nama"
@@ -31,11 +30,9 @@ export const OverlayDaftarPsikolog = ({ visible, toggleOverlay }) => {
                             primary: '#67308F',
                         }
                     }}
-                    selectionColor={'#939598'}
+                    // selectionColor={'#939598'}
                 />
-            </View>
 
-            <View style={{ flex: 1 }}>
                 <TextInput
                     // inputRef={(ref) => (this.password = ref)}
                     label="Tanggal Lahir"
@@ -52,9 +49,7 @@ export const OverlayDaftarPsikolog = ({ visible, toggleOverlay }) => {
                     }}
                     selectionColor={'#939598'}
                 />
-            </View>
 
-            <View style={{ flex: 1 }}>
                 <TextInput
                     // inputRef={(ref) => (this.password = ref)}
                     label="Pengalaman Kerja"
@@ -71,7 +66,6 @@ export const OverlayDaftarPsikolog = ({ visible, toggleOverlay }) => {
                     }}
                     selectionColor={'#939598'}
                 />
-            </View>
 
             <Text style={{ color: '#67308F', marginBottom: 20 }}>Upload dokumen</Text>
 
@@ -107,7 +101,10 @@ const style = StyleSheet.create({
         borderBottomLeftRadius: 10,
         borderBottomRightRadius: 10,
         borderColor: '#67308F',
-        borderWidth: 1
+        borderWidth: 1,
+        marginBottom:12,
+        // paddingVertical:12,
+        minHeight:50
     },
     textInputDashed: {
         // overflow: 'hidden',

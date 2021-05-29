@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { ScrollView, View, Image, Text, TouchableOpacity, TextInput } from 'react-native'
+import { ScrollView, View, Image, Text, TouchableOpacity } from 'react-native'
+import { TextInput } from 'react-native-paper';
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import images from '../../Themes/Images';
 import styles from '../Styles/LaunchScreenStyles'
@@ -95,7 +96,7 @@ function Konseling(props) {
                                         overflow: 'hidden',
                                     }}>
                                         <TextInput
-                                            inputRef={(ref) => (this.password = ref)}
+                                            // inputRef={(ref) => (this.password = ref)}
                                             label="Masukkan kode unik"
                                             value={password}
                                             error={errorPassword}

@@ -27,7 +27,7 @@ function SelectKonseling(props) {
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
                 <View style={styles.section}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
                         <TouchableOpacity
                             onPress={() => pop()}
                             style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -49,16 +49,19 @@ function SelectKonseling(props) {
                         </TextInput>
                     </View>
 
-                    <ScrollView>
-                        <View style={style.container}>
+                    <ScrollView style={{paddingBottom:Screen.height*0.1}}>
+                        <View style={[style.container,{marginTop:12 }]}>
                             <View style={{ flexDirection: 'row' }}>
-                                <Image source={images.konselor} style={{ width: Screen.width * 0.15, height: Screen.width * 0.15 }} resizeMode='contain' />
+                                <Image source={images.konselor} style={{ width: Screen.width * 0.15, height: Screen.width * 0.15,marginLeft:Screen.width*0.05 }} resizeMode='contain' />
                                 <View style={{ flexDirection: 'column', marginLeft: 20 }}>
                                     <Text style={{ fontWeight: 'bold', marginBottom: 10 }}>Dr. Eva Suryani, Sp.KJ</Text>
-                                    <Text>Phychiatrist</Text>
-                                    <Text>Experience 8 years</Text>
-                                    <Text>Next Available: Monday, 17:00-20:00 WIB</Text>
-                                    <Text style={{ fontWeight: 'bold', marginTop: 10 }}>Rp.35.000/session</Text>
+                                    <Text style={{fontSize:12}}>Phychiatrist</Text>
+                                    <Text style={{fontSize:12}}>Experience 8 years</Text>
+                                    <Text style={{fontSize:12, paddingRight:12}} numberOfLines={2}>Next Available: Monday, 17:00-20:00 WIB</Text>
+                                    <Text style={{ marginTop: 10,fontSize:14 }}>
+                                        <Text style={{fontWeight:'bold'}}>Rp.35.000/</Text>
+                                        <Text>Session</Text>
+                                    </Text>
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', marginTop: 20, justifyContent: 'space-between', width: Screen.width * 0.85 }}>
@@ -74,14 +77,17 @@ function SelectKonseling(props) {
                         </View>
 
                         <View style={style.container}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Image source={images.konselor} style={{ width: Screen.width * 0.15, height: Screen.width * 0.15 }} resizeMode='contain' />
+                             <View style={{ flexDirection: 'row' }}>
+                                <Image source={images.konselor} style={{ width: Screen.width * 0.15, height: Screen.width * 0.15,marginLeft:Screen.width*0.05 }} resizeMode='contain' />
                                 <View style={{ flexDirection: 'column', marginLeft: 20 }}>
                                     <Text style={{ fontWeight: 'bold', marginBottom: 10 }}>Dr. Eva Suryani, Sp.KJ</Text>
-                                    <Text>Phychiatrist</Text>
-                                    <Text>Experience 8 years</Text>
-                                    <Text>Next Available: Monday, 17:00-20:00 WIB</Text>
-                                    <Text style={{ fontWeight: 'bold', marginTop: 10 }}>Rp.35.000/session</Text>
+                                    <Text style={{fontSize:12}}>Phychiatrist</Text>
+                                    <Text style={{fontSize:12}}>Experience 8 years</Text>
+                                    <Text style={{fontSize:12, paddingRight:12}} numberOfLines={2}>Next Available: Monday, 17:00-20:00 WIB</Text>
+                                    <Text style={{ marginTop: 10,fontSize:14 }}>
+                                        <Text style={{fontWeight:'bold'}}>Rp.35.000/</Text>
+                                        <Text>Session</Text>
+                                    </Text>
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', marginTop: 20, justifyContent: 'space-between', width: Screen.width * 0.85 }}>
@@ -97,14 +103,17 @@ function SelectKonseling(props) {
                         </View>
 
                         <View style={style.container}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Image source={images.konselor} style={{ width: Screen.width * 0.15, height: Screen.width * 0.15 }} resizeMode='contain' />
+                             <View style={{ flexDirection: 'row' }}>
+                                <Image source={images.konselor} style={{ width: Screen.width * 0.15, height: Screen.width * 0.15,marginLeft:Screen.width*0.05 }} resizeMode='contain' />
                                 <View style={{ flexDirection: 'column', marginLeft: 20 }}>
                                     <Text style={{ fontWeight: 'bold', marginBottom: 10 }}>Dr. Eva Suryani, Sp.KJ</Text>
-                                    <Text>Phychiatrist</Text>
-                                    <Text>Experience 8 years</Text>
-                                    <Text>Next Available: Monday, 17:00-20:00 WIB</Text>
-                                    <Text style={{ fontWeight: 'bold', marginTop: 10 }}>Rp.35.000/session</Text>
+                                    <Text style={{fontSize:12}}>Phychiatrist</Text>
+                                    <Text style={{fontSize:12}}>Experience 8 years</Text>
+                                    <Text style={{fontSize:12, paddingRight:12}} numberOfLines={2}>Next Available: Monday, 17:00-20:00 WIB</Text>
+                                    <Text style={{ marginTop: 10,fontSize:14 }}>
+                                        <Text style={{fontWeight:'bold'}}>Rp.35.000/</Text>
+                                        <Text>Session</Text>
+                                    </Text>
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', marginTop: 20, justifyContent: 'space-between', width: Screen.width * 0.85 }}>

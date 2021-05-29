@@ -29,7 +29,7 @@ export default StyleSheet.create({
     alignItems: 'center'
   },
   textInput: {
-    overflow: 'hidden',
+    // overflow: 'hidden',
     backgroundColor: 'transparent',
     borderTopRightRadius: 10,
     borderTopLeftRadius: 10,
