@@ -1,6 +1,7 @@
-export const CheckEmail =(setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess,ForgotRequest)=>{
+export const CheckEmail =(setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess)=>{
     if(type === 'login'){
         setsubmitted(true)
+        console.log('login')
         if(check.status) {
             setavail(true)
             setvisible(false)
@@ -12,8 +13,10 @@ export const CheckEmail =(setavail, type, check,email,password,LoginRequest,setv
             setavail(false)
             setvisible(false)
         }
-    }else{
+    }
+    if(type === 'signup'){
         setsubmitted(true)
+        console.log('singup',check)
         if(check.status) {
             setavail(false)
             navigate('SignUpScreen',{ params : {
@@ -24,6 +27,8 @@ export const CheckEmail =(setavail, type, check,email,password,LoginRequest,setv
             setavail(true)
         }
     }
+
+    console.log('check',check)
     CheckEmailSuccess(null)
 }
 

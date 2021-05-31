@@ -318,7 +318,7 @@ function LoginScreen(props) {
     },[callbackfacebook])
 
     useEffect(()=>{
-        if(check&& !check.status){
+        if(check){
             CheckEmail(setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess)
         }
     },[check])
@@ -350,7 +350,7 @@ function LoginScreen(props) {
                                 overflow: 'hidden',
                             }}>
                                 <TextInput
-                                    label="Email atau Nomor Telepon"
+                                    label={type == 'login' ? "Email atau Nomor Telepon": "Email"}
                                     value={email}
                                     onChangeText={email => validate(email)}
                                     inputRef={(ref) => (this.email = ref)}

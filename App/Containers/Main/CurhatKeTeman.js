@@ -40,8 +40,10 @@ function CurhatKeTeman(props) {
                         <Image source={images.newMessage} style={{ width: Screen.width * 0.3, height: 40, alignSelf: 'flex-end', marginVertical: 20 }} resizeMode='contain' />
                     </TouchableOpacity>
 
-                    <View style={{ flexDirection: 'row', height: Screen.width * 0.15, alignItems: 'center' }}>
-                        <Image source={images.pp} style={{ width: 40, height: 40,marginTop:-24 }} resizeMode='contain' />
+                    <View style={{ flexDirection: 'row', height: Screen.height * 0.1, alignItems: 'center' }}>
+                        <View style={{flexDirection:'column',justifyContent:'flex-start', height:Screen.height*0.1}}>
+                            <Image source={images.pp} style={{ width: 40, height: 40 }} resizeMode='contain' />
+                        </View>
                         <View style={{ marginLeft: 20, flex: Screen.width * 0.8 }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flex: 0.9 }}>

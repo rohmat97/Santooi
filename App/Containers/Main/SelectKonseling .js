@@ -9,6 +9,7 @@ import Images from '../../Themes/Images';
 import RoundedButton from '../../Components/RoundedButton';
 import { Fonts, Colors, Metrics } from '../../Themes/'
 import { OverlayDaftarPsikolog } from '../../Components/OverlayDaftarPsikolog';
+import { Platform } from 'react-native';
 
 function SelectKonseling(props) {
     const { navigation } = props
@@ -26,7 +27,7 @@ function SelectKonseling(props) {
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
-                <View style={styles.section}>
+                <View style={{height:Screen.height,paddingHorizontal:12}}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
                         <TouchableOpacity
                             onPress={() => pop()}
@@ -49,7 +50,7 @@ function SelectKonseling(props) {
                         </TextInput>
                     </View>
 
-                    <ScrollView style={{paddingBottom:Screen.height*0.1}}>
+                    <ScrollView style={{paddingBottom:Platform.OS==='android'? 0:Screen.height*0.1, marginBottom:Platform.OS==='android'? Screen.height*0.15:0}}>
                         <View style={[style.container,{marginTop:12 }]}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Image source={images.konselor} style={{ width: Screen.width * 0.15, height: Screen.width * 0.15,marginLeft:Screen.width*0.05 }} resizeMode='contain' />
