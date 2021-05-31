@@ -6,9 +6,7 @@ import { Colors, Images } from "../Themes";
 import { Screen } from "../Transforms/Screen";
 import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
-export const OverlayBerhitung = ({ visible, toggleOverlay }) => {
-    const [music, setMusic] = useState()
-    const [pemandu, setPemandu] = useState('')
+export const OverlayBerhitung = ({ visible, toggleOverlay, music, setMusic, pemandu, setPemandu }) => {
     return (
         <Overlay
             isVisible={visible}
@@ -30,8 +28,8 @@ export const OverlayBerhitung = ({ visible, toggleOverlay }) => {
                     <CheckBox
                         checkedIcon={<Image source={images.Checked} style={{width:20,height:20}} resizeMode='contain'/>}
                         uncheckedIcon={<Image source={images.unChecked} style={{width:20,height:20}} resizeMode='contain'/>}
-                        checked={music===1?true:false}
-                        onPress={() => setMusic(1)}
+                        checked={music?false:true}
+                        onPress={() => setMusic(null)}
                     />
                 </View>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>

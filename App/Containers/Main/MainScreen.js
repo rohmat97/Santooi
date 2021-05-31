@@ -18,6 +18,7 @@ import images from '../../Themes/Images';
 import { OverlayHomepage, style } from '../../Components/OverlayHomepage';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { bindActionCreators } from 'redux';
+import { FlatList } from 'react-native';
 
 function MainScreen (props) {
   const { EmoticonRequest, emoticon, token,navigation } = props
@@ -58,13 +59,17 @@ function MainScreen (props) {
   },[emoticon])
 
   useEffect(()=>{
-    console.log('picker',picked)
+    // console.log('picker',picked)
   },[picked])
+
+  const renderItem = ({ item }) => (
+    <Image source={{uri:item.image && item.image.url}} style={[style.iconic]} resizeMode='contain'/>
+  );
     return (
       <TemplateBackground cover={true}>
         <View style={styles.mainContainer}>
             <ScrollView>
-              <View style={styles.section} >
+              <View style={[styles.section, {marginBottom:12}]} >
                 <View style={{flexDirection:'row',justifyContent:'flex-end', alignItems:'center'}}>
                   <Image source={images.iconNotification} style={{width:30,height:30}} resizeMode='contain' />
                 </View>
@@ -101,10 +106,25 @@ function MainScreen (props) {
                       style={{borderWidth:1, minHeight:80, width:Screen.width*0.9, marginBottom:Screen.height*0.1, borderRadius:20,paddingBottom:12, alignItems:'flex-start',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
                       {
                         picked.length>0?
-                          <Image source={{uri:picked[0].image.url}} style={[quote?style.iconDashboard:style.icon]} resizeMode='contain'/>
-                        :null
+                      <FlatList
+                        data={picked}
+                        renderItem={renderItem}
+                        keyExtractor={item => item.id}
+                        contentContainerStyle={{maxWidth:Screen.width*0.875, margin:12}}
+                        numColumns={10}
+                        
+                      />:null
+                    }
+                      {/* <View style={{flexDirection:'row',maxWidth:Screen.width*0.1,backgroundColor:'red'}}>
+                      {
+                        picked.length>0?
+                          picked && picked.map((data)=>(
+                            <Image source={{uri:data.image && data.image.url}} style={[quote?style.iconDashboard:style.icon]} resizeMode='contain'/>
+                          ))
+                          :null
                       }
-                      <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:picked.length>0?-12:quote?14:0}}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
+                      </View> */}
+                      <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:picked.length>0?12:quote?14:0}}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
                       {
                         picked.length>0 || quote?
                         <View style={{width:'100%', justifyContent:'flex-end', flexDirection:'row', marginTop:24}}>
