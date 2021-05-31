@@ -358,9 +358,9 @@ function LoginScreen(props) {
                                     autoCapitalize="none"
                                     error={errorEmail}
                                     returnKeyType="next"
-                                    onSubmitEditing={() => {
-                                        this.password.focus()
-                                    }}
+                                    // onSubmitEditing={() => {
+                                    //     this.password.focus()
+                                    // }}
                                     theme={{
                                         colors: {
                                             placeholder: 'white',
