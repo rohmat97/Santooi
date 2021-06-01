@@ -19,6 +19,7 @@ export const reducers = combineReducers({
   emoticon: require('./Dashboard/EmoticonRedux').reducer,
   checkEmail: require('./CheckEmailRedux').reducer,
   checkPhone: require('./CheckPhoneRedux').reducer,
+  status: require('./Dashboard/UpdateStatusRedux').reducer,
 
 })
 

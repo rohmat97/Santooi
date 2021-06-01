@@ -121,7 +121,7 @@ export const OverlayHomepage =({visible,toggleOverlay,setquote,listEmoticon, pic
                     multiline={true}
                  />
                 </View>
-                 <TouchableOpacity onPress={toggleOverlay}>
+                 <TouchableOpacity onPress={()=>toggleOverlay(true)}>
                     <View style={{flexDirection:'row', justifyContent:'flex-end',alignItems:'center'}}>
                         <Text style={{color:'#67308F', fontWeight:'500', fontSize:14,marginRight:2}}>Selesai</Text>
                         <Image source={Images.iconNext} style={{width:20, height:20}} resizeMode='contain' />

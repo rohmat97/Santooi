@@ -8,7 +8,7 @@ import { TemplateBackground } from '../../Components/TemplateBackground'
 import { ContentHome } from '../../Components/ContentHome'
 //redux 
 import EmoticonRedux from '../../Redux/Dashboard/EmoticonRedux'
-//redux
+import UpdateStatusRedux from '../../Redux/Dashboard/UpdateStatusRedux'
 import TokenRedux from '../../Redux/TokenRedux';
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
@@ -21,15 +21,33 @@ import { bindActionCreators } from 'redux';
 import { FlatList } from 'react-native';
 
 function MainScreen (props) {
-  const { EmoticonRequest, emoticon, token,navigation } = props
+  const { EmoticonRequest, emoticon, token,navigation, status,UpdateStatusRequest } = props
   const { navigate } = navigation
   const [visible, setVisible] = useState(false);
   const [quote, setquote]= useState('')
   const [listEmoticon, setlistEmoticon] = useState([])
   const [picked, setpicked] = useState([])
   const [ImageProfile, setImageProfile] = useState()
-  const toggleOverlay = () => {
-    setVisible(!visible);
+  const toggleOverlay = (payload) => {
+    let pickedEmoticon =[]
+    picked.map(data =>{
+      pickedEmoticon.push(data.id)
+    })
+    const param = {
+      "id":token.data.user.id,
+      "body":{
+        "id_emoticon":pickedEmoticon,
+        "status":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+      },
+      "token":token.data.access_token
+    }
+    if(payload){
+      setVisible(!visible);
+      UpdateStatusRequest(param)
+      console.log('param',param)
+    }else{
+      setVisible(!visible);
+    }
   };
 
   const RemovePickedEmotion = (payload) =>{
@@ -61,7 +79,11 @@ function MainScreen (props) {
   useEffect(()=>{
     // console.log('picker',picked)
   },[picked])
-
+  
+  useEffect(()=>{
+    console.log('status',status)
+  },[status])
+  
   const renderItem = ({ item }) => (
     <Image source={{uri:item.image && item.image.url}} style={[style.iconic]} resizeMode='contain'/>
   );
@@ -160,12 +182,13 @@ function MainScreen (props) {
 const mapStateToProps = (state) => {
   return {
     emoticon: state.emoticon.payload,
-    token: state.token.payload
+    token: state.token.payload,
+    status: state.status.payload
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(Object.assign(EmoticonRedux,TokenRedux), dispatch)
+  return bindActionCreators(Object.assign(EmoticonRedux,TokenRedux,UpdateStatusRedux), dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen)
 // export default connect(null,null)(MainScreen)

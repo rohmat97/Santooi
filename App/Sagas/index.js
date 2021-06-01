@@ -7,21 +7,24 @@ import DebugConfig from '../Config/DebugConfig'
 
 import { StartupTypes } from '../Redux/StartupRedux'
 import { GithubTypes } from '../Redux/GithubRedux'
+//auth
 import { LoginTypes } from '../Redux/LoginRedux'
 import { RegisterTypes } from '../Redux/RegisterRedux'
 import { ForgotTypes } from '../Redux/ForgotRedux'
 import { ResetPasswordTypes } from '../Redux/ResetPasswordRedux'
 import { CallbackFacebookTypes } from '../Redux/CallbackFacebookRedux'
 import { CallbackGoogleTypes } from '../Redux/CallbackGoogleRedux'
-import { EmoticonTypes } from '../Redux/Dashboard/EmoticonRedux'
 import { CheckEmailTypes } from '../Redux/CheckEmailRedux'
 import { CheckPhoneTypes } from '../Redux/CheckPhoneRedux'
+//dashboard
+import { EmoticonTypes } from '../Redux/Dashboard/EmoticonRedux'
+import { UpdateStatusTypes } from '../Redux/Dashboard/UpdateStatusRedux'
 
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
 import { getUserAvatar } from './GithubSagas'
-import { getEmoticon } from './DashboardSagas';
+import { getEmoticon,UpdateStatus } from './DashboardSagas';
 import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword, getCheckPhone} from './AuthSagas';
 
 /* ------------- API ------------- */
@@ -48,5 +51,6 @@ export default function * root () {
     takeLatest(EmoticonTypes.EMOTICON_REQUEST, getEmoticon, api),
     takeLatest(CheckEmailTypes.CHECK_EMAIL_REQUEST, getCheckEmail, api),
     takeLatest(CheckPhoneTypes.CHECK_PHONE_REQUEST, getCheckPhone, api),
+    takeLatest(UpdateStatusTypes.UPDATE_STATUS_REQUEST, UpdateStatus, api),
   ])
 }
