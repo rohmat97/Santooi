@@ -8,23 +8,24 @@ import DebugConfig from '../Config/DebugConfig'
 import { StartupTypes } from '../Redux/StartupRedux'
 import { GithubTypes } from '../Redux/GithubRedux'
 //auth
-import { LoginTypes } from '../Redux/LoginRedux'
-import { RegisterTypes } from '../Redux/RegisterRedux'
-import { ForgotTypes } from '../Redux/ForgotRedux'
-import { ResetPasswordTypes } from '../Redux/ResetPasswordRedux'
-import { CallbackFacebookTypes } from '../Redux/CallbackFacebookRedux'
-import { CallbackGoogleTypes } from '../Redux/CallbackGoogleRedux'
-import { CheckEmailTypes } from '../Redux/CheckEmailRedux'
-import { CheckPhoneTypes } from '../Redux/CheckPhoneRedux'
+import { LoginTypes } from '../Redux/Authentication/LoginRedux'
+import { RegisterTypes } from '../Redux/Authentication/RegisterRedux'
+import { ForgotTypes } from '../Redux/Authentication/ForgotRedux'
+import { ResetPasswordTypes } from '../Redux/Authentication/ResetPasswordRedux'
+import { CallbackFacebookTypes } from '../Redux/Authentication/CallbackFacebookRedux'
+import { CallbackGoogleTypes } from '../Redux/Authentication/CallbackGoogleRedux'
+import { CheckEmailTypes } from '../Redux/Authentication/CheckEmailRedux'
+import { CheckPhoneTypes } from '../Redux/Authentication/CheckPhoneRedux'
 //dashboard
 import { EmoticonTypes } from '../Redux/Dashboard/EmoticonRedux'
 import { UpdateStatusTypes } from '../Redux/Dashboard/UpdateStatusRedux'
+import { StatusTypes } from '../Redux/Dashboard/StatusRedux'
 
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
 import { getUserAvatar } from './GithubSagas'
-import { getEmoticon,UpdateStatus } from './DashboardSagas';
+import { getEmoticon,UpdateStatus,getStatus } from './DashboardSagas';
 import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword, getCheckPhone} from './AuthSagas';
 
 /* ------------- API ------------- */
@@ -52,5 +53,6 @@ export default function * root () {
     takeLatest(CheckEmailTypes.CHECK_EMAIL_REQUEST, getCheckEmail, api),
     takeLatest(CheckPhoneTypes.CHECK_PHONE_REQUEST, getCheckPhone, api),
     takeLatest(UpdateStatusTypes.UPDATE_STATUS_REQUEST, UpdateStatus, api),
+    takeLatest(StatusTypes.STATUS_REQUEST, getStatus, api),
   ])
 }

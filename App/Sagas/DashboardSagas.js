@@ -1,6 +1,7 @@
 import { call, put } from 'redux-saga/effects'
 import EmoticonRedux from '../Redux/Dashboard/EmoticonRedux'
 import UpdateStatusRedux from '../Redux/Dashboard/UpdateStatusRedux'
+import StatusRedux from '../Redux/Dashboard/StatusRedux'
 import { Alert } from 'react-native'
 
 export function * getEmoticon(api, action) {
@@ -25,6 +26,19 @@ export function * UpdateStatus(api, action) {
     yield put(UpdateStatusRedux.UpdateStatusSuccess(response.data))
   } else {
     yield put(UpdateStatusRedux.UpdateStatusFailure(response))
+    // Alert.alert(response.data.message)
+  }
+}
+
+export function * getStatus(api, action) {
+  // make the call to the api
+  // console.log(action.data)
+  const response = yield call(api.getStatus, action.data)
+  if (response.ok) {
+    console.log('getStatus',response.data.data.rows)
+    yield put(StatusRedux.StatusSuccess(response.data.data.rows))
+  } else {
+    yield put(StatusRedux.StatusFailure(response))
     // Alert.alert(response.data.message)
   }
 }

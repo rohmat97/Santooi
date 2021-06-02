@@ -9,7 +9,8 @@ import { ContentHome } from '../../Components/ContentHome'
 //redux 
 import EmoticonRedux from '../../Redux/Dashboard/EmoticonRedux'
 import UpdateStatusRedux from '../../Redux/Dashboard/UpdateStatusRedux'
-import TokenRedux from '../../Redux/TokenRedux';
+import TokenRedux from '../../Redux/Authentication/TokenRedux'
+import StatusRedux from '../../Redux/Dashboard/StatusRedux'
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'
@@ -21,7 +22,7 @@ import { bindActionCreators } from 'redux';
 import { FlatList } from 'react-native';
 
 function MainScreen (props) {
-  const { EmoticonRequest, emoticon, token,navigation, status,UpdateStatusRequest } = props
+  const { EmoticonRequest, emoticon, token,navigation, status,UpdateStatusRequest,StatusRequest } = props
   const { navigate } = navigation
   const [visible, setVisible] = useState(false);
   const [quote, setquote]= useState('')
@@ -31,13 +32,13 @@ function MainScreen (props) {
   const toggleOverlay = (payload) => {
     let pickedEmoticon =[]
     picked.map(data =>{
-      pickedEmoticon.push(data.id)
+      pickedEmoticon.push({"id":data.id})
     })
     const param = {
       "id":token.data.user.id,
       "body":{
-        "id_emoticon":pickedEmoticon,
-        "status":"Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+        "emoticons":pickedEmoticon,
+        "status":quote
       },
       "token":token.data.access_token
     }
@@ -60,6 +61,13 @@ function MainScreen (props) {
     setpicked(check)
     console.log('removed',check)
   }
+
+  useEffect(()=>{
+    StatusRequest({
+      "id":token.data.user.id,
+      "token":token.data.access_token
+    })
+  },[])
   useEffect(()=>{
     if(token){
       EmoticonRequest(token.data.access_token)
@@ -81,7 +89,12 @@ function MainScreen (props) {
   },[picked])
   
   useEffect(()=>{
-    console.log('status',status)
+    if(status){
+      console.log('status',status.emoticons)
+      setquote(status.status)
+      setpicked(status.emoticons)
+    }
+    // 
   },[status])
   
   const renderItem = ({ item }) => (
@@ -127,7 +140,7 @@ function MainScreen (props) {
                     <View
                       style={{borderWidth:1, minHeight:80, width:Screen.width*0.9, marginBottom:Screen.height*0.1, borderRadius:20,paddingBottom:12, alignItems:'flex-start',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
                       {
-                        picked.length>0?
+                       picked && picked.length>0?
                       <FlatList
                         data={picked}
                         renderItem={renderItem}
@@ -139,16 +152,16 @@ function MainScreen (props) {
                     }
                       {/* <View style={{flexDirection:'row',maxWidth:Screen.width*0.1,backgroundColor:'red'}}>
                       {
-                        picked.length>0?
+                        picked && picked.length>0?
                           picked && picked.map((data)=>(
                             <Image source={{uri:data.image && data.image.url}} style={[quote?style.iconDashboard:style.icon]} resizeMode='contain'/>
                           ))
                           :null
                       }
                       </View> */}
-                      <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:picked.length>0?12:quote?14:0}}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
+                      <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:picked && picked.length>0?12:quote?14:0}}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
                       {
-                        picked.length>0 || quote?
+                        picked && picked.length>0 || quote?
                         <View style={{width:'100%', justifyContent:'flex-end', flexDirection:'row', marginTop:24}}>
                         <TouchableOpacity 
                           onPress={toggleOverlay}
@@ -188,7 +201,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(Object.assign(EmoticonRedux,TokenRedux,UpdateStatusRedux), dispatch)
+  return bindActionCreators(Object.assign(EmoticonRedux,TokenRedux,UpdateStatusRedux,StatusRedux), dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen)
 // export default connect(null,null)(MainScreen)

@@ -4,7 +4,7 @@ import { TextInput } from 'react-native-paper';
 import { TemplateBackground } from '../../Components/TemplateBackground'
 
 // Redux
-import ResetPasswordRedux from '../../Redux/ResetPasswordRedux';
+import ResetPasswordRedux from '../../Redux/Authentication/ResetPasswordRedux';
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'

@@ -3,8 +3,8 @@ import { Text, Image, View, TouchableOpacity, Alert } from 'react-native'
 import { TextInput } from 'react-native-paper';
 import { TemplateBackground } from '../../Components/TemplateBackground'
 //redux
-import ForgotRedux from '../../Redux/ForgotRedux';
-import CheckEmailRedux from '../../Redux/CheckEmailRedux'
+import ForgotRedux from '../../Redux/Authentication/ForgotRedux';
+import CheckEmailRedux from '../../Redux/Authentication/CheckEmailRedux'
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'

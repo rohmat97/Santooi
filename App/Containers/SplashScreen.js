@@ -3,7 +3,7 @@ import { Text, Image, View, ImageBackground } from 'react-native'
 import { TemplateBackground } from '../Components/TemplateBackground'
 
 //redux
-import TokenRedux from '../Redux/TokenRedux';
+import TokenRedux from '../Redux/Authentication/TokenRedux';
 // Styles
 import styles from '../Containers/Styles/LaunchScreenStyles'
 import { Screen } from '../Transforms/Screen'

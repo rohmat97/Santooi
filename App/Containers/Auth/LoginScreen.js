@@ -21,12 +21,12 @@ import {
 import { TemplateBackground } from '../../Components/TemplateBackground'
 // Redux 
 
-import LoginRedux from '../../Redux/LoginRedux'
-import CallbackFacebookRedux from '../../Redux/CallbackFacebookRedux'
-import CallbackGoogleRedux from '../../Redux/CallbackGoogleRedux'
-import TokenRedux from '../../Redux/TokenRedux'
-import CheckEmailRedux from '../../Redux/CheckEmailRedux'
-import CheckPhoneRedux from '../../Redux/CheckPhoneRedux'
+import LoginRedux from '../../Redux/Authentication/LoginRedux'
+import CallbackFacebookRedux from '../../Redux/Authentication/CallbackFacebookRedux'
+import CallbackGoogleRedux from '../../Redux/Authentication/CallbackGoogleRedux'
+import TokenRedux from '../../Redux/Authentication/TokenRedux'
+import CheckEmailRedux from '../../Redux/Authentication/CheckEmailRedux'
+import CheckPhoneRedux from '../../Redux/Authentication/CheckPhoneRedux'
 
 // Styles
 import styles from '../Styles/LaunchScreenStyles'

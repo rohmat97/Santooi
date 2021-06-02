@@ -10,8 +10,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import ErrorButton from '../../Components/ErrorButton'
 // Redux
-import RegisterRedux from '../../Redux/RegisterRedux';
-import CheckPhoneRedux from '../../Redux/CheckPhoneRedux';
+import RegisterRedux from '../../Redux/Authentication/RegisterRedux';
+import CheckPhoneRedux from '../../Redux/Authentication/CheckPhoneRedux';
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
 import { Screen } from '../../Transforms/Screen'

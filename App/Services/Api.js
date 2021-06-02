@@ -53,6 +53,7 @@ const create = (baseURL = staging) => {
   const checkEmail = payload => api.get('/auth/is-available/email?key='+payload)
   const checkPhone = payload => api.get('/auth/is-available/phone?key='+payload)
   const updateStatus = payload => api.patch('/account/user/'+payload.id,payload.body,{headers: { Authorization: `Bearer ${payload.token}` }})
+  const getStatus = payload => api.get('/account/user?id='+payload.id,'',{headers: { Authorization: `Bearer ${payload.token}` }})
   // ------
   // STEP 3
   // ------
@@ -81,7 +82,8 @@ const create = (baseURL = staging) => {
     getEmoticon,
     checkEmail,
     checkPhone,
-    updateStatus
+    updateStatus,
+    getStatus
   }
 }
 
