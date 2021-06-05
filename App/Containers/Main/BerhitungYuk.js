@@ -1,26 +1,32 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ScrollView, View, Image, Text, TouchableOpacity } from 'react-native'
+import { ScrollView, View, Image, Text, TouchableOpacity,ImageBackground } from 'react-native'
 import SoundPlayer from 'react-native-sound-player'
+import { connect } from 'react-redux';
+//redux
+import MusicRedux from '../../Redux/Berhitung/MusicRedux';
+import TokenRedux from '../../Redux/Authentication/TokenRedux'
+
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import images from '../../Themes/Images';
 import styles from '../Styles/LaunchScreenStyles'
 import Colors from '../../Themes/Colors'
 import { Screen } from '../../Transforms/Screen'
-import { connect } from 'react-redux';
 import { OverlayBerhitung } from '../../Components/OverlayBerhitung';
-import { ImageBackground } from 'react-native';
+import { bindActionCreators } from 'redux';
 
 function BerhitungYuk(props) {
-    const { navigation } = props
+    const { navigation, dataMusic, MusicRequest, token } = props
     const { pop } = navigation
     const [visible, setVisible] = useState(false);
     const [Minute, setMinute] = useState(0);
     const [Second, setSecond] = useState(0);
     const [start, setstart] = useState(false);
     const [reset, setreset] = useState(false);
+    const [played, setplayed] = useState(false);
     const [music, setMusic] = useState()
     const [pemandu, setPemandu] = useState('')
     const [duration, setduration] = useState(0)
+    const [listMusic, setlistMusic] = useState([])
     const toggleOverlay = () => {
         setVisible(!visible);
     };
@@ -29,19 +35,31 @@ function BerhitungYuk(props) {
     const Start =(payload) =>{
         setstart(payload)
         if(music && payload){
-            playSound()
-            getInfo()
+            if(played){
+                SoundPlayer.resume()
+                console.log('resume')
+            }else{
+                setplayed(true)
+                playSound(music.file.url)
+                console.log('play')
+                // getInfo()
+            }
         }else{
+            console.log('pause')
             SoundPlayer.pause()
         }
     }
-    const playSound =()=>{
-        try {
-            // or play from url
-            SoundPlayer.playUrl('https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3')
-        } catch (e) {
-            // console.log(`cannot play the sound file`, e)
+    const playSound =(payload,trial)=>{
+        if(trial){
+            SoundPlayer.playUrl(payload)
+                // or play from url
+            setTimeout(() => {
+                SoundPlayer.stop()
+            }, 15000);
+        }else{
+            SoundPlayer.playUrl(payload)
         }
+       
     }
     const getInfo = async()=> { // You need the keyword `async`
         try {
@@ -111,6 +129,16 @@ function BerhitungYuk(props) {
         
     },[start,reset,Second])
 
+    useEffect(()=>{
+        MusicRequest({"token":token.data.access_token})
+    },[])
+    useEffect(()=>{
+        // console.log('music',dataMusic.data)
+        if(dataMusic) {
+            setlistMusic(dataMusic.data)
+        }
+    },[dataMusic])
+
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -145,10 +173,11 @@ function BerhitungYuk(props) {
                         <TouchableOpacity onPress={()=>{
                             setstart(false)
                             setreset(true)
+                            setplayed(false)
                         }}>
                             <Image source={images.reset} style={{ width: Screen.width * 0.5, height: Screen.width * 0.18, alignSelf: 'center', marginVertical: Screen.width * 0.1 }} resizeMode='contain' />
                         </TouchableOpacity>
-                        <OverlayBerhitung visible={visible} toggleOverlay={toggleOverlay} music={music} setMusic={setMusic} pemandu={pemandu} setPemandu={setPemandu} />
+                        <OverlayBerhitung visible={visible} toggleOverlay={toggleOverlay} music={music} setMusic={setMusic} pemandu={pemandu} setPemandu={setPemandu} listMusic={listMusic} playSound={playSound}/>
                     </ScrollView>
                 </View>
 
@@ -157,4 +186,15 @@ function BerhitungYuk(props) {
     )
 }
 
-export default connect(null, null)(BerhitungYuk)
+
+const mapStateToProps = (state) => {
+    return {
+      dataMusic: state.music.payload,
+      token: state.token.payload,
+    }
+  }
+  
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(Object.assign(MusicRedux,TokenRedux), dispatch)
+  }
+export default connect(mapStateToProps, mapDispatchToProps)(BerhitungYuk)

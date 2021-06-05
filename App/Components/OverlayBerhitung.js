@@ -6,7 +6,7 @@ import { Colors, Images } from "../Themes";
 import { Screen } from "../Transforms/Screen";
 import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
-export const OverlayBerhitung = ({ visible, toggleOverlay, music, setMusic, pemandu, setPemandu }) => {
+export const OverlayBerhitung = ({ visible, toggleOverlay, music, setMusic, pemandu, setPemandu, listMusic , playSound}) => {
     return (
         <Overlay
             isVisible={visible}
@@ -32,51 +32,35 @@ export const OverlayBerhitung = ({ visible, toggleOverlay, music, setMusic, pema
                         onPress={() => setMusic(null)}
                     />
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                    <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                        <Text style={{ color: '#67308F', marginLeft: 10 }}>Body Relaxion</Text>
-                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10,marginTop:-4 }} resizeMode='contain' />
-                    </View>
-                    <CheckBox
-                        checkedIcon={<Image source={images.Checked} style={{width:20,height:20}} resizeMode='contain'/>}
-                        uncheckedIcon={<Image source={images.unChecked} style={{width:20,height:20}} resizeMode='contain'/>}
-                        checked={music===2?true:false}
-                        onPress={() => setMusic(2)}
-                    />
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                    <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                        <Text style={{ color: '#67308F', marginLeft: 10 }}>Piano Moods</Text>
-                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10,marginTop:-4 }} resizeMode='contain' />
-                    </View>
-                    <CheckBox
-                        checkedIcon={<Image source={images.Checked} style={{width:20,height:20}} resizeMode='contain'/>}
-                        uncheckedIcon={<Image source={images.unChecked} style={{width:20,height:20}} resizeMode='contain'/>}
-                        checked={music===3?true:false}
-                        onPress={() => setMusic(3)}
-                    />
-                </View>
-
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-                    <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                        <Text style={{ color: '#67308F', marginLeft: 10,marginTop:4 }}>The Colors of the Winds</Text>
-                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10}} resizeMode='contain' />
-                    </View>
-                    <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.18, alignItems: 'center', borderRadius: 100, padding: 2, flexDirection: 'row', justifyContent: 'center' }}>
-                        <Image source={images.key} style={{ width: 20, height: 20,marginTop:-4 }} resizeMode='contain' />
-                        <Text style={{ color: 'white', fontWeight: '500', marginLeft: 5, fontSize: 13 }}>Beli</Text>
-                    </View>
-                </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                        <Text style={{ color: '#67308F', marginLeft: 10,marginTop:4 }}>Discover your spirit</Text>
-                        <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10 }} resizeMode='contain' />
-                    </View>
-                    <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.18, alignItems: 'center', borderRadius: 100, padding: 2, flexDirection: 'row', justifyContent: 'center' }}>
-                        <Image source={images.key} style={{ width: 20, height: 20 ,marginTop:-4 }} resizeMode='contain' />
-                        <Text style={{ color: 'white', fontWeight: '500', marginLeft: 5, fontSize: 13 }}>Beli</Text>
-                    </View>
-                </View>
+                {
+                    listMusic && listMusic.map(
+                        data =>{
+                            // console.log(data)
+                            return(
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                                        <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+                                            <Text style={{ color: '#67308F', marginLeft: 10,marginTop:4,maxWidth:'80%' }}>{data.name}</Text>
+                                            <Image source={images.play} style={{ width: 35, height: 35, marginLeft: 10}} resizeMode='contain' onPress={()=> playSound(data.file.url, true)}/>
+                                        </View>
+                                        {
+                                            data.col_is_paid?
+                                            <CheckBox
+                                                checkedIcon={<Image source={images.Checked} style={{width:20,height:20}} resizeMode='contain'/>}
+                                                uncheckedIcon={<Image source={images.unChecked} style={{width:20,height:20}} resizeMode='contain'/>}
+                                                checked={music && music.id===data.id?true:false}
+                                                onPress={() => setMusic(data)}
+                                            />:
+                                            <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.18, alignItems: 'center', borderRadius: 100, padding: 2, flexDirection: 'row', justifyContent: 'center' }}>
+                                                <Image source={images.key} style={{ width: 20, height: 20,marginTop:-4 }} resizeMode='contain' />
+                                                <Text style={{ color: 'white', fontWeight: '500', marginLeft: 5, fontSize: 13 }}>Beli</Text>
+                                            </View>
+                                        }
+                                      
+                                    </View>
+                            )
+                        }
+                    )
+                }
 
                 <View style={{ height: 1, width: '100%', borderRadius: 1, borderWidth: 1, borderColor: '#D9078D', borderStyle: 'dashed', zIndex: 0, marginVertical: 24 }}>
                     <View style={{ position: 'absolute', left: 0, bottom: 0, width: '100%', height: 1, backgroundColor: 'white', zIndex: 1 }} />

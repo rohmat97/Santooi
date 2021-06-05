@@ -20,6 +20,8 @@ import { CheckPhoneTypes } from '../Redux/Authentication/CheckPhoneRedux'
 import { EmoticonTypes } from '../Redux/Dashboard/EmoticonRedux'
 import { UpdateStatusTypes } from '../Redux/Dashboard/UpdateStatusRedux'
 import { StatusTypes } from '../Redux/Dashboard/StatusRedux'
+//berhitung
+import { MusicTypes } from '../Redux/Berhitung/MusicRedux';
 
 /* ------------- Sagas ------------- */
 
@@ -27,6 +29,7 @@ import { startup } from './StartupSagas'
 import { getUserAvatar } from './GithubSagas'
 import { getEmoticon,UpdateStatus,getStatus } from './DashboardSagas';
 import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword, getCheckPhone} from './AuthSagas';
+import { getMusic } from './BerhitungSagas';
 
 /* ------------- API ------------- */
 
@@ -54,5 +57,6 @@ export default function * root () {
     takeLatest(CheckPhoneTypes.CHECK_PHONE_REQUEST, getCheckPhone, api),
     takeLatest(UpdateStatusTypes.UPDATE_STATUS_REQUEST, UpdateStatus, api),
     takeLatest(StatusTypes.STATUS_REQUEST, getStatus, api),
+    takeLatest(MusicTypes.MUSIC_REQUEST, getMusic, api),
   ])
 }

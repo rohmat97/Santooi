@@ -21,6 +21,7 @@ export const reducers = combineReducers({
   checkPhone: require('./Authentication/CheckPhoneRedux').reducer,
   UpdateStatus: require('./Dashboard/UpdateStatusRedux').reducer,
   status: require('./Dashboard/StatusRedux').reducer,
+  music: require('./Berhitung/MusicRedux').reducer,
 })
 
 export default () => {
