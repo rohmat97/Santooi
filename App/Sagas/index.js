@@ -22,6 +22,8 @@ import { UpdateStatusTypes } from '../Redux/Dashboard/UpdateStatusRedux'
 import { StatusTypes } from '../Redux/Dashboard/StatusRedux'
 //berhitung
 import { MusicTypes } from '../Redux/Berhitung/MusicRedux';
+//kalimatbijak
+import { KalimatBijakTypes } from '../Redux/KalimatBijak/KalimatBijakRedux';
 
 /* ------------- Sagas ------------- */
 
@@ -30,6 +32,7 @@ import { getUserAvatar } from './GithubSagas'
 import { getEmoticon,UpdateStatus,getStatus } from './DashboardSagas';
 import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword, getCheckPhone} from './AuthSagas';
 import { getMusic } from './BerhitungSagas';
+import { getKalimat } from './KalimatBijakSagas';
 
 /* ------------- API ------------- */
 
@@ -58,5 +61,6 @@ export default function * root () {
     takeLatest(UpdateStatusTypes.UPDATE_STATUS_REQUEST, UpdateStatus, api),
     takeLatest(StatusTypes.STATUS_REQUEST, getStatus, api),
     takeLatest(MusicTypes.MUSIC_REQUEST, getMusic, api),
+    takeLatest(KalimatBijakTypes.KALIMAT_BIJAK_REQUEST, getKalimat, api),
   ])
 }

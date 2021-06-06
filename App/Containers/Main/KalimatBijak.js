@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, View, Image, Text, TouchableOpacity, Alert } from 'react-native'
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import images from '../../Themes/Images';
@@ -7,14 +7,32 @@ import Colors from '../../Themes/Colors'
 import { Screen } from '../../Transforms/Screen'
 import { connect } from 'react-redux';
 import { CheckBox, Overlay } from 'react-native-elements';
+import { bindActionCreators } from 'redux';
+//redux
+import KalimatBijakRedux from '../../Redux/KalimatBijak/KalimatBijakRedux';
+import TokenRedux from '../../Redux/Authentication/TokenRedux'
 
 function KalimatBijak(props) {
-    const { navigation } = props
+    const { navigation, token, listKalimatBijak, KalimatBijakRequest } = props
     const { pop } = navigation
     const [visible, setvisible] = useState(false)
     const [filter, setfilter] = useState()
     const [filterByLatest, setfilterByLatest] = useState(false)
     const [filterByFavorite, setfilterByFavorite] = useState(false)
+
+    useEffect(()=>{
+        const payload= {
+            "fav":null,
+            "filter":'ASC',
+            "token":token.data.access_token
+        }
+        KalimatBijakRequest(payload)
+    },[])
+    useEffect(()=>{
+        if(listKalimatBijak){
+            console.log('listKalimatBijak',listKalimatBijak.data)
+        }
+    },[listKalimatBijak])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -50,7 +68,26 @@ function KalimatBijak(props) {
                                                 <Image source={images.burgerIcon} style={{width:15,height:25}} resizeMode={'contain'}/>
                                             </TouchableOpacity>
                                         </View>
-                                        <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12,flexDirection:'column',justifyContent:'space-between'}}>
+                                        {
+                                            listKalimatBijak && listKalimatBijak.data && listKalimatBijak.data.map(data =>(
+                                            <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12,flexDirection:'column',justifyContent:'space-between'}}>
+                                                <Text style={{color:'#662D91',padding:2}}>{data.name}</Text>
+                                                <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'flex-end'}}>
+                                                    <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>{data.update_at}</Text>
+                                                    <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',maxWidth:100,marginBottom:-20}}>
+                                                        <CheckBox
+                                                            checkedIcon={ <Image source={images.StarChecked} style={{width:40,height:40}} resizeMode={'contain'}/>}
+                                                            uncheckedIcon={<Image source={images.StarUncheck} style={{width:25,height:25}} resizeMode={'contain'}/>}
+                                                            checked={data.is_favorite}
+                                                            // onPress={() => this.setState({checked: !this.state.checked})}
+                                                            />
+                                                        <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                            ))
+                                        }
+                                        {/* <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12,flexDirection:'column',justifyContent:'space-between'}}>
                                             <Text style={{color:'#662D91',padding:2}}>Patience is when you’re supposed to get mad, but you choose to understand.</Text>
                                             <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'flex-end'}}>
                                                 <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>07/05/2021</Text>
@@ -64,8 +101,8 @@ function KalimatBijak(props) {
                                                     <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
                                                 </View>
                                             </View>
-                                        </View>
-                                        <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12}}>
+                                        </View> */}
+                                        {/* <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12}}>
                                             <Text style={{color:'#662D91',padding:2}}>Breath is the power behind all things…. I breathe in and know that good things will happen</Text>
                                             <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'flex-end'}}>
                                                 <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>07/05/2021</Text>
@@ -104,7 +141,7 @@ function KalimatBijak(props) {
                                                     <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
                                                 </View>
                                             </View>
-                                        </View>
+                                        </View> */}
 
                                 </View>
                             </ScrollView>
@@ -153,4 +190,15 @@ function KalimatBijak(props) {
     )
 }
 
-export default connect(null, null)(KalimatBijak)
+
+const mapStateToProps = (state) => {
+    return {
+      token: state.token.payload,
+      listKalimatBijak: state.kalimatbijak.payload
+    }
+  }
+  
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(Object.assign(KalimatBijakRedux,TokenRedux), dispatch)
+  }
+export default connect(mapStateToProps, mapDispatchToProps)(KalimatBijak)

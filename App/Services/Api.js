@@ -56,6 +56,7 @@ const create = (baseURL = staging) => {
   const getStatus = payload => api.get('/account/user?id='+payload.id,'',{headers: { Authorization: `Bearer ${payload.token}` }})
   //berhitung
   const getMusic = payload => api.get('/music?limit=10&page=1','',{headers: { Authorization: `Bearer ${payload.token}` }})
+  const getKalimatBijak = payload =>api.get(`/wise?fav=${payload.fav}&sort=${payload.filter}&limit=10&page=1`,'',{headers: { Authorization: `Bearer ${payload.token}` }})
   // ------
   // STEP 3
   // ------
@@ -86,7 +87,8 @@ const create = (baseURL = staging) => {
     checkPhone,
     updateStatus,
     getStatus,
-    getMusic
+    getMusic,
+    getKalimatBijak
   }
 }
 

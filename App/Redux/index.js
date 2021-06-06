@@ -22,6 +22,7 @@ export const reducers = combineReducers({
   UpdateStatus: require('./Dashboard/UpdateStatusRedux').reducer,
   status: require('./Dashboard/StatusRedux').reducer,
   music: require('./Berhitung/MusicRedux').reducer,
+  kalimatbijak: require('./KalimatBijak/KalimatBijakRedux').reducer
 })
 
 export default () => {
