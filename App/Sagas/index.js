@@ -24,6 +24,7 @@ import { StatusTypes } from '../Redux/Dashboard/StatusRedux'
 import { MusicTypes } from '../Redux/Berhitung/MusicRedux';
 //kalimatbijak
 import { KalimatBijakTypes } from '../Redux/KalimatBijak/KalimatBijakRedux';
+import { addFavoriteTypes } from '../Redux/KalimatBijak/AddFavoriteRedux';
 
 /* ------------- Sagas ------------- */
 
@@ -32,7 +33,7 @@ import { getUserAvatar } from './GithubSagas'
 import { getEmoticon,UpdateStatus,getStatus } from './DashboardSagas';
 import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword, getCheckPhone} from './AuthSagas';
 import { getMusic } from './BerhitungSagas';
-import { getKalimat } from './KalimatBijakSagas';
+import { getKalimat, addFavorite } from './KalimatBijakSagas';
 
 /* ------------- API ------------- */
 
@@ -62,5 +63,6 @@ export default function * root () {
     takeLatest(StatusTypes.STATUS_REQUEST, getStatus, api),
     takeLatest(MusicTypes.MUSIC_REQUEST, getMusic, api),
     takeLatest(KalimatBijakTypes.KALIMAT_BIJAK_REQUEST, getKalimat, api),
+    takeLatest(addFavoriteTypes.ADD_FAVORITE_REQUEST, addFavorite, api)
   ])
 }

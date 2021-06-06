@@ -10,15 +10,18 @@ import { CheckBox, Overlay } from 'react-native-elements';
 import { bindActionCreators } from 'redux';
 //redux
 import KalimatBijakRedux from '../../Redux/KalimatBijak/KalimatBijakRedux';
+import AddFavoriteRedux from '../../Redux/KalimatBijak/AddFavoriteRedux';
 import TokenRedux from '../../Redux/Authentication/TokenRedux'
+import { Share } from 'react-native';
 
 function KalimatBijak(props) {
-    const { navigation, token, listKalimatBijak, KalimatBijakRequest } = props
+    const { navigation, token, listKalimatBijak, KalimatBijakRequest,addFavorite, addFavoriteRequest } = props
     const { pop } = navigation
     const [visible, setvisible] = useState(false)
     const [filter, setfilter] = useState()
     const [filterByLatest, setfilterByLatest] = useState(false)
     const [filterByFavorite, setfilterByFavorite] = useState(false)
+    const [listKalimat, setlistKalimat] =useState([])
 
     useEffect(()=>{
         const payload= {
@@ -30,9 +33,75 @@ function KalimatBijak(props) {
     },[])
     useEffect(()=>{
         if(listKalimatBijak){
-            console.log('listKalimatBijak',listKalimatBijak.data)
+            // console.log('listKalimatBijak',listKalimatBijak.data)
+            setlistKalimat(listKalimatBijak.data)
         }
     },[listKalimatBijak])
+
+    useEffect(() => {
+        if(addFavorite){
+            console.log(`addFavorite`, addFavorite)
+            // const payload= {
+            //     "fav":null,
+            //     "filter":'ASC',
+            //     "token":token.data.access_token
+            // }
+            // // setTimeout(() => {
+            //     KalimatBijakRequest(payload)
+            // }, 1000);
+        }
+        // return () => {
+        //     cleanup
+        // }
+    }, [addFavorite])
+
+    const UpdateFavorite = (payload, param,index) =>{
+        if(param ==='add'){
+            const data ={
+                "body":{
+                    id_wise_sentence:payload
+                },
+                "token":token.data.access_token,
+                "param":param
+            }
+            addFavoriteRequest(data)
+        }else{
+            const data ={
+                "body":payload,
+                "token":token.data.access_token,
+                "param":param
+            }
+            addFavoriteRequest(data)
+        }
+        let updateData = [...listKalimat]
+        updateData[index] = {
+            "created_at": updateData[index].created_at, 
+            "id": updateData[index].id, 
+            "is_favorite": !updateData[index].is_favorite, 
+            "name": updateData[index].name
+        };
+        setlistKalimat(updateData)
+    }
+
+    const onShare = async (payload) => {
+        try {
+          const result = await Share.share({
+            message:payload,
+          });
+          if (result.action === Share.sharedAction) {
+            if (result.activityType) {
+              // shared with activity type of result.activityType
+            } else {
+              // shared
+            }
+          } else if (result.action === Share.dismissedAction) {
+            // dismissed
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      };
+
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -69,23 +138,26 @@ function KalimatBijak(props) {
                                             </TouchableOpacity>
                                         </View>
                                         {
-                                            listKalimatBijak && listKalimatBijak.data && listKalimatBijak.data.map(data =>(
-                                            <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12,flexDirection:'column',justifyContent:'space-between'}}>
-                                                <Text style={{color:'#662D91',padding:2}}>{data.name}</Text>
-                                                <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'flex-end'}}>
-                                                    <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>{data.update_at}</Text>
-                                                    <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',maxWidth:100,marginBottom:-20}}>
-                                                        <CheckBox
-                                                            checkedIcon={ <Image source={images.StarChecked} style={{width:40,height:40}} resizeMode={'contain'}/>}
-                                                            uncheckedIcon={<Image source={images.StarUncheck} style={{width:25,height:25}} resizeMode={'contain'}/>}
-                                                            checked={data.is_favorite}
-                                                            // onPress={() => this.setState({checked: !this.state.checked})}
-                                                            />
-                                                        <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
+                                            listKalimat && listKalimat.map((data,index) =>(
+                                                <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12,flexDirection:'column',justifyContent:'space-between'}}>
+                                                    <Text style={{color:'#662D91',padding:2}}>{data.name}</Text>
+                                                    <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'flex-end'}}>
+                                                        <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>{data.update_at}</Text>
+                                                        <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',maxWidth:100,marginBottom:-20}}>
+                                                            <CheckBox
+                                                                checkedIcon={ <Image source={images.StarChecked} style={{width:40,height:40}} resizeMode={'contain'}/>}
+                                                                uncheckedIcon={<Image source={images.StarUncheck} style={{width:40,height:40}} resizeMode={'contain'}/>}
+                                                                checked={data.is_favorite}
+                                                                onPress={() => UpdateFavorite(data.id,data.is_favorite?'remove':'add',index)}
+                                                                style={{alignItems:'center',justifyContent:'center'}}
+                                                                />
+                                                            <TouchableOpacity onPress={()=> onShare(data.name)}>
+                                                                <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
+                                                            </TouchableOpacity>
+                                                        </View>
                                                     </View>
                                                 </View>
-                                            </View>
-                                            ))
+                                                ))
                                         }
                                         {/* <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12,flexDirection:'column',justifyContent:'space-between'}}>
                                             <Text style={{color:'#662D91',padding:2}}>Patience is when you’re supposed to get mad, but you choose to understand.</Text>
@@ -194,11 +266,12 @@ function KalimatBijak(props) {
 const mapStateToProps = (state) => {
     return {
       token: state.token.payload,
-      listKalimatBijak: state.kalimatbijak.payload
+      listKalimatBijak: state.kalimatbijak.payload,
+      addFavorite: state.addFavorite.payload
     }
   }
   
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Object.assign(KalimatBijakRedux,TokenRedux), dispatch)
+    return bindActionCreators(Object.assign(KalimatBijakRedux,TokenRedux,AddFavoriteRedux), dispatch)
   }
 export default connect(mapStateToProps, mapDispatchToProps)(KalimatBijak)

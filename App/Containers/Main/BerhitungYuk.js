@@ -165,7 +165,7 @@ function BerhitungYuk(props) {
                         </Text>
                         <TouchableOpacity onPress={()=> Start(!start)}>
                             <View style={{width:Screen.width, alignSelf: 'center',justifyContent:'center'}}>
-                                <ImageBackground source={images.start} style={{maxWidth:205, maxHeight:205, width:Screen.width*0.45,height:Screen.height*0.3, alignSelf: 'center',justifyContent:'center' }}>
+                                <ImageBackground source={images.start} style={{maxWidth:225, maxHeight:205, width:Screen.width*0.5,height:Screen.height*0.25, alignSelf: 'center',justifyContent:'center' }}>
                                     <Text style={{color:'#67308F', fontSize:39, fontWeight:'100',textAlign:'center'}}>START</Text>
                                 </ImageBackground>
                             </View>
