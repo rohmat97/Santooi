@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { ScrollView, View, Image, Text, TouchableOpacity, Alert } from 'react-native'
+import { ScrollView, View, Image, Text, TouchableOpacity, FlatList,Share } from 'react-native'
+import { OverlayHomepage, style } from '../../Components/OverlayHomepage';
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import images from '../../Themes/Images';
 import styles from '../Styles/LaunchScreenStyles'
@@ -12,29 +13,69 @@ import { bindActionCreators } from 'redux';
 import KalimatBijakRedux from '../../Redux/KalimatBijak/KalimatBijakRedux';
 import AddFavoriteRedux from '../../Redux/KalimatBijak/AddFavoriteRedux';
 import TokenRedux from '../../Redux/Authentication/TokenRedux'
-import { Share } from 'react-native';
+import StatusRedux from '../../Redux/Dashboard/StatusRedux'
+import UpdateStatusRedux from '../../Redux/Dashboard/UpdateStatusRedux'
+import EmoticonRedux from '../../Redux/Dashboard/EmoticonRedux'
 
 function KalimatBijak(props) {
-    const { navigation, token, listKalimatBijak, KalimatBijakRequest,addFavorite, addFavoriteRequest } = props
+    const { navigation, token, listKalimatBijak, KalimatBijakRequest,addFavorite, addFavoriteRequest,status,UpdateStatusRequest,emoticon,StatusRequest } = props
     const { pop } = navigation
     const [visible, setvisible] = useState(false)
     const [filter, setfilter] = useState()
     const [filterByLatest, setfilterByLatest] = useState(false)
     const [filterByFavorite, setfilterByFavorite] = useState(false)
     const [listKalimat, setlistKalimat] =useState([])
-
+    const [picked, setpicked] = useState([])
+    const [quote, setquote]= useState('')
+    const [visibleStatus, setVisibleStatus] = useState(false);
+    const [listEmoticon, setlistEmoticon] = useState([])
+    let page =1
     useEffect(()=>{
-        const payload= {
-            "fav":null,
-            "filter":'ASC',
+        StatusRequest({
+            "id":token.data.user.id,
             "token":token.data.access_token
+          })
+        const payload= {
+            "fav":filterByFavorite,
+            "filter":filterByLatest?'DESC':'ASC',
+            "token":token.data.access_token,
+            "page":1
         }
         KalimatBijakRequest(payload)
+        if(emoticon && emoticon.data && emoticon.data.rows){
+            // console.log('emoticon',emoticon.data.rows)
+            setlistEmoticon(emoticon.data.rows)
+        }
+        return () => {
+            // console.log('awadaw')
+            StatusRequest({
+                "id":token.data.user.id,
+                "token":token.data.access_token
+              })
+        }
     },[])
+
+    useEffect(()=>{
+        if(status){
+          // console.log('status',status.emoticons)
+          setquote(status.status)
+          setpicked(status.emoticons)
+        }
+        // 
+      },[status])
     useEffect(()=>{
         if(listKalimatBijak){
-            // console.log('listKalimatBijak',listKalimatBijak.data)
-            setlistKalimat(listKalimatBijak.data)
+            // console.log(`page`,listKalimatBijak.current_page + ' === '+listKalimatBijak.last_page)
+            if(listKalimat && listKalimat.length>0){
+                if(listKalimat !== listKalimatBijak.data){
+                    let newlist = listKalimat.concat(listKalimatBijak.data)
+                    // console.log('new data', newlist)
+                    setlistKalimat(newlist)
+                }
+            }else{
+                setlistKalimat(listKalimatBijak.data)
+            }
+            
         }
     },[listKalimatBijak])
 
@@ -46,7 +87,7 @@ function KalimatBijak(props) {
             //     "filter":'ASC',
             //     "token":token.data.access_token
             // }
-            // // setTimeout(() => {
+            // setTimeout(() => {
             //     KalimatBijakRequest(payload)
             // }, 1000);
         }
@@ -55,6 +96,32 @@ function KalimatBijak(props) {
         // }
     }, [addFavorite])
 
+    useEffect(() => {
+            setlistKalimat([])
+            const payload= {
+                "fav":filterByFavorite?1:0,
+                "filter":filterByLatest?'DESC':'ASC',
+                "token":token.data.access_token,
+                "page":1
+            }
+            console.log(payload)
+            KalimatBijakRequest(payload)
+    }, [filterByFavorite])
+
+    useEffect(() => {
+        setlistKalimat([])
+        const payload= {
+            "fav":filterByFavorite?1:0,
+            "filter":filterByLatest?'DESC':'ASC',
+            "token":token.data.access_token,
+            "page":1
+        }
+        console.log(payload)
+        KalimatBijakRequest(payload)
+}, [filterByLatest])
+    useEffect(() => {
+        
+    }, [filterByLatest])
     const UpdateFavorite = (payload, param,index) =>{
         if(param ==='add'){
             const data ={
@@ -101,7 +168,43 @@ function KalimatBijak(props) {
           alert(error.message);
         }
       };
+      const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+        const paddingToBottom = 20;
+        return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+      }
 
+  const toggleOverlay = (payload) => {
+    if(payload){
+      let pickedEmoticon =[]
+      picked && picked.map(data =>{
+        pickedEmoticon.push({"id":data.id})
+      })
+      const param = {
+        "id":token.data.user.id,
+        "body":{
+          "emoticons":pickedEmoticon,
+          "status":quote
+        },
+        "token":token.data.access_token
+      }
+      setVisibleStatus(!visibleStatus);
+      UpdateStatusRequest(param)
+      // console.log('param',param)
+    }else{
+      setVisibleStatus(!visibleStatus);
+    }
+  };
+
+  const RemovePickedEmotion = (payload) =>{
+
+    // console.log('will remove',payload[0].name)
+    const check = picked.filter(data => data.name !== payload[0].name)
+    // const indexOfTaskToDelete = picked.findIndex(
+    //   task => task.name === payload.name
+    // );
+    setpicked(check)
+    // console.log('removed',check)
+  }
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -115,7 +218,7 @@ function KalimatBijak(props) {
                         </TouchableOpacity>
                     </View>
                         <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-                            <View style={{minHeight:155, backgroundColor:'#67308F', width:Screen.width*0.9,justifyContent:'center',alignItems:'center'}}>
+                            {/* <View style={{minHeight:155, backgroundColor:'#67308F', width:Screen.width*0.9,justifyContent:'center',alignItems:'center'}}>
                                 <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12}}>
                                     <View style={{flexDirection:'row',width:80, justifyContent:'space-between', marginBottom:12}}>
                                         <Image source={images.sample1} style={{width:35,height:35}}/>
@@ -128,36 +231,104 @@ function KalimatBijak(props) {
                                         </View>
                                     </TouchableOpacity>
                                 </View>
+                            </View> */}
+                          <View
+                            style={{borderWidth:1, minHeight:80, width:Screen.width*0.9, borderRadius:20,paddingBottom:12, alignItems:'flex-start',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
+                            {
+                            picked && picked.length>0?
+                            <FlatList
+                                data={picked}
+                                renderItem={renderItem}
+                                keyExtractor={item => item.id}
+                                contentContainerStyle={{maxWidth:Screen.width*0.875, margin:12}}
+                                numColumns={10}
+                                
+                            />:null
+                            }
+                            {/* <View style={{flexDirection:'row',maxWidth:Screen.width*0.1,backgroundColor:'red'}}>
+                            {
+                                picked && picked.length>0?
+                                picked && picked.map((data)=>(
+                                    <Image source={{uri:data.image && data.image.url}} style={[quote?style.iconDashboard:style.icon]} resizeMode='contain'/>
+                                ))
+                                :null
+                            }
+                            </View> */}
+                            <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:picked && picked.length>0?12:quote?14:0}}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
+                            {
+                                picked && picked.length>0 || quote?
+                                <View style={{width:'100%', justifyContent:'flex-end', flexDirection:'row', marginTop:24}}>
+                                <TouchableOpacity 
+                                onPress={toggleOverlay}
+                                style={{backgroundColor:'#67308F', flexDirection:'row',alignItems:'center',justifyContent:'center', height:30, borderRadius:16, marginRight:12}}>
+                                <Image source={images.editQuote} style={[style.iconDashboard]} resizeMode='contain'/>
+                                    <Text style={{color:'#fff', marginLeft:-6, paddingRight:12}}>Edit</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                :null
+                            }
                             </View>
-                            <ScrollView>
-                                <View style={{minHeight:155, height:undefined, backgroundColor:'#67308F', width:Screen.width*0.9,justifyContent:'center',alignItems:'center',marginTop:16,paddingBottom:12}}>
-                                        <View style={{width:'90%', borderRadius:12, padding:12, paddingRight:12, flexDirection:'row', justifyContent:'space-between',alignItems:'center'}}>
-                                            <Text style={{color:'white'}}>Kata-kata untuk diingat..</Text>
-                                            <TouchableOpacity onPress={()=> setvisible(true)}>
-                                                <Image source={images.burgerIcon} style={{width:15,height:25}} resizeMode={'contain'}/>
-                                            </TouchableOpacity>
-                                        </View>
+                            <View style={{width:'90%', borderTopLeftRadius:12, borderTopRightRadius:12, padding:12,paddingBottom:20, paddingRight:12,marginBottom:-16,marginTop:12, flexDirection:'row', justifyContent:'space-between',alignItems:'center',backgroundColor:'#67308F'}}>
+                                <Text style={{color:'white'}}>Kata-kata untuk diingat..</Text>
+                                <TouchableOpacity onPress={()=> setvisible(true)}>
+                                    <Image source={images.burgerIcon} style={{width:15,height:25}} resizeMode={'contain'}/>
+                                </TouchableOpacity>
+                            </View>
+                            <ScrollView 
+                            onMomentumScrollEnd={(event)=>{
+                                if (isCloseToBottom(event.nativeEvent)) {
+                                    // LoadMoreRandomData()
+                                    if(listKalimatBijak.current_page !== listKalimatBijak.last_page){
+                                        // console.log(`page`,listKalimatBijak.current_page + ' === '+listKalimatBijak.last_page)
+                                        page +=1
+                                        const payload= {
+                                            "fav":filterByFavorite,
+                                            "filter":filterByLatest?'DESC':'ASC',
+                                            "token":token.data.access_token,
+                                            "page":page
+                                        }
+                                        KalimatBijakRequest(payload)
+                                    }else{
+                                        // console.log(`page`,listKalimatBijak.current_page + ' === '+listKalimatBijak.last_page)
+                                    }
+                                    
+                                  }
+                                
+                               
+                            }}>
+                                <View style={{minHeight:155, height:undefined, backgroundColor:'#67308F', width:Screen.width*0.9,justifyContent:'center',alignItems:'center',marginTop:16,paddingBottom:12,paddingTop:16}}>
+                                       
                                         {
-                                            listKalimat && listKalimat.map((data,index) =>(
-                                                <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12,flexDirection:'column',justifyContent:'space-between'}}>
-                                                    <Text style={{color:'#662D91',padding:2}}>{data.name}</Text>
-                                                    <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'flex-end'}}>
-                                                        <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>{data.update_at}</Text>
-                                                        <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',maxWidth:100,marginBottom:-20}}>
-                                                            <CheckBox
-                                                                checkedIcon={ <Image source={images.StarChecked} style={{width:40,height:40}} resizeMode={'contain'}/>}
-                                                                uncheckedIcon={<Image source={images.StarUncheck} style={{width:40,height:40}} resizeMode={'contain'}/>}
-                                                                checked={data.is_favorite}
-                                                                onPress={() => UpdateFavorite(data.id,data.is_favorite?'remove':'add',index)}
-                                                                style={{alignItems:'center',justifyContent:'center'}}
-                                                                />
-                                                            <TouchableOpacity onPress={()=> onShare(data.name)}>
-                                                                <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
-                                                            </TouchableOpacity>
+                                            listKalimat && listKalimat.map((data,index) =>{
+                                                // console.log('data kalimat',data) 
+                                                if(data){
+                                                    return(
+                                                        <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12,flexDirection:'column',justifyContent:'space-between'}}>
+                                                            <Text style={{color:'#662D91',padding:2}} numberOfLines={5}>{data.name}</Text>
+                                                            <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'flex-end'}}>
+                                                                <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>{new Date(data.updated_at).getDate() + "/"+ parseInt(new Date(data.updated_at).getMonth()+1) +"/"+new Date(data.updated_at).getFullYear()}</Text>
+                                                                <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',maxWidth:100,marginBottom:-20}}>
+                                                                    <CheckBox
+                                                                        checkedIcon={ <Image source={images.StarChecked} style={{width:40,height:40}} resizeMode={'contain'}/>}
+                                                                        uncheckedIcon={<Image source={images.StarUncheck} style={{width:40,height:40}} resizeMode={'contain'}/>}
+                                                                        checked={data.is_favorite}
+                                                                        onPress={() => UpdateFavorite(data.id,data.is_favorite?'remove':'add',index)}
+                                                                        style={{alignItems:'center',justifyContent:'center'}}
+                                                                        />
+                                                                    <TouchableOpacity 
+                                                                    onPress={()=> onShare(data.name)}
+                                                                    >
+                                                                        <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
+                                                                    </TouchableOpacity>
+                                                                </View>
+                                                            </View>
                                                         </View>
-                                                    </View>
-                                                </View>
-                                                ))
+                                                        )
+                                                }else{
+                                                    return null
+                                                }
+                                                
+                                            })
                                         }
                                         {/* <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12,flexDirection:'column',justifyContent:'space-between'}}>
                                             <Text style={{color:'#662D91',padding:2}}>Patience is when you’re supposed to get mad, but you choose to understand.</Text>
@@ -258,6 +429,7 @@ function KalimatBijak(props) {
                     </View>
                 </View>
             </Overlay>
+            <OverlayHomepage visible ={visibleStatus} toggleOverlay={toggleOverlay} setquote={setquote} quote={quote} listEmoticon={listEmoticon} picked={picked} RemovePickedEmotion={RemovePickedEmotion} setpicked ={setpicked}/>
         </TemplateBackground>
     )
 }
@@ -267,11 +439,18 @@ const mapStateToProps = (state) => {
     return {
       token: state.token.payload,
       listKalimatBijak: state.kalimatbijak.payload,
-      addFavorite: state.addFavorite.payload
+      addFavorite: state.addFavorite.payload,
+      status: state.status.payload,
+      emoticon: state.emoticon.payload
     }
   }
   
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Object.assign(KalimatBijakRedux,TokenRedux,AddFavoriteRedux), dispatch)
+    return bindActionCreators(Object.assign(KalimatBijakRedux,TokenRedux,AddFavoriteRedux,StatusRedux, UpdateStatusRedux,EmoticonRedux), dispatch)
   }
 export default connect(mapStateToProps, mapDispatchToProps)(KalimatBijak)
+
+
+const renderItem = ({ item }) => (
+    <Image source={{uri:item.image && item.image.url}} style={[style.iconic]} resizeMode='contain'/>
+)

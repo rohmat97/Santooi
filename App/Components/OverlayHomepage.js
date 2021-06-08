@@ -71,7 +71,7 @@ export const OverlayHomepage =({visible,toggleOverlay,setquote,listEmoticon, pic
                     numColumns={4}
                     data={listEmoticon}
                     renderItem={({item}) => {
-                        const check = picked.filter(data => data === item)
+                        const check = picked && picked.filter(data => data === item)
                         // console.log('check',check)
                         return(
                         <TouchableOpacity onPress={()=>{
@@ -87,8 +87,8 @@ export const OverlayHomepage =({visible,toggleOverlay,setquote,listEmoticon, pic
                                 setpicked([...picked,item]) 
                             }
                         }}>
-                            <View style={[{justifyContent:'center',alignItems:'center',margin:8,marginRight:12,height:80,width:60},check.length>0?style.borderShadow:{}]}>
-                                <View style={check.length>0?{flex:1,backgroundColor:'#fff',justifyContent:'center',alignItems:'center'}:{}}>
+                            <View style={[{justifyContent:'center',alignItems:'center',margin:8,marginRight:12,height:80,width:60},check && check.length>0?style.borderShadow:{}]}>
+                                <View style={check && check.length>0?{flex:1,backgroundColor:'#fff',justifyContent:'center',alignItems:'center'}:{}}>
                                     <Image source={{uri:item.image && item.image.url?item.image.url:null}} style={[style.icon]} resizeMode='contain'/>
                                     <Text style={{textAlign:'center',marginTop:-16}} numberOfLines={1}>{item.name}</Text>
                                 </View>

@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 function CreateNewPassword(props) {
-    const { navigation, ResetPasswordRequest,data } = props
+    const { navigation, ResetPasswordRequest,data,ResetPasswordSuccess } = props
     const { navigate, getParam } = navigation
     const [password1, setPassword1] = useState('')
     const [password2, setPassword2] = useState('')
@@ -77,6 +77,9 @@ function CreateNewPassword(props) {
             navigate('CreateNewPasswordSuccessScreen',{email:params.email})
         }
     },[data])
+    useEffect(() => {
+        ResetPasswordSuccess(null)
+    }, [])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>

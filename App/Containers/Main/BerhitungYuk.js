@@ -27,6 +27,7 @@ function BerhitungYuk(props) {
     const [pemandu, setPemandu] = useState('')
     const [duration, setduration] = useState(0)
     const [listMusic, setlistMusic] = useState([])
+    const [play, setPlay] = useState('START')
     const toggleOverlay = () => {
         setVisible(!visible);
     };
@@ -39,25 +40,40 @@ function BerhitungYuk(props) {
                 SoundPlayer.resume()
                 console.log('resume')
             }else{
-                setplayed(true)
-                playSound(music.file.url)
-                console.log('play')
-                // getInfo()
+                SoundPlayer.stop()
+                setTimeout(() => {
+                    setplayed(true)
+                    playSound(music.file.url)
+                    console.log('play')
+                    getInfo()
+                }, 500);
             }
         }else{
             console.log('pause')
+            setPlay('RESUME')
             SoundPlayer.pause()
         }
     }
     const playSound =(payload,trial)=>{
         if(trial){
-            SoundPlayer.playUrl(payload)
-                // or play from url
+            SoundPlayer.stop()
             setTimeout(() => {
-                SoundPlayer.stop()
-            }, 15000);
+                SoundPlayer.playUrl(payload)
+                setTimeout(() => {
+                    SoundPlayer.stop()
+                }, 15000);
+            }, 1000);
+                // or play from url
+          
         }else{
-            SoundPlayer.playUrl(payload)
+            SoundPlayer.playUrl(payload,(error) => {
+                console.log(error)
+                if (error) {
+                  console.log('failed to load the sound', error);
+                  return;
+                }
+                this.soundPlayer.play()
+              })
         }
        
     }
@@ -77,7 +93,7 @@ function BerhitungYuk(props) {
         // console.log(currentDate.getHours()+":"+currentDate.getMinutes()+":"+currentDate.getSeconds())
         _onFinishedPlayingSubscription = SoundPlayer.addEventListener('FinishedPlaying', ({ success }) => {
             console.log('finished playing', success)
-            playSound()
+            // playSound()
           })
           _onFinishedLoadingSubscription = SoundPlayer.addEventListener('FinishedLoading', ({ success }) => {
             console.log('finished loading', success)
@@ -101,6 +117,7 @@ function BerhitungYuk(props) {
     useEffect(()=>{
         if(start){
             // console.log(Second.charAt(0))
+            setPlay('PAUSE')
             timerRef.current = setTimeout(() => {
                 if(Second>59){
                     setSecond(0)
@@ -166,7 +183,7 @@ function BerhitungYuk(props) {
                         <TouchableOpacity onPress={()=> Start(!start)}>
                             <View style={{width:Screen.width, alignSelf: 'center',justifyContent:'center'}}>
                                 <ImageBackground source={images.start} style={{maxWidth:225, maxHeight:205, width:Screen.width*0.5,height:Screen.height*0.25, alignSelf: 'center',justifyContent:'center' }}>
-                                    <Text style={{color:'#67308F', fontSize:39, fontWeight:'100',textAlign:'center'}}>START</Text>
+                                    <Text style={{color:'#67308F', fontSize:36, fontWeight:'100',textAlign:'center'}}>{play}</Text>
                                 </ImageBackground>
                             </View>
                         </TouchableOpacity>
@@ -174,6 +191,7 @@ function BerhitungYuk(props) {
                             setstart(false)
                             setreset(true)
                             setplayed(false)
+                            setPlay('START')
                         }}>
                             <Image source={images.reset} style={{ width: Screen.width * 0.5, height: Screen.width * 0.18, alignSelf: 'center', marginVertical: Screen.width * 0.1 }} resizeMode='contain' />
                         </TouchableOpacity>

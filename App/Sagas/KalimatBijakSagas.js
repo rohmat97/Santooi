@@ -8,7 +8,7 @@ export function * getKalimat(api, action) {
     // console.log(action.data)
     const response = yield call(api.getKalimatBijak, action.data)
     if (response.ok) {
-      console.log('response',response.data.data.rows)
+      // console.log('response',response.data.data.rows)
       yield put(KalimatBijakRedux.KalimatBijakSuccess(response.data.data.rows))
     } else {
       yield put(KalimatBijakRedux.KalimatBijakFailure(response))
@@ -20,7 +20,7 @@ export function * addFavorite(api, action) {
   console.log(action.data.param,action.data)
   if(action.data.param ==='add'){
     const response = yield call(api.addFavorite, action.data)
-    console.log('response',response.data)
+    // console.log('response',response.data)
     if (response.ok) {
       yield put(AddFavoriteRedux.addFavoriteSuccess(response.data))
     } else {
@@ -28,7 +28,7 @@ export function * addFavorite(api, action) {
     }
   }else{
     const response = yield call(api.removeFavorite, action.data)
-    console.log('response',response.data)
+    // console.log('response',response.data)
     if (response.ok) {
       yield put(AddFavoriteRedux.addFavoriteSuccess(response.data))
     } else {

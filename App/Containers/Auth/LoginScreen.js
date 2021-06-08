@@ -172,6 +172,7 @@ function LoginScreen(props) {
         if (Platform.OS === "android") {
             await LoginManager.setLoginBehavior('web_only')
         }
+        setloggedIn(true)
         await LoginManager.logInWithPermissions(["public_profile", "email"]).then(
             function (result) {
             if (result.isCancelled) {
@@ -226,6 +227,7 @@ function LoginScreen(props) {
     const LoginByEmail = (type) =>{
         if(type==='email'){
             setvisible(true)
+            setloggedIn(true)
             CheckEmailRequest(email)
         }else if( type==='phone'){
             setvisible(true)
@@ -255,14 +257,9 @@ function LoginScreen(props) {
 
     useEffect(()=>{
         if(token){
-            navigation.navigate('Splash', {
-                screen: 'SplashScreen',
-                initial: true,
-                params : {
-                    type:'transition',
-                    root:'Main',
-                    screen:'MainScreen'
-                }
+            navigation.navigate('Main', {
+                screen: 'MainScreen',
+                initial: true
             })
         }
     },[token])
@@ -319,12 +316,14 @@ function LoginScreen(props) {
 
     useEffect(()=>{
         if(check){
-            CheckEmail(setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess)
+            if(loggedIn){
+                CheckEmail(setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess)
+            }
         }
     },[check])
 
     useEffect(()=>{
-        if(checkPhone){
+        if(checkPhone && loggedIn){
             console.log(checkPhone)
             CheckPhone(setavailPhone,checkPhone,setsubmitted,LoginRequest,email,password,setvisible)
         }

@@ -53,7 +53,7 @@ export function * getForgotPassword (api, action) {
   const { data } = action
   // make the call to the api
   const response = yield call(api.getForgotPassword, data)
-  // console.log('data Reset', response)
+  console.log('getForgotPassword', response)
 
   if (response.ok) {
     // do data conversion here if needed
@@ -133,7 +133,7 @@ export function * getCheckEmail (api, action) {
   const { data } = action
   // make the call to the api
   const response = yield call(api.checkEmail, data)
-  console.log('email', response.data)
+  // console.log('email', response.data)
 
   if (response.ok) {
     // do data conversion here if needed
