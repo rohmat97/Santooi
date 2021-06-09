@@ -234,6 +234,13 @@ function LoginScreen(props) {
             CheckPhoneRequest(email)
         }
     }
+    
+    const Register =()=>{
+        if(validateEmail && password.length>7) {
+            CheckEmailRequest(email)
+            setloggedIn(true)
+        }
+    }
     useEffect(()=>{
         login && console.log('LOGIN BOIS',login.status)
         if(login) {
@@ -264,12 +271,6 @@ function LoginScreen(props) {
         }
     },[token])
 
-    const Register =()=>{
-        if(validateEmail && password.length>7) {
-            CheckEmailRequest(email)
-        }
-       
-    }
     useEffect(()=>{
         Setup()
     },[])

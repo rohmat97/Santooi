@@ -17,7 +17,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 function ForgotPassword(props) {
-    const { navigation, ForgotRequest, forgot, ForgotSuccess,check, CheckEmailRequest } = props
+    const { navigation, ForgotRequest, forgot, ForgotSuccess,check, CheckEmailRequest,CheckEmailSuccess} = props
     const { navigate, pop } = navigation
     const [email, setEmail] = useState('')
     const [errorEmail, setErrorEmail] = useState()
@@ -42,13 +42,13 @@ function ForgotPassword(props) {
             CheckEmailRequest(email)
         }
     }
+
     useEffect(()=>{
         if(forgot){
             Alert.alert('Email berhasil dikirimkan');
             pop()
-            setTimeout(() => {
-                ForgotSuccess(null)
-            }, 1000);
+            ForgotSuccess(null)
+            CheckEmailSuccess(null)
         }
     },[forgot])
 

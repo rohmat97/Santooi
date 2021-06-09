@@ -22,12 +22,18 @@ function MainScreen (props) {
   const [quote, setquote]= useState('')
   const [listEmoticon, setlistEmoticon] = useState([])
   const [picked, setpicked] = useState([])
+  const [manualPicked, setmanualPicked] = useState([])
   const [ImageProfile, setImageProfile] = useState()
   const [tab,settab] = useState(0)
+ 
+  //listEmoticon
   const toggleOverlay = (payload) => {
     if(payload){
       let pickedEmoticon =[]
       picked && picked.map(data =>{
+        pickedEmoticon.push({"id":data.id})
+      })
+      manualPicked && manualPicked.map(data=>{
         pickedEmoticon.push({"id":data.id})
       })
       const param = {
@@ -42,21 +48,47 @@ function MainScreen (props) {
       UpdateStatusRequest(param)
       // console.log('param',param)
     }else{
-      setVisible(!visible);
+      setVisible(!visible); 
+      if(quote){
+        ValidateTextForEmoticon(quote)
+      }
+      console.log('show up')
+      
     }
   };
-
   const RemovePickedEmotion = (payload) =>{
 
     // console.log('will remove',payload[0].name)
-    const check = picked.filter(data => data.name !== payload[0].name)
+    const check = manualPicked.filter(data => data.name !== payload[0].name)
     // const indexOfTaskToDelete = picked.findIndex(
     //   task => task.name === payload.name
     // );
-    setpicked(check)
+    setmanualPicked(check)
     // console.log('removed',check)
   }
 
+  const ValidateTextForEmoticon =(text) =>{
+    if(text){
+        setquote(text)
+        const filtertext = text.split(' ')
+        const filter =listEmoticon.filter(dat => filtertext.find(text =>{
+            // console.log(dat.name.toLowerCase() + ' = ' + text.toLowerCase())
+            return dat.name.toLowerCase() === text.toLowerCase()
+        }))
+        if(filter.length>0){
+            // console.log(filter)
+            // MapingValidationEmoticonByText(filter)
+            setpicked(filter)
+            // setpicked(result)
+        }else{
+            if(picked){
+                setpicked([])
+            }else{
+                setpicked([])
+            }
+        }
+    } 
+}
   useEffect(()=>{
     StatusRequest({
       "id":token.data.user.id,
@@ -88,13 +120,13 @@ function MainScreen (props) {
     }
     // 
   },[status])
-  
+
     return (
       <TemplateBackground cover={true}>
         <View style={styles.mainContainer}>
             {
               tab === 0?
-                <Dashboard ImageProfile={ImageProfile} token={token} styles={styles} picked={picked} toggleOverlay={toggleOverlay} navigate={navigate} quote={quote}/> :
+                <Dashboard ImageProfile={ImageProfile} token={token} styles={styles} picked={picked} manualPicked={manualPicked} toggleOverlay={toggleOverlay} navigate={navigate} quote={quote}/> :
                 tab === 1 ?
                 <Dashboard ImageProfile={ImageProfile} token={token} styles={styles} picked={picked} toggleOverlay={toggleOverlay} navigate={navigate} quote={quote}/>  :
                   tab === 2? 
@@ -104,7 +136,7 @@ function MainScreen (props) {
             
             <CustomBottomTab tab={tab} settab={settab}/>
         </View>
-        <OverlayHomepage visible ={visible} toggleOverlay={toggleOverlay} setquote={setquote} quote={quote} listEmoticon={listEmoticon} picked={picked} RemovePickedEmotion={RemovePickedEmotion} setpicked ={setpicked}/>
+        <OverlayHomepage visible ={visible} toggleOverlay={toggleOverlay} setquote={setquote} quote={quote} listEmoticon={listEmoticon} picked={picked} RemovePickedEmotion={RemovePickedEmotion} setpicked ={setpicked}  manualPicked={manualPicked} setmanualPicked={setmanualPicked} ValidateTextForEmoticon={ValidateTextForEmoticon}/>
       </TemplateBackground>
     )
 }

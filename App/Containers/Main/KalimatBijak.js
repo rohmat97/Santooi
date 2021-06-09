@@ -16,9 +16,10 @@ import TokenRedux from '../../Redux/Authentication/TokenRedux'
 import StatusRedux from '../../Redux/Dashboard/StatusRedux'
 import UpdateStatusRedux from '../../Redux/Dashboard/UpdateStatusRedux'
 import EmoticonRedux from '../../Redux/Dashboard/EmoticonRedux'
+import { ActivityIndicator } from 'react-native';
 
 function KalimatBijak(props) {
-    const { navigation, token, listKalimatBijak, KalimatBijakRequest,addFavorite, addFavoriteRequest,status,UpdateStatusRequest,emoticon,StatusRequest } = props
+    const { navigation, token, listKalimatBijak, KalimatBijakRequest,addFavorite, addFavoriteRequest,status,UpdateStatusRequest,emoticon,StatusRequest,kalimatfetching } = props
     const { pop } = navigation
     const [visible, setvisible] = useState(false)
     const [filter, setfilter] = useState()
@@ -28,7 +29,10 @@ function KalimatBijak(props) {
     const [picked, setpicked] = useState([])
     const [quote, setquote]= useState('')
     const [visibleStatus, setVisibleStatus] = useState(false);
+    const [onfetch, setonfetch] = useState(false);
     const [listEmoticon, setlistEmoticon] = useState([])
+    const [manualPicked, setmanualPicked] = useState([])
+
     let page =1
     useEffect(()=>{
         StatusRequest({
@@ -120,8 +124,8 @@ function KalimatBijak(props) {
         KalimatBijakRequest(payload)
 }, [filterByLatest])
     useEffect(() => {
-        
-    }, [filterByLatest])
+        setonfetch(kalimatfetching)
+    }, [kalimatfetching])
     const UpdateFavorite = (payload, param,index) =>{
         if(param ==='add'){
             const data ={
@@ -140,14 +144,28 @@ function KalimatBijak(props) {
             }
             addFavoriteRequest(data)
         }
-        let updateData = [...listKalimat]
-        updateData[index] = {
-            "created_at": updateData[index].created_at, 
-            "id": updateData[index].id, 
-            "is_favorite": !updateData[index].is_favorite, 
-            "name": updateData[index].name
-        };
-        setlistKalimat(updateData)
+        if(filterByFavorite){
+            const payload1= {
+                "fav":filterByFavorite?1:0,
+                "filter":filterByLatest?'DESC':'ASC',
+                "token":token.data.access_token,
+                "page":1
+            }
+            console.log(payload1)
+                KalimatBijakRequest(payload1)
+                setlistKalimat([])
+        }else{
+            let updateData = [...listKalimat]
+            updateData[index] = {
+                "created_at": updateData[index].created_at, 
+                "id": updateData[index].id, 
+                "is_favorite": !updateData[index].is_favorite, 
+                "name": updateData[index].name
+            };
+            setlistKalimat(updateData)
+        }
+        
+
     }
 
     const onShare = async (payload) => {
@@ -179,6 +197,9 @@ function KalimatBijak(props) {
       picked && picked.map(data =>{
         pickedEmoticon.push({"id":data.id})
       })
+      manualPicked && manualPicked.map(data=>{
+        pickedEmoticon.push({"id":data.id})
+      })
       const param = {
         "id":token.data.user.id,
         "body":{
@@ -189,9 +210,12 @@ function KalimatBijak(props) {
       }
       setVisibleStatus(!visibleStatus);
       UpdateStatusRequest(param)
+      console.log('show dpwn')
       // console.log('param',param)
     }else{
       setVisibleStatus(!visibleStatus);
+      ValidateTextForEmoticon(quote)
+      console.log('show up')
     }
   };
 
@@ -205,6 +229,29 @@ function KalimatBijak(props) {
     setpicked(check)
     // console.log('removed',check)
   }
+
+  const ValidateTextForEmoticon =(text) =>{
+    if(text){
+        setquote(text)
+        const filtertext = text.split(' ')
+        const filter =listEmoticon.filter(dat => filtertext.find(text =>{
+            // console.log(dat.name.toLowerCase() + ' = ' + text.toLowerCase())
+            return dat.name.toLowerCase() === text.toLowerCase()
+        }))
+        if(filter.length>0){
+            // console.log(filter)
+            // MapingValidationEmoticonByText(filter)
+            setpicked(filter)
+            // setpicked(result)
+        }else{
+            if(picked){
+                setpicked([])
+            }else{
+                setpicked([])
+            }
+        }
+    } 
+}
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -232,6 +279,7 @@ function KalimatBijak(props) {
                                     </TouchableOpacity>
                                 </View>
                             </View> */}
+                        <TouchableOpacity onPress={()=>toggleOverlay(null)}>
                           <View
                             style={{borderWidth:1, minHeight:80, width:Screen.width*0.9, borderRadius:20,paddingBottom:12, alignItems:'flex-start',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
                             {
@@ -254,20 +302,22 @@ function KalimatBijak(props) {
                                 :null
                             }
                             </View> */}
-                            <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:picked && picked.length>0?12:quote?14:0}}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
+                            
+                                <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:picked && picked.length>0?12:quote?14:0}}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
                             {
                                 picked && picked.length>0 || quote?
                                 <View style={{width:'100%', justifyContent:'flex-end', flexDirection:'row', marginTop:24}}>
-                                <TouchableOpacity 
-                                onPress={toggleOverlay}
-                                style={{backgroundColor:'#67308F', flexDirection:'row',alignItems:'center',justifyContent:'center', height:30, borderRadius:16, marginRight:12}}>
-                                <Image source={images.editQuote} style={[style.iconDashboard]} resizeMode='contain'/>
-                                    <Text style={{color:'#fff', marginLeft:-6, paddingRight:12}}>Edit</Text>
+                                    <TouchableOpacity 
+                                    onPress={()=>toggleOverlay(null)}
+                                    style={{backgroundColor:'#67308F', flexDirection:'row',alignItems:'center',justifyContent:'center', height:30, borderRadius:16, marginRight:12}}>
+                                        <Image source={images.editQuote} style={[style.iconDashboard]} resizeMode='contain'/>
+                                        <Text style={{color:'#fff', marginLeft:-6, paddingRight:12}}>Edit</Text>
                                     </TouchableOpacity>
                                 </View>
                                 :null
                             }
                             </View>
+                            </TouchableOpacity>
                             <View style={{width:'90%', borderTopLeftRadius:12, borderTopRightRadius:12, padding:12,paddingBottom:20, paddingRight:12,marginBottom:-16,marginTop:12, flexDirection:'row', justifyContent:'space-between',alignItems:'center',backgroundColor:'#67308F'}}>
                                 <Text style={{color:'white'}}>Kata-kata untuk diingat..</Text>
                                 <TouchableOpacity onPress={()=> setvisible(true)}>
@@ -275,7 +325,7 @@ function KalimatBijak(props) {
                                 </TouchableOpacity>
                             </View>
                             <ScrollView 
-                            onMomentumScrollEnd={(event)=>{
+                                onMomentumScrollEnd={(event)=>{
                                 if (isCloseToBottom(event.nativeEvent)) {
                                     // LoadMoreRandomData()
                                     if(listKalimatBijak.current_page !== listKalimatBijak.last_page){
@@ -297,95 +347,41 @@ function KalimatBijak(props) {
                                
                             }}>
                                 <View style={{minHeight:155, height:undefined, backgroundColor:'#67308F', width:Screen.width*0.9,justifyContent:'center',alignItems:'center',marginTop:16,paddingBottom:12,paddingTop:16}}>
-                                       
-                                        {
-                                            listKalimat && listKalimat.map((data,index) =>{
-                                                // console.log('data kalimat',data) 
-                                                if(data){
-                                                    return(
-                                                        <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12,flexDirection:'column',justifyContent:'space-between'}}>
-                                                            <Text style={{color:'#662D91',padding:2}} numberOfLines={5}>{data.name}</Text>
-                                                            <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'flex-end'}}>
-                                                                <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>{new Date(data.updated_at).getDate() + "/"+ parseInt(new Date(data.updated_at).getMonth()+1) +"/"+new Date(data.updated_at).getFullYear()}</Text>
-                                                                <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',maxWidth:100,marginBottom:-20}}>
-                                                                    <CheckBox
-                                                                        checkedIcon={ <Image source={images.StarChecked} style={{width:40,height:40}} resizeMode={'contain'}/>}
-                                                                        uncheckedIcon={<Image source={images.StarUncheck} style={{width:40,height:40}} resizeMode={'contain'}/>}
-                                                                        checked={data.is_favorite}
-                                                                        onPress={() => UpdateFavorite(data.id,data.is_favorite?'remove':'add',index)}
-                                                                        style={{alignItems:'center',justifyContent:'center'}}
-                                                                        />
-                                                                    <TouchableOpacity 
-                                                                    onPress={()=> onShare(data.name)}
-                                                                    >
-                                                                        <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
-                                                                    </TouchableOpacity>
-                                                                </View>
+                                    {
+                                    onfetch?
+                                        <ActivityIndicator size={32} color='white'/>:
+                                        listKalimat &&listKalimat.length>0 ? listKalimat.map((data,index) =>{
+                                            // console.log('data kalimat',data) 
+                                            if(data){
+                                                return(
+                                                    <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12,flexDirection:'column',justifyContent:'space-between'}}>
+                                                        <Text style={{color:'#662D91',padding:2}} numberOfLines={5}>{data.name}</Text>
+                                                        <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'flex-end'}}>
+                                                            <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>{new Date(data.created_at).getDate() + "/"+ parseInt(new Date(data.created_at).getMonth()+1) +"/"+new Date(data.created_at).getFullYear()}</Text>
+                                                            <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',maxWidth:100,marginBottom:-20}}>
+                                                                <CheckBox
+                                                                    checkedIcon={ <Image source={images.StarChecked} style={{width:40,height:40}} resizeMode={'contain'}/>}
+                                                                    uncheckedIcon={<Image source={images.StarUncheck} style={{width:40,height:40}} resizeMode={'contain'}/>}
+                                                                    checked={data.is_favorite}
+                                                                    onPress={() => UpdateFavorite(data.id,data.is_favorite?'remove':'add',index)}
+                                                                    style={{alignItems:'center',justifyContent:'center'}}
+                                                                    />
+                                                                <TouchableOpacity 
+                                                                onPress={()=> onShare(data.name)}
+                                                                >
+                                                                    <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
+                                                                </TouchableOpacity>
                                                             </View>
                                                         </View>
-                                                        )
-                                                }else{
-                                                    return null
-                                                }
-                                                
-                                            })
-                                        }
-                                        {/* <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12,flexDirection:'column',justifyContent:'space-between'}}>
-                                            <Text style={{color:'#662D91',padding:2}}>Patience is when you’re supposed to get mad, but you choose to understand.</Text>
-                                            <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'flex-end'}}>
-                                                <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>07/05/2021</Text>
-                                                <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',maxWidth:100,marginBottom:-20}}>
-                                                    <CheckBox
-                                                        checkedIcon={ <Image source={images.StarChecked} style={{width:40,height:40}} resizeMode={'contain'}/>}
-                                                        uncheckedIcon={<Image source={images.StarUncheck} style={{width:25,height:25}} resizeMode={'contain'}/>}
-                                                        checked={true}
-                                                        // onPress={() => this.setState({checked: !this.state.checked})}
-                                                        />
-                                                    <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
-                                                </View>
-                                            </View>
-                                        </View> */}
-                                        {/* <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12}}>
-                                            <Text style={{color:'#662D91',padding:2}}>Breath is the power behind all things…. I breathe in and know that good things will happen</Text>
-                                            <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'flex-end'}}>
-                                                <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>07/05/2021</Text>
-                                                <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',maxWidth:100,marginBottom:-20}}>
-                                                    <CheckBox
-                                                        checkedIcon={ <Image source={images.StarChecked} style={{width:40,height:40}} resizeMode={'contain'}/>}
-                                                        uncheckedIcon={<Image source={images.StarUncheck} style={{width:25,height:25}} resizeMode={'contain'}/>}
-                                                        checked={true}
-                                                        // onPress={() => this.setState({checked: !this.state.checked})}
-                                                        />
-                                                    <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
-                                                </View>
-                                            </View>
-                                        </View>
-                                        <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12}}>
-                                            <Text style={{color:'#662D91',padding:2}}>Breath is the power behind all things…. I breathe in and know that good things will happen</Text>
-                                            <View style={{flexDirection:'row', justifyContent:'space-between'}}>
-                                                <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>07/05/2021</Text>
-                                                <View style={{flexDirection:'row',justifyContent:'space-between',minWidth:70,alignItems:'center'}}>
-                                                    <Image source={images.StarChecked} style={{width:40,height:40}} resizeMode={'contain'}/>
-                                                    <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
-                                                </View>
-                                            </View>
-                                        </View>
-                                        <View style={{backgroundColor:'white',minHeight:123,width:'90%', borderRadius:12, padding:12,margin:12}}>
-                                            <Text style={{color:'#662D91',padding:2}}>Breath is the power behind all things…. I breathe in and know that good things will happen</Text>
-                                            <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'flex-end'}}>
-                                                <Text style={{color:'#8B8F93',padding:2, fontSize:12}}>07/05/2021</Text>
-                                                <View style={{flexDirection:'row',justifyContent:'space-around',alignItems:'center',maxWidth:100,marginBottom:-20}}>
-                                                    <CheckBox
-                                                        checkedIcon={ <Image source={images.StarChecked} style={{width:40,height:40}} resizeMode={'contain'}/>}
-                                                        uncheckedIcon={<Image source={images.StarUncheck} style={{width:25,height:25}} resizeMode={'contain'}/>}
-                                                        checked={true}
-                                                        // onPress={() => this.setState({checked: !this.state.checked})}
-                                                        />
-                                                    <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
-                                                </View>
-                                            </View>
-                                        </View> */}
-
+                                                    </View>
+                                                    )
+                                            }else{
+                                                return null
+                                            }
+                                            
+                                        }):
+                                        !onfetch &&<Text style={{color:'white',padding:2, fontSize:24}} numberOfLines={5}>Belum ada Favorit</Text>
+                                        } 
                                 </View>
                             </ScrollView>
                         </View>  
@@ -429,7 +425,7 @@ function KalimatBijak(props) {
                     </View>
                 </View>
             </Overlay>
-            <OverlayHomepage visible ={visibleStatus} toggleOverlay={toggleOverlay} setquote={setquote} quote={quote} listEmoticon={listEmoticon} picked={picked} RemovePickedEmotion={RemovePickedEmotion} setpicked ={setpicked}/>
+            <OverlayHomepage visible={visibleStatus} toggleOverlay={toggleOverlay} setquote={setquote} quote={quote} listEmoticon={listEmoticon} picked={picked} RemovePickedEmotion={RemovePickedEmotion} setpicked ={setpicked}  manualPicked={manualPicked} setmanualPicked={setmanualPicked} ValidateTextForEmoticon={ValidateTextForEmoticon}/>
         </TemplateBackground>
     )
 }
@@ -441,7 +437,8 @@ const mapStateToProps = (state) => {
       listKalimatBijak: state.kalimatbijak.payload,
       addFavorite: state.addFavorite.payload,
       status: state.status.payload,
-      emoticon: state.emoticon.payload
+      emoticon: state.emoticon.payload,
+      kalimatfetching: state.kalimatbijak.fetching
     }
   }
   

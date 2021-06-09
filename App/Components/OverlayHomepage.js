@@ -6,7 +6,7 @@ import { Divider, Image, Overlay, Text } from "react-native-elements";
 import { TextInput } from "react-native-paper";
 import { Colors, Images } from "../Themes";
 import { Screen } from "../Transforms/Screen";
-export const OverlayHomepage =({visible,toggleOverlay,setquote,listEmoticon, picked, RemovePickedEmotion,setpicked,quote})=>{
+export const OverlayHomepage =({visible,toggleOverlay,listEmoticon, picked, RemovePickedEmotion,ValidateTextForEmoticon,quote,manualPicked, setmanualPicked})=>{
     Object.size = function(obj) {
         var size = 0,
           key;
@@ -15,50 +15,17 @@ export const OverlayHomepage =({visible,toggleOverlay,setquote,listEmoticon, pic
         }
         return size;
       };
-    let sizeOfWord = 0
-    const MapingValidationEmoticonByText = (filter) =>{
-        console.log('filter',filter)
-        let dataPicked = picked
-        setpicked(filter)
-        // filter.map(data =>{ 
-        //     // console.log('data',data)
-        //     let result = picked.find(item => item === data)
-        //     // console.log('result',result)
-        //     // console.log('length of result ', Object.size(result))
-        //     // console.log(find)
-        //     if(Object.size(result)===0){
-        //         dataPicked.push(data)
-        //     }
-        // })
-    }
-    const ValidateTextForEmoticon =(text) =>{
-        setquote(text)
-        const filtertext = text.split(' ')
-        const filter =listEmoticon.filter(dat => filtertext.find(text =>{
-            // console.log(dat.name.toLowerCase() + ' = ' + text.toLowerCase())
-            return dat.name.toLowerCase() === text.toLowerCase()
-        }))
-        if(filter.length>0){
-            // console.log(filter)
-            MapingValidationEmoticonByText(filter)
-            // setpicked(result)
-        }else{
-            if(picked){
-                setpicked([])
-            }else{
-                setpicked([])
-            }
-        }
-        // if(!text){
-        //     setpicked([])
-        // }
-        // console.log('validasi', filter)
-    }
+    // let sizeOfWord = 0
+    // const MapingValidationEmoticonByText = (filter) =>{
+    //     // console.log('filter',filter)
+    //     setpicked(filter)
+    // }
+
     const [onKeyboardView, setonKeyboardView] = useState(0)
     return (
         <Overlay 
             isVisible={visible} 
-            onBackdropPress={()=>toggleOverlay()}
+            onBackdropPress={()=>toggleOverlay(null)}
             overlayStyle={{width: Screen.width*0.9,paddingVertical:24, borderRadius:20, minHeight: Screen.height*0.4}}
             >
         <ScrollView>
@@ -66,30 +33,31 @@ export const OverlayHomepage =({visible,toggleOverlay,setquote,listEmoticon, pic
             <View style={{height:Screen.height*0.4}}>
                 <ScrollView>
                    <FlatList 
-                    style={{ width: '100%', margin:10, backgroundColor: 'transparent', borderRadius: 5, alignSelf: 'center'}}
+                    style={{ width: '100%', backgroundColor: 'transparent', borderRadius: 5, alignSelf: 'center',alignContent:'space-around'}}
                     // bounces={false}
                     numColumns={4}
                     data={listEmoticon}
                     renderItem={({item}) => {
-                        const check = picked && picked.filter(data => data === item)
                         // console.log('check',check)
+                        const manual = manualPicked && manualPicked.filter(data => data === item)
+                        const auto = picked && picked.filter(data => data === item)
                         return(
                         <TouchableOpacity onPress={()=>{
                             // console.log(item.name)
                             // console.log('hasil checkcok',check)
-                            if(picked.length>0){
-                                if(check && check.length>0) {
-                                    RemovePickedEmotion(check)
+                            if(manualPicked.length>0){
+                                if(manual && manual.length>0) {
+                                    RemovePickedEmotion(manual)
                                 }else{
-                                    setpicked([...picked,item])
+                                    setmanualPicked([...manualPicked,item])
                                 }
                             }else{
-                                setpicked([...picked,item]) 
+                                setmanualPicked([...manualPicked,item]) 
                             }
                         }}>
-                            <View style={[{justifyContent:'center',alignItems:'center',margin:8,marginRight:12,height:80,width:60},check && check.length>0?style.borderShadow:{}]}>
-                                <View style={check && check.length>0?{flex:1,backgroundColor:'#fff',justifyContent:'center',alignItems:'center'}:{}}>
-                                    <Image source={{uri:item.image && item.image.url?item.image.url:null}} style={[style.icon]} resizeMode='contain'/>
+                            <View style={[{justifyContent:'space-around',alignItems:'center',marginTop:Screen.width*0.005, marginRight:Screen.width*0.015,height:Screen.width*0.2,width:Screen.width*0.2},(manual && manual.length>0) || (auto && auto.length>0)?{ backgroundColor:'rgba(0, 0, 0, 0.1)'}:{}]}>
+                                <View style={(manual && manual.length>0) || (auto && auto.length>0)?{backgroundColor:'white',alignItems:'center',justifyContent:'space-around',height:Screen.width*0.19,width:Screen.width*0.19}:{}}>
+                                    <Image source={{uri:item.image && item.image.url?item.image.url:null}} style={[style.icon]}/>
                                     <Text style={{textAlign:'center',marginTop:-16}} numberOfLines={1}>{item.name}</Text>
                                 </View>
                             </View>
@@ -115,6 +83,8 @@ export const OverlayHomepage =({visible,toggleOverlay,setquote,listEmoticon, pic
                     value={quote}
                     onTouchStart={()=>setonKeyboardView(Screen.height*0.4)}
                     onEndEditing={()=>setonKeyboardView(0)}
+                    onSubmitEditing={()=>setonKeyboardView(0)}
+                    onTouchEnd={()=>setonKeyboardView(0)}
                     placeholder="Bagaimana Perasaanmu Hari ini"   
                     style={{minHeight:Screen.height*0.15,backgroundColor:'transparent'}}
                     onChangeText={text => ValidateTextForEmoticon(text)}
@@ -136,9 +106,9 @@ export const OverlayHomepage =({visible,toggleOverlay,setquote,listEmoticon, pic
 
 export const style =StyleSheet.create({
     borderShadow:{
-        shadowColor: "#000", shadowOffset: { width: 0, height: 0, }, shadowOpacity: 0.25, shadowRadius: 2
+        shadowColor: "#000", shadowOffset: { width: 0, height: 0, }, shadowOpacity: 0.25, shadowRadius: 4,elevation: 12,
     },
-    icon: {width:35, height:40, margin:Screen.width*0.05},
+    icon: {width:Screen.width*0.1, height:Screen.width*0.1, margin:Screen.width*0.04},
     iconic: {width:25, height:25, margin:Screen.width*0.0075},
     iconDashboard: {width:15, height:15, margin:Screen.width*0.05}
 })

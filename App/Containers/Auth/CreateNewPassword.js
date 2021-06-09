@@ -37,7 +37,11 @@ function CreateNewPassword(props) {
 
     const checkingPassword1 = (password) => {
         setPassword1(password)
-
+        if (password2 == password) {
+            setPasswordMatch(true)
+        } else {
+            setPasswordMatch(false)
+        }
         // if (password2.length == password.length) {
         //     if (password2.toString == password.toString) {
         //         setPasswordMatch(true)
