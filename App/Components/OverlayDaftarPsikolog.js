@@ -16,24 +16,43 @@ export const OverlayDaftarPsikolog = ({ visible, toggleOverlay }) => {
             overlayStyle={{ width: Screen.width * 0.9, borderRadius: 20, minHeight: Screen.height * 0.65, padding: Screen.width * 0.05 }}
         >
             <Text style={{ color: '#67308F', fontWeight: '500', marginBottom: 20 }}>Profil Psikolog</Text>
-                <TextInput
-                    // inputRef={(ref) => (this.password = ref)}
-                    label="Nama"
-                    // value={password}
-                    // error={errorPassword}
-                    // onChangeText={password => setPassword(password)}
-                    style={style.textInput}
-                    theme={{
-                        colors: {
-                            placeholder: '#67308F',
-                            text: '#67308F',
-                            primary: '#67308F',
-                        }
-                    }}
-                    // selectionColor={'#939598'}
-                />
-
-                <TextInput
+            <View style={{ flex: 1 }}>
+                <View style={{ 
+                    borderRadius: 12,
+                    height: 60,
+                    marginBottom: 12,
+                    overflow: 'hidden' ,
+                    borderColor: '#67308F',
+                    borderWidth: 1,
+                    }}>
+                    <TextInput
+                        // inputRef={(ref) => (this.password = ref)}
+                        label="Nama"
+                        // value={password}
+                        // error={errorPassword}
+                        // onChangeText={password => setPassword(password)}
+                        style={style.textInput}
+                        theme={{
+                            colors: {
+                                placeholder: '#67308F',
+                                text: '#67308F',
+                                primary: '#67308F',
+                            }
+                        }}
+                        // selectionColor={'#939598'}
+                    />
+                </View>
+            </View>
+            <View style={{ flex: 1 }}>
+                <View style={{ 
+                    borderRadius: 12,
+                    height: 60,
+                    marginBottom: 12,
+                    overflow: 'hidden' ,
+                    borderColor: '#67308F',
+                    borderWidth: 1,
+                    }}>
+                    <TextInput
                     // inputRef={(ref) => (this.password = ref)}
                     label="Tanggal Lahir"
                     // value={password}
@@ -49,8 +68,18 @@ export const OverlayDaftarPsikolog = ({ visible, toggleOverlay }) => {
                     }}
                     selectionColor={'#939598'}
                 />
-
-                <TextInput
+                </View>
+            </View>
+            <View style={{ flex: 1 }}>
+                <View style={{ 
+                    borderRadius: 12,
+                    height: 60,
+                    marginBottom: 12,
+                    overflow: 'hidden' ,
+                    borderColor: '#67308F',
+                    borderWidth: 1,
+                    }}>
+                    <TextInput
                     // inputRef={(ref) => (this.password = ref)}
                     label="Pengalaman Kerja"
                     // value={password}
@@ -66,7 +95,8 @@ export const OverlayDaftarPsikolog = ({ visible, toggleOverlay }) => {
                     }}
                     selectionColor={'#939598'}
                 />
-
+                </View>
+            </View>
             <Text style={{ color: '#67308F', marginBottom: 20 }}>Upload dokumen</Text>
 
             <View style={style.textInputDashed}>
@@ -96,13 +126,7 @@ const style = StyleSheet.create({
     textInput: {
         // overflow: 'hidden',
         backgroundColor: 'transparent',
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        borderBottomLeftRadius: 10,
-        borderBottomRightRadius: 10,
-        borderColor: '#67308F',
-        borderWidth: 1,
-        marginBottom:12,
+        // marginBottom:12,
         // paddingVertical:12,
         minHeight:50
     },

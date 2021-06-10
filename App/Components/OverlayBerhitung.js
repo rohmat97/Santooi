@@ -6,14 +6,16 @@ import { Colors, Images } from "../Themes";
 import { Screen } from "../Transforms/Screen";
 import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
+import { SafeAreaView } from "react-native";
 export const OverlayBerhitung = ({ visible, toggleOverlay, music, setMusic, pemandu, setPemandu, listMusic , playSound}) => {
     return (
+        <SafeAreaView style={{flex:1}}>
         <Overlay
             isVisible={visible}
             onBackdropPress={()=>toggleOverlay()}
             overlayStyle={{ width: Screen.width * 0.9, borderRadius: 20, minHeight: Screen.height * 0.4, padding: Screen.width * 0.05 }}
         >
-            <ScrollView>
+            <ScrollView style={{ height:Screen.height*0.8}}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
                     <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.25, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>
                         <Text style={{ color: 'white', fontWeight: 'bold' }}>Musik</Text>
@@ -103,6 +105,7 @@ export const OverlayBerhitung = ({ visible, toggleOverlay, music, setMusic, pema
                 </RadioButton.Group>
             </ScrollView>
         </Overlay>
+        </SafeAreaView>
     )
 }
 
