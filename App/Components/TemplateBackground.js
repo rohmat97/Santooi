@@ -1,23 +1,24 @@
 
 import React from 'react';
-import { Images } from '../Themes'
+import { Images, Metrics } from '../Themes'
 import styles from '../Containers/Styles/LaunchScreenStyles'
 import { ImageBackground, View } from 'react-native';
 import { SafeAreaView } from 'react-native';
 import { StatusBar } from 'react-native';
 
 export const TemplateBackground = ({ children, cover }) => (
-    <SafeAreaView style={{flex:1}}>
-        <StatusBar
-            animated={true}
-            backgroundColor="transparent"
-            barStyle={'dark-content'}
-            // showHideTransition={statusBarTransition}
-            hidden={false}
-            translucent = {true}
-             />
+    
         <ImageBackground source={Images.backgroundMain} style={styles.backgroundImage} >
-
+            <SafeAreaView style={{flex:1}}>
+                <View style={{margin:Platform.OS==='android'?Metrics.baseMargin*2.5:0}}/>
+                <StatusBar
+                animated={true}
+                backgroundColor="transparent"
+                barStyle={'dark-content'}
+                showHideTransition={'slide'}
+                // hidden={false}
+                translucent ={true}
+             />
             { cover == false &&
                 <View style={styles.backgroundImage}>
                     {children}
@@ -28,6 +29,6 @@ export const TemplateBackground = ({ children, cover }) => (
                     {children}
                 </ImageBackground>
             }
+            </SafeAreaView>
         </ImageBackground>
-    </SafeAreaView>
 )

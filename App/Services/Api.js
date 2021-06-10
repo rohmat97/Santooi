@@ -55,7 +55,7 @@ const create = (baseURL = staging) => {
   const updateStatus = payload => api.patch('/account/user/'+payload.id,payload.body,{headers: { Authorization: `Bearer ${payload.token}` }})
   const getStatus = payload => api.get('/account/user?id='+payload.id,'',{headers: { Authorization: `Bearer ${payload.token}` }})
   //berhitung
-  const getMusic = payload => api.get('/music?limit=10&page=1','',{headers: { Authorization: `Bearer ${payload.token}` }})
+  const getMusic = payload => api.get('/music?limit=4&page='+payload.page,'',{headers: { Authorization: `Bearer ${payload.token}` }})
   const getKalimatBijak = payload =>api.get(`/wise?fav=${payload.fav}&sort=${payload.filter}&limit=10&page=${payload.page}`,'',{headers: { Authorization: `Bearer ${payload.token}` }})
   const addFavorite = payload => api.post('/account/user/wise',payload.body,{headers: { Authorization: `Bearer ${payload.token}` }})
   const removeFavorite = payload => api.delete('/account/user/wise/'+payload.body,'',{headers: { Authorization: `Bearer ${payload.token}` }})

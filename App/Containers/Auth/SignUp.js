@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { Overlay } from 'react-native-elements';
 import { RadioButton } from 'react-native-paper'
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import moment from 'moment'
 //component
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import ErrorButton from '../../Components/ErrorButton'
@@ -167,13 +167,15 @@ function SignUp(props) {
             setvisible(false)
             if(check.status){
                 setavail(true)
-                let newdate = dateBirth.split("-").reverse().join("-");
+                // let newdate = dateBirth.split("-").reverse().join("-");
+                let newdate = moment(date, 'YYYY-MM-DD').format()
+                let split = newdate.split('T')
                 const params = {
                     'name': name,
                     'email': email,
                     'password': password,
                     'call': greeting,
-                    'birt_date': newdate,
+                    'birth_date': split[0],
                     'phone_number': '0'+phoneNumber,
                     'uid':bundleLogin && bundleLogin.uid,
                     'driver':bundleLogin && bundleLogin.driver,

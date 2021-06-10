@@ -27,9 +27,11 @@ function BerhitungYuk(props) {
     const [pemandu, setPemandu] = useState('')
     const [duration, setduration] = useState(0)
     const [listMusic, setlistMusic] = useState([])
+    const [playlistMusic, setplaylistMusic] = useState([])
     const [play, setPlay] = useState('START')
     const toggleOverlay = () => {
         setVisible(!visible);
+        SoundPlayer.stop()
     };
     const timerRef = useRef(null);
 
@@ -112,6 +114,7 @@ function BerhitungYuk(props) {
             _onFinishedLoadingSubscription.remove()
             _onFinishedLoadingURLSubscription.remove()
             _onFinishedLoadingFileSubscription.remove()
+            SoundPlayer.stop()
           };
     },[])
     useEffect(()=>{
@@ -147,12 +150,21 @@ function BerhitungYuk(props) {
     },[start,reset,Second])
 
     useEffect(()=>{
-        MusicRequest({"token":token.data.access_token})
+        MusicRequest({"token":token.data.access_token,'page':1})
     },[])
     useEffect(()=>{
         // console.log('music',dataMusic.data)
         if(dataMusic) {
-            setlistMusic(dataMusic.data)
+            setlistMusic(dataMusic)
+            if(playlistMusic){
+                // let combine =[playlistMusic,dataMusic.data]
+                let newlist = playlistMusic.concat(dataMusic.data)
+                setplaylistMusic(newlist)
+                // console.log('playlistMusic',newlist)
+            }else{
+                setplaylistMusic(dataMusic.data)
+            }
+            
         }
     },[dataMusic])
 
@@ -195,11 +207,10 @@ function BerhitungYuk(props) {
                         }}>
                             <Image source={images.reset} style={{ width: Screen.width * 0.5, height: Screen.width * 0.18, alignSelf: 'center', marginVertical: Screen.width * 0.1 }} resizeMode='contain' />
                         </TouchableOpacity>
-                        <OverlayBerhitung visible={visible} toggleOverlay={toggleOverlay} music={music} setMusic={setMusic} pemandu={pemandu} setPemandu={setPemandu} listMusic={listMusic} playSound={playSound}/>
                     </ScrollView>
                 </View>
-
             </View>
+            <OverlayBerhitung visible={visible} toggleOverlay={toggleOverlay} music={music} setMusic={setMusic} pemandu={pemandu} setPemandu={setPemandu} listMusic={listMusic} playSound={playSound} MusicRequest={MusicRequest} token={token.data.access_token} playlistMusic={playlistMusic}/>
         </TemplateBackground>
     )
 }

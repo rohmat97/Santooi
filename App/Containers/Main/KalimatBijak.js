@@ -25,6 +25,7 @@ function KalimatBijak(props) {
     const [filter, setfilter] = useState()
     const [filterByLatest, setfilterByLatest] = useState(false)
     const [filterByFavorite, setfilterByFavorite] = useState(false)
+    const [noFilter, setnoFilter] = useState(true)
     const [listKalimat, setlistKalimat] =useState([])
     const [picked, setpicked] = useState([])
     const [quote, setquote]= useState('')
@@ -41,7 +42,7 @@ function KalimatBijak(props) {
           })
         const payload= {
             "fav":filterByFavorite,
-            "filter":filterByLatest?'DESC':'ASC',
+            "filter":null,
             "token":token.data.access_token,
             "page":1
         }
@@ -101,10 +102,10 @@ function KalimatBijak(props) {
     }, [addFavorite])
 
     useEffect(() => {
-            setlistKalimat([])
+        setlistKalimat([])
             const payload= {
                 "fav":filterByFavorite?1:0,
-                "filter":filterByLatest?'DESC':'ASC',
+                "filter":noFilter?'':filterByLatest?'DESC':'ASC',
                 "token":token.data.access_token,
                 "page":1
             }
@@ -113,6 +114,7 @@ function KalimatBijak(props) {
     }, [filterByFavorite])
 
     useEffect(() => {
+        if(!noFilter){
         setlistKalimat([])
         const payload= {
             "fav":filterByFavorite?1:0,
@@ -122,10 +124,28 @@ function KalimatBijak(props) {
         }
         console.log(payload)
         KalimatBijakRequest(payload)
+    }
 }, [filterByLatest])
+
+    useEffect(() => {
+        if(noFilter){
+            setlistKalimat([])
+            const payload= {
+                "fav":filterByFavorite?1:0,
+                "filter":'',
+                "token":token.data.access_token,
+                "page":1
+            }
+            console.log(payload)
+            KalimatBijakRequest(payload)
+        }
+       
+    }, [noFilter])
+
     useEffect(() => {
         setonfetch(kalimatfetching)
     }, [kalimatfetching])
+
     const UpdateFavorite = (payload, param,index) =>{
         if(param ==='add'){
             const data ={
@@ -231,8 +251,8 @@ function KalimatBijak(props) {
   }
 
   const ValidateTextForEmoticon =(text) =>{
+    setquote(text)
     if(text){
-        setquote(text)
         const filtertext = text.split(' ')
         const filter =listEmoticon.filter(dat => filtertext.find(text =>{
             // console.log(dat.name.toLowerCase() + ' = ' + text.toLowerCase())
@@ -394,12 +414,17 @@ function KalimatBijak(props) {
                         <TouchableOpacity onPress={()=>{setfilterByFavorite(!filterByFavorite)}}>
                         <Text style={{fontWeight:'bold',paddingVertical:12}}>Favorit</Text>
                         </TouchableOpacity>
-                        <CheckBox
-                            checkedIcon={<Image source={images.checklist} style={{width:20,height:20}} resizeMode='contain'/>}
-                            uncheckedIcon={null}
-                            checked={filterByFavorite}
-                            onPress={() => setfilterByFavorite(!filterByFavorite)}
-                        />  
+                        <View style={{borderWidth:0.5,width:25,height:25,justifyContent:'center', alignItems:'center', marginRight:16, borderColor:'gray'}}>
+                            <CheckBox
+                                checkedIcon={<Image source={images.checklist} style={{width:20,height:20, marginLeft:-10}} resizeMode='contain'/>}
+                                uncheckedIcon={null}
+                                checked={filterByFavorite}
+                                onPress={() => {
+                                    setfilterByFavorite(!filterByFavorite)
+                                    setnoFilter(true)
+                                }}
+                            />
+                        </View>  
                     </View>
                     <View>
                         <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'center'}}>
@@ -407,8 +432,11 @@ function KalimatBijak(props) {
                             <CheckBox
                                 checkedIcon={<Image source={images.Checked} style={{width:20,height:20}} resizeMode='contain'/>}
                                 uncheckedIcon={<Image source={images.unChecked} style={{width:20,height:20}} resizeMode='contain'/>}
-                                checked={filterByLatest?false:true}
-                                onPress={() => setfilterByLatest(false)}
+                                checked={filterByLatest?false: !noFilter &&true}
+                                onPress={() => {
+                                    setnoFilter(false)
+                                    setfilterByLatest(false)
+                                }}
                             />  
                         </View>
                     </View>
@@ -418,8 +446,22 @@ function KalimatBijak(props) {
                             <CheckBox
                                 checkedIcon={<Image source={images.Checked} style={{width:20,height:20}} resizeMode='contain'/>}
                                 uncheckedIcon={<Image source={images.unChecked} style={{width:20,height:20}} resizeMode='contain'/>}
-                                checked={filterByLatest?true:false}
-                                onPress={() => setfilterByLatest(true)}
+                                checked={filterByLatest&& !noFilter?true:false}
+                                onPress={() => {
+                                    setnoFilter(false)
+                                    setfilterByLatest(true)
+                                }}
+                            />  
+                        </View>
+                    </View>
+                    <View>
+                        <View style={{flexDirection:'row', justifyContent:'space-between',alignItems:'center'}}>
+                        <Text style={{fontWeight:'bold',paddingVertical:12}}>Semua</Text>
+                            <CheckBox
+                                checkedIcon={<Image source={images.Checked} style={{width:20,height:20}} resizeMode='contain'/>}
+                                uncheckedIcon={<Image source={images.unChecked} style={{width:20,height:20}} resizeMode='contain'/>}
+                                checked={noFilter?true:false}
+                                onPress={() => setnoFilter(true)}
                             />  
                         </View>
                     </View>

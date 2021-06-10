@@ -68,8 +68,8 @@ function MainScreen (props) {
   }
 
   const ValidateTextForEmoticon =(text) =>{
+    setquote(text)
     if(text){
-        setquote(text)
         const filtertext = text.split(' ')
         const filter =listEmoticon.filter(dat => filtertext.find(text =>{
             // console.log(dat.name.toLowerCase() + ' = ' + text.toLowerCase())

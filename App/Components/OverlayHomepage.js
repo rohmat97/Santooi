@@ -28,10 +28,12 @@ export const OverlayHomepage =({visible,toggleOverlay,listEmoticon, picked, Remo
             onBackdropPress={()=>toggleOverlay(null)}
             overlayStyle={{width: Screen.width*0.9,paddingVertical:24, borderRadius:20, minHeight: Screen.height*0.4}}
             >
-        <ScrollView>
+     
+            <ScrollView>
+            <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "position" : null} keyboardVerticalOffset={Platform.OS === 'ios' ?  Screen.height*0.15 : 0}>
             <Text style={{color:'#67308F', fontWeight:'700'}}>Pilih Emosimu :</Text>
             <View style={{height:Screen.height*0.4}}>
-                <ScrollView>
+                {/* <ScrollView> */}
                    <FlatList 
                     style={{ width: '100%', backgroundColor: 'transparent', borderRadius: 5, alignSelf: 'center',alignContent:'space-around'}}
                     // bounces={false}
@@ -67,38 +69,76 @@ export const OverlayHomepage =({visible,toggleOverlay,listEmoticon, picked, Remo
                     }
                     }
                     />
-                </ScrollView>
+                {/* </ScrollView> */}
             </View>
             <View style={{ height: 1, width: '100%', borderRadius: 1, borderWidth: 1, borderColor: '#D9078D', borderStyle: 'dashed', zIndex: 0,marginVertical:24 }}>
                 <View style={{ position: 'absolute', left: 0, bottom: 0, width: '100%', height: 1, backgroundColor: 'white', zIndex: 1 }} />
             </View>
-            <Text style={{color:'#67308F', fontWeight:'700', fontSize:14}}>Apa yang ada dalam pikiranmu?</Text>
+            <Text style={{color:'#67308F', fontWeight:'700', fontSize:14}}>Apa yang ada dalam pikiranmu?{'\n'}</Text>
             <View style={{flexDirection:'column',justifyContent:'flex-start'}}> 
+                   
             <View style={{
                 borderRadius: 4,
                 height: 55,
                 borderWidth:1, height:Screen.height*0.15, width:'100%', marginBottom:24, borderRadius:20, textAlign:'center', backgroundColor:'white',borderColor:'#67308F',
                 overflow: 'hidden'}}>
-                <TextInput 
+                    {
+                        Platform.OS==='ios'?
+                        <TextInput 
+                            value={quote && quote.length>0?quote:'Bagaimana Perasaanmu Hari ini'}
+                            // placeholder=""   
+                            style={{minHeight:Screen.height*0.15,backgroundColor:'transparent'}}
+                            theme={{
+                                colors: {
+                                    placeholder: '#662D91',
+                                    text: '#662D91',
+                                    primary: '#662D91',
+                                }
+                            }}
+                            onChangeText={text => ValidateTextForEmoticon(text)}
+                            multiline={true}
+                        />:
+                        <TextInput 
+                            value={quote && quote.length>0?quote:'Bagaimana Perasaanmu Hari ini'}
+                            // onTouchStart={()=>setonKeyboardView(Screen.height*0.4)}
+                            // onEndEditing={()=>setonKeyboardView(0)}
+                            // onSubmitEditing={()=>setonKeyboardView(0)}
+                            // onTouchEnd={()=>setonKeyboardView(0)}
+                            // placeholder="Bagaimana Perasaanmu Hari ini"   
+                            style={{minHeight:Screen.height*0.15,backgroundColor:'transparent'}}
+                            onChangeText={text => ValidateTextForEmoticon(text)}
+                            multiline={true}
+                            theme={{
+                                colors: {
+                                    placeholder: '#662D91',
+                                    text: '#662D91',
+                                    primary: '#662D91',
+                                },
+                            }}
+                        />
+                    }
+                    
+                {/* <TextInput 
                     value={quote}
                     onTouchStart={()=>setonKeyboardView(Screen.height*0.4)}
                     onEndEditing={()=>setonKeyboardView(0)}
-                    onSubmitEditing={()=>setonKeyboardView(0)}
-                    onTouchEnd={()=>setonKeyboardView(0)}
+                    // onSubmitEditing={()=>Platform.OS==='android'&&setonKeyboardView(0)}
+                    // onTouchEnd={()=>Platform.OS==='android'&&setonKeyboardView(0)}
                     placeholder="Bagaimana Perasaanmu Hari ini"   
                     style={{minHeight:Screen.height*0.15,backgroundColor:'transparent'}}
                     onChangeText={text => ValidateTextForEmoticon(text)}
                     multiline={true}
-                 />
+                 /> */}
                 </View>
                  <TouchableOpacity onPress={()=>toggleOverlay(true)}>
                     <View style={{flexDirection:'row', justifyContent:'flex-end',alignItems:'center'}}>
-                        <Text style={{color:'#67308F', fontWeight:'500', fontSize:14,marginRight:2}}>Selesai</Text>
+                        <Text style={{color:'#67308F', fontWeight:'500', fontSize:14,marginRight:2}}>Selesai{'\t'}</Text>
                         <Image source={Images.iconNext} style={{width:20, height:20}} resizeMode='contain' />
                     </View>
                  </TouchableOpacity>
             </View>
             <View  style={{height:onKeyboardView}}/>
+            </KeyboardAvoidingView>
             </ScrollView>
         </Overlay>
     )

@@ -14,7 +14,7 @@ const ApplicationStyles = {
       backgroundColor: Colors.transparent,
       height: Screen.height,
       width: Screen.width,
-      marginTop: Platform.OS==='android'?Metrics.baseMargin*2.5:0
+      // top: Platform.OS==='android'?Metrics.baseMargin*2.5:0
     },
     backgroundImage: {
       flex: 1,

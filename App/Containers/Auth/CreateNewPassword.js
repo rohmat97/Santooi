@@ -189,11 +189,11 @@ function CreateNewPassword(props) {
                     <RoundedButton
                         text={'Konfirmasi'}
                         onPress={() => {
-                            if(passwordMatch){
+                            if(passwordMatch && password1.length>7 && password2.length>7){
                                 Submit()
                             }
                         }}
-                        backgroundColor={passwordMatch ? '#266CF5' : '#b3b3cc'}  />
+                        backgroundColor={passwordMatch && password1.length>7 && password2.length>7? '#266CF5' : '#b3b3cc'}  />
                 </View>
             </View>
         </TemplateBackground>
