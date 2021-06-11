@@ -124,7 +124,7 @@ function SignUp(props) {
 
     const Signup = () => {
         setsubmitted(true)
-        CheckPhoneRequest('0'+phoneNumber)
+        CheckPhoneRequest(phoneNumber)
         
     }
     useEffect(() => {
@@ -176,7 +176,7 @@ function SignUp(props) {
                     'password': password,
                     'call': greeting,
                     'birth_date': split[0],
-                    'phone_number': '0'+phoneNumber,
+                    'phone_number': phoneNumber,
                     'uid':bundleLogin && bundleLogin.uid,
                     'driver':bundleLogin && bundleLogin.driver,
                     'photoURL':bundleLogin && bundleLogin.photoURL
@@ -184,7 +184,7 @@ function SignUp(props) {
                 }
                 console.log(params)
                 // setTimeout(() => {
-                    RegisterRequest(params)
+                    // RegisterRequest(params)
                 // }, 1000);
             }else{
                 setavail(false)
