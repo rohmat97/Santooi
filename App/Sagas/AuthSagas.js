@@ -133,14 +133,14 @@ export function * getCheckEmail (api, action) {
   const { data } = action
   // make the call to the api
   const response = yield call(api.checkEmail, data)
-  // console.log('email', response.data)
+  console.log('email', response.data)
 
-  if (response.ok) {
+  // if (response.ok) {
     // do data conversion here if needed
     yield put(CheckEmailRedux.CheckEmailSuccess(response.data))
-  } else {
-    yield put(CheckEmailRedux.CheckEmailFailure())
-  }
+  // } else {
+  //   yield put(CheckEmailRedux.CheckEmailFailure())
+  // }
 }
 
 export function * getCheckPhone (api, action) {

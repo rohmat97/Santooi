@@ -57,7 +57,8 @@ function LoginScreen(props) {
     const { 
         navigation, LoginRequest, login, errorLogin, CallbackGoogleRequest, 
         CallbackFacebookRequest, callbackgoogle, callbackfacebook, token, check,
-        CheckEmailRequest,CheckEmailSuccess, CheckPhoneRequest, checkPhone ,LoginSuccess
+        CheckEmailRequest,CheckEmailSuccess, CheckPhoneRequest, checkPhone ,LoginSuccess,
+        CallbackFacebookSuccess,CallbackGoogleSuccess
     } = props
     const { navigate } = navigation
     const { type } = navigation.state.params
@@ -229,17 +230,22 @@ function LoginScreen(props) {
             setvisible(true)
             setloggedIn(true)
             CheckEmailRequest(email)
+            console.log('email',email)
         }else if( type==='phone'){
+            setloggedIn(true)
             setvisible(true)
             CheckPhoneRequest(email)
+            console.log('email',email)
         }
     }
     
     const Register =()=>{
-        if(validateEmail && password.length>7) {
+        // if(validateEmail && password.length>7) {
             CheckEmailRequest(email)
+            // setavail(true)
             setloggedIn(true)
-        }
+            console.log('email',email)
+        // }
     }
     useEffect(()=>{
         login && console.log('LOGIN BOIS',login.status)
@@ -255,10 +261,7 @@ function LoginScreen(props) {
             //     screen: 'MainScreen',
             //     initial: true,
             // })
-            // Alert.alert('Login Success')
         }
-        
-       
     },[login])
 
 
@@ -279,6 +282,7 @@ function LoginScreen(props) {
         if(callbackgoogle){
             if(callbackgoogle.status){
                 Alert.alert('Login Success')
+                CallbackGoogleSuccess(null)
             }else{
                 navigate('SignUpScreen',{ bundleLogin : bundleLogin})
             }
@@ -298,6 +302,7 @@ function LoginScreen(props) {
         if(callbackfacebook){
             if(callbackfacebook.status){
                 Alert.alert('Login Success')
+                CallbackFacebookSuccess(null)
             }else{
                 navigate('SignUpScreen',{ bundleLogin :bundleLogin})
             }
@@ -316,19 +321,19 @@ function LoginScreen(props) {
     },[callbackfacebook])
 
     useEffect(()=>{
-        if(check){
-            if(loggedIn){
-                CheckEmail(setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess)
-            }
+        console.log('check email',check )
+        if(check && loggedIn){
+            CheckEmail(setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess)
         }
-    },[check])
+    },[check,loggedIn])
 
     useEffect(()=>{
+        console.log('check checkPhone')
         if(checkPhone && loggedIn){
             console.log(checkPhone)
             CheckPhone(setavailPhone,checkPhone,setsubmitted,LoginRequest,email,password,setvisible)
         }
-    },[checkPhone])
+    },[checkPhone,loggedIn])
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>

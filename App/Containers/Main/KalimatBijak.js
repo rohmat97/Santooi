@@ -33,7 +33,7 @@ function KalimatBijak(props) {
     const [onfetch, setonfetch] = useState(false);
     const [listEmoticon, setlistEmoticon] = useState([])
     const [manualPicked, setmanualPicked] = useState([])
-
+    let emoticonList =picked ? picked.concat(manualPicked):manualPicked?manualPicked:null
     let page =1
     useEffect(()=>{
         StatusRequest({
@@ -105,7 +105,7 @@ function KalimatBijak(props) {
         setlistKalimat([])
             const payload= {
                 "fav":filterByFavorite?1:0,
-                "filter":noFilter?'':filterByLatest?'DESC':'ASC',
+                "filter":noFilter?'':filterByLatest?'ASC':'DESC',
                 "token":token.data.access_token,
                 "page":1
             }
@@ -113,19 +113,19 @@ function KalimatBijak(props) {
             KalimatBijakRequest(payload)
     }, [filterByFavorite])
 
-    useEffect(() => {
-        if(!noFilter){
-        setlistKalimat([])
-        const payload= {
-            "fav":filterByFavorite?1:0,
-            "filter":filterByLatest?'DESC':'ASC',
-            "token":token.data.access_token,
-            "page":1
-        }
-        console.log(payload)
-        KalimatBijakRequest(payload)
-    }
-}, [filterByLatest])
+//     useEffect(() => {
+//         if(!noFilter){
+//             setlistKalimat([])
+//             const payload= {
+//                 "fav":filterByFavorite?1:0,
+//                 "filter":filterByLatest?'ASC':'DESC',
+//                 "token":token.data.access_token,
+//                 "page":1
+//             }
+//             console.log(payload)
+//             KalimatBijakRequest(payload)
+//     }
+// }, [filterByLatest])
 
     useEffect(() => {
         if(noFilter){
@@ -138,9 +138,19 @@ function KalimatBijak(props) {
             }
             console.log(payload)
             KalimatBijakRequest(payload)
+        }else{
+            setlistKalimat([])
+            const payload= {
+                "fav":filterByFavorite?1:0,
+                "filter":filterByLatest?'ASC':'DESC',
+                "token":token.data.access_token,
+                "page":1
+            }
+            console.log(payload)
+            KalimatBijakRequest(payload)
         }
        
-    }, [noFilter])
+    }, [noFilter,filterByLatest])
 
     useEffect(() => {
         setonfetch(kalimatfetching)
@@ -167,7 +177,7 @@ function KalimatBijak(props) {
         if(filterByFavorite){
             const payload1= {
                 "fav":filterByFavorite?1:0,
-                "filter":filterByLatest?'DESC':'ASC',
+                "filter":filterByLatest?'ASC':'DESC',
                 "token":token.data.access_token,
                 "page":1
             }
@@ -303,9 +313,9 @@ function KalimatBijak(props) {
                           <View
                             style={{borderWidth:1, minHeight:80, width:Screen.width*0.9, borderRadius:20,paddingBottom:12, alignItems:'flex-start',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
                             {
-                            picked && picked.length>0?
+                            emoticonList && emoticonList.length>0?
                             <FlatList
-                                data={picked}
+                                data={emoticonList}
                                 renderItem={renderItem}
                                 keyExtractor={item => item.id}
                                 contentContainerStyle={{maxWidth:Screen.width*0.875, margin:12}}
@@ -353,7 +363,7 @@ function KalimatBijak(props) {
                                         page +=1
                                         const payload= {
                                             "fav":filterByFavorite,
-                                            "filter":filterByLatest?'DESC':'ASC',
+                                            "filter":filterByLatest?'ASC':'DESC',
                                             "token":token.data.access_token,
                                             "page":page
                                         }
@@ -368,8 +378,6 @@ function KalimatBijak(props) {
                             }}>
                                 <View style={{minHeight:155, height:undefined, backgroundColor:'#67308F', width:Screen.width*0.9,justifyContent:'center',alignItems:'center',marginTop:16,paddingBottom:12,paddingTop:16}}>
                                     {
-                                    onfetch?
-                                        <ActivityIndicator size={32} color='white'/>:
                                         listKalimat &&listKalimat.length>0 ? listKalimat.map((data,index) =>{
                                             // console.log('data kalimat',data) 
                                             if(data){
@@ -402,6 +410,7 @@ function KalimatBijak(props) {
                                         }):
                                         !onfetch &&<Text style={{color:'white',padding:2, fontSize:24}} numberOfLines={5}>Belum ada Favorit</Text>
                                         } 
+                                        {onfetch && <ActivityIndicator size={32} color='white'/>}
                                 </View>
                             </ScrollView>
                         </View>  

@@ -144,7 +144,9 @@ function SignUp(props) {
     useEffect(() => {
         if (regist && regist.status) {
             // console.log('register',regist)
-            setvisible(false)
+            setTimeout(() => {
+                setvisible(false)
+            }, 1000)
             navigation.navigate('Main', {
                 screen: 'MainScreen'
             })
@@ -184,7 +186,7 @@ function SignUp(props) {
                 }
                 console.log(params)
                 // setTimeout(() => {
-                    // RegisterRequest(params)
+                    RegisterRequest(params)
                 // }, 1000);
             }else{
                 setavail(false)

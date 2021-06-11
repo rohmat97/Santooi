@@ -27,7 +27,6 @@ export const CheckEmail =(setavail, type, check,email,password,LoginRequest,setv
             setavail(true)
         }
     }
-
     console.log('check',check)
     CheckEmailSuccess(null)
 }

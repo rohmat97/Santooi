@@ -85,8 +85,8 @@ export const OverlayHomepage =({visible,toggleOverlay,listEmoticon, picked, Remo
                     {
                         Platform.OS==='ios'?
                         <TextInput 
-                            value={quote && quote.length>0?quote:'Bagaimana Perasaanmu Hari ini'}
-                            // placeholder=""   
+                            value={quote}
+                            placeholder="Bagaimana Perasaanmu Hari ini"   
                             style={{minHeight:Screen.height*0.15,backgroundColor:'transparent'}}
                             theme={{
                                 colors: {

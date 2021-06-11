@@ -40,9 +40,11 @@ export const OverlayBerhitung = ({ visible, toggleOverlay, music, setMusic, pema
                     onMomentumScrollEnd={(event)=>{
                         if (isCloseToBottom(event.nativeEvent)) {
                             if(listMusic.current_page !== listMusic.last_page){
-                                // console.log(`page`,listKalimatBijak.current_page + ' === '+listKalimatBijak.last_page)
-                                page +=1
-                                fetchMusic(page)
+                                page += 1
+                                console.log(`page`,listMusic.current_page + ' === '+listMusic.last_page)
+                                fetchMusic(listMusic.current_page+1)
+                            }else{
+                                console.log(`page`,listMusic.current_page + ' === '+listMusic.last_page)
                             }
                             // }
                             
