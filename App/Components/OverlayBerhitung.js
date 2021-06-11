@@ -23,20 +23,21 @@ export const OverlayBerhitung = ({ visible, toggleOverlay, music, setMusic, pema
         <Overlay
             isVisible={visible}
             onBackdropPress={()=>toggleOverlay()}
-            overlayStyle={{ width: Screen.width * 0.9, borderRadius: 20, minHeight: Screen.height * 0.4, padding: Screen.width * 0.05,height:Screen.height*0.85, }}
+            overlayStyle={{ width: Screen.width * 0.9, borderRadius: 20, minHeight: Screen.height * 0.4, padding: Screen.width * 0.05,maxHeight:Screen.height*0.85, }}
         >
             {/* <ScrollView style={{ height:Screen.height*0.8}}> */}
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
                     <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.25, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>
                         <Text style={{ color: 'white', fontWeight: 'bold' }}>Musik</Text>
                     </View>
-                    <TouchableOpacity onPress={toggleOverlay}>
+                    <TouchableOpacity onPress={()=>toggleOverlay()}>
                         <Text style={{ color: '#67308F', marginLeft: 10, fontWeight: 'bold' }}>OK</Text>
                     </TouchableOpacity>
                 </View>
 
 
                 <ScrollView
+                    style={{maxHeight:Screen.height*0.3}}
                     onMomentumScrollEnd={(event)=>{
                         if (isCloseToBottom(event.nativeEvent)) {
                             if(listMusic.current_page !== listMusic.last_page){
@@ -49,8 +50,6 @@ export const OverlayBerhitung = ({ visible, toggleOverlay, music, setMusic, pema
                             // }
                             
                         }
-                        
-                    
                     }}
                 >
                 <View style={{ flexDirection: 'row', justifyContent:'space-between',alignItems: 'center', marginBottom: 10 }}>

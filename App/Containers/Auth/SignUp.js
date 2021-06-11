@@ -144,12 +144,13 @@ function SignUp(props) {
     useEffect(() => {
         if (regist && regist.status) {
             // console.log('register',regist)
-            setTimeout(() => {
-                setvisible(false)
-            }, 1000)
+           
             navigation.navigate('Main', {
                 screen: 'MainScreen'
             })
+            setTimeout(() => {
+                setvisible(false)
+            }, 1000)
         }
         if (registerror) {
             setvisible(false)
