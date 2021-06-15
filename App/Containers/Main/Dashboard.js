@@ -8,8 +8,10 @@ import { Colors } from '../../Themes'
 import images from '../../Themes/Images';
 import { style } from '../../Components/OverlayHomepage';
 
-export const Dashboard =({ImageProfile,token,styles,picked,toggleOverlay,navigate,quote,manualPicked}) =>{
-    let emoticon =picked ? picked.concat(manualPicked):manualPicked?manualPicked:null
+export const Dashboard =({ImageProfile,token,styles,picked,toggleOverlay,navigate,quote,manualPicked,getUnique}) =>{
+    let emoticon =picked ? picked.concat(manualPicked):manualPicked?manualPicked:[]
+    let uniqEmot =[...new Set(emoticon)]
+    // console.log('uniqEmot',uniqEmot)
     return(
         <ScrollView>
               <View style={[styles.section, {marginBottom:12}]} >
@@ -48,9 +50,9 @@ export const Dashboard =({ImageProfile,token,styles,picked,toggleOverlay,navigat
                     <View
                       style={{borderWidth:1, minHeight:80, width:Screen.width*0.9, marginBottom:Screen.height*0.1, borderRadius:20,paddingBottom:12, alignItems:'flex-start',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
                       {
-                       emoticon && emoticon.length>0?
+                       uniqEmot && uniqEmot.length>0?
                       <FlatList
-                        data={emoticon}
+                        data={uniqEmot}
                         renderItem={renderItem}
                         keyExtractor={item => item.id}
                         contentContainerStyle={{maxWidth:Screen.width*0.875, margin:12}}
@@ -67,9 +69,9 @@ export const Dashboard =({ImageProfile,token,styles,picked,toggleOverlay,navigat
                           :null
                       }
                       </View> */}
-                      <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:emoticon && emoticon.length>0?12:quote?14:0}} numberOfLines={4}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
+                      <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:uniqEmot && uniqEmot.length>0?12:quote?14:0}} numberOfLines={4}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
                       {
-                        emoticon && emoticon.length>0 || quote?
+                        uniqEmot && uniqEmot.length>0 || quote?
                         <View style={{width:'100%', justifyContent:'flex-end', flexDirection:'row', marginTop:24}}>
                         <TouchableOpacity 
                           onPress={()=>toggleOverlay(null)}

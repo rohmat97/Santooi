@@ -7,14 +7,14 @@ import { TextInput } from "react-native-paper";
 import { Colors, Images } from "../Themes";
 import { Screen } from "../Transforms/Screen";
 export const OverlayHomepage =({visible,toggleOverlay,listEmoticon, picked, RemovePickedEmotion,ValidateTextForEmoticon,quote,manualPicked, setmanualPicked})=>{
-    Object.size = function(obj) {
-        var size = 0,
-          key;
-        for (key in obj) {
-          if (obj.hasOwnProperty(key)) size++;
-        }
-        return size;
-      };
+    // Object.size = function(obj) {
+    //     var size = 0,
+    //       key;
+    //     for (key in obj) {
+    //       if (obj.hasOwnProperty(key)) size++;
+    //     }
+    //     return size;
+    //   };
     // let sizeOfWord = 0
     // const MapingValidationEmoticonByText = (filter) =>{
     //     // console.log('filter',filter)
@@ -41,8 +41,11 @@ export const OverlayHomepage =({visible,toggleOverlay,listEmoticon, picked, Remo
                     data={listEmoticon}
                     renderItem={({item}) => {
                         // console.log('check',check)
-                        const manual = manualPicked && manualPicked.filter(data => data === item)
-                        const auto = picked && picked.filter(data => data === item)
+                        const manual = manualPicked && manualPicked.length>0 && manualPicked.filter(data => {return data.id === item.id})
+                        const auto = picked && picked.length>0 && picked.filter(data =>{return data.id === item.id})
+                        const isExistOnAuto = auto && auto.find(data => data.id === item.id)
+                        // console.log('isExistOnAuto',isExistOnAuto)
+                        // console.log('auto',auto)
                         return(
                         <TouchableOpacity onPress={()=>{
                             // console.log(item.name)
@@ -50,11 +53,11 @@ export const OverlayHomepage =({visible,toggleOverlay,listEmoticon, picked, Remo
                             if(manualPicked.length>0){
                                 if(manual && manual.length>0) {
                                     RemovePickedEmotion(manual)
-                                }else{
+                                }else if(!isExistOnAuto){
                                     setmanualPicked([...manualPicked,item])
                                 }
-                            }else{
-                                setmanualPicked([...manualPicked,item]) 
+                            }else if(!isExistOnAuto){
+                                setmanualPicked([...manualPicked,item])
                             }
                         }}>
                             <View style={[{justifyContent:'space-around',alignItems:'center',marginTop:Screen.width*0.005, marginRight:Screen.width*0.015,height:Screen.width*0.2,width:Screen.width*0.2},(manual && manual.length>0) || (auto && auto.length>0)?{ backgroundColor:'rgba(0, 0, 0, 0.1)'}:{}]}>

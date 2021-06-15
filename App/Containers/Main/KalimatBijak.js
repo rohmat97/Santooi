@@ -22,7 +22,6 @@ function KalimatBijak(props) {
     const { navigation, token, listKalimatBijak, KalimatBijakRequest,addFavorite, addFavoriteRequest,status,UpdateStatusRequest,emoticon,StatusRequest,kalimatfetching } = props
     const { pop } = navigation
     const [visible, setvisible] = useState(false)
-    const [filter, setfilter] = useState()
     const [filterByLatest, setfilterByLatest] = useState(false)
     const [filterByFavorite, setfilterByFavorite] = useState(false)
     const [noFilter, setnoFilter] = useState(true)
@@ -33,7 +32,7 @@ function KalimatBijak(props) {
     const [onfetch, setonfetch] = useState(false);
     const [listEmoticon, setlistEmoticon] = useState([])
     const [manualPicked, setmanualPicked] = useState([])
-    let emoticonList =picked ? picked.concat(manualPicked):manualPicked?manualPicked:null
+    const [emoticonList, setemoticonList] =useState([])
     let page =1
     useEffect(()=>{
         StatusRequest({
@@ -60,11 +59,17 @@ function KalimatBijak(props) {
         }
     },[])
 
+    useEffect(() => {
+        setemoticonList(picked ? picked.concat(manualPicked):manualPicked?manualPicked:null)
+    }, [picked,manualPicked])
     useEffect(()=>{
         if(status){
           // console.log('status',status.emoticons)
+        setpicked([])
+        setmanualPicked([])
           setquote(status.status)
-          setpicked(status.emoticons)
+        //   setpicked(status.emoticons)
+          validationEmoticon(null,status)
         }
         // 
       },[status])
@@ -233,7 +238,7 @@ function KalimatBijak(props) {
       const param = {
         "id":token.data.user.id,
         "body":{
-          "emoticons":pickedEmoticon,
+          "emoticons":[...new Set(pickedEmoticon)],
           "status":quote
         },
         "token":token.data.access_token
@@ -243,9 +248,18 @@ function KalimatBijak(props) {
       console.log('show dpwn')
       // console.log('param',param)
     }else{
-      setVisibleStatus(!visibleStatus);
-      ValidateTextForEmoticon(quote)
-      console.log('show up')
+
+        setVisibleStatus(!visibleStatus); 
+        if(quote && status){
+            validationEmoticon(quote, status)
+            console.log('show up 2')
+          } else if(quote){
+            ValidateTextForEmoticon(quote)
+            console.log('show up 1')
+          }
+    //   setVisibleStatus(!visibleStatus);
+    //   ValidateTextForEmoticon(quote)
+    //   console.log('show up')
     }
   };
 
@@ -262,6 +276,7 @@ function KalimatBijak(props) {
 
   const ValidateTextForEmoticon =(text) =>{
     setquote(text)
+    setpicked([])
     if(text){
         const filtertext = text.split(' ')
         const filter =listEmoticon.filter(dat => filtertext.find(text =>{
@@ -282,6 +297,47 @@ function KalimatBijak(props) {
         }
     } 
 }
+
+
+const validationEmoticon =(stat,status) =>{
+    if(stat && status){
+        const filtertext = stat.split(' ')
+        const filterAuto =status && status.emoticons &&  status.emoticons.filter(dat => filtertext.find(text =>{
+          // console.log(dat.name.toLowerCase()+ ' = ' + text.toLowerCase())
+          return dat.name.toLowerCase() === text.toLowerCase()
+        }))
+        const filterManualPicked = status && status.emoticons && status.emoticons.filter(dat => filtertext.find(text =>{
+          // console.log(dat.name.toLowerCase() + ' = ' + text.toLowerCase())
+          return dat.name.toLowerCase() !== text.toLowerCase()
+        }))
+      setpicked(filterAuto)
+      // console.log('filterAuto',filterAuto)
+      setmanualPicked(filterManualPicked)
+    } else if(status) {
+      console.log('status', status)
+      const filtertext = status && status.status && status.status.split(' ')
+      if(filtertext){
+        const filterAuto =status && status.emoticons &&  status.emoticons.filter(dat => filtertext.find(text =>{
+            // console.log(dat.name.toLowerCase()+ ' = ' + text.toLowerCase())
+            return dat.name.toLowerCase() === text.toLowerCase()
+        }))
+        const filterManualPicked = status && status.emoticons && status.emoticons.filter(dat => filtertext.find(text =>{
+          console.log(dat.name.toLowerCase() + ' = ' + text.toLowerCase())
+          return dat.name.toLowerCase() !== text.toLowerCase()
+        }))
+        const filter = filterManualPicked && filterManualPicked.filter(dat => filterAuto.find(text =>{
+          // console.log('filterManualPicked',dat)
+          // console.log('filterAuto',text)
+          return dat.id !== text.id
+        }))
+        setpicked(filterAuto)
+        setmanualPicked(filter)
+      }else{
+        setmanualPicked(status.emoticons)
+      }
+    }
+   
+  }
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -315,7 +371,7 @@ function KalimatBijak(props) {
                             {
                             emoticonList && emoticonList.length>0?
                             <FlatList
-                                data={emoticonList}
+                                data={[... new Set(emoticonList)]}
                                 renderItem={renderItem}
                                 keyExtractor={item => item.id}
                                 contentContainerStyle={{maxWidth:Screen.width*0.875, margin:12}}
@@ -335,7 +391,7 @@ function KalimatBijak(props) {
                             
                                 <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:picked && picked.length>0?12:quote?14:0}}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
                             {
-                                picked && picked.length>0 || quote?
+                                picked && picked.length>0 || quote || manualPicked && manualPicked.length>0?
                                 <View style={{width:'100%', justifyContent:'flex-end', flexDirection:'row', marginTop:24}}>
                                     <TouchableOpacity 
                                     onPress={()=>toggleOverlay(null)}
