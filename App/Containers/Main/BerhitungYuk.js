@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import { ScrollView, View, Image, Text, TouchableOpacity,ImageBackground } from 'react-native'
 import SoundPlayer from 'react-native-sound-player'
 import { connect } from 'react-redux';
+import KeepAwake from 'react-native-keep-awake';
+import { bindActionCreators } from 'redux';
 //redux
 import MusicRedux from '../../Redux/Berhitung/MusicRedux';
 import TokenRedux from '../../Redux/Authentication/TokenRedux'
@@ -12,7 +14,6 @@ import styles from '../Styles/LaunchScreenStyles'
 import Colors from '../../Themes/Colors'
 import { Screen } from '../../Transforms/Screen'
 import { OverlayBerhitung } from '../../Components/OverlayBerhitung';
-import { bindActionCreators } from 'redux';
 
 function BerhitungYuk(props) {
     const { navigation, dataMusic, MusicRequest, token } = props
@@ -20,6 +21,7 @@ function BerhitungYuk(props) {
     const [visible, setVisible] = useState(false);
     const [Minute, setMinute] = useState(0);
     const [Second, setSecond] = useState(0);
+    const [miliSecond, setmiliSecond] = useState(0);
     const [start, setstart] = useState(false);
     const [reset, setreset] = useState(false);
     const [played, setplayed] = useState(false);
@@ -122,35 +124,41 @@ function BerhitungYuk(props) {
             // console.log(Second.charAt(0))
             setPlay('PAUSE')
             timerRef.current = setTimeout(() => {
+                if(miliSecond>59){
+                    setmiliSecond(0)
+                    setSecond((parseInt(Second)+1).toString())
+                }else{
+                    if(miliSecond.length>1){
+                        setmiliSecond((parseInt(miliSecond)+1).toString())
+                    }else{
+                    let parsing =(parseInt(miliSecond)+1)
+                    setmiliSecond(parsing)
+                    }
+                }
                 if(Second>59){
                     setSecond(0)
                     setMinute(parseInt(Minute)+1)
-                }else{
-                    if(Second.length>1){
-                        setSecond((parseInt(Second)+1).toString())
-                    }else{
-                    let parsing =(parseInt(Second)+1)
-                    setSecond(parsing)
-                    }
                 }
-                if(duration>0){
+                if(duration>0 && miliSecond>59){
                     setduration(duration-1)
                 }
-            }, 1000);
+            }, 10);
         }else{
             if(reset){
                 clearTimeout(timerRef.current)
                 setreset(false)
                 setSecond(0)
                 setMinute(0)
+                setmiliSecond(0)
                 SoundPlayer.stop()
             }
         }
         
-    },[start,reset,Second])
+    },[start,reset,Second,miliSecond])
 
     useEffect(()=>{
         MusicRequest({"token":token.data.access_token,'page':1})
+        KeepAwake.deactivate()
     },[])
     useEffect(()=>{
         // console.log('music',dataMusic.data)
@@ -187,10 +195,12 @@ function BerhitungYuk(props) {
                         </TouchableOpacity>
                     </View>
                     <ScrollView>
-                        <Text style={{ color: '#67308F', fontSize: 110, textAlign: 'center', marginVertical: Screen.width * 0.13 }} numberOfLines={1}>
+                        <Text style={{ color: '#67308F', fontSize: 50, textAlign: 'center', marginVertical: Screen.width * 0.13 }} numberOfLines={1}>
                                 <Text>{Minute>9?Minute:'0'+Minute}</Text>
                                 <Text>:</Text>
                                 <Text>{Second>9?Second:'0'+Second }</Text>
+                                <Text>:</Text>
+                                <Text>{miliSecond>9?miliSecond:'0'+miliSecond }</Text>
                         </Text>
                         <TouchableOpacity onPress={()=> Start(!start)}>
                             <View style={{width:Screen.width, alignSelf: 'center',justifyContent:'center'}}>
@@ -211,6 +221,7 @@ function BerhitungYuk(props) {
                 </View>
             </View>
             <OverlayBerhitung visible={visible} toggleOverlay={toggleOverlay} music={music} setMusic={setMusic} pemandu={pemandu} setPemandu={setPemandu} listMusic={listMusic} playSound={playSound} MusicRequest={MusicRequest} token={token.data.access_token} playlistMusic={playlistMusic}/>
+            <KeepAwake />
         </TemplateBackground>
     )
 }

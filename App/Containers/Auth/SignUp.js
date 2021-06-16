@@ -19,7 +19,7 @@ import images from '../../Themes/Images';
 import { Colors, Fonts } from '../../Themes'
 
 function SignUp(props) {
-    const { navigation, RegisterRequest, regist, registerror,check, CheckPhoneRequest } = props
+    const { navigation, RegisterRequest, regist, registerror,check, CheckPhoneRequest,RegisterSuccess,CheckPhoneSuccess } = props
     const { navigate, getParam } = navigation
     const [name, setName] = useState('')
     const [state, setState] = useState(0)
@@ -144,7 +144,8 @@ function SignUp(props) {
     useEffect(() => {
         if (regist && regist.status) {
             // console.log('register',regist)
-           
+            RegisterSuccess(null)
+            CheckPhoneSuccess(null)
             navigation.navigate('Main', {
                 screen: 'MainScreen'
             })

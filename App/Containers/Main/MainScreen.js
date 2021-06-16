@@ -16,7 +16,7 @@ import { Dashboard } from './Dashboard'
 import AccountScreen from '../Account/AccountScreen'
 
 function MainScreen (props) {
-  const { EmoticonRequest, emoticon, token,navigation, status,UpdateStatusRequest,StatusRequest } = props
+  const { EmoticonRequest, emoticon, token,navigation, status,UpdateStatusRequest,StatusRequest,UpdateStatusSuccess,UpdateStatus,UpdateStatusfetching } = props
   const { navigate } = navigation
   const [visible, setVisible] = useState(false);
   const [quote, setquote]= useState('')
@@ -25,6 +25,7 @@ function MainScreen (props) {
   const [manualPicked, setmanualPicked] = useState([])
   const [ImageProfile, setImageProfile] = useState()
   const [tab,settab] = useState(0)
+  const [visibleStatus,setvisibleStatus] = useState(false)
  
   //listEmoticon
   const toggleOverlay = (payload) => {
@@ -36,13 +37,15 @@ function MainScreen (props) {
       // manualPicked && manualPicked.map(data=>{
       //   pickedEmoticon.push({"id":data.id})
       // })
+      UpdateStatusSuccess([])
+      console.log('submit emoticon',pickedEmoticon)
       const param = {
-        "id":token.data.user.id,
+        "id":token && token.data.user.id,
         "body":{
           "emoticons":pickedEmoticon,
           "status":quote
         },
-        "token":token.data.access_token
+        "token":token && token.data.access_token
       }
       setVisible(!visible);
       UpdateStatusRequest(param)
@@ -50,11 +53,11 @@ function MainScreen (props) {
     }else{
       setVisible(!visible); 
       if(quote && status){
-        validationEmoticon(quote, status)
         console.log('show up 2')
+        validationEmoticon(quote, status)
       } else if(quote){
-        ValidateTextForEmoticon(quote)
         console.log('show up 1')
+        ValidateTextForEmoticon(quote)
       }
     }
   };
@@ -73,39 +76,43 @@ function MainScreen (props) {
     if(stat && status){
         console.log('status 1')
         const filtertext = stat.split(' ')
-        const filterAuto =status && status.emoticons &&  status.emoticons.filter(dat => filtertext.find(text =>{
+        let emoticons =status && [...new Set(status.emoticons)]
+        const filterAuto =emoticons.filter(dat => filtertext.find(text =>{
           // console.log(dat.name.toLowerCase()+ ' = ' + text.toLowerCase())
           return dat.name.toLowerCase() === text.toLowerCase()
         }))
-        const filterManualPicked = status && status.emoticons && status.emoticons.filter(dat => filtertext.find(text =>{
-          // console.log(dat.name.toLowerCase() + ' = ' + text.toLowerCase())
-          return dat.name.toLowerCase() !== text.toLowerCase()
-        }))
-      setpicked(filterAuto)
-      // console.log('filterAuto',filterAuto)
-      setmanualPicked(filterManualPicked)
-      
-    } else if(status) {
-      console.log('status 2', status)
-      const filtertext = status && status.status && status.status.split(' ')
-        if(filtertext){
-        const filterAuto =status && status.emoticons &&  status.emoticons.filter(dat => filtertext.find(text =>{
-            // console.log(dat.name.toLowerCase()+ ' = ' + text.toLowerCase())
-            return dat.name.toLowerCase() === text.toLowerCase()
-        }))
-        const filterManualPicked = status && status.emoticons && status.emoticons.filter(dat => filtertext.find(text =>{
+        const filterManualPicked = emoticons.filter(dat => filtertext.find(text =>{
           // console.log(dat.name.toLowerCase() + ' = ' + text.toLowerCase())
           return dat.name.toLowerCase() !== text.toLowerCase()
         }))
         const filter = filterManualPicked && filterManualPicked.filter(dat => filterAuto.find(text =>{
-          // console.log('filterManualPicked',dat)
+          // console.log('filter manual manual === '+dat.id+" --- "+text.id)
           return dat.id !== text.id
         }))
-        setpicked(filterAuto)
-        // console.log('filterAuto',filterAuto)
-        setmanualPicked(filter)
+        setpicked( [...new Set(filterAuto)])
+      setmanualPicked(filter)
+      
+    } else if(status) {
+      console.log('status 2-1')
+      const filtertext = status && status.status && status.status.split(' ')
+      let emoticons = status && [...new Set(status.emoticons)]
+      let emoticonManualPick = []
+        if(filtertext){
+          console.log('status 2-2')
+        const filterAuto =emoticons.filter(dat => filtertext.find(text =>{
+            // console.log(dat.name.toLowerCase()+ ' = ' + text.toLowerCase())
+            return dat.name.toLowerCase() === text.toLowerCase()
+        }))
+        emoticons.map(dat => {
+          if(!filterAuto.includes(dat)){
+            emoticonManualPick.push(dat)
+          }
+        })
+       console.log('filterManualPicked',emoticonManualPick)
+        setpicked( [...new Set(filterAuto)])
+        setmanualPicked(emoticonManualPick)
       }else{
-        setmanualPicked(status.emoticons)
+        setmanualPicked(emoticons)
       }
     }
    
@@ -134,12 +141,18 @@ function MainScreen (props) {
     } 
 }
   useEffect(()=>{
-    StatusRequest({
-      "id":token.data.user.id,
-      "token":token.data.access_token
-    })
-    EmoticonRequest(token.data.access_token)
-    setImageProfile(token.data.user.photo && token.data.user.photo.url)
+    setquote()
+    setpicked([])
+    setmanualPicked([])
+    if(token){
+      StatusRequest({
+        "id":token && token.data.user.id,
+        "token":token && token.data.access_token
+      })
+    }
+    
+    EmoticonRequest(token && token.data.access_token)
+    setImageProfile(token && token.data.user.photo && token.data.user.photo.url)
   },[])
   // useEffect(()=>{
   //   if(token){
@@ -158,15 +171,43 @@ function MainScreen (props) {
   
   useEffect(()=>{
     if(status){
-      // console.log('status',status.emoticons)
-      setpicked([])
-      setmanualPicked([])
+      // console.log('status',status)
       setquote(status.status)
       validationEmoticon(null,status)
       // setpicked(status.emoticons)
     }
     // 
   },[status])
+
+  useEffect(()=>{
+
+    console.log('filterAuto',picked)
+
+  },[picked])
+  useEffect(()=>{
+
+    console.log('filterManualPicked',manualPicked)
+  },[manualPicked])
+  useEffect(()=>{
+    if(UpdateStatus){
+      UpdateStatusSuccess(null)
+      StatusRequest({
+        "id":token.data.user.id,
+        "token":token.data.access_token
+      })
+    }
+  },[UpdateStatus])
+
+  useEffect(()=>{
+    if(UpdateStatusfetching){
+      setvisibleStatus(UpdateStatusfetching)
+    }else{
+      setTimeout(() => {
+        
+    setvisibleStatus(UpdateStatusfetching)
+      }, 500);
+    }
+  },[UpdateStatusfetching])
 
     return (
       <TemplateBackground cover={true}>
@@ -175,13 +216,15 @@ function MainScreen (props) {
               tab === 0?
                 <Dashboard 
                 ImageProfile={ImageProfile} 
-                token={token} 
+                token={token && token} 
                 styles={styles} 
                 picked={picked} 
                 manualPicked={manualPicked} 
                 toggleOverlay={toggleOverlay} 
                 navigate={navigate} 
-                quote={quote} /> :
+                quote={quote} 
+                UpdateStatusfetching={visibleStatus}
+                /> :
                 tab === 1 ?
                   <AccountScreen props={props} />   :
                   tab === 2? 
@@ -200,7 +243,9 @@ const mapStateToProps = (state) => {
   return {
     emoticon: state.emoticon.payload,
     token: state.token.payload,
-    status: state.status.payload
+    status: state.status.payload,
+    UpdateStatus: state.UpdateStatus.payload,
+    UpdateStatusfetching: state.UpdateStatus.fetching
   }
 }
 

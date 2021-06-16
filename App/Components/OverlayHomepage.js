@@ -25,7 +25,7 @@ export const OverlayHomepage =({visible,toggleOverlay,listEmoticon, picked, Remo
     return (
         <Overlay 
             isVisible={visible} 
-            onBackdropPress={()=>toggleOverlay(null)}
+            onBackdropPress={()=>toggleOverlay(true)}
             overlayStyle={{width: Screen.width*0.9,paddingVertical:24, borderRadius:20, minHeight: Screen.height*0.4}}
             >
      
