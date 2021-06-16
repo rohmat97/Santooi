@@ -41,9 +41,11 @@ function BerhitungYuk(props) {
         setstart(payload)
         if(music && payload){
             if(played){
+                KeepAwake.activate()
                 SoundPlayer.resume()
                 console.log('resume')
             }else{
+                KeepAwake.deactivate()
                 SoundPlayer.stop()
                 setTimeout(() => {
                     setplayed(true)
@@ -56,6 +58,7 @@ function BerhitungYuk(props) {
             console.log('pause')
             setPlay('RESUME')
             SoundPlayer.pause()
+            KeepAwake.deactivate()
         }
     }
     const playSound =(payload,trial)=>{
@@ -63,7 +66,9 @@ function BerhitungYuk(props) {
             SoundPlayer.stop()
             setTimeout(() => {
                 SoundPlayer.playUrl(payload)
+                KeepAwake.activate()
                 setTimeout(() => {
+                    KeepAwake.deactivate()
                     SoundPlayer.stop()
                 }, 15000);
             }, 1000);
@@ -76,6 +81,7 @@ function BerhitungYuk(props) {
                   console.log('failed to load the sound', error);
                   return;
                 }
+                KeepAwake.activate()
                 this.soundPlayer.play()
               })
         }
@@ -97,7 +103,7 @@ function BerhitungYuk(props) {
         // console.log(currentDate.getHours()+":"+currentDate.getMinutes()+":"+currentDate.getSeconds())
         _onFinishedPlayingSubscription = SoundPlayer.addEventListener('FinishedPlaying', ({ success }) => {
             console.log('finished playing', success)
-            // playSound()
+            playSound()
           })
           _onFinishedLoadingSubscription = SoundPlayer.addEventListener('FinishedLoading', ({ success }) => {
             console.log('finished loading', success)
@@ -123,6 +129,7 @@ function BerhitungYuk(props) {
         if(start){
             // console.log(Second.charAt(0))
             setPlay('PAUSE')
+            KeepAwake.activate()
             timerRef.current = setTimeout(() => {
                 if(miliSecond>59){
                     setmiliSecond(0)
@@ -145,6 +152,7 @@ function BerhitungYuk(props) {
             }, 10);
         }else{
             if(reset){
+                KeepAwake.deactivate()
                 clearTimeout(timerRef.current)
                 setreset(false)
                 setSecond(0)
@@ -214,6 +222,7 @@ function BerhitungYuk(props) {
                             setreset(true)
                             setplayed(false)
                             setPlay('START')
+                            KeepAwake.deactivate()
                         }}>
                             <Image source={images.reset} style={{ width: Screen.width * 0.5, height: Screen.width * 0.18, alignSelf: 'center', marginVertical: Screen.width * 0.1 }} resizeMode='contain' />
                         </TouchableOpacity>
