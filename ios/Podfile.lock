@@ -757,6 +757,11 @@ PODS:
     - Yoga
   - RNScreens (2.18.1):
     - React-Core
+  - RNSound (0.11.0):
+    - React
+    - RNSound/Core (= 0.11.0)
+  - RNSound/Core (0.11.0):
+    - React
   - RNSoundPlayer (0.10.8):
     - React
   - RNVectorIcons (8.1.0):
@@ -831,6 +836,7 @@ DEPENDENCIES:
   - "RNGoogleSignin (from `../node_modules/@react-native-google-signin/google-signin`)"
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
+  - RNSound (from `../node_modules/react-native-sound`)
   - RNSoundPlayer (from `../node_modules/react-native-sound-player`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
@@ -957,6 +963,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
     :path: "../node_modules/react-native-screens"
+  RNSound:
+    :path: "../node_modules/react-native-sound"
   RNSoundPlayer:
     :path: "../node_modules/react-native-sound-player"
   RNVectorIcons:
@@ -1041,11 +1049,12 @@ SPEC CHECKSUMS:
   RNGoogleSignin: 111fd4792913208f338fe3178005f7a22e490ff9
   RNReanimated: 70f662b5232dd5d19ccff581e919a54ea73df51c
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
+  RNSound: c980916b596cc15c8dcd2f6ecd3b13c4881dbe20
   RNSoundPlayer: aa3c998a1f9beaa0f9fdd4485846a74a53df7d07
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 75fad105399d655bc541e8ae77ec7df62bb90b59
+PODFILE CHECKSUM: d10be7cccab4eddfa462974272af12993d7487fb
 
 COCOAPODS: 1.10.1

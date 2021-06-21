@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ScrollView, View, Image, Text, TouchableOpacity,ImageBackground } from 'react-native'
 import SoundPlayer from 'react-native-sound-player'
+import Sound from 'react-native-sound'
 import { connect } from 'react-redux';
 import KeepAwake from 'react-native-keep-awake';
 import { bindActionCreators } from 'redux';
@@ -17,14 +18,14 @@ import { OverlayBerhitung } from '../../Components/OverlayBerhitung';
 import StopWatch from '../../Components/StopWatch';
 import { Overlay } from 'react-native-elements';
 import { ActivityIndicator } from 'react-native';
+import { Platform } from 'react-native';
+import { AppState } from 'react-native';
+import { DeviceEventEmitter } from 'react-native';
 
 function BerhitungYuk(props) {
     const { navigation, dataMusic, MusicRequest, token } = props
     const { pop } = navigation
     const [visible, setVisible] = useState(false);
-    const [Minute, setMinute] = useState(0);
-    const [Second, setSecond] = useState(0);
-    const [miliSecond, setmiliSecond] = useState(0);
     const [start, setstart] = useState(false);
     const [reset, setreset] = useState(false);
     const [played, setplayed] = useState(false);
@@ -37,18 +38,26 @@ function BerhitungYuk(props) {
     const [statusPLay, setstatusPLay] = useState(false);
     const [statusLoad, setstatusLoad] = useState(false);
     const [isTrial, setisTrial] = useState(false);
+    const [soundAndroid, setsoundAndroid] = useState()
+    const [appState, setappState] =useState(AppState.currentState)
     const toggleOverlay = () => {
         setVisible(!visible);
         SoundPlayer.stop()
     };
     const timerRef = useRef(null);
+    let a: any = 0;
+    let b: any = 0;
 
     const Start =(payload) =>{
         setstart(payload)
         if(music && payload){
             if(played){
                 KeepAwake.activate()
-                SoundPlayer.resume()
+                if(Platform.OS==='ios'){
+                    SoundPlayer.resume()
+                }else{
+                    soundAndroid && soundAndroid.play();
+                }
                 console.log('resume')
             }else{
                 KeepAwake.deactivate()
@@ -56,31 +65,74 @@ function BerhitungYuk(props) {
                 console.log('play',music.file.url)
                 setTimeout(async() => {
                     await playSound(music.file.url)
-                    getInfo()
                 }, 500);
             }
         }else{
             console.log('pause')
             setPlay('RESUME')
-            SoundPlayer.pause()
+            if(Platform.OS==='ios'){
+                SoundPlayer.pause()
+            }else{
+                soundAndroid && soundAndroid.pause();
+            }
             KeepAwake.deactivate()
         }
     }
     const playSound =(payload,trial)=>{
-        if(trial && payload){
-            setisTrial(true)
-            KeepAwake.activate()
-            clearTimeout(timerRef.current)
-            console.log('data music trial', payload)
-            SoundPlayer.loadUrl(payload)
-            setstatusLoad(true)
-        }else if(payload){
-            clearTimeout(timerRef.current)
-            SoundPlayer.loadUrl(payload)
-            setstatusLoad(true)
-            console.log('data music', payload)
-            KeepAwake.activate()
+        if(Platform.OS==='ios'){
+            if(trial && payload){
+                setisTrial(true)
+                KeepAwake.activate()
+                clearTimeout(timerRef.current)
+                console.log('data music trial', payload)
+                SoundPlayer.loadUrl(payload)
+                setstatusLoad(true)
+            }else if(payload){
+                clearTimeout(timerRef.current)
+                SoundPlayer.loadUrl(payload)
+                setstatusLoad(true)
+                console.log('data music', payload)
+                KeepAwake.activate()
+            }
+        }else{
+            if(trial && payload){
+                setisTrial(true)
+                KeepAwake.activate()
+                clearTimeout(timerRef.current)
+                console.log('data music trial', payload)
+                const whoosh = new Sound(payload, null, (e) => {
+                    if (e) {
+                        console.log('error loading track:', e)
+                    } else {
+                        if (soundAndroid) soundAndroid.stop();
+                        setsoundAndroid(whoosh);
+                        whoosh.play()
+                        setstatusPLay(true)
+                    }
+                    })
+                setstatusLoad(true)
+            }else if(payload){
+                clearTimeout(timerRef.current)
+                const whoosh = new Sound(payload, null, async(e) => {
+                    if (e) {
+                        console.log('error loading track:', e)
+                    } else {
+                        if (soundAndroid) soundAndroid.stop();
+                        await setsoundAndroid(whoosh);
+                        setTimeout(() => {
+                            whoosh.play()
+                            setstatusPLay(true)
+                        }, 500);
+                        
+                    }
+                })
+                setstatusLoad(true)
+                console.log('data music', payload)
+                KeepAwake.activate()
+            }
+           
         }
+        
        
     }
     const getInfo = async()=> { // You need the keyword `async`
@@ -95,8 +147,34 @@ function BerhitungYuk(props) {
     let _onFinishedLoadingSubscription = null
     let _onFinishedLoadingFileSubscription = null
     let _onFinishedLoadingURLSubscription = null
+
+    const _handleAppStateChange = (nextAppState: any) => {
+        if (nextAppState == 'inactive') {
+          a = 1;
+        }
+        if (nextAppState == 'background') {
+          b = 1;
+          console.log(b ,a);
+          console.log('back a=handler',soundAndroid)
+          if(Platform.OS==='ios'){
+                SoundPlayer.stop()
+                Start(!start)
+            }else{
+                soundAndroid&& soundAndroid.stop();
+                Start(!start)
+            }
+        }
+        if (nextAppState == 'active') {
+          a = 0;
+          b = 0;
+        }
+      }
+
     useEffect(()=>{
         // console.log(currentDate.getHours()+":"+currentDate.getMinutes()+":"+currentDate.getSeconds())
+        MusicRequest({"token":token.data.access_token,'page':1})
+        KeepAwake.activate()
+       
         _onFinishedPlayingSubscription = SoundPlayer.addEventListener('FinishedPlaying', ({ success }) => {
             console.log('finished-playing', success)
             if(start){
@@ -116,6 +194,8 @@ function BerhitungYuk(props) {
             setstatusPLay(true)
             // SoundPlayer.play()
           })
+
+ 
           return () => {
             if (timerRef.current) {
               clearTimeout(timerRef.current);
@@ -124,7 +204,10 @@ function BerhitungYuk(props) {
             _onFinishedLoadingSubscription.remove()
             _onFinishedLoadingURLSubscription.remove()
             _onFinishedLoadingFileSubscription.remove()
-            SoundPlayer.stop()
+            if(Platform.OS==='ios'){
+                SoundPlayer.stop()
+            }
+
           };
     },[])
     useEffect(()=>{
@@ -137,32 +220,79 @@ function BerhitungYuk(props) {
                 KeepAwake.deactivate()
                 clearTimeout(timerRef.current)
                 setreset(false)
-                SoundPlayer.stop()
+                if(Platform.OS==='ios'){
+                    SoundPlayer.stop()
+                }else{
+                    soundAndroid && soundAndroid.stop();
+                }
             }
         }
         
-    },[start,reset,Second,miliSecond])
+    },[start,reset])
 
     useEffect(()=>{
-        MusicRequest({"token":token.data.access_token,'page':1})
-        KeepAwake.deactivate()
-    },[])
+        if(soundAndroid){
+            AppState.addEventListener('change', _handleAppStateChange)
+            DeviceEventEmitter.addListener(
+                'ON_HOME_BUTTON_PRESSED',
+                () => {
+                        soundAndroid&& soundAndroid.pause();
+                        Start(!start)
+               })
+        }
+        if(SoundPlayer){
+            AppState.addEventListener('change', _handleAppStateChange)
+            DeviceEventEmitter.addListener(
+                'ON_HOME_BUTTON_PRESSED',
+                () => {
+                        SoundPlayer.pause()
+                        Start(!start)
+               })
+        }
+        return () => {
+            console.log('back a=handler',soundAndroid)
+            soundAndroid&& soundAndroid.pause();
+            SoundPlayer.pause()
+            AppState.removeEventListener('change', _handleAppStateChange)
+        }
+
+    },[soundAndroid,SoundPlayer])
 
     useEffect(()=>{
-        if(statusLoad && statusPLay){
-            setstatusLoad(false)
-            SoundPlayer.play()
-            if(isTrial){
-                console.log('ujicoba')
-                setisTrial(false)
-                setTimeout(() => {
-                    SoundPlayer.stop()
-                }, 15000);
-            }else{
-                console.log('for real')
-                setplayed(true)
+        if(Platform.OS==='ios'){
+            if(statusLoad && statusPLay){
+                setstatusLoad(false)
+                setstatusPLay(false)
+                SoundPlayer.play()
+                if(isTrial){
+                    console.log('ujicoba')
+                    setisTrial(false)
+                    setTimeout(() => {
+                        SoundPlayer.stop()
+                    }, 15000);
+                }else{
+                    console.log('for real')
+                    setplayed(true)
+                }
+            }
+        }else{
+            if(statusPLay){
+                setstatusLoad(false)
+                setstatusPLay(false)
+                if(isTrial){
+                    setisTrial(false)
+                    console.log('soundAndroid',soundAndroid)
+                    setTimeout(() => {
+                        soundAndroid && soundAndroid.stop();
+                        // console.log('stop',JSON.stringify(soundAndroid))
+                    }, 2000);
+                }else{
+                    console.log('for real')
+                    setplayed(true)
+                }
             }
         }
+        
     },[statusLoad, statusPLay])
 
 
@@ -228,12 +358,13 @@ function BerhitungYuk(props) {
                         </TouchableOpacity>
                     </ScrollView>
                 </View>
+                {props.screenShouldBeAwake?<KeepAwake />:null}
             </View>
             <OverlayBerhitung visible={visible} toggleOverlay={toggleOverlay} music={music} setMusic={setMusic} pemandu={pemandu} setPemandu={setPemandu} listMusic={listMusic} playSound={playSound} MusicRequest={MusicRequest} token={token.data.access_token} playlistMusic={playlistMusic}/>
-            <KeepAwake />
             <Overlay visible={statusLoad}>
                 <ActivityIndicator size='large' color='#67308F' />
             </Overlay>
+            
         </TemplateBackground>
     )
 }
