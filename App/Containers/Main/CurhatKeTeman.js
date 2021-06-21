@@ -22,11 +22,11 @@ function CurhatKeTeman(props) {
     const toggleOverlay = () => {
         setVisible(!visible);
     };
-
+    let x = [{},{},{},{},{},{},{},{},{},{},{},{},{},{}]
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
-                <View style={styles.section}>
+                <View style={[{maxHeight:Screen.height*0.915,paddingHorizontal:12}]}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <TouchableOpacity
                             onPress={() => pop()}
@@ -39,41 +39,29 @@ function CurhatKeTeman(props) {
                     <TouchableOpacity onPress={() => navigation.navigate('CurhatKeTemanContact')}>
                         <Image source={images.newMessage} style={{ width: Screen.width * 0.3, height: 40, alignSelf: 'flex-end', marginVertical: 20 }} resizeMode='contain' />
                     </TouchableOpacity>
-
-                    <View style={{ flexDirection: 'row', height: Screen.height * 0.1, alignItems: 'center' }}>
-                        <View style={{flexDirection:'column',justifyContent:'flex-start', height:Screen.height*0.1}}>
-                            <Image source={images.pp} style={{ width: 40, height: 40 }} resizeMode='contain' />
-                        </View>
-                        <View style={{ marginLeft: 20, flex: Screen.width * 0.8 }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flex: 0.9 }}>
-                                    <Text style={{ fontWeight: 'bold', color: 'white' }}>Nissa</Text>
-                                    <Text style={{ color: 'white' }}>Ok</Text>
+                    <ScrollView style={{height:Screen.height*0.7}}>
+                    {
+                        x.map(()=>(
+                            <View style={{ flexDirection: 'row', height: Screen.height * 0.1, alignItems: 'center' }}>
+                                <View style={{flexDirection:'column',justifyContent:'flex-start', height:Screen.height*0.1}}>
+                                    <Image source={images.pp} style={{ width: 40, height: 40 }} resizeMode='contain' />
                                 </View>
-                                <View>
-                                    <Text style={{ color: 'white', fontSize: 13 }}>07.00</Text>
-                                </View>
-                            </View>
-                            <View style={{ height: 1, width: '100%', borderRadius: 1, borderWidth: 0.5, borderColor: 'white', zIndex: 0, marginVertical: 15 }} />
-                        </View>
-                    </View>
-                    <View style={{ flexDirection: 'row', height: Screen.height * 0.1, alignItems: 'center' }}>
-                        <View style={{flexDirection:'column',justifyContent:'flex-start', height:Screen.height*0.1}}>
-                            <Image source={images.pp} style={{ width: 40, height: 40 }} resizeMode='contain' />
-                        </View>
-                        <View style={{ marginLeft: 20, flex: Screen.width * 0.8 }}>
-                            <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flex: 0.9 }}>
-                                    <Text style={{ fontWeight: 'bold', color: 'white' }}>Nissa</Text>
-                                    <Text style={{ color: 'white' }}>Ok</Text>
-                                </View>
-                                <View>
-                                    <Text style={{ color: 'white', fontSize: 13 }}>07.00</Text>
+                                <View style={{ marginLeft: 20, flex: Screen.width * 0.8 }}>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <View style={{ flex: 0.9 }}>
+                                            <Text style={{ fontWeight: 'bold', color: 'white' }}>Nissa</Text>
+                                            <Text style={{ color: 'white' }}>Ok</Text>
+                                        </View>
+                                        <View>
+                                            <Text style={{ color: 'white', fontSize: 13 }}>07.00</Text>
+                                        </View>
+                                    </View>
+                                    <View style={{ height: 1, width: '100%', borderRadius: 1, borderWidth: 0.5, borderColor: 'white', zIndex: 0, marginVertical: 15 }} />
                                 </View>
                             </View>
-                            <View style={{ height: 1, width: '100%', borderRadius: 1, borderWidth: 0.5, borderColor: 'white', zIndex: 0, marginVertical: 15 }} />
-                        </View>
-                    </View>
+                        ))
+                    }
+                    </ScrollView>
                 </View>
 
                 <CustomBottomTab2 />
