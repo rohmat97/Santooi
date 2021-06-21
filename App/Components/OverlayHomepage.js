@@ -102,13 +102,13 @@ export const OverlayHomepage =({visible,toggleOverlay,listEmoticon, picked, Remo
                             multiline={true}
                         />:
                         <TextInput 
-                            value={quote && quote.length>0?quote:'Bagaimana Perasaanmu Hari ini'}
+                            value={quote}
                             // onTouchStart={()=>setonKeyboardView(Screen.height*0.4)}
                             // onEndEditing={()=>setonKeyboardView(0)}
                             // onSubmitEditing={()=>setonKeyboardView(0)}
                             // onTouchEnd={()=>setonKeyboardView(0)}
-                            // placeholder="Bagaimana Perasaanmu Hari ini"   
-                            style={{minHeight:Screen.height*0.15,backgroundColor:'transparent'}}
+                            placeholder="Bagaimana Perasaanmu Hari ini"   
+                            style={{minHeight:Screen.height*0.15,backgroundColor:'transparent',alignItems:quote && quote.length>0?'flex-start':'center',justifyContent:quote && quote.length>0?'flex-start':'center'}}
                             onChangeText={text => ValidateTextForEmoticon(text)}
                             multiline={true}
                             theme={{

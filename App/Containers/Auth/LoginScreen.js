@@ -253,6 +253,7 @@ function LoginScreen(props) {
             setvisible(false)
             if(login.status === 200){
                 login && Alert.alert(login.data.message)
+                LoginSuccess(null)
             }else if(login.status === 401){
                 login && Alert.alert(login.data.message)
                 LoginSuccess(null)
@@ -284,6 +285,7 @@ function LoginScreen(props) {
                 Alert.alert('Login Success')
                 CallbackGoogleSuccess(null)
             }else{
+                CallbackGoogleSuccess(null)
                 navigate('SignUpScreen',{ bundleLogin : bundleLogin})
             }
             // navigation.navigate('Splash', {
@@ -304,6 +306,7 @@ function LoginScreen(props) {
                 Alert.alert('Login Success')
                 CallbackFacebookSuccess(null)
             }else{
+                CallbackFacebookSuccess(null)
                 navigate('SignUpScreen',{ bundleLogin :bundleLogin})
             }
             //   navigation.navigate('Splash', {

@@ -62,19 +62,16 @@ function BerhitungYuk(props) {
         }
     }
     const playSound =(payload,trial)=>{
-        if(trial){
+        if(trial && payload){
             SoundPlayer.stop()
-            setTimeout(() => {
+            clearTimeout(timerRef.current)
                 SoundPlayer.playUrl(payload)
                 KeepAwake.activate()
                 setTimeout(() => {
                     KeepAwake.deactivate()
                     SoundPlayer.stop()
                 }, 15000);
-            }, 1000);
-                // or play from url
-          
-        }else{
+        }else if(payload){
             SoundPlayer.playUrl(payload,(error) => {
                 console.log(error)
                 if (error) {
@@ -103,7 +100,7 @@ function BerhitungYuk(props) {
         // console.log(currentDate.getHours()+":"+currentDate.getMinutes()+":"+currentDate.getSeconds())
         _onFinishedPlayingSubscription = SoundPlayer.addEventListener('FinishedPlaying', ({ success }) => {
             console.log('finished playing', success)
-            playSound()
+            // playSound()
           })
           _onFinishedLoadingSubscription = SoundPlayer.addEventListener('FinishedLoading', ({ success }) => {
             console.log('finished loading', success)
