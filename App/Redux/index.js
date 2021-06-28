@@ -23,7 +23,10 @@ export const reducers = combineReducers({
   status: require('./Dashboard/StatusRedux').reducer,
   music: require('./Berhitung/MusicRedux').reducer,
   kalimatbijak: require('./KalimatBijak/KalimatBijakRedux').reducer,
-  addFavorite: require('./KalimatBijak/AddFavoriteRedux').reducer
+  addFavorite: require('./KalimatBijak/AddFavoriteRedux').reducer,
+  gallery: require('./FotoFav/GalleryRedux').reducer,
+  addFoto: require('./FotoFav/AddFotoRedux').reducer,
+  deleteFoto: require('./FotoFav/DeleteFotoRedux').reducer
 })
 
 export default () => {

@@ -213,7 +213,7 @@ function BerhitungYuk(props) {
     useEffect(()=>{
         if(start){
             // console.log(Second.charAt(0))
-            setPlay('PAUSE')
+            setPlay('start')
             KeepAwake.activate()
         }else{
             if(reset){
@@ -312,6 +312,46 @@ function BerhitungYuk(props) {
         }
     },[dataMusic])
 
+    useEffect(()=>{
+        // console.log('music',dataMusic.data)
+        
+        if(start && music){
+            if(Platform.OS==='ios'){
+                    clearTimeout(timerRef.current)
+                    SoundPlayer.loadUrl(music.file.url)
+                    setstatusLoad(true)
+                    console.log('data music', music.file.url)
+                    KeepAwake.activate()
+            }else{
+                    clearTimeout(timerRef.current)
+                    const whoosh = new Sound(music.file.url, null, async(e) => {
+                        if (e) {
+                            console.log('error loading track:', e)
+                        } else {
+                            if (soundAndroid) soundAndroid.stop();
+                            await setsoundAndroid(whoosh);
+                            setTimeout(() => {
+                                whoosh.play()
+                                setstatusPLay(true)
+                            }, 500);
+                        }
+                    })
+                    setstatusLoad(true)
+                    console.log('data music', music.file.url)
+                    KeepAwake.activate()
+               
+            }
+        }else{
+            if(!music){
+                if(Platform.OS==='ios'){
+                    SoundPlayer.stop()
+                }else{
+                    soundAndroid && soundAndroid.stop();
+                }
+            }
+        }
+    },[music])
+
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -321,7 +361,7 @@ function BerhitungYuk(props) {
                             onPress={() => pop()}
                             style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={images.arrowBack} style={{ width: 18, height: 18 }} resizeMode='contain' />
-                            <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Berhitung yuk!</Text>
+                            <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Atur Nafas Yuk!</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={toggleOverlay}>
                             <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.25, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>

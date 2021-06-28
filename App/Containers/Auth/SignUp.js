@@ -281,7 +281,7 @@ function SignUp(props) {
                                                     <ErrorButton text={'Nomor ponsel minimal 11 angka dan maksimal 15 angka'} />
                                                 </View>
                                             }
-                                             {validatePhoneNumber && !avail && submitted &&
+                                             {validatePhoneNumber && !avail && submitted && !visible &&
                                                 <View style={{ marginTop: 10, marginHorizontal: -5 }}>
                                                     <ErrorButton text={'Nomor sudah digunakan'} />
                                                 </View>

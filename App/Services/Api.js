@@ -2,8 +2,8 @@
 import apisauce from 'apisauce'
 
 // our "constructor"
-const staging = 'https://happiness-api.demoapp.xyz/api'
-const production = 'https://happiness-api.demoapp.xyz/api'
+export const staging = 'https://happiness-api.demoapp.xyz/api'
+export const production = 'https://happiness-api.demoapp.xyz/api'
 const create = (baseURL = staging) => {
   // ------
   // STEP 1
@@ -59,6 +59,10 @@ const create = (baseURL = staging) => {
   const getKalimatBijak = payload =>api.get(`/wise?fav=${payload.fav}&sort=${payload.filter}&limit=10&page=${payload.page}`,'',{headers: { Authorization: `Bearer ${payload.token}` }})
   const addFavorite = payload => api.post('/account/user/wise',payload.body,{headers: { Authorization: `Bearer ${payload.token}` }})
   const removeFavorite = payload => api.delete('/account/user/wise/'+payload.body,'',{headers: { Authorization: `Bearer ${payload.token}` }})
+  //foto
+  const getGallery =payload=> api.get('/account/user/gallery?limit=10&page='+payload.page,'',{headers:{Authorization:`Bearer ${payload.token}`}})
+  const addFoto = payload => api.post('/account/user/gallery',payload.body,{headers: { Authorization: `Bearer ${payload.token}`, 'Content-Type': 'multipart/form-data' }})
+  const deleteFoto = payload => api.post('/account/user/gallery/delete',payload.body,{headers: { Authorization: `Bearer ${payload.token}`, 'Content-Type': 'multipart/form-data' }})
   // ------
   // STEP 3
   // ------
@@ -92,7 +96,10 @@ const create = (baseURL = staging) => {
     getMusic,
     getKalimatBijak,
     addFavorite,
-    removeFavorite
+    removeFavorite,
+    getGallery,
+    addFoto,
+    deleteFoto
   }
 }
 

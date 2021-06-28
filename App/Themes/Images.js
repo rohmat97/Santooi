@@ -95,6 +95,7 @@ const images = {
   StarUncheck: require('../Images/Icons/StarUncheck.png'),
   Share: require('../Images/Icons/Share.png'),
   checklist: require('../Images/Icons/checklist.png'),
+  emptyStateFoto: require('../Images/foto-foto/emptyStateFoto.png'),
 
 
 }

@@ -25,7 +25,10 @@ import { MusicTypes } from '../Redux/Berhitung/MusicRedux';
 //kalimatbijak
 import { KalimatBijakTypes } from '../Redux/KalimatBijak/KalimatBijakRedux';
 import { addFavoriteTypes } from '../Redux/KalimatBijak/AddFavoriteRedux';
-
+//fotoFavorite
+import { GalleryTypes } from '../Redux/FotoFav/GalleryRedux';
+import { AddfotoTypes } from '../Redux/FotoFav/AddFotoRedux';
+import { DeletefotoTypes } from '../Redux/FotoFav/DeleteFotoRedux';
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
@@ -34,6 +37,7 @@ import { getEmoticon,UpdateStatus,getStatus } from './DashboardSagas';
 import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword, getCheckPhone} from './AuthSagas';
 import { getMusic } from './BerhitungSagas';
 import { getKalimat, addFavorite } from './KalimatBijakSagas';
+import { getGallery, AddFoto, DeleteFoto } from './FotoFavSagas';
 
 /* ------------- API ------------- */
 
@@ -63,6 +67,9 @@ export default function * root () {
     takeLatest(StatusTypes.STATUS_REQUEST, getStatus, api),
     takeLatest(MusicTypes.MUSIC_REQUEST, getMusic, api),
     takeLatest(KalimatBijakTypes.KALIMAT_BIJAK_REQUEST, getKalimat, api),
-    takeLatest(addFavoriteTypes.ADD_FAVORITE_REQUEST, addFavorite, api)
+    takeLatest(addFavoriteTypes.ADD_FAVORITE_REQUEST, addFavorite, api),
+    takeLatest(GalleryTypes.GALLERY_REQUEST, getGallery, api),
+    takeLatest(AddfotoTypes.ADDFOTO_REQUEST, AddFoto, api),
+    takeLatest(DeletefotoTypes.DELETEFOTO_REQUEST, DeleteFoto, api)
   ])
 }

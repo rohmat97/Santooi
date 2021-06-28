@@ -74,7 +74,7 @@ function MainScreen (props) {
 
   const validationEmoticon =(stat,status) =>{
     if(stat && status){
-        console.log('status 1')
+        // console.log('status 1')
         const filtertext = stat.split(' ')
         let emoticons =status && [...new Set(status.emoticons)]
         const filterAuto =emoticons.filter(dat => filtertext.find(text =>{
@@ -93,12 +93,12 @@ function MainScreen (props) {
       setmanualPicked(filter)
       
     } else if(status) {
-      console.log('status 2-1')
+      // console.log('status 2-1')
       const filtertext = status && status.status && status.status.split(' ')
       let emoticons = status && [...new Set(status.emoticons)]
       let emoticonManualPick = []
         if(filtertext){
-          console.log('status 2-2')
+          // console.log('status 2-2')
         const filterAuto =emoticons.filter(dat => filtertext.find(text =>{
             // console.log(dat.name.toLowerCase()+ ' = ' + text.toLowerCase())
             return dat.name.toLowerCase() === text.toLowerCase()
@@ -108,7 +108,7 @@ function MainScreen (props) {
             emoticonManualPick.push(dat)
           }
         })
-       console.log('filterManualPicked',emoticonManualPick)
+      //  console.log('filterManualPicked',emoticonManualPick)
         setpicked( [...new Set(filterAuto)])
         setmanualPicked(emoticonManualPick)
       }else{
