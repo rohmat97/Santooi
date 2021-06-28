@@ -96,6 +96,7 @@ const images = {
   Share: require('../Images/Icons/Share.png'),
   checklist: require('../Images/Icons/checklist.png'),
   emptyStateFoto: require('../Images/foto-foto/emptyStateFoto.png'),
+  checkedFoto: require('../Images/foto-foto/checkedFoto.png'),
 
 
 }

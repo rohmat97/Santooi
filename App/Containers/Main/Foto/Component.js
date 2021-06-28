@@ -93,12 +93,24 @@ export const ListFoto =({listFoto,isGaleri,listGaleri,gallery,GalleryRequest,tok
                         }
                     }}
                     renderItem={({ item })=>{
-                                return(<Image
-                                    onLongPress={()=>setonPicked(item)}
-                                    source={{uri:item.photo.url}} style={{ width: Screen.width * 0.45, height: Screen.width * 0.45,margin:Screen.width*0.025,borderWidth:item===onPicked?2:0 }} 
-                                    resizeMode={'contain'} 
-                                    PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
-                                    />
+                                const check  = onPicked.includes(item)
+                                console.log(check)
+                                return(
+                                <View style={{ width: Screen.width * 0.5, height: Screen.width * 0.5,padding:Screen.width*0.02}}>
+                                    <Image
+                                        onLongPress={()=>setonPicked([...onPicked,item])}
+                                        source={{uri:item.photo.url}} style={{ width: Screen.width * 0.45, height: Screen.width * 0.45}} 
+                                        resizeMode={'stretch'} 
+                                        PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
+                                        />
+                                        {
+                                            check?
+                                            <View style={{right: 20, bottom: 30,position:'absolute'}}>
+                                                <Image source={images.checkedFoto} style={{width:20,height:20}} resizeMode='contain'/>
+                                            </View>:null
+                                        }
+                                    
+                                </View>
                                     )
                     }}
                 />
