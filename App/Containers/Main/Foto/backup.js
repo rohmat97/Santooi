@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Image, Text, TouchableOpacity, ActivityIndicator, LogBox, Share } from 'react-native'
+import { View, Image, Text, TouchableOpacity, ActivityIndicator, LogBox } from 'react-native'
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { connect } from 'react-redux';
 import Animated from 'react-native-reanimated';
@@ -139,7 +139,6 @@ function FotoFavorit(props) {
 
     const deleteFoto=()=>{
       let foto =[]
-      let filter = []
       onPicked.map(data=>{
         foto.push({'id':data.id})
       })
@@ -148,12 +147,6 @@ function FotoFavorit(props) {
         'body': {
           'photos':foto
         }}
-      listFoto.map(data =>{
-        if(!onPicked.includes(data)){
-            filter.push(data)
-        }
-      })
-      setlistFoto(filter)
       DeletefotoRequest(payload)
     }
 
@@ -207,14 +200,12 @@ function FotoFavorit(props) {
               alignItems:'center'
             }}
           >
-            <TouchableOpacity onPress={()=>Share.share({title:'React Native | A framework for building native apps using React',url:onPicked[0].photo.url})}>
             <Image
               source={images.share} 
               style={{ width: Screen.width * 0.08, height: Screen.width * 0.08}} 
               resizeMode={'stretch'} 
               PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
             />
-            </TouchableOpacity>
             <Text style={{fontSize:16, marginHorizontal:Screen.width*0.25}}>Pilih Item</Text>
             <TouchableOpacity onPress={()=>setwillDelete(true)}>
               <Image
@@ -238,13 +229,35 @@ function FotoFavorit(props) {
       </TemplateBackground>
       )
     }
-
+    if(!galleryfetching&&listFoto.length<1){
+        return(
+        <TemplateBackground cover={true}>
+            <View style={styles.mainContainer}>
+                <HeaderFoto isEmpty={true} pop={pop}/>
+            </View>
+            <Overlay visible={visible} onBackdropPress={()=> setVisible(false)} overlayStyle={{width:Screen.width*0.8, borderRadius:12}}>
+                {actions.map(({title, type, options,color}) => {
+                    return (
+                    <View style={{ borderBottomColor:'rgba(212, 212, 212, 1)', borderBottomWidth:color?0:1,width:Screen.width*0.8,marginLeft:-10}}>
+                        <TouchableOpacity onPress={() => onButtonPress(type, options)}>
+                            <Text style={{color:color?color:"rgba(0, 83, 220, 1)", fontSize:14, textAlign:'center',padding:12,width:Screen.width*0.8}}>{title}</Text>
+                        </TouchableOpacity> 
+                    </View>
+                    );
+                })}
+            </Overlay>
+            
+            <FAB onPress={()=> setVisible(true)} icon={<Image source={images.addFill} style={{width:52,height:52}} resizeMode='contain' />} iconPosition='bottom' style={{paddingBottom:12}}/>
+        </TemplateBackground>
+        )
+        
+    }
     return (
         <TemplateBackground cover={true}>
             <View style={[styles.mainContainer]}>
-                <View style={{height:'20%', paddingHorizontal:12, paddingTop:12}}>
-                    {/* <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri}/> */}
-                    <HeaderFoto isEmpty={isGaleri?listFoto.length>0?false:true:listGaleri.length>0?false:true}  pop={pop} setisGaleri={setisGaleri} isGaleri={isGaleri}/>
+                <View style={{height:undefined, paddingHorizontal:12, paddingTop:12}}>
+                    <HeaderFoto isEmpty={false}  pop={pop}/>
+                    <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri}/>
                 </View>
                 <ListFoto 
                   listFoto={listFoto} 

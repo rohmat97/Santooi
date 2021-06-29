@@ -30,6 +30,7 @@ export function * DeleteFoto (api, action) {
   const { data } = action
   // console.log('data', data.body)
   // make the call to the api
+  // console.log(data.body._searchParams[0])
   const response = yield call(api.deleteFoto , data)
   console.log('response DeleteFoto', response.data)
   yield put(DeleteFotoRedux.DeletefotoSuccess(response.data))

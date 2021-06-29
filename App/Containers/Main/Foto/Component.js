@@ -5,10 +5,10 @@ import { View, Text, TouchableOpacity,ScrollView, ActivityIndicator } from 'reac
 import { Image } from 'react-native-elements/dist/image/Image'
 import images from '../../../Themes/Images'
 import { Screen } from '../../../Transforms/Screen'
-export const HeaderFoto =({isEmpty,pop,loading}) =>{
+export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri}) =>{
     if(isEmpty){
         return(
-        <View style={{height:Screen.height, paddingHorizontal:12, paddingTop:12}}>
+        <View style={{height:loading?Screen.height:Screen.height*0.8, paddingHorizontal:12, paddingTop:16}}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30 }}>
                 <TouchableOpacity
                     onPress={() => pop()}
@@ -17,6 +17,7 @@ export const HeaderFoto =({isEmpty,pop,loading}) =>{
                     <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Foto-foto Favorit</Text>
                 </TouchableOpacity>
             </View>
+            <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri} isEmpty={isEmpty}/>
             {
                 !loading?
                 <View style={{ justifyContent:'center',alignItems:'center' }}>
@@ -27,30 +28,33 @@ export const HeaderFoto =({isEmpty,pop,loading}) =>{
                 </View>
                 
             }
-            
+           
         </View>
         )
     }
     return(
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30 }}>
-        <TouchableOpacity
-            onPress={() => pop()}
-            style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image source={images.arrowBack} style={{ width: 18, height: 18 }} resizeMode='contain' />
-            <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Foto-foto Favorit</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-            onPress={() => Alert.alert('','on dev')}
-            style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ color: 'white',backgroundColor:'#67308F',padding:4,paddingHorizontal:12,borderRadius:20, marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Pilih</Text>
-        </TouchableOpacity>
+    <View style={{height:loading?Screen.height:Screen.height*0.3, paddingHorizontal:12, paddingTop:12}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30 }}>
+            <TouchableOpacity
+                onPress={() => pop()}
+                style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Image source={images.arrowBack} style={{ width: 18, height: 18 }} resizeMode='contain' />
+                <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Foto-foto Favorit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => Alert.alert('','on dev')}
+                style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ color: 'white',backgroundColor:'#67308F',padding:4,paddingHorizontal:12,borderRadius:20, marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Pilih</Text>
+            </TouchableOpacity>
+        </View>
+        <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri}/>
     </View>
 )}
 
 
-export const MenuFoto =({setisGaleri,isGaleri})=>{
+export const MenuFoto =({setisGaleri,isGaleri,isEmpty})=>{
     return(
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30 }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30,marginTop:isEmpty?4:0 }}>
         <TouchableOpacity
             onPress={() => setisGaleri(true)}
             style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -65,7 +69,7 @@ export const MenuFoto =({setisGaleri,isGaleri})=>{
     )
 }
 
-export const ListFoto =({listFoto,isGaleri,listGaleri,gallery,GalleryRequest,token,onPicked,setonPicked})=>{
+export const ListFoto =({listFoto,isGaleri,listGaleri,gallery,GalleryRequest,token,onPicked,setonPicked,setvisibleBottomSheet})=>{
     const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
         const paddingToBottom = 20;
         return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
@@ -94,11 +98,44 @@ export const ListFoto =({listFoto,isGaleri,listGaleri,gallery,GalleryRequest,tok
                     }}
                     renderItem={({ item })=>{
                                 const check  = onPicked.includes(item)
-                                console.log(check)
+                                let data = []
                                 return(
                                 <View style={{ width: Screen.width * 0.5, height: Screen.width * 0.5,padding:Screen.width*0.02}}>
                                     <Image
-                                        onLongPress={()=>setonPicked([...onPicked,item])}
+                                        onLongPress={()=>{
+                                            if(!check && onPicked.length<1) {
+                                                setonPicked([...onPicked,item])
+                                                setvisibleBottomSheet(true)
+                                            }else{
+                                                onPicked.map(dat =>{
+                                                    if(dat !== item){
+                                                        data.push(dat)
+                                                    }
+                                                })
+                                                setonPicked(data)
+                                            }
+                                            
+                                        }}
+                                        onPress={()=>{
+                                            if(onPicked.length>0){
+                                                // console.log('work')
+                                                if(check){
+                                                    onPicked.map(dat =>{
+                                                        if(dat !== item){
+                                                            data.push(dat)
+                                                        }
+                                                    })
+                                                    setonPicked(data)
+                                                }else{
+                                                    onPicked.map(dat =>{
+                                                            data.push(dat)
+                                                    })
+                                                    data.push(item)
+                                                    setonPicked(data)
+                                                }
+                                               
+                                            }
+                                        }}
                                         source={{uri:item.photo.url}} style={{ width: Screen.width * 0.45, height: Screen.width * 0.45}} 
                                         resizeMode={'stretch'} 
                                         PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}

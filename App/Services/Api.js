@@ -1,6 +1,5 @@
 // a library to wrap and simplify api calls
 import apisauce from 'apisauce'
-
 // our "constructor"
 export const staging = 'https://happiness-api.demoapp.xyz/api'
 export const production = 'https://happiness-api.demoapp.xyz/api'
@@ -62,7 +61,7 @@ const create = (baseURL = staging) => {
   //foto
   const getGallery =payload=> api.get('/account/user/gallery?limit=10&page='+payload.page,'',{headers:{Authorization:`Bearer ${payload.token}`}})
   const addFoto = payload => api.post('/account/user/gallery',payload.body,{headers: { Authorization: `Bearer ${payload.token}`, 'Content-Type': 'multipart/form-data' }})
-  const deleteFoto = payload => api.post('/account/user/gallery/delete',payload.body,{headers: { Authorization: `Bearer ${payload.token}`, 'Content-Type': 'multipart/form-data' }})
+  const deleteFoto = payload => api.post('/account/user/gallery/delete',payload.body,{headers: { Authorization: `Bearer ${payload.token}`  }})
   // ------
   // STEP 3
   // ------
