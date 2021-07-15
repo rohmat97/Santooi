@@ -26,7 +26,12 @@ export const reducers = combineReducers({
   addFavorite: require('./KalimatBijak/AddFavoriteRedux').reducer,
   gallery: require('./FotoFav/GalleryRedux').reducer,
   addFoto: require('./FotoFav/AddFotoRedux').reducer,
-  deleteFoto: require('./FotoFav/DeleteFotoRedux').reducer
+  deleteFoto: require('./FotoFav/DeleteFotoRedux').reducer,
+  album: require('./FotoFav/AlbumRedux').reducer,
+  addalbum: require('./FotoFav/AddAlbumRedux').reducer,
+  deletealbum: require('./FotoFav/DeleteAlbumRedux').reducer,
+  updateAlbum: require('./FotoFav/UpdateAlbumRedux').reducer,
+  uploadAlbum: require('./FotoFav/UploadPhotoAlbumRedux').reducer,
 })
 
 export default () => {

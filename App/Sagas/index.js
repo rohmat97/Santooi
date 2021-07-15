@@ -29,6 +29,11 @@ import { addFavoriteTypes } from '../Redux/KalimatBijak/AddFavoriteRedux';
 import { GalleryTypes } from '../Redux/FotoFav/GalleryRedux';
 import { AddfotoTypes } from '../Redux/FotoFav/AddFotoRedux';
 import { DeletefotoTypes } from '../Redux/FotoFav/DeleteFotoRedux';
+import { AlbumTypes } from '../Redux/FotoFav/AlbumRedux';
+import { AddAlbumTypes } from '../Redux/FotoFav/AddAlbumRedux';
+import { DeleteAlbumTypes } from '../Redux/FotoFav/DeleteAlbumRedux';
+import { UpdateAlbumTypes } from '../Redux/FotoFav/UpdateAlbumRedux';
+import { UploadAlbumTypes } from '../Redux/FotoFav/UploadPhotoAlbumRedux';
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
@@ -37,7 +42,7 @@ import { getEmoticon,UpdateStatus,getStatus } from './DashboardSagas';
 import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword, getCheckPhone} from './AuthSagas';
 import { getMusic } from './BerhitungSagas';
 import { getKalimat, addFavorite } from './KalimatBijakSagas';
-import { getGallery, AddFoto, DeleteFoto } from './FotoFavSagas';
+import { getGallery, AddFoto, DeleteFoto, getAlbum, getAddAlbum, DeleteAlbum, UpdateAlbum, UploadAlbum } from './FotoFavSagas';
 
 /* ------------- API ------------- */
 
@@ -70,6 +75,11 @@ export default function * root () {
     takeLatest(addFavoriteTypes.ADD_FAVORITE_REQUEST, addFavorite, api),
     takeLatest(GalleryTypes.GALLERY_REQUEST, getGallery, api),
     takeLatest(AddfotoTypes.ADDFOTO_REQUEST, AddFoto, api),
-    takeLatest(DeletefotoTypes.DELETEFOTO_REQUEST, DeleteFoto, api)
+    takeLatest(DeletefotoTypes.DELETEFOTO_REQUEST, DeleteFoto, api),
+    takeLatest(AlbumTypes.ALBUM_REQUEST, getAlbum, api),
+    takeLatest(AddAlbumTypes.ADD_ALBUM_REQUEST, getAddAlbum, api),
+    takeLatest(DeleteAlbumTypes.DELETE_ALBUM_REQUEST, DeleteAlbum, api),
+    takeLatest(UpdateAlbumTypes.UPDATE_ALBUM_REQUEST, UpdateAlbum, api),
+    takeLatest(UploadAlbumTypes.UPLOAD_ALBUM_REQUEST, UploadAlbum, api)
   ])
 }

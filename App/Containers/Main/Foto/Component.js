@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Alert } from 'react-native'
-import { FlatList } from 'react-native'
-import { View, Text, TouchableOpacity,ScrollView, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity,FlatList, ActivityIndicator } from 'react-native'
+import { TextInput } from 'react-native-paper';
+import { Divider, Overlay } from 'react-native-elements'
 import { Image } from 'react-native-elements/dist/image/Image'
 import images from '../../../Themes/Images'
 import { Screen } from '../../../Transforms/Screen'
-export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri}) =>{
+export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri,setvisibleBottomSheet,visibleBottomSheet,setonPicked}) =>{
     if(isEmpty){
         return(
         <View style={{height:loading?Screen.height:Screen.height*0.8, paddingHorizontal:12, paddingTop:16}}>
@@ -42,9 +42,12 @@ export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri}) =>{
                 <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Foto-foto Favorit</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => Alert.alert('','on dev')}
-                style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Text style={{ color: 'white',backgroundColor:'#67308F',padding:4,paddingHorizontal:12,borderRadius:20, marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Pilih</Text>
+                onPress={() => {
+                    setvisibleBottomSheet(!visibleBottomSheet)
+                    setonPicked([])
+                }}
+                style={{ flexDirection: 'row', alignItems: 'center',backgroundColor:'#67308F',padding:4,width:80,borderRadius:12, marginLeft: 15,justifyContent:'center' }}>
+                <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>{visibleBottomSheet?'Batal':'Pilih'}</Text>
             </TouchableOpacity>
         </View>
         <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri}/>
@@ -69,7 +72,7 @@ export const MenuFoto =({setisGaleri,isGaleri,isEmpty})=>{
     )
 }
 
-export const ListFoto =({listFoto,isGaleri,listGaleri,gallery,GalleryRequest,token,onPicked,setonPicked,setvisibleBottomSheet})=>{
+export const ListFoto =({listFoto,album,isGaleri,listGaleri,gallery,GalleryRequest,token,onPicked,setonPicked,setvisibleBottomSheet,setvisibleDetailFoto,visibleBottomSheet,setselectedDetailFoto,AlbumRequest})=>{
     const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
         const paddingToBottom = 20;
         return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
@@ -81,8 +84,9 @@ export const ListFoto =({listFoto,isGaleri,listGaleri,gallery,GalleryRequest,tok
                     data={ listFoto }
                     numColumns={2}
                     onMomentumScrollEnd={(event)=>{
+                        // console.log(gallery)
                         if (isCloseToBottom(event.nativeEvent)) {
-                            if(gallery.current_page !== gallery.last_page){
+                            if(gallery.current_page < gallery.last_page){
                                 console.log(`page`,gallery.current_page + ' === '+gallery.last_page)
                                 const payload ={
                                     'token':token && token.data.access_token,
@@ -99,47 +103,57 @@ export const ListFoto =({listFoto,isGaleri,listGaleri,gallery,GalleryRequest,tok
                     renderItem={({ item })=>{
                                 const check  = onPicked.includes(item)
                                 let data = []
+                                // console.log(item)
                                 return(
                                 <View style={{ width: Screen.width * 0.5, height: Screen.width * 0.5,padding:Screen.width*0.02}}>
-                                    <Image
-                                        onLongPress={()=>{
-                                            if(!check && onPicked.length<1) {
-                                                setonPicked([...onPicked,item])
-                                                setvisibleBottomSheet(true)
-                                            }else{
-                                                onPicked.map(dat =>{
-                                                    if(dat !== item){
-                                                        data.push(dat)
-                                                    }
-                                                })
-                                                setonPicked(data)
-                                            }
-                                            
-                                        }}
-                                        onPress={()=>{
-                                            if(onPicked.length>0){
-                                                // console.log('work')
-                                                if(check){
+                                    <View style={{backgroundColor:'transparent',width: Screen.width * 0.45, height: Screen.width * 0.45}}>
+                                        <Image
+                                            onLongPress={()=>{
+                                                if(!check && onPicked.length<1) {
+                                                    setonPicked([...onPicked,item])
+                                                    setvisibleBottomSheet(true)
+                                                }else{
                                                     onPicked.map(dat =>{
                                                         if(dat !== item){
                                                             data.push(dat)
                                                         }
                                                     })
                                                     setonPicked(data)
-                                                }else{
-                                                    onPicked.map(dat =>{
-                                                            data.push(dat)
-                                                    })
-                                                    data.push(item)
-                                                    setonPicked(data)
                                                 }
-                                               
-                                            }
-                                        }}
-                                        source={{uri:item.photo.url}} style={{ width: Screen.width * 0.45, height: Screen.width * 0.45}} 
-                                        resizeMode={'stretch'} 
-                                        PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
+                                                
+                                            }}
+                                            onPress={()=>{
+                                                if(visibleBottomSheet){
+                                                    // if(onPicked.length>0){
+                                                        // console.log('work')
+                                                        if(check){
+                                                            onPicked.map(dat =>{
+                                                                if(dat !== item){
+                                                                    data.push(dat)
+                                                                }
+                                                            })
+                                                            setonPicked(data)
+                                                        }else{
+                                                            onPicked.map(dat =>{
+                                                                    data.push(dat)
+                                                            })
+                                                            data.push(item)
+                                                            setonPicked(data)
+                                                        }
+                                                    
+                                                    // }
+                                                }else{
+                                                    setvisibleDetailFoto(true)
+                                                    setselectedDetailFoto(item)
+                                                }
+                                                
+                                            }}
+                                            source={{uri:item.photo.url}} style={{ width: Screen.width * 0.45, height: Screen.width * 0.45}} 
+                                            resizeMode={'contain'} 
+                                            PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
                                         />
+                                    </View>
+                                   
                                         {
                                             check?
                                             <View style={{right: 20, bottom: 30,position:'absolute'}}>
@@ -174,31 +188,222 @@ export const ListFoto =({listFoto,isGaleri,listGaleri,gallery,GalleryRequest,tok
 
        
     }
-    return <ThumbnailAlbum  listGaleri={listGaleri}/>
+    return <ThumbnailAlbum  listGaleri={listGaleri} album={album} AlbumRequest={AlbumRequest} visibleBottomSheet={visibleBottomSheet} setvisibleBottomSheet={setvisibleBottomSheet} setonPicked={setonPicked} onPicked={onPicked}/>
 
 }
 
-export const ThumbnailAlbum =({listGaleri}) =>{
+export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequest, setvisibleBottomSheet, setonPicked, onPicked }) =>{
+    const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
+        const paddingToBottom = 20;
+        return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+      }
     return(
         <FlatList
             data={listGaleri}
             numColumns={2}
-            renderItem={({ item })=>(
-                <TouchableOpacity>
-                    <View style={{flexDirection:'row',height:Screen.width*0.5,width:Screen.width*0.5,paddingHorizontal:8,marginBottom:-48}}>
-                        <Image source={images.kopiKenangan} style={{ width: '70%', height: '70%', borderTopLeftRadius:12,borderBottomLeftRadius:12 }} resizeMode={'stretch'} />
-                        <View style={{width:'30%',height:'35%'}}>
-                            <Image source={images.kopiKenangan} style={{ width: '100%', height: '100%',borderTopRightRadius:20 }} resizeMode={'stretch'} />
-                            <Image source={images.kopiKenangan} style={{ width: '100%', height: '100%' ,borderBottomRightRadius:20}} resizeMode={'stretch'} />
+            onMomentumScrollEnd={(event)=>{
+                // console.log(gallery)
+                if (isCloseToBottom(event.nativeEvent)) {
+                    if(album.current_page < album.last_page){
+                        console.log(`page`,album.current_page + ' === '+album.last_page)
+                        const payload ={
+                            'token':token && token.data.access_token,
+                            'page':album.current_page+1
+                          }
+                          AlbumRequest(payload)
+                    }else{
+                        console.log(`page`,album.current_page + ' === '+album.last_page)
+                    }
+                    // }
+                    
+                }
+            }}
+            renderItem={({ item })=>{
+            let data = []
+            const check  = onPicked.includes(item)
+            // console.log('item', item.col_highlight&& item.col_highlight.length>0 &&item.col_highlight[0].photo.url)
+            return(
+            <TouchableOpacity  
+                onLongPress={()=>{
+                    if(!check && onPicked.length<1) {
+                        setonPicked([...onPicked,item])
+                        setvisibleBottomSheet(true)
+                    }else{
+                        onPicked.map(dat =>{
+                            if(dat !== item){
+                                data.push(dat)
+                            }
+                        })
+                        setonPicked(data)
+                    }
+                    
+                }}
+            onPress={()=>{
+                if(visibleBottomSheet){
+                    // if(onPicked.length>0){
+                        // console.log('work')
+                        if(check){
+                            onPicked.map(dat =>{
+                                if(dat !== item){
+                                    data.push(dat)
+                                }
+                            })
+                            setonPicked(data)
+                        }else{
+                            onPicked.map(dat =>{
+                                    data.push(dat)
+                            })
+                            data.push(item)
+                            setonPicked(data)
+                        }
+                    
+                    // }
+                }else{
+                    setvisibleDetailFoto(true)
+                    setselectedDetailFoto(item)
+                }
+                
+            }}>
+            <View style={{ width: Screen.width * 0.5, height: Screen.width * 0.5,marginVertical:16,marginHorizontal:4,marginBottom:24}}>
+                    {
+                    item.col_total>0?
+                <View style={{backgroundColor:'grey',width: Screen.width * 0.45, height: Screen.width * 0.45, borderRadius:20}}>
+                        <Image
+                        // onLongPress={()=>{
+                        //     if(!check && onPicked.length<1) {
+                        //         setonPicked([...onPicked,item])
+                        //         setvisibleBottomSheet(true)
+                        //     }else{
+                        //         onPicked.map(dat =>{
+                        //             if(dat !== item){
+                        //                 data.push(dat)
+                        //             }
+                        //         })
+                        //         setonPicked(data)
+                        //     }
+                            
+                        // }}
+                        // onPress={()=>{
+                        //     if(onPicked.length>0){
+                        //         // console.log('work')
+                        //         if(check){
+                        //             onPicked.map(dat =>{
+                        //                 if(dat !== item){
+                        //                     data.push(dat)
+                        //                 }
+                        //             })
+                        //             setonPicked(data)
+                        //         }else{
+                        //             onPicked.map(dat =>{
+                        //                     data.push(dat)
+                        //             })
+                        //             data.push(item)
+                        //             setonPicked(data)
+                        //         }
+                            
+                        //     }
+                        // }}
+                        source={{uri:item.col_highlight[0].photo.url}} style={{ width: Screen.width * 0.45, height: Screen.width * 0.45}} 
+                        resizeMode={'contain'} 
+                        PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
+                    />
+                        <View style={{marginTop:8,marginBottom:20}}>
+                            <Text style={{color:'white',fontWeight:'700'}}>{item.name}</Text>
+                            <Text style={{color:'white', fontWeight:'normal',opacity:0.8}}>{item.col_total} times</Text>
                         </View>
                     </View>
-                    <View style={{paddingHorizontal:8,marginBottom:20}}>
-                        <Text style={{color:'white',fontWeight:'700'}}>Nameless</Text>
-                        <Text style={{color:'white', fontWeight:'normal',opacity:0.8}}>xxx times</Text>
+                    :
+                    <View style={{backgroundColor:'grey',width: Screen.width * 0.45, height: Screen.width * 0.45, borderRadius:20}}>
+                        <View style={{ width: Screen.width * 0.45, height: Screen.width * 0.45}} />
+                        <View style={{marginTop:8,marginBottom:20}}>
+                            <Text style={{color:'white',fontWeight:'700'}}>{item.name}</Text>
+                            <Text style={{color:'white', fontWeight:'normal',opacity:0.8}}>{item.col_total} times</Text>
+                        </View>
                     </View>
+                    }
+               
+                    {
+                        check?
+                        <View style={{right: 20, bottom: 30,position:'absolute'}}>
+                            <Image source={images.checkedFoto} style={{width:20,height:20}} resizeMode='contain'/>
+                        </View>:null
+                    }
+                
+            </View>
+            </TouchableOpacity>
+) 
+            }}
+        />
+        
+    )
+}
+
+export const DetailFoto = ({visibleDetailFoto, setvisibleDetailFoto, selectedDetailFoto,deleteDetailFoto ,setaddToAlbum, addToAlbum, createNewAlbum, setcreateNewAlbum, nameNewAlbum, setnameNewAlbum, AddNewAlbum}) =>{
+    if(addToAlbum){
+        return(
+            <Overlay visible={visibleDetailFoto} overlayStyle={{height:Screen.height*0.75, width: Screen.width,position:'absolute',bottom:-10,borderRadius:20}} onBackdropPress={()=> setvisibleDetailFoto(false)}>  
+                <View style={{flexDirection:'row', alignItems:'center',justifyContent:'space-between',marginHorizontal:8,marginTop:12}}>
+                    <Text style={{color:'rgba(103, 48, 143, 1)',textAlign:'center',fontWeight:'bold'}}>Simpan Dalam Album</Text>
+                    <TouchableOpacity onPress={()=> {
+                        setvisibleDetailFoto(false)
+                        setaddToAlbum(false)
+                        }}>
+                        <Text style={{textAlign:'right', color:'rgba(103, 48, 143, 1)'}}>X</Text>
+                    </TouchableOpacity>
+                </View>
+                <TouchableOpacity onPress={()=> setcreateNewAlbum(true)}>
+                    <Image source={images.newAlbum} resizeMode='contain' style={{width:Screen.width*0.4, height:200}}/>
                 </TouchableOpacity>
                 
-            )}
-        />
+                <Overlay visible={createNewAlbum} onBackdropPress={()=> setcreateNewAlbum(false)}
+                    overlayStyle={{height:undefined, width: Screen.width*0.8,borderRadius:20}}
+                    >
+                    <Text style={{fontWeight:'bold', fontSize:16,textAlign:'center'}}>Album Baru {'\n'}
+                        <Text style={{fontWeight:'normal', fontSize:12}}>Masukan nama album</Text>
+                    </Text>
+                    <TextInput
+                        label="Nama album"
+                        mode='outlined'
+                        value={nameNewAlbum}
+                        onChangeText={text => setnameNewAlbum(text)}
+                    />
+                    <View style={{ width: Screen.width*0.8, height:50,marginBottom:-10, flexDirection:'row',alignItems:'center',borderTopWidth:0.5, borderColor:'rgba(171, 169, 172, 1)', marginTop:24,marginLeft:-10}}>
+                        <TouchableOpacity onPress={()=>{
+                            setcreateNewAlbum(false)
+                            setnameNewAlbum()
+                        }}>
+                            <Text style={{color:'blue', width:Screen.width*0.4,textAlign:'center', textAlignVertical:'center'}}>Batal</Text>
+                        </TouchableOpacity>
+                        <Divider orientation="vertical" width={1} />
+                        <TouchableOpacity onPress={()=>AddNewAlbum()}>
+                            <Text style={{ width:Screen.width*0.4,textAlign:'center'}}>Simpan</Text>
+                        </TouchableOpacity>
+                    </View>
+                </Overlay>
+            </Overlay>
+        )
+    }
+    return(
+        <Overlay visible={visibleDetailFoto} overlayStyle={{height:Screen.height*0.75, width: Screen.width,position:'absolute',bottom:-10,borderRadius:20}} onBackdropPress={()=> setvisibleDetailFoto(false)}>  
+            <TouchableOpacity onPress={()=> setvisibleDetailFoto(false)}>
+                <Text style={{textAlign:'right', color:'rgba(103, 48, 143, 1)'}}>X</Text>
+            </TouchableOpacity>
+            <View style={{justifyContent:'center',alignItems:'center',width:Screen.width*0.95,marginTop:-60,flexDirection:'row'}}>
+                <Image source={{uri:selectedDetailFoto && selectedDetailFoto.photo.url}} resizeMode='contain' style={{width:Screen.width*0.9, height:Screen.height*0.4,margin:12,marginTop:Screen.height*0.1}}/>
+            </View>
+            <TouchableOpacity 
+                onPress={()=> setaddToAlbum(true)}
+                style={{backgroundColor:'rgba(102, 45, 145, 1)',marginHorizontal:20,borderRadius:20,height:40,justifyContent:'center'}}>
+                <Text style={{color:'#fff',textAlign:'center'}}>Simpan Dalam Album</Text>
+            </TouchableOpacity>
+            <TouchableOpacity 
+                onPress={()=>{
+                    setvisibleDetailFoto(false)
+                    deleteDetailFoto(selectedDetailFoto)
+                }}
+                style={{borderColor:'rgba(102, 45, 145, 1)',borderWidth:1,marginHorizontal:20,marginTop:20,borderRadius:20,height:40,justifyContent:'center'}}>
+                <Text style={{color:'rgba(102, 45, 145, 1)',textAlign:'center'}}>Hapus</Text>
+            </TouchableOpacity>
+        </Overlay>
     )
 }

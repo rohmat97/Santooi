@@ -62,6 +62,11 @@ const create = (baseURL = staging) => {
   const getGallery =payload=> api.get('/account/user/gallery?limit=10&page='+payload.page,'',{headers:{Authorization:`Bearer ${payload.token}`}})
   const addFoto = payload => api.post('/account/user/gallery',payload.body,{headers: { Authorization: `Bearer ${payload.token}`, 'Content-Type': 'multipart/form-data' }})
   const deleteFoto = payload => api.post('/account/user/gallery/delete',payload.body,{headers: { Authorization: `Bearer ${payload.token}`  }})
+  const getAlbum= payload=> api.get('/account/user/gallery/album','',{headers:{Authorization:`Bearer ${payload.token}`}})
+  const addAlbum= payload=>api.post('/account/user/gallery/album',payload.body,{headers: { Authorization: `Bearer ${payload.token}`}})
+  const getUpdatePhotoAlbum = payload => api.post('/account/user/gallery/update',payload.body,{headers: { Authorization: `Bearer ${payload.token}`}})
+  const updateAlbum= payload=>api.patch('/account/user/gallery/album/'+payload.idPhoto,payload.body,{headers: { Authorization: `Bearer ${payload.token}`}})
+  const deleteAlbum= payload=>api.delete('/account/user/gallery/album/'+payload.idAlbum,'',{headers: { Authorization: `Bearer ${payload.token}`}})
   // ------
   // STEP 3
   // ------
@@ -98,7 +103,12 @@ const create = (baseURL = staging) => {
     removeFavorite,
     getGallery,
     addFoto,
-    deleteFoto
+    deleteFoto,
+    getAlbum,
+    addAlbum,
+    updateAlbum,
+    deleteAlbum,
+    getUpdatePhotoAlbum
   }
 }
 

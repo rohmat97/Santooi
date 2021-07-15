@@ -42,7 +42,7 @@ function BerhitungYuk(props) {
     const [appState, setappState] =useState(AppState.currentState)
     const toggleOverlay = () => {
         setVisible(!visible);
-        SoundPlayer.stop()
+        // SoundPlayer.stop()
     };
     const timerRef = useRef(null);
     let a: any = 0;
@@ -213,7 +213,7 @@ function BerhitungYuk(props) {
     useEffect(()=>{
         if(start){
             // console.log(Second.charAt(0))
-            setPlay('start')
+            setPlay('PAUSE')
             KeepAwake.activate()
         }else{
             if(reset){

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { View, Image, Text, TouchableOpacity, ActivityIndicator, LogBox, Share } from 'react-native'
+import { View, Image, Text, TouchableOpacity, ActivityIndicator, LogBox, Platform } from 'react-native'
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { connect } from 'react-redux';
-import Animated from 'react-native-reanimated';
+import Share from 'react-native-share';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { FAB, Overlay } from 'react-native-elements';
 //redux
@@ -10,6 +10,11 @@ import TokenRedux from '../../Redux/Authentication/TokenRedux'
 import GalleryRedux from '../../Redux/FotoFav/GalleryRedux'
 import AddFotoRedux from '../../Redux/FotoFav/AddFotoRedux'
 import DeleteFotoRedux from '../../Redux/FotoFav/DeleteFotoRedux'
+import AlbumRedux from '../../Redux/FotoFav/AlbumRedux'
+import AddAlbumRedux from '../../Redux/FotoFav/AddAlbumRedux'
+import UpdateAlbumRedux from '../../Redux/FotoFav/UpdateAlbumRedux'
+import UploadPhotoAlbumRedux from '../../Redux/FotoFav/UploadPhotoAlbumRedux'
+import DeleteAlbumRedux from '../../Redux/FotoFav/DeleteAlbumRedux'
 
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import images from '../../Themes/Images';
@@ -17,15 +22,19 @@ import styles from '../Styles/LaunchScreenStyles'
 import Colors from '../../Themes/Colors'
 import { Screen } from '../../Transforms/Screen'
 import { Alert } from 'react-native';
-import { HeaderFoto, MenuFoto, ListFoto } from './Foto/Component';
+import { HeaderFoto, MenuFoto, ListFoto, DetailFoto} from './Foto/Component';
 import { bindActionCreators } from 'redux';
 
 function FotoFavorit(props) {
     const sheetRef = React.useRef(null);
-    const { navigation,token,gallery,GalleryRequest,GallerySuccess,uploadfoto,AddfotoRequest,galleryfetching,AddfotoSuccess,DeletefotoRequest,DeletefotoSuccess,deletedFoto } = props
+    const { 
+      navigation,token,gallery,GalleryRequest,GallerySuccess,uploadfoto,AddfotoRequest,galleryfetching,AddfotoSuccess,
+      DeletefotoRequest,DeletefotoSuccess,deletedFoto,album ,AlbumRequest, AddAlbumRequest, AddAlbumSuccess,addalbum,
+      UploadAlbumRequest, updateAlbum,DeleteAlbumRequest } = props
     const { pop } = navigation
     const [listFoto, setlistFoto] = useState([])
-    const [listGaleri, setlisrGaleri] = useState([{},{},{},{},{}])
+    const [responseFoto, setresponseFoto] = useState([])
+    const [listGaleri, setlisrGaleri] = useState([])
     const [response, setResponse] = useState(null);
     const [visible, setVisible] = useState(false)
     const [visibleBottomSheet, setvisibleBottomSheet] = useState(false)
@@ -33,6 +42,11 @@ function FotoFavorit(props) {
     const [onPicked, setonPicked]=useState([])
     const [willDelete, setwillDelete] =useState(false)
     const [loading, setloading]= useState(false)
+    const [visibleDetailFoto, setvisibleDetailFoto]=useState(false)
+    const [selectedDetailFoto,setselectedDetailFoto]=useState(null)
+    const [addToAlbum, setaddToAlbum] = useState(false)
+    const [createNewAlbum, setcreateNewAlbum] = useState(false)
+    const [nameNewAlbum, setnameNewAlbum] = useState()
 
     const onButtonPress = React.useCallback((type, options) => {
       // console.log(options,type)
@@ -59,6 +73,7 @@ function FotoFavorit(props) {
       setlistFoto([])
       setTimeout(() => {
         GalleryRequest(payload)
+        AlbumRequest(payload)
       }, 1000);
      
       // return () => {
@@ -71,6 +86,7 @@ function FotoFavorit(props) {
         const merger =listFoto.concat(gallery.data.rows.data)
         setlistFoto(merger)
         setloading(false)
+        setresponseFoto(gallery)
         GallerySuccess(null)
       }
      
@@ -118,21 +134,70 @@ function FotoFavorit(props) {
         DeletefotoSuccess(null)
       }
     }, [deletedFoto])
+
+    useEffect(() => {
+      if(album && album.data && album.data.rows){
+        // console.log('album',album.data.rows[21].col_highlight)
+        setlisrGaleri(album.data.rows)
+      }
+      
+    }, [album])
+
+    useEffect(()=>{
+      if(addalbum){
+        // const foto = new FormData()
+          
+        // foto.append('photo',{
+        //   name: selectedDetailFoto.photo.name,
+        //   uri: selectedDetailFoto.photo.uri,
+        //   type:"image/jpg"
+        // })
+        // foto.append('id_user_gallery_album',addalbum.data.id)
+        // console.log(foto)
+        // // console.log(params)
+        const payload ={
+          'token':token && token.data.access_token,
+          'body':{
+            'id_user_gallery_album':addalbum.data.id,
+            'photos':[{"id":selectedDetailFoto.id}]
+          },
+        }
+        // AddfotoRequest(payload)
+        UploadAlbumRequest(payload)
+        AddAlbumSuccess(null)
+        const payloadRequest ={
+          'token':token && token.data.access_token,
+          'page':1
+        }
+        AlbumRequest(payloadRequest)
+      }
+    },[addalbum])
+
+    useEffect(() => {
+     if(updateAlbum){
+       console.log('updateAlbum',updateAlbum)
+        
+     }
+    }, [updateAlbum])
     const uploadFoto=(params)=>{
       // console.log(params)
       if(params && !params.errorCode){
-        const foto = new FormData()
-        foto.append('photo',{
-          name: params.assets[0].fileName,
-          uri:params.assets[0].uri,
-          type: params.assets[0].type
+        params.assets.map(data =>{
+          const foto = new FormData()
+          
+          foto.append('photo',{
+            name: data.fileName,
+            uri: data.uri,
+            type: data.type
+          })
+          // console.log(foto._parts[0])
+          console.log(params)
+          const payload ={
+            'token':token && token.data.access_token,
+            'body':foto
+          }
+          AddfotoRequest(payload)
         })
-        console.log(foto)
-        const payload ={
-          'token':token && token.data.access_token,
-          'body':foto
-        }
-        AddfotoRequest(payload)
       }
  
     }
@@ -156,7 +221,53 @@ function FotoFavorit(props) {
       setlistFoto(filter)
       DeletefotoRequest(payload)
     }
-
+    const deleteDetailFoto=(params)=>{
+      let foto =[]
+      let filter = []
+      foto.push({'id':params.id})
+      const payload = {
+        'token':token && token.data.access_token,
+        'body': {
+          'photos':foto
+        }}
+      listFoto.map(data =>{
+        if(data.id !== params.id){
+            filter.push(data)
+        }
+      })
+      setlistFoto(filter)
+      DeletefotoRequest(payload)
+    }
+    const AddNewAlbum =()=>{
+      const payload = {
+        'token':token && token.data.access_token,
+        'body': {
+          'name':nameNewAlbum
+        }}
+        if(createNewAlbum){
+          setcreateNewAlbum(false)
+          AddAlbumRequest(payload)
+        }
+      
+    }
+    const deleteAlbum=()=>{
+      let foto =[]
+      let filter = []
+      onPicked.map(data=>{
+        foto.push({'id':data.id})
+      })
+      const payload = {
+        'token':token && token.data.access_token,
+        'idAlbum': 1
+      }
+      listFoto.map(data =>{
+        if(!onPicked.includes(data)){
+            filter.push(data)
+        }
+      })
+      setlistFoto(filter)
+      DeletefotoRequest(payload)
+    }
     const renderContent = () => {
       if(willDelete){
         return(
@@ -164,10 +275,10 @@ function FotoFavorit(props) {
             style={{
               backgroundColor: 'white',
               padding: 16,
-              height: 250,
+              height: 300,
               flexDirection:'column',
               justifyContent:'center',
-              alignItems:'center'
+              alignItems:'flex-start'
             }}
           >
             <View style={{flexDirection:'row',alignItems:'center',width:'95%',marginTop:-50,marginBottom:30}}>
@@ -183,15 +294,20 @@ function FotoFavorit(props) {
                 setwillDelete(false)
                 setonPicked([])
                 setvisibleBottomSheet(false)
-                deleteFoto()
+                if(isGaleri){
+                  deleteAlbum()
+                }else{
+                  deleteFoto()
+                }
+                
               }} style={{width:'100%',alignItems:'center'}}>
                 <Text 
                   style={{color:'red',borderWidth:1, borderColor:'red',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Hapus Item</Text>
             </TouchableOpacity>
-            
-            <Text 
-              onPress={()=>setwillDelete(false)}
-              style={{color:'rgba(103, 48, 143, 1)',borderWidth:1, borderColor:'rgba(103, 48, 143, 1)',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Batal</Text>
+            <TouchableOpacity onPress={()=>setwillDelete(false)} style={{width:'100%',alignItems:'center'}}>
+              <Text 
+                style={{color:'rgba(103, 48, 143, 1)',borderWidth:1, borderColor:'rgba(103, 48, 143, 1)',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Batal</Text>
+            </TouchableOpacity>
           </View>
         )
       }
@@ -201,20 +317,37 @@ function FotoFavorit(props) {
             style={{
               backgroundColor: 'white',
               padding: 16,
-              height: 125,
+              paddingTop:24,
+              height: 200,
               flexDirection:'row',
               justifyContent:'center',
-              alignItems:'center'
+              alignItems:'flex-start'
             }}
           >
-            <TouchableOpacity onPress={()=>Share.share({title:'React Native | A framework for building native apps using React',url:onPicked[0].photo.url})}>
-            <Image
-              source={images.share} 
-              style={{ width: Screen.width * 0.08, height: Screen.width * 0.08}} 
-              resizeMode={'stretch'} 
-              PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
-            />
-            </TouchableOpacity>
+            {
+              isGaleri?
+              <TouchableOpacity onPress={()=>
+                {
+                  let dataforshare= []
+                  onPicked.map(img=>{
+                    dataforshare.push(img.photo.url)
+                  })
+                  const shareOptions = {
+                    title: 'Share file',
+                        urls:dataforshare,
+                      };
+    
+                    Share.open(shareOptions)
+                }}>
+                <Image
+                  source={images.share} 
+                  style={{ width: Screen.width * 0.08, height: Screen.width * 0.08}} 
+                  resizeMode={'stretch'} 
+                  PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
+                />
+                </TouchableOpacity>:null
+            }
+           
             <Text style={{fontSize:16, marginHorizontal:Screen.width*0.25}}>Pilih Item</Text>
             <TouchableOpacity onPress={()=>setwillDelete(true)}>
               <Image
@@ -233,29 +366,33 @@ function FotoFavorit(props) {
       return(
         <TemplateBackground cover={true}>
           <View style={styles.mainContainer}>
-            <HeaderFoto isEmpty={true} loading={true} pop={pop}/>
+            <HeaderFoto isEmpty={true} loading={true} pop={pop} setvisibleBottomSheet={setvisibleBottomSheet} visibleBottomSheet={visibleBottomSheet} setonPicked={setonPicked}/>
           </View>
       </TemplateBackground>
       )
     }
-
     return (
         <TemplateBackground cover={true}>
             <View style={[styles.mainContainer]}>
                 <View style={{height:'20%', paddingHorizontal:12, paddingTop:12}}>
                     {/* <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri}/> */}
-                    <HeaderFoto isEmpty={isGaleri?listFoto.length>0?false:true:listGaleri.length>0?false:true}  pop={pop} setisGaleri={setisGaleri} isGaleri={isGaleri}/>
+                    <HeaderFoto isEmpty={isGaleri?listFoto.length>0?false:true:listGaleri.length>0?false:true}  pop={pop} setisGaleri={setisGaleri} isGaleri={isGaleri} setvisibleBottomSheet={setvisibleBottomSheet} visibleBottomSheet={visibleBottomSheet} setonPicked={setonPicked}/>
                 </View>
                 <ListFoto 
                   listFoto={listFoto} 
                   isGaleri={isGaleri} 
                   listGaleri={listGaleri} 
-                  gallery={gallery&& gallery.data&& gallery.data.rows} 
+                  album={album}
+                  gallery={responseFoto && responseFoto.data && responseFoto.data.rows} 
                   GalleryRequest={GalleryRequest} 
+                  AlbumRequest={AlbumRequest}
                   token={token}
                   onPicked={onPicked}
                   setonPicked={setonPicked}
                   setvisibleBottomSheet={setvisibleBottomSheet}
+                  setvisibleDetailFoto={setvisibleDetailFoto}
+                  visibleBottomSheet={visibleBottomSheet}
+                  setselectedDetailFoto={setselectedDetailFoto}
                   />
                 {
                   !visibleBottomSheet && <View style={{bottom:0,left:Screen.width*0.45,width:Screen.width, paddingVertical:20}}>
@@ -269,26 +406,42 @@ function FotoFavorit(props) {
             {
               visibleBottomSheet &&<BottomSheet
               ref={sheetRef}
-              snapPoints={[willDelete?340:290, 290,0]}
+              snapPoints={[willDelete?Platform.OS==='ios'?375:400:Platform.OS==='ios'?275:325,0,0]}
               borderRadius={10}
               renderContent={renderContent}
+              enabledContentGestureInteraction={true}
+              enabledContentTapInteraction={true}
               onCloseEnd={()=> {
                 setonPicked([])
                 setvisibleBottomSheet(false)
               }}
             />
             }
-            <Overlay visible={visible} onBackdropPress={()=> setVisible(false)} overlayStyle={{width:Screen.width*0.8, borderRadius:12}}>
+            <Overlay visible={visible} onBackdropPress={()=> setVisible(false)} overlayStyle={{width:Screen.width*0.8, borderRadius:12,paddingBottom:-12}}>
                 {actions.map(({title, type, options,color}) => {
                     return (
-                    <View style={{ borderBottomColor:'rgba(212, 212, 212, 1)', borderBottomWidth:color?0:1,width:Screen.width*0.8,marginLeft:-10}}>
+                    <View style={{ borderBottomColor:'rgba(212, 212, 212, 1)', borderBottomWidth:color?0:1,width:Screen.width*0.8,marginLeft:-10,backgroundColor:color?'rgba(102, 45, 145, 0.85)':''}}>
                         <TouchableOpacity onPress={() => onButtonPress(type, options)}>
-                            <Text style={{color:color?color:"rgba(0, 83, 220, 1)", fontSize:14, textAlign:'center',padding:12,width:Screen.width*0.8}}>{title}</Text>
+                            <Text style={{color:color?color:"rgba(0, 83, 220, 1)", fontSize:14, textAlign:'center',padding:12,paddingBottom:12,width:Screen.width*0.8}}>{title}</Text>
                         </TouchableOpacity> 
                     </View>
                     );
                 })}
             </Overlay>
+            <DetailFoto 
+              visibleDetailFoto={visibleDetailFoto} 
+              setvisibleDetailFoto={setvisibleDetailFoto} 
+              selectedDetailFoto={selectedDetailFoto} 
+              deleteDetailFoto={deleteDetailFoto}
+              addToAlbum={addToAlbum}
+              setaddToAlbum={setaddToAlbum}
+              createNewAlbum={createNewAlbum}
+              setcreateNewAlbum={setcreateNewAlbum}
+              nameNewAlbum={nameNewAlbum}
+              setnameNewAlbum={setnameNewAlbum}
+              AddNewAlbum={AddNewAlbum}
+              
+              />
         </TemplateBackground>
     )
 }
@@ -299,12 +452,15 @@ const mapStateToProps = (state) => {
     gallery: state.gallery.payload,
     galleryfetching: state.gallery.fetching,
     uploadfoto:state.addFoto.payload,
-    deletedFoto:state.deleteFoto.payload
+    deletedFoto:state.deleteFoto.payload,
+    album:state.album.payload,
+    addalbum:state.addalbum.payload,
+    updateAlbum:state.updateAlbum.payload
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(Object.assign(TokenRedux,GalleryRedux,AddFotoRedux,DeleteFotoRedux), dispatch)
+  return bindActionCreators(Object.assign(TokenRedux,GalleryRedux,AddFotoRedux,DeleteFotoRedux,AlbumRedux,AddAlbumRedux,UpdateAlbumRedux,UploadPhotoAlbumRedux,DeleteAlbumRedux), dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(FotoFavorit)
 
@@ -336,9 +492,9 @@ interface Action {
       },
     },
     {
-      title: 'Hapus Foto',
+      title: 'Batal',
       type: 'Close',
-      color:'red'
+      color:'white'
     },
     // {
     //   title: 'Take Video',
