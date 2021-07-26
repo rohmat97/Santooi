@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import RootContainer from './RootContainer'
 import createStore from '../Redux'
 
+import FlashMessage from "react-native-flash-message";
 // create our store
 const store = createStore()
 
@@ -24,6 +25,7 @@ class App extends Component {
     return (
       <Provider store={store} uriPrefix={'santooi://'}>
         <RootContainer/>
+        <FlashMessage position="top" /> 
       </Provider>
     )
   }

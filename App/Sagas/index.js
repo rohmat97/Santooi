@@ -34,6 +34,7 @@ import { AddAlbumTypes } from '../Redux/FotoFav/AddAlbumRedux';
 import { DeleteAlbumTypes } from '../Redux/FotoFav/DeleteAlbumRedux';
 import { UpdateAlbumTypes } from '../Redux/FotoFav/UpdateAlbumRedux';
 import { UploadAlbumTypes } from '../Redux/FotoFav/UploadPhotoAlbumRedux';
+import { DetailAlbumTypes } from '../Redux/FotoFav/DetailAlbumRedux';
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
@@ -42,7 +43,7 @@ import { getEmoticon,UpdateStatus,getStatus } from './DashboardSagas';
 import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword, getCheckPhone} from './AuthSagas';
 import { getMusic } from './BerhitungSagas';
 import { getKalimat, addFavorite } from './KalimatBijakSagas';
-import { getGallery, AddFoto, DeleteFoto, getAlbum, getAddAlbum, DeleteAlbum, UpdateAlbum, UploadAlbum } from './FotoFavSagas';
+import { getGallery, AddFoto, DeleteFoto, getAlbum, getAddAlbum, DeleteAlbum, UpdateAlbum, UploadAlbum,getDetailAlbum } from './FotoFavSagas';
 
 /* ------------- API ------------- */
 
@@ -80,6 +81,7 @@ export default function * root () {
     takeLatest(AddAlbumTypes.ADD_ALBUM_REQUEST, getAddAlbum, api),
     takeLatest(DeleteAlbumTypes.DELETE_ALBUM_REQUEST, DeleteAlbum, api),
     takeLatest(UpdateAlbumTypes.UPDATE_ALBUM_REQUEST, UpdateAlbum, api),
-    takeLatest(UploadAlbumTypes.UPLOAD_ALBUM_REQUEST, UploadAlbum, api)
+    takeLatest(UploadAlbumTypes.UPLOAD_ALBUM_REQUEST, UploadAlbum, api),
+    takeLatest(DetailAlbumTypes.DETAIL_ALBUM_REQUEST, getDetailAlbum, api)
   ])
 }

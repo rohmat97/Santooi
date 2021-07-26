@@ -67,6 +67,7 @@ const create = (baseURL = staging) => {
   const getUpdatePhotoAlbum = payload => api.post('/account/user/gallery/update',payload.body,{headers: { Authorization: `Bearer ${payload.token}`}})
   const updateAlbum= payload=>api.patch('/account/user/gallery/album/'+payload.idPhoto,payload.body,{headers: { Authorization: `Bearer ${payload.token}`}})
   const deleteAlbum= payload=>api.delete('/account/user/gallery/album/'+payload.idAlbum,'',{headers: { Authorization: `Bearer ${payload.token}`}})
+  const getDetailAlbum = payload => api.get(`/account/user/gallery?id_user_gallery_album=${payload.id}&limit=10&page=${payload.page}`,'',{headers:{Authorization:`Bearer ${payload.token}`}})
   // ------
   // STEP 3
   // ------
@@ -108,7 +109,8 @@ const create = (baseURL = staging) => {
     addAlbum,
     updateAlbum,
     deleteAlbum,
-    getUpdatePhotoAlbum
+    getUpdatePhotoAlbum,
+    getDetailAlbum
   }
 }
 

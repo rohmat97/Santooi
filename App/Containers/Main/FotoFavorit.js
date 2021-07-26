@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Share from 'react-native-share';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { FAB, Overlay } from 'react-native-elements';
+import { showMessage, hideMessage } from "react-native-flash-message";
 //redux
 import TokenRedux from '../../Redux/Authentication/TokenRedux'
 import GalleryRedux from '../../Redux/FotoFav/GalleryRedux'
@@ -24,14 +25,15 @@ import { Screen } from '../../Transforms/Screen'
 import { Alert } from 'react-native';
 import { HeaderFoto, MenuFoto, ListFoto, DetailFoto} from './Foto/Component';
 import { bindActionCreators } from 'redux';
+import { Snackbar } from 'react-native-paper';
 
 function FotoFavorit(props) {
     const sheetRef = React.useRef(null);
     const { 
       navigation,token,gallery,GalleryRequest,GallerySuccess,uploadfoto,AddfotoRequest,galleryfetching,AddfotoSuccess,
       DeletefotoRequest,DeletefotoSuccess,deletedFoto,album ,AlbumRequest, AddAlbumRequest, AddAlbumSuccess,addalbum,
-      UploadAlbumRequest, updateAlbum,DeleteAlbumRequest } = props
-    const { pop } = navigation
+      UploadAlbumRequest, updateAlbum,DeleteAlbumRequest,deletealbum,DeleteAlbumSuccess } = props
+    const { pop, navigate } = navigation
     const [listFoto, setlistFoto] = useState([])
     const [responseFoto, setresponseFoto] = useState([])
     const [listGaleri, setlisrGaleri] = useState([])
@@ -155,6 +157,13 @@ function FotoFavorit(props) {
         // foto.append('id_user_gallery_album',addalbum.data.id)
         // console.log(foto)
         // // console.log(params)
+        setcreateNewAlbum(false)
+        setaddToAlbum(false)
+        setvisibleDetailFoto(false)
+        showMessage({
+          message: "Add album Success",
+          type: "info",
+        });
         const payload ={
           'token':token && token.data.access_token,
           'body':{
@@ -179,6 +188,19 @@ function FotoFavorit(props) {
         
      }
     }, [updateAlbum])
+
+    useEffect(() => {
+      if(deletealbum && deletealbum.status) {
+        DeleteAlbumSuccess(null)
+        const payloadRequest ={
+          'token':token && token.data.access_token,
+          'page':1
+        }
+        AlbumRequest(payloadRequest)
+        
+      }
+    }, [deletealbum])
+
     const uploadFoto=(params)=>{
       // console.log(params)
       if(params && !params.errorCode){
@@ -251,22 +273,20 @@ function FotoFavorit(props) {
       
     }
     const deleteAlbum=()=>{
-      let foto =[]
       let filter = []
-      onPicked.map(data=>{
-        foto.push({'id':data.id})
-      })
       const payload = {
         'token':token && token.data.access_token,
-        'idAlbum': 1
+        'idAlbum': onPicked[0].id
       }
-      listFoto.map(data =>{
-        if(!onPicked.includes(data)){
-            filter.push(data)
-        }
-      })
-      setlistFoto(filter)
-      DeletefotoRequest(payload)
+      console.log('payload',payload)
+      DeleteAlbumRequest(payload)
+      
+      // listGaleri.map(data =>{
+      //   if(!onPicked.includes(data)){
+      //       filter.push(data)
+      //   }
+      // })
+      // setlisrGaleri(filter)
     }
     const renderContent = () => {
       if(willDelete){
@@ -295,9 +315,9 @@ function FotoFavorit(props) {
                 setonPicked([])
                 setvisibleBottomSheet(false)
                 if(isGaleri){
-                  deleteAlbum()
-                }else{
                   deleteFoto()
+                }else{
+                  deleteAlbum()
                 }
                 
               }} style={{width:'100%',alignItems:'center'}}>
@@ -393,6 +413,7 @@ function FotoFavorit(props) {
                   setvisibleDetailFoto={setvisibleDetailFoto}
                   visibleBottomSheet={visibleBottomSheet}
                   setselectedDetailFoto={setselectedDetailFoto}
+                  navigate={navigate}
                   />
                 {
                   !visibleBottomSheet && <View style={{bottom:0,left:Screen.width*0.45,width:Screen.width, paddingVertical:20}}>
@@ -455,7 +476,8 @@ const mapStateToProps = (state) => {
     deletedFoto:state.deleteFoto.payload,
     album:state.album.payload,
     addalbum:state.addalbum.payload,
-    updateAlbum:state.updateAlbum.payload
+    updateAlbum:state.updateAlbum.payload,
+    deletealbum: state.deletealbum.payload
   }
 }
 
@@ -470,7 +492,7 @@ interface Action {
     options: ImagePicker.CameraOptions | ImagePicker.ImageLibraryOptions;
   }
   
-  const actions: Action[] = [
+export const actions: Action[] = [
     {
       title: 'Ambil Foto',
       type: 'capture',

@@ -32,6 +32,7 @@ export const reducers = combineReducers({
   deletealbum: require('./FotoFav/DeleteAlbumRedux').reducer,
   updateAlbum: require('./FotoFav/UpdateAlbumRedux').reducer,
   uploadAlbum: require('./FotoFav/UploadPhotoAlbumRedux').reducer,
+  detailAlbum: require('./FotoFav/DetailAlbumRedux').reducer,
 })
 
 export default () => {

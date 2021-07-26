@@ -7,6 +7,7 @@ import AddAlbumRedux from '../Redux/FotoFav/AddAlbumRedux'
 import DeleteAlbumRedux from '../Redux/FotoFav/DeleteAlbumRedux'
 import UpdateAlbumRedux from '../Redux/FotoFav/UpdateAlbumRedux'
 import UploadPhotoAlbumRedux from '../Redux/FotoFav/UploadPhotoAlbumRedux'
+import DetailAlbumRedux from '../Redux/FotoFav/DetailAlbumRedux'
 //gallery
 export function * getGallery (api, action) {
   const { data } = action
@@ -51,6 +52,19 @@ export function * getAlbum (api, action) {
   yield put(AlbumRedux.AlbumSuccess(response.data))
 }
 
+
+export function * getDetailAlbum (api, action) {
+  const { data } = action
+  // make the call to the api
+  const response = yield call(api.getDetailAlbum, data)
+  if (response.ok) {
+    // do data conversion here if needed
+    // console.log('getDetailAlbum', response.data.data.rows)
+    yield put(DetailAlbumRedux.DetailAlbumSuccess(response.data.data.rows))
+  } 
+}
+
+
 export function * getAddAlbum (api, action) {
   const { data } = action
   // console.log('data', data.body)
@@ -65,12 +79,13 @@ export function * getAddAlbum (api, action) {
 
 export function * DeleteAlbum (api, action) {
   const { data } = action
-  // console.log('data', data.body)
-  // make the call to the api
-  // console.log(data.body._searchParams[0])
-  const response = yield call(api.deleteAlbum , data)
-  console.log('response DeleteAlbum', response.data)
-  yield put(DeleteAlbumRedux.DeleteAlbumSuccess(response.data))
+  // console.log('data DeleteAlbum', data)
+  const response = yield call(api.deleteAlbum, data)
+  // console.log('response DeleteAlbum', response.data)
+  if (response.ok) {
+    yield put(DeleteAlbumRedux.DeleteAlbumSuccess(response.data))
+  }
+  
 }
 
 

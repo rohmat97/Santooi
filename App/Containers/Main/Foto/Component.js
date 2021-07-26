@@ -72,7 +72,7 @@ export const MenuFoto =({setisGaleri,isGaleri,isEmpty})=>{
     )
 }
 
-export const ListFoto =({listFoto,album,isGaleri,listGaleri,gallery,GalleryRequest,token,onPicked,setonPicked,setvisibleBottomSheet,setvisibleDetailFoto,visibleBottomSheet,setselectedDetailFoto,AlbumRequest})=>{
+export const ListFoto =({listFoto,album,isGaleri,listGaleri,gallery,GalleryRequest,token,onPicked,setonPicked,setvisibleBottomSheet,setvisibleDetailFoto,visibleBottomSheet,setselectedDetailFoto,AlbumRequest,navigate})=>{
     const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
         const paddingToBottom = 20;
         return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
@@ -188,11 +188,11 @@ export const ListFoto =({listFoto,album,isGaleri,listGaleri,gallery,GalleryReque
 
        
     }
-    return <ThumbnailAlbum  listGaleri={listGaleri} album={album} AlbumRequest={AlbumRequest} visibleBottomSheet={visibleBottomSheet} setvisibleBottomSheet={setvisibleBottomSheet} setonPicked={setonPicked} onPicked={onPicked}/>
+    return <ThumbnailAlbum  listGaleri={listGaleri} album={album} AlbumRequest={AlbumRequest} visibleBottomSheet={visibleBottomSheet} setvisibleBottomSheet={setvisibleBottomSheet} setonPicked={setonPicked} onPicked={onPicked} navigate={navigate}/>
 
 }
 
-export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequest, setvisibleBottomSheet, setonPicked, onPicked }) =>{
+export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequest, setvisibleBottomSheet, setonPicked, onPicked, navigate }) =>{
     const isCloseToBottom = ({layoutMeasurement, contentOffset, contentSize}) => {
         const paddingToBottom = 20;
         return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
@@ -259,8 +259,7 @@ export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequ
                     
                     // }
                 }else{
-                    setvisibleDetailFoto(true)
-                    setselectedDetailFoto(item)
+                    navigate('DetailAlbum',{params:item})
                 }
                 
             }}>
