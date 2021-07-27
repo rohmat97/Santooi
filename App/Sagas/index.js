@@ -35,6 +35,9 @@ import { DeleteAlbumTypes } from '../Redux/FotoFav/DeleteAlbumRedux';
 import { UpdateAlbumTypes } from '../Redux/FotoFav/UpdateAlbumRedux';
 import { UploadAlbumTypes } from '../Redux/FotoFav/UploadPhotoAlbumRedux';
 import { DetailAlbumTypes } from '../Redux/FotoFav/DetailAlbumRedux';
+//jalanyuks
+import { GetPlaceTypes } from '../Redux/JalanYuk/GetPlaceRedux';
+import { HistoryPlaceTypes } from '../Redux/JalanYuk/HistoryPlaceRedux';
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
@@ -44,6 +47,7 @@ import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook
 import { getMusic } from './BerhitungSagas';
 import { getKalimat, addFavorite } from './KalimatBijakSagas';
 import { getGallery, AddFoto, DeleteFoto, getAlbum, getAddAlbum, DeleteAlbum, UpdateAlbum, UploadAlbum,getDetailAlbum } from './FotoFavSagas';
+import { getPlace, getPlaceHistory } from './JalanYukSagas';
 
 /* ------------- API ------------- */
 
@@ -82,6 +86,8 @@ export default function * root () {
     takeLatest(DeleteAlbumTypes.DELETE_ALBUM_REQUEST, DeleteAlbum, api),
     takeLatest(UpdateAlbumTypes.UPDATE_ALBUM_REQUEST, UpdateAlbum, api),
     takeLatest(UploadAlbumTypes.UPLOAD_ALBUM_REQUEST, UploadAlbum, api),
-    takeLatest(DetailAlbumTypes.DETAIL_ALBUM_REQUEST, getDetailAlbum, api)
+    takeLatest(DetailAlbumTypes.DETAIL_ALBUM_REQUEST, getDetailAlbum, api),
+    takeLatest(GetPlaceTypes.GET_PLACE_REQUEST, getPlace, api),
+    takeLatest(HistoryPlaceTypes.HISTORY_PLACE_REQUEST, getPlaceHistory, api),
   ])
 }

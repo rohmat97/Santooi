@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Text, Image, View, ImageBackground } from 'react-native'
 import { TemplateBackground } from '../Components/TemplateBackground'
 
+// import Geolocation from '@react-native-community/geolocation';
 //redux
 import TokenRedux from '../Redux/Authentication/TokenRedux';
 // Styles
@@ -21,6 +22,7 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
     const [nextStep, setnextStep] = useState(false);
     const [params, setParam] = useState(false);
       useEffect(() => {
+        // Geolocation.requestAuthorization()
         Initiate(setUrl,setCame,navigate,routeName,goBack)
         const pars = getParam('params')
         setParam(pars)

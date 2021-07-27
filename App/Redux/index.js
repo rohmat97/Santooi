@@ -33,6 +33,8 @@ export const reducers = combineReducers({
   updateAlbum: require('./FotoFav/UpdateAlbumRedux').reducer,
   uploadAlbum: require('./FotoFav/UploadPhotoAlbumRedux').reducer,
   detailAlbum: require('./FotoFav/DetailAlbumRedux').reducer,
+  listplace: require('./JalanYuk/GetPlaceRedux').reducer,
+  listhistory: require('./JalanYuk/HistoryPlaceRedux').reducer,
 })
 
 export default () => {
