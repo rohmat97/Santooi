@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { ScrollView, View, Image, Text, TouchableOpacity, TextInput } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { ScrollView, View, Image, Text, TouchableOpacity, TextInput,Platform,FlatList,Linking,PermissionsAndroid } from 'react-native'
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import images from '../../Themes/Images';
 import styles from '../Styles/LaunchScreenStyles'
@@ -7,16 +7,125 @@ import Colors from '../../Themes/Colors'
 import { Screen } from '../../Transforms/Screen'
 import { connect } from 'react-redux';
 import { OverlayJalanYuk } from '../../Components/OverlayJalanYuk';
+import Geolocation from '@react-native-community/geolocation';
+import { bindActionCreators } from 'redux';
+//redux
+import TokenRedux from '../../Redux/Authentication/TokenRedux'
+import GetPlaceRedux from '../../Redux/JalanYuk/GetPlaceRedux'
+import HistoryPlaceRedux from '../../Redux/JalanYuk/HistoryPlaceRedux'
+import { set } from 'seamless-immutable';
+
+
 
 function JalanYuk(props) {
-    const { navigation } = props
+    const { navigation,token,listplace,listhistory,GetPlaceRequest,HistoryPlaceRequest } = props
     const { navigate,pop } = navigation
 
+    const [latlong, setlatlong] = useState()
+    const [listPlaces, setlistPlaces] = useState([])
+    const [listHistory, setlistHistory] = useState([])
+    const [selected, setselected] = useState()
+    const [search, setsearch] = useState(null)
     const [visible, setVisible] = useState(false);
-    const toggleOverlay = () => {
+    const toggleOverlay = (params) => {
         setVisible(!visible);
+        setselected(params)
     };
+    const request = async() =>{
+        if(Platform.OS==='android'){
+             await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+            )
+        }else{
+            await Geolocation.requestAuthorization()
+        }
+        
+        await Geolocation.watchPosition((position) => {
+            let region = {
+                latitude:       position.coords.latitude,
+                longitude:      position.coords.longitude,
+                latitudeDelta:  0.00922*1.5,
+                longitudeDelta: 0.00421*1.5
+              }
+            !latlong && setlatlong(region)
+            // console.log('region',region)     
+          }, (error)=>console.log(error));
+    }
+    useEffect(() => {
+        request()
+    }, [])
 
+    useEffect(() => {
+        if(latlong){
+            const payloadPlace ={
+                'token':token && token.data.access_token,
+                'page':1,
+                'lat':latlong.latitude,
+                'long':latlong.longitude,
+                'key':'',
+                'id':''
+              }
+            const payloadHistory ={
+                'token':token && token.data.access_token,
+                'page':1,
+              }
+            GetPlaceRequest(payloadPlace)
+            HistoryPlaceRequest(payloadHistory)
+            // console.log('latlong',latlong)
+        }
+    }, [latlong])
+    
+    useEffect(() => {
+        if(listplace){
+            setlistPlaces(listplace.data)
+        }
+    }, [listplace])
+
+    useEffect(() => {
+       if(listhistory){
+           setlistHistory(listhistory.data)
+            // console.log('listhistory',listhistory.data[0])
+       }
+    }, [listhistory])
+    const SearchPlace = (text) => {
+        // console.log(text.length)
+        if(text.length>0){
+            const payload ={
+                'token':token && token.data.access_token,
+                'page':1,
+                'lat':latlong &&latlong.latitude,
+                'long':latlong && latlong.longitude,
+                'key':text,
+                'id':''
+              }
+            GetPlaceRequest(payload)
+            setsearch(text)
+        }else{
+            const payload ={
+                'token':token && token.data.access_token,
+                'page':1,
+                'lat':latlong && latlong.latitude,
+                'long':latlong &&latlong.longitude,
+                'key':'',
+                'id':''
+              }
+            GetPlaceRequest(payload)
+            setsearch(null)
+        }
+       
+        
+    }
+    const openMaps = (lat, lng) => {
+        // let scheme = Platform.OS === 'ios' ? 'maps:' : 'geo:';
+        // let url = scheme + `${lat},${lng}`;
+        // Linking.openURL(url);
+        if(Platform.OS==='ios'){
+            Linking.openURL(`maps://app?saddr=${lat}+${lng}&daddr=${latlong && latlong.lat}+${latlong && latlong.long}`)
+        }else{
+            Linking.openURL(`google.navigation:q=${lat}+${lng}`)
+        }
+       
+      }
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
@@ -33,58 +142,73 @@ function JalanYuk(props) {
                         <TextInput style={{ color: 'white', flex: 1, marginLeft: 10 }}
                             placeholder={'Search a place...'}
                             placeholderTextColor='rgba(255, 255, 255, 0.5)'
-                            // value={phoneNumber}
-                            // onChangeText={number => onPhoneChange(number)}
+                            value={search}
+                            onChangeText={text => SearchPlace(text)}
                             keyboardType={'default'}
                         // inputRef={(ref) => (this.number = ref)}
                         >
                         </TextInput>
                     </View>
-
-                    <ScrollView>
+                    {
+                       search?
+                        <View style={{ marginBottom: 10 }}>
+                           <FlatList 
+                                data={listPlaces}
+                                horizontal={false}
+                                renderItem={({ item, index, separators }) => (
+                                    <TouchableOpacity onPress={()=>toggleOverlay(item)}>
+                                         <View style={{ flexDirection: 'row', marginBottom: 20, marginRight: 20  }}>
+                                            <Image source={images.kopiKenangan} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
+                                            <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end' }}>
+                                                <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.2, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
+                                                    <Image source={images.addChart} style={{ width: 15, height: 15 }} resizeMode='contain' />
+                                                    <Text style={{ color: 'white', fontWeight: '500', marginLeft: 10, fontSize:12}}>Pesan</Text>
+                                                </View>
+                                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}numberOfLines={1}>{item.name}</Text>
+                                                <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.created_at}</Text>
+                                                <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.4, fontSize: 13 }}numberOfLines={1}>{item.address}</Text>
+                                            </View>
+                                        </View>
+                                    {/* <View style={{ flexDirection: 'column', marginBottom: 20, marginRight: 20 }}>
+                                        <Image source={{uri: item.photo.url}} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
+                                        <View style={{ width: Screen.width * 0.3, flexDirection: 'column', marginTop: 20 }}>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }} numberOfLines={1}>{item.name}</Text>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }} numberOfLines={1}>{item.created_at}</Text>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }}>{item.distance} km</Text>
+                                        </View>
+                                    </View> */}
+                                </TouchableOpacity>
+                                  )}
+                            />  
+                        </View>:
+                        <ScrollView>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
                             <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.3, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>
                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>Recomended</Text>
                             </View>
-                            <TouchableOpacity>
+                            {/* <TouchableOpacity>
                                 <Text style={{ color: '#67308F', marginLeft: 10, fontWeight: 'bold' }}>See All</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                         </View>
 
                         <View style={{ marginBottom: 10 }}>
-                            <ScrollView horizontal={true}>
-                                <TouchableOpacity onPress={toggleOverlay}>
+                            <FlatList 
+                                data={listPlaces}
+                                horizontal={true}
+                                renderItem={({ item, index, separators }) => (
+                                    <TouchableOpacity onPress={()=>toggleOverlay(item)}>
                                     <View style={{ flexDirection: 'column', marginBottom: 20, marginRight: 20 }}>
-                                        <Image source={images.kopiKenangan} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
+                                        <Image source={{uri: item.photo.url}} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
                                         <View style={{ width: Screen.width * 0.3, flexDirection: 'column', marginTop: 20 }}>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}>Kopi Kenangan</Text>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }}>7, Jl.Lamandau III ..</Text>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }}>0.5 km</Text>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }} numberOfLines={1}>{item.name}</Text>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }} numberOfLines={1}>{item.address}</Text>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }}>{item.distance} km</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={toggleOverlay}>
-                                    <View style={{ flexDirection: 'column', marginBottom: 20, marginRight: 20 }}>
-                                        <Image source={images.kopiKenangan} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
-                                        <View style={{ width: Screen.width * 0.3, flexDirection: 'column', marginTop: 20 }}>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}>Kopi Kenangan</Text>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }}>7, Jl.Lamandau III ..</Text>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }}>0.5 km</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress={toggleOverlay}>
-                                    <View style={{ flexDirection: 'column', marginBottom: 20, marginRight: 20 }}>
-                                        <Image source={images.kopiKenangan} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
-                                        <View style={{ width: Screen.width * 0.3, flexDirection: 'column', marginTop: 20 }}>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}>Kopi Kenangan</Text>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }}>7, Jl.Lamandau III ..</Text>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }}>0.5 km</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                            </ScrollView>
+                                  )}
+                            />
                         </View>
 
                         <View style={{ height: 1, width: '100%', borderRadius: 1, borderWidth: 1, borderColor: '#D9078D', borderStyle: 'dashed' }} />
@@ -94,33 +218,49 @@ function JalanYuk(props) {
                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>History</Text>
                             </View>
                         </View>
+                        <FlatList 
+                                data={listHistory}
+                                horizontal={false}
+                                renderItem={({ item, index, separators }) => (
+                                    
+                                         <View style={{ flexDirection: 'row', marginBottom: 20, marginRight: 20  }}>
+                                            <Image source={{ uri: item.place.photo.url}} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
+                                            <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end' }}>
+                                                <TouchableOpacity onPress={()=>Linking.openURL(item.place.url)}>
+                                                    <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.2, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
+                                                        <Image source={images.addChart} style={{ width: 15, height: 15 }} resizeMode='contain' />
+                                                        <Text style={{ color: 'white', fontWeight: '500', marginLeft: 10, fontSize:12}}>Pesan</Text>
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}numberOfLines={1}>{item.place.name}</Text>
+                                                <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.place.created_at}</Text>
+                                                <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.4, fontSize: 13 }}numberOfLines={1}>{item.place.address}</Text>
+                                            </View>
+                                        </View>
 
-                        <View style={{ flexDirection: 'row', marginBottom: 20 }}>
-                            <Image source={images.kopiKenangan} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
-                            <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end' }}>
-                                <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.2, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
-                                    <Image source={images.addChart} style={{ width: 15, height: 15 }} resizeMode='contain' />
-                                    <Text style={{ color: 'white', fontWeight: '500', marginLeft: 10, fontSize:12}}>Pesan</Text>
-                                </View>
-                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}>Kopi Kenangan</Text>
-                                <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}>03 Dec 2020, 16:06</Text>
-                                <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.4, fontSize: 13 }}>7, Jl.Lamandau III No.04, RT.04/RW.07, Kramat Pela</Text>
-                            </View>
-                        </View>
-                        <View style={{ flexDirection: 'row', marginBottom: 20 }}>
-                            <Image source={images.kopiKenangan} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
-                            <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end' }}>
-                                <Text style={{ color: 'white', fontWeight: 'bold' }}>Kopi Kenangan</Text>
-                                <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10 }}>03 Dec 2020, 16:06</Text>
-                                <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.4 }}>7, Jl.Lamandau III No.04, RT.04/RW.07, Kramat Pela</Text>
-                            </View>
-                        </View>
+                                
+                                  )}
+                            />  
                     </ScrollView>
-                    <OverlayJalanYuk visible={visible} toggleOverlay={toggleOverlay} />
+                    }
+                    
+                    <OverlayJalanYuk visible={visible} toggleOverlay={toggleOverlay} selected={selected} openMaps={openMaps}/>
                 </View>
             </View>
         </TemplateBackground>
     )
 }
 
-export default connect(null, null)(JalanYuk)
+const mapStateToProps = (state) => {
+    const { listplace, token, listhistory } = state
+    return {
+        token: token.payload,
+        listplace: listplace.payload,
+        listhistory: listhistory.payload
+    }
+  }
+  
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(Object.assign(GetPlaceRedux,TokenRedux,HistoryPlaceRedux), dispatch)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(JalanYuk)
