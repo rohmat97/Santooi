@@ -224,7 +224,7 @@ function KalimatBijak(props) {
 
     const onShare = async (payload,url) => {
         console.log(url)
-        const mark = ' \n\nDikirim dari Santooi. \nhttps://happiness-api/kalimat-bijak'
+        const mark = '\n\nDikirim dari Santooi. \nhttps://happiness-api/kalimat-bijak'
         try {
           const result = await Share.share({
             message:payload+mark,
