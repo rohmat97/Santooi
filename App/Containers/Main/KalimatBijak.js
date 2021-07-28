@@ -204,9 +204,10 @@ function KalimatBijak(props) {
     }
 
     const onShare = async (payload) => {
+        const mark = ' \n\nDikirim dari Santooi.'
         try {
           const result = await Share.share({
-            message:payload,
+            message:payload+mark,
           });
           if (result.action === Share.sharedAction) {
             if (result.activityType) {
