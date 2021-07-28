@@ -60,8 +60,9 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
                         initial: true,
                     }) 
                 }
-                setCame(false)
-                setnextStep(false) 
+                // navigate('KalimatBijak')
+                // setCame(false)
+                // setnextStep(false) 
             }, 3000 );
         }
     },[nextStep,token])

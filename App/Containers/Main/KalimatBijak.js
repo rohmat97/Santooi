@@ -9,6 +9,7 @@ import { Screen } from '../../Transforms/Screen'
 import { connect } from 'react-redux';
 import { CheckBox, Overlay } from 'react-native-elements';
 import { bindActionCreators } from 'redux';
+import { showMessage, hideMessage } from "react-native-flash-message";
 //redux
 import KalimatBijakRedux from '../../Redux/KalimatBijak/KalimatBijakRedux';
 import AddFavoriteRedux from '../../Redux/KalimatBijak/AddFavoriteRedux';
@@ -20,7 +21,7 @@ import { ActivityIndicator } from 'react-native';
 
 function KalimatBijak(props) {
     const { navigation, token, listKalimatBijak, KalimatBijakRequest,addFavorite, addFavoriteRequest,status,UpdateStatusRequest,emoticon,StatusRequest,kalimatfetching } = props
-    const { pop } = navigation
+    const { pop, navigate } = navigation
     const [visible, setvisible] = useState(false)
     const [filterByLatest, setfilterByLatest] = useState(false)
     const [filterByFavorite, setfilterByFavorite] = useState(false)
@@ -35,28 +36,40 @@ function KalimatBijak(props) {
     const [emoticonList, setemoticonList] =useState([])
     let page =1
     useEffect(()=>{
-        StatusRequest({
-            "id":token.data.user.id,
-            "token":token.data.access_token
-          })
-        const payload= {
-            "fav":filterByFavorite,
-            "filter":null,
-            "token":token.data.access_token,
-            "page":1
-        }
-        KalimatBijakRequest(payload)
-        if(emoticon && emoticon.data && emoticon.data.rows){
-            // console.log('emoticon',emoticon.data.rows)
-            setlistEmoticon(emoticon.data.rows)
-        }
-        return () => {
-            // console.log('awadaw')
+        if(token){
             StatusRequest({
                 "id":token.data.user.id,
                 "token":token.data.access_token
               })
+            const payload= {
+                "fav":filterByFavorite,
+                "filter":null,
+                "token":token.data.access_token,
+                "page":1
+            }
+            KalimatBijakRequest(payload)
+            if(emoticon && emoticon.data && emoticon.data.rows){
+                // console.log('emoticon',emoticon.data.rows)
+                setlistEmoticon(emoticon.data.rows)
+            }
+            return () => {
+                // console.log('awadaw')
+                StatusRequest({
+                    "id":token.data.user.id,
+                    "token":token.data.access_token
+                  })
+            }
+        }else{
+            showMessage({
+                message: "Mohon login terlebih dahulu",
+                type: "danger",
+              });
+            navigate('Auth', {
+                screen: 'LoginScreen',
+                initial: true,
+            }) 
         }
+      
     },[])
 
     useEffect(() => {
@@ -107,7 +120,8 @@ function KalimatBijak(props) {
     }, [addFavorite])
 
     useEffect(() => {
-        setlistKalimat([])
+        if(token){
+            setlistKalimat([])
             const payload= {
                 "fav":filterByFavorite?1:0,
                 "filter":noFilter?'':filterByLatest?'ASC':'DESC',
@@ -116,6 +130,8 @@ function KalimatBijak(props) {
             }
             console.log(payload)
             KalimatBijakRequest(payload)
+        }
+       
     }, [filterByFavorite])
 
 //     useEffect(() => {
@@ -133,27 +149,30 @@ function KalimatBijak(props) {
 // }, [filterByLatest])
 
     useEffect(() => {
-        if(noFilter){
-            setlistKalimat([])
-            const payload= {
-                "fav":filterByFavorite?1:0,
-                "filter":'',
-                "token":token.data.access_token,
-                "page":1
+        if(token){
+            if(noFilter){
+                setlistKalimat([])
+                const payload= {
+                    "fav":filterByFavorite?1:0,
+                    "filter":'',
+                    "token":token.data.access_token,
+                    "page":1
+                }
+                console.log(payload)
+                KalimatBijakRequest(payload)
+            }else{
+                setlistKalimat([])
+                const payload= {
+                    "fav":filterByFavorite?1:0,
+                    "filter":filterByLatest?'ASC':'DESC',
+                    "token":token.data.access_token,
+                    "page":1
+                }
+                console.log(payload)
+                KalimatBijakRequest(payload)
             }
-            console.log(payload)
-            KalimatBijakRequest(payload)
-        }else{
-            setlistKalimat([])
-            const payload= {
-                "fav":filterByFavorite?1:0,
-                "filter":filterByLatest?'ASC':'DESC',
-                "token":token.data.access_token,
-                "page":1
-            }
-            console.log(payload)
-            KalimatBijakRequest(payload)
         }
+        
        
     }, [noFilter,filterByLatest])
 
@@ -203,8 +222,9 @@ function KalimatBijak(props) {
 
     }
 
-    const onShare = async (payload) => {
-        const mark = ' \n\nDikirim dari Santooi.'
+    const onShare = async (payload,url) => {
+        console.log(url)
+        const mark = ' \n\nDikirim dari Santooi. \nhttps://happiness-api/kalimat-bijak'
         try {
           const result = await Share.share({
             message:payload+mark,
@@ -452,7 +472,7 @@ const validationEmoticon =(stat,status) =>{
                                                                     style={{alignItems:'center',justifyContent:'center'}}
                                                                     />
                                                                 <TouchableOpacity 
-                                                                onPress={()=> onShare(data.name)}
+                                                                onPress={()=> onShare(data.name,data)}
                                                                 >
                                                                     <Image source={images.share} style={{width:35,height:35}} resizeMode={'contain'}/>
                                                                 </TouchableOpacity>

@@ -189,13 +189,14 @@ function MainScreen (props) {
     console.log('filterManualPicked',manualPicked)
   },[manualPicked])
   useEffect(()=>{
-    if(UpdateStatus){
-      UpdateStatusSuccess(null)
-      StatusRequest({
-        "id":token.data.user.id,
-        "token":token.data.access_token
-      })
-    }
+    if(token){
+      if(UpdateStatus){
+        UpdateStatusSuccess(null)
+        StatusRequest({
+          "id":token.data.user.id,
+          "token":token.data.access_token
+        })
+    }}
   },[UpdateStatus])
 
   useEffect(()=>{
