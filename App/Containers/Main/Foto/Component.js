@@ -5,7 +5,7 @@ import { Divider, Overlay } from 'react-native-elements'
 import { Image } from 'react-native-elements/dist/image/Image'
 import images from '../../../Themes/Images'
 import { Screen } from '../../../Transforms/Screen'
-export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri,setvisibleBottomSheet,visibleBottomSheet,setonPicked}) =>{
+export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri,setvisibleBottomSheet,visibleBottomSheet,setonPicked,listFoto}) =>{
     if(isEmpty){
         return(
         <View style={{height:loading?Screen.height:Screen.height*0.8, paddingHorizontal:12, paddingTop:16}}>
@@ -17,7 +17,7 @@ export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri,setvisibleBo
                     <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Foto-foto Favorit</Text>
                 </TouchableOpacity>
             </View>
-            <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri} isEmpty={isEmpty}/>
+            {/* <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri} isEmpty={isEmpty}/> */}
             {
                 !loading?
                 <View style={{ justifyContent:'center',alignItems:'center' }}>
@@ -263,10 +263,10 @@ export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequ
                 }
                 
             }}>
-            <View style={{ width: Screen.width * 0.5, height: Screen.width * 0.5,marginVertical:16,marginHorizontal:4,marginBottom:24}}>
+            <View style={{ width: Screen.width * 0.4, height: Screen.width * 0.4,marginVertical:16,marginHorizontal:Screen.width*0.05,marginBottom:24}}>
                     {
                     item.col_total>0?
-                <View style={{backgroundColor:'grey',width: Screen.width * 0.45, height: Screen.width * 0.45, borderRadius:20}}>
+                <View style={{backgroundColor:'grey',width: Screen.width * 0.4, height: Screen.width * 0.4, borderRadius:20}}>
                         <Image
                         // onLongPress={()=>{
                         //     if(!check && onPicked.length<1) {
@@ -302,7 +302,7 @@ export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequ
                             
                         //     }
                         // }}
-                        source={{uri:item.col_highlight[0].photo.url}} style={{ width: Screen.width * 0.45, height: Screen.width * 0.45}} 
+                        source={{uri:item.col_highlight[0].photo.url}} style={{ width: Screen.width * 0.4, height: Screen.width * 0.4}} 
                         resizeMode={'contain'} 
                         PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
                     />
@@ -312,8 +312,8 @@ export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequ
                         </View>
                     </View>
                     :
-                    <View style={{backgroundColor:'grey',width: Screen.width * 0.45, height: Screen.width * 0.45, borderRadius:20}}>
-                        <View style={{ width: Screen.width * 0.45, height: Screen.width * 0.45}} />
+                    <View style={{backgroundColor:'grey',width: Screen.width * 0.4, height: Screen.width * 0.4, borderRadius:20}}>
+                        <View style={{ width: Screen.width * 0.4, height: Screen.width * 0.4}} />
                         <View style={{marginTop:8,marginBottom:20}}>
                             <Text style={{color:'white',fontWeight:'700'}}>{item.name}</Text>
                             <Text style={{color:'white', fontWeight:'normal',opacity:0.8}}>{item.col_total} times</Text>
@@ -337,7 +337,8 @@ export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequ
     )
 }
 
-export const DetailFoto = ({visibleDetailFoto, setvisibleDetailFoto, selectedDetailFoto,deleteDetailFoto ,setaddToAlbum, addToAlbum, createNewAlbum, setcreateNewAlbum, nameNewAlbum, setnameNewAlbum, AddNewAlbum}) =>{
+export const DetailFoto = ({visibleDetailFoto, setvisibleDetailFoto, selectedDetailFoto,deleteDetailFoto ,setaddToAlbum, addToAlbum, createNewAlbum, setcreateNewAlbum, nameNewAlbum, setnameNewAlbum, AddNewAlbum, listGaleri,uploadFotoToAlbum}) =>{
+    let listAlbum = [{}].concat(listGaleri)
     if(addToAlbum){
         return(
             <Overlay visible={visibleDetailFoto} overlayStyle={{height:Screen.height*0.75, width: Screen.width,position:'absolute',bottom:-10,borderRadius:20}} onBackdropPress={()=> setvisibleDetailFoto(false)}>  
@@ -350,9 +351,35 @@ export const DetailFoto = ({visibleDetailFoto, setvisibleDetailFoto, selectedDet
                         <Text style={{textAlign:'right', color:'rgba(103, 48, 143, 1)'}}>X</Text>
                     </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={()=> setcreateNewAlbum(true)}>
-                    <Image source={images.newAlbum} resizeMode='contain' style={{width:Screen.width*0.4, height:200}}/>
-                </TouchableOpacity>
+              
+                    <FlatList
+                        data={listAlbum}
+                        numColumns={2}
+                        contentContainerStyle={{width:Screen.width*0.9,paddingHorizontal:Screen.width*0.025}}
+                        renderItem={({ item })=>{
+                            if(item && item.col_highlight){
+                                return(
+                                    <TouchableOpacity onPress={()=> uploadFotoToAlbum(item)}>
+                                        <View style={{backgroundColor:'grey',width: Screen.width * 0.45, height:150, borderRadius:20,marginTop:20}}>
+                                            <Image source={{uri:item.col_highlight[0].photo.url}} resizeMode='contain' style={{width:Screen.width*0.45, height:150}}/>
+                                            <View style={{marginTop:8,marginBottom:20,marginLeft:12}}>
+                                                <Text style={{color:'black',fontWeight:'700'}}>{item.name}</Text>
+                                                <Text style={{color:'black', fontWeight:'normal',opacity:0.8}}>{item.col_total} times</Text>
+                                            </View>
+                                        </View>
+                                    </TouchableOpacity>
+                                )
+                            }else{
+                                return(
+                                    <TouchableOpacity onPress={()=> setcreateNewAlbum(true)}>
+                                        <Image source={images.newAlbum} resizeMode='contain' style={{width:Screen.width*0.45, height:200}}/>
+                                    </TouchableOpacity>
+                                )
+                            }
+                            
+                        }}
+                    />
+                   
                 
                 <Overlay visible={createNewAlbum} onBackdropPress={()=> setcreateNewAlbum(false)}
                     overlayStyle={{height:undefined, width: Screen.width*0.8,borderRadius:20}}
@@ -374,8 +401,8 @@ export const DetailFoto = ({visibleDetailFoto, setvisibleDetailFoto, selectedDet
                             <Text style={{color:'blue', width:Screen.width*0.4,textAlign:'center', textAlignVertical:'center'}}>Batal</Text>
                         </TouchableOpacity>
                         <Divider orientation="vertical" width={1} />
-                        <TouchableOpacity onPress={()=>AddNewAlbum()}>
-                            <Text style={{ width:Screen.width*0.4,textAlign:'center'}}>Simpan</Text>
+                        <TouchableOpacity onPress={()=> nameNewAlbum&&nameNewAlbum.length>0 &&AddNewAlbum()}>
+                            <Text style={{ width:Screen.width*0.4,textAlign:'center', opacity:nameNewAlbum&&nameNewAlbum.length>0?1:0.5}}>Simpan</Text>
                         </TouchableOpacity>
                     </View>
                 </Overlay>
@@ -384,11 +411,14 @@ export const DetailFoto = ({visibleDetailFoto, setvisibleDetailFoto, selectedDet
     }
     return(
         <Overlay visible={visibleDetailFoto} overlayStyle={{height:Screen.height*0.75, width: Screen.width,position:'absolute',bottom:-10,borderRadius:20}} onBackdropPress={()=> setvisibleDetailFoto(false)}>  
-            <TouchableOpacity onPress={()=> setvisibleDetailFoto(false)}>
-                <Text style={{textAlign:'right', color:'rgba(103, 48, 143, 1)'}}>X</Text>
+            <TouchableOpacity onPress={()=>{
+                 setvisibleDetailFoto(false)
+                 setaddToAlbum(false)
+            }}>
+                <Text style={{textAlign:'right', color:'rgba(103, 48, 143, 1)',marginHorizontal:12, fontSize:16}}>X</Text>
             </TouchableOpacity>
-            <View style={{justifyContent:'center',alignItems:'center',width:Screen.width*0.95,marginTop:-60,flexDirection:'row'}}>
-                <Image source={{uri:selectedDetailFoto && selectedDetailFoto.photo.url}} resizeMode='contain' style={{width:Screen.width*0.9, height:Screen.height*0.4,margin:12,marginTop:Screen.height*0.1}}/>
+            <View style={{justifyContent:'center',alignItems:'center',width:Screen.width*0.95,flexDirection:'row'}}>
+                <Image source={{uri:selectedDetailFoto && selectedDetailFoto.photo.url}} resizeMode='contain' style={{width:Screen.width*0.9, height:Screen.height*0.4,margin:4}}/>
             </View>
             <TouchableOpacity 
                 onPress={()=> setaddToAlbum(true)}

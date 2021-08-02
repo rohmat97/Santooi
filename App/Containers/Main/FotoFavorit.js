@@ -117,7 +117,11 @@ function FotoFavorit(props) {
           'page':1
         }
         GalleryRequest(payload)
+        AlbumRequest(payload)
         AddfotoSuccess(null)
+        setcreateNewAlbum(false)
+        setaddToAlbum(false)
+        setvisibleDetailFoto(false)
       }
     }, [uploadfoto])
 
@@ -134,6 +138,11 @@ function FotoFavorit(props) {
         })
         setlistFoto(filter)
         DeletefotoSuccess(null)
+        const payload ={
+          'token':token && token.data.access_token,
+          'page':1
+        }
+        AlbumRequest(payload)
       }
     }, [deletedFoto])
 
@@ -213,7 +222,7 @@ function FotoFavorit(props) {
             type: data.type
           })
           // console.log(foto._parts[0])
-          console.log(params)
+          // console.log(params)
           const payload ={
             'token':token && token.data.access_token,
             'body':foto
@@ -222,6 +231,25 @@ function FotoFavorit(props) {
         })
       }
  
+    }
+
+    const uploadFotoToAlbum=(params)=>{
+      // console.log(selectedDetailFoto)
+          const foto = new FormData()
+          
+          foto.append('photo',{
+            name:selectedDetailFoto.photo.name,
+            uri: selectedDetailFoto.photo.url,
+            // type: data.type
+          })
+          foto.append('id_user_gallery_album',params.id)
+          // console.log(foto._parts[0])
+          console.log(params)
+          const payload ={
+            'token':token && token.data.access_token,
+            'body':foto
+          }
+          AddfotoRequest(payload)
     }
 
     const deleteFoto=()=>{
@@ -396,7 +424,16 @@ function FotoFavorit(props) {
             <View style={[styles.mainContainer]}>
                 <View style={{height:'20%', paddingHorizontal:12, paddingTop:12}}>
                     {/* <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri}/> */}
-                    <HeaderFoto isEmpty={isGaleri?listFoto.length>0?false:true:listGaleri.length>0?false:true}  pop={pop} setisGaleri={setisGaleri} isGaleri={isGaleri} setvisibleBottomSheet={setvisibleBottomSheet} visibleBottomSheet={visibleBottomSheet} setonPicked={setonPicked}/>
+                    <HeaderFoto 
+                      isEmpty={isGaleri?listFoto.length>0?false:true:listGaleri.length>0?false:true}  
+                      pop={pop} 
+                      setisGaleri={setisGaleri} 
+                      isGaleri={isGaleri} 
+                      setvisibleBottomSheet={setvisibleBottomSheet} 
+                      visibleBottomSheet={visibleBottomSheet} 
+                      setonPicked={setonPicked}
+                      listFoto={listFoto}
+                      />
                 </View>
                 <ListFoto 
                   listFoto={listFoto} 
@@ -425,7 +462,7 @@ function FotoFavorit(props) {
                 
             </View>
             {
-              visibleBottomSheet &&<BottomSheet
+              visibleBottomSheet && onPicked.length>0 &&<BottomSheet
               ref={sheetRef}
               snapPoints={[willDelete?Platform.OS==='ios'?375:400:Platform.OS==='ios'?275:325,0,0]}
               borderRadius={10}
@@ -455,12 +492,14 @@ function FotoFavorit(props) {
               selectedDetailFoto={selectedDetailFoto} 
               deleteDetailFoto={deleteDetailFoto}
               addToAlbum={addToAlbum}
+              listGaleri={listGaleri}
               setaddToAlbum={setaddToAlbum}
               createNewAlbum={createNewAlbum}
               setcreateNewAlbum={setcreateNewAlbum}
               nameNewAlbum={nameNewAlbum}
               setnameNewAlbum={setnameNewAlbum}
               AddNewAlbum={AddNewAlbum}
+              uploadFotoToAlbum={uploadFotoToAlbum}
               
               />
         </TemplateBackground>

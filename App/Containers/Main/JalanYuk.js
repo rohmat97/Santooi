@@ -60,6 +60,7 @@ function JalanYuk(props) {
             const payloadPlace ={
                 'token':token && token.data.access_token,
                 'page':1,
+                'limit':5,
                 'lat':latlong.latitude,
                 'long':latlong.longitude,
                 'key':'',
@@ -93,6 +94,7 @@ function JalanYuk(props) {
             const payload ={
                 'token':token && token.data.access_token,
                 'page':1,
+                'limit':10,
                 'lat':latlong &&latlong.latitude,
                 'long':latlong && latlong.longitude,
                 'key':text,
@@ -104,6 +106,7 @@ function JalanYuk(props) {
             const payload ={
                 'token':token && token.data.access_token,
                 'page':1,
+                'limit':5,
                 'lat':latlong && latlong.latitude,
                 'long':latlong &&latlong.longitude,
                 'key':'',
@@ -158,15 +161,19 @@ function JalanYuk(props) {
                                 renderItem={({ item, index, separators }) => (
                                     <TouchableOpacity onPress={()=>toggleOverlay(item)}>
                                          <View style={{ flexDirection: 'row', marginBottom: 20, marginRight: 20  }}>
-                                            <Image source={images.kopiKenangan} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
+                                            <Image source={{uri:item.photo.url}} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
                                             <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end' }}>
-                                                <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.2, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
-                                                    <Image source={images.addChart} style={{ width: 15, height: 15 }} resizeMode='contain' />
-                                                    <Text style={{ color: 'white', fontWeight: '500', marginLeft: 10, fontSize:12}}>Pesan</Text>
-                                                </View>
-                                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}numberOfLines={1}>{item.name}</Text>
-                                                <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.created_at}</Text>
-                                                <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.4, fontSize: 13 }}numberOfLines={1}>{item.address}</Text>
+                                                {
+                                                     item.is_featured===1 &&
+                                                     <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.2, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
+                                                        <Image source={images.addChart} style={{ width: 15, height: 15 }} resizeMode='contain' />
+                                                        <Text style={{ color: 'white', fontWeight: '500', marginLeft: 10, fontSize:12}}>Pesan</Text>
+                                                    </View>
+                                                }
+                                               
+                                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13, width: Screen.width * 0.5 }}numberOfLines={2}>{item.name}</Text>
+                                                <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.created_at?new Date(item.created_at).toLocaleString('es-AR'):''}</Text>
+                                                <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.55, fontSize: 13 }}numberOfLines={2}>{item.address}</Text>
                                             </View>
                                         </View>
                                     {/* <View style={{ flexDirection: 'column', marginBottom: 20, marginRight: 20 }}>
@@ -203,7 +210,7 @@ function JalanYuk(props) {
                                         <View style={{ width: Screen.width * 0.3, flexDirection: 'column', marginTop: 20 }}>
                                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }} numberOfLines={1}>{item.name}</Text>
                                             <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }} numberOfLines={1}>{item.address}</Text>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }}>{item.distance} km</Text>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }}>{item.distance.toFixed(2)} km</Text>
                                         </View>
                                     </View>
                                 </TouchableOpacity>
@@ -218,29 +225,33 @@ function JalanYuk(props) {
                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>History</Text>
                             </View>
                         </View>
-                        <FlatList 
-                                data={listHistory}
-                                horizontal={false}
-                                renderItem={({ item, index, separators }) => (
-                                    
-                                         <View style={{ flexDirection: 'row', marginBottom: 20, marginRight: 20  }}>
-                                            <Image source={{ uri: item.place.photo.url}} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
-                                            <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end' }}>
-                                                <TouchableOpacity onPress={()=>Linking.openURL(item.place.url)}>
-                                                    <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.2, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
-                                                        <Image source={images.addChart} style={{ width: 15, height: 15 }} resizeMode='contain' />
-                                                        <Text style={{ color: 'white', fontWeight: '500', marginLeft: 10, fontSize:12}}>Pesan</Text>
-                                                    </View>
-                                                </TouchableOpacity>
-                                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}numberOfLines={1}>{item.place.name}</Text>
-                                                <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.place.created_at}</Text>
-                                                <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.4, fontSize: 13 }}numberOfLines={1}>{item.place.address}</Text>
-                                            </View>
-                                        </View>
-
+                        {
+                            listHistory.length>0?
+                            <FlatList 
+                            data={listHistory}
+                            horizontal={false}
+                            renderItem={({ item, index, separators }) => (
                                 
-                                  )}
-                            />  
+                                     <View style={{ flexDirection: 'row', marginBottom: 20, marginRight: 20  }}>
+                                        <Image source={{ uri: item.place.photo.url}} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3 }} resizeMode='contain' />
+                                        <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end' }}>
+                                            <TouchableOpacity onPress={()=>Linking.openURL(item.place.url)}>
+                                                <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.2, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
+                                                    <Image source={images.addChart} style={{ width: 15, height: 15 }} resizeMode='contain' />
+                                                    <Text style={{ color: 'white', fontWeight: '500', marginLeft: 10, fontSize:12}}>Pesan</Text>
+                                                </View>
+                                            </TouchableOpacity>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}numberOfLines={1}>{item.place.name}</Text>
+                                            <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.place.created_at?new Date(item.place.created_at).toLocaleString('es-AR'):''}</Text>
+                                            <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.4, fontSize: 13 }}numberOfLines={1}>{item.place.address}</Text>
+                                        </View>
+                                    </View>
+
+                            
+                              )}
+                        />  :
+                        <Text style={{color:'white', textAlign:'center', fontSize:20}}>Tidak ada History</Text>
+                        }
                     </ScrollView>
                     }
                     
