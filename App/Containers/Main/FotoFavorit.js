@@ -85,6 +85,7 @@ function FotoFavorit(props) {
 
     useEffect(() => {
       if(gallery && gallery.data){
+        console.log('galeri', gallery)
         const merger =listFoto.concat(gallery.data.rows.data)
         setlistFoto(merger)
         setloading(false)

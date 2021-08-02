@@ -78,20 +78,33 @@ function DetailAlbum(props) {
     useEffect(() => {
         setlisrGaleri([])
         // console.log(getParam('params').col_highlight)
-        const payload ={
+        if(getParam('params').name =='All Photos'){
+          // console.log('params',getParam('params').name)
+          const payload ={
+            'token':token && token.data.access_token,
+            'page':1,
+            'id':''
+          }
+        DetailAlbumRequest(payload)
+        settitle(getParam('params').name)
+        }else{
+          const payload ={
             'token':token && token.data.access_token,
             'page':1,
             'id':getParam('params').id
           }
         DetailAlbumRequest(payload)
         settitle(getParam('params').name)
+        }
+
+      
         // setlisrGaleri(getParam('params').col_highlight)
     }, [])
 
     useEffect(() => {
         if(detailAlbum){
-            console.log('detailAlbum',detailAlbum.data)
-            let merger = listGaleri.concat(detailAlbum.data)
+            // console.log('detailAlbum',detailAlbum.data)
+            let merger = listGaleri && listGaleri.length>0? listGaleri.concat(detailAlbum.data):detailAlbum.data
             setlisrGaleri(merger)
             setdata(detailAlbum)
             DetailAlbumSuccess(null)
@@ -327,8 +340,10 @@ function DetailAlbum(props) {
               </View>
               
               <FlatList
+                      contentContainerStyle={{margin:4}}
+                      horizontal={false}
+                      numColumns={2}
                       data={ listGaleri }
-                      numColumns={3}
                       onMomentumScrollEnd={(event)=>{
                           // console.log(gallery)
                           if (isCloseToBottom(event.nativeEvent)) {
@@ -346,7 +361,10 @@ function DetailAlbum(props) {
                               }
                           }
                       }}
+                      keyExtractor={category => category.id}
                       renderItem={({ item })=>{
+
+                                  // console.log(index,' ', item)
                                   const check  = onPicked.includes(item)
                                   let data = []
                                   // console.log(item)

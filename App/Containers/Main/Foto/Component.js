@@ -265,43 +265,9 @@ export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequ
             }}>
             <View style={{ width: Screen.width * 0.4, height: Screen.width * 0.4,marginVertical:16,marginHorizontal:Screen.width*0.05,marginBottom:24}}>
                     {
-                    item.col_total>0?
+                    item?
                 <View style={{backgroundColor:'grey',width: Screen.width * 0.4, height: Screen.width * 0.4, borderRadius:20}}>
                         <Image
-                        // onLongPress={()=>{
-                        //     if(!check && onPicked.length<1) {
-                        //         setonPicked([...onPicked,item])
-                        //         setvisibleBottomSheet(true)
-                        //     }else{
-                        //         onPicked.map(dat =>{
-                        //             if(dat !== item){
-                        //                 data.push(dat)
-                        //             }
-                        //         })
-                        //         setonPicked(data)
-                        //     }
-                            
-                        // }}
-                        // onPress={()=>{
-                        //     if(onPicked.length>0){
-                        //         // console.log('work')
-                        //         if(check){
-                        //             onPicked.map(dat =>{
-                        //                 if(dat !== item){
-                        //                     data.push(dat)
-                        //                 }
-                        //             })
-                        //             setonPicked(data)
-                        //         }else{
-                        //             onPicked.map(dat =>{
-                        //                     data.push(dat)
-                        //             })
-                        //             data.push(item)
-                        //             setonPicked(data)
-                        //         }
-                            
-                        //     }
-                        // }}
                         source={{uri:item.col_highlight[0].photo.url}} style={{ width: Screen.width * 0.4, height: Screen.width * 0.4}} 
                         resizeMode={'contain'} 
                         PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
