@@ -8,7 +8,7 @@ import { Screen } from '../../../Transforms/Screen'
 export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri,setvisibleBottomSheet,visibleBottomSheet,setonPicked,listFoto}) =>{
     if(isEmpty){
         return(
-        <View style={{height:loading?Screen.height:Screen.height*0.8, paddingHorizontal:12, paddingTop:16}}>
+        <View style={{height:loading?Screen.height:Screen.height*0.3, paddingHorizontal:12, paddingTop:12}}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30 }}>
                 <TouchableOpacity
                     onPress={() => pop()}
@@ -16,19 +16,16 @@ export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri,setvisibleBo
                     <Image source={images.arrowBack} style={{ width: 18, height: 18 }} resizeMode='contain' />
                     <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Foto-foto Favorit</Text>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        setvisibleBottomSheet(!visibleBottomSheet)
+                        setonPicked([])
+                    }}
+                    style={{ flexDirection: 'row', alignItems: 'center',backgroundColor:'#67308F',padding:4,width:60,borderRadius:12, marginLeft: 15,justifyContent:'center' }}>
+                    <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>{visibleBottomSheet?'Batal':'Pilih'}</Text>
+                </TouchableOpacity>
             </View>
-            {/* <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri} isEmpty={isEmpty}/> */}
-            {
-                !loading?
-                <View style={{ justifyContent:'center',alignItems:'center' }}>
-                    <Image source={images.emptyStateFoto} style={{ width: Screen.width*0.8, height: Screen.height*0.6 }} resizeMode='contain' />
-                </View>:
-                <View style={{ justifyContent:'center',alignItems:'center',flex:0.75 }}>
-                    <ActivityIndicator color={'white'} size='large' />
-                </View>
-                
-            }
-           
+            <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri}/>
         </View>
         )
     }
@@ -46,7 +43,7 @@ export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri,setvisibleBo
                     setvisibleBottomSheet(!visibleBottomSheet)
                     setonPicked([])
                 }}
-                style={{ flexDirection: 'row', alignItems: 'center',backgroundColor:'#67308F',padding:4,width:80,borderRadius:12, marginLeft: 15,justifyContent:'center' }}>
+                style={{ flexDirection: 'row', alignItems: 'center',backgroundColor:'#67308F',padding:4,width:60,borderRadius:12, marginLeft: 15,justifyContent:'center' }}>
                 <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>{visibleBottomSheet?'Batal':'Pilih'}</Text>
             </TouchableOpacity>
         </View>
@@ -57,16 +54,21 @@ export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri,setvisibleBo
 
 export const MenuFoto =({setisGaleri,isGaleri,isEmpty})=>{
     return(
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30,marginTop:isEmpty?4:0 }}>
+    <View style={{ width:Screen.width*0.91,flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30,marginTop:isEmpty?4:0,marginLeft:-Screen.width*0.03 }}>
         <TouchableOpacity
             onPress={() => setisGaleri(true)}
             style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ color: 'white',backgroundColor:isGaleri?'#67308F':'rgba(103, 48, 143, 0.6)',padding:4,paddingHorizontal:24,borderRadius:4, marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Semua Galeri</Text>
+            <View style={{backgroundColor:isGaleri?'#67308F':'rgba(103, 48, 143, 0.6)',padding:4,borderRadius:4, marginLeft: 15,width:Screen.width*0.4,alignItems:'center'}}>
+                <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>Semua Galeri</Text>
+            </View>
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => setisGaleri(false)}
             style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Text style={{ color: 'white',backgroundColor:!isGaleri?'#67308F':'rgba(103, 48, 143, 0.6)',padding:4,paddingHorizontal:24,borderRadius:4, marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Semua Album</Text>
+            <View style={{backgroundColor:!isGaleri?'#67308F':'rgba(103, 48, 143, 0.6)',padding:4,borderRadius:4, marginLeft: 15,width:Screen.width*0.4,alignItems:'center'}}>
+                <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>Album</Text>
+            </View>
+            {/* <Text style={{ color: 'white',backgroundColor:!isGaleri?'#67308F':'rgba(103, 48, 143, 0.6)',padding:4,borderRadius:4, marginLeft: 15, fontWeight: '500', fontSize: 16,width:Screen.width*0.4,textAlign:'center' }}>Album</Text> */}
         </TouchableOpacity>
     </View>
     )
@@ -149,7 +151,7 @@ export const ListFoto =({listFoto,album,isGaleri,listGaleri,gallery,GalleryReque
                                                 
                                             }}
                                             source={{uri:item.photo.url}} style={{ width: Screen.width * 0.45, height: Screen.width * 0.45}} 
-                                            resizeMode={'contain'} 
+                                            resizeMode={'cover'} 
                                             PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
                                         />
                                     </View>
@@ -221,7 +223,7 @@ export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequ
             renderItem={({ item })=>{
             let data = []
             const check  = onPicked.includes(item)
-            // console.log('item', item.col_highlight&& item.col_highlight.length>0 &&item.col_highlight[0].photo.url)
+            console.log('item', item.col_highlight)
             return(
             <TouchableOpacity  
                 onLongPress={()=>{
@@ -263,18 +265,18 @@ export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequ
                 }
                 
             }}>
-            <View style={{ width: Screen.width * 0.4, height: Screen.width * 0.4,marginVertical:16,marginHorizontal:Screen.width*0.05,marginBottom:24}}>
+            <View style={{ width: Screen.width * 0.4, height: Screen.width * 0.45,marginVertical:16,marginHorizontal:Screen.width*0.05,marginBottom:24}}>
                     {
-                    item?
-                <View style={{backgroundColor:'grey',width: Screen.width * 0.4, height: Screen.width * 0.4, borderRadius:20}}>
+                    item&&item.col_highlight&&item.col_highlight.length>0?
+                    <View style={{backgroundColor:'grey',width: Screen.width * 0.4, height: Screen.width * 0.4, borderRadius:20}}>
                         <Image
-                        source={{uri:item.col_highlight[0].photo.url}} style={{ width: Screen.width * 0.4, height: Screen.width * 0.4}} 
-                        resizeMode={'contain'} 
+                        source={{uri:item.col_highlight[0].photo.url}} style={{ width: Screen.width * 0.4, height: Screen.width * 0.4, borderRadius:20}} 
+                        resizeMode={'cover'} 
                         PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
-                    />
-                        <View style={{marginTop:8,marginBottom:20}}>
+                        />
+                        <View style={{marginTop:8,marginBottom:24}}>
                             <Text style={{color:'white',fontWeight:'700'}}>{item.name}</Text>
-                            <Text style={{color:'white', fontWeight:'normal',opacity:0.8}}>{item.col_total} times</Text>
+                            <Text style={{color:'white', fontWeight:'normal',opacity:0.8}}>{item.col_total} item</Text>
                         </View>
                     </View>
                     :
@@ -282,7 +284,7 @@ export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequ
                         <View style={{ width: Screen.width * 0.4, height: Screen.width * 0.4}} />
                         <View style={{marginTop:8,marginBottom:20}}>
                             <Text style={{color:'white',fontWeight:'700'}}>{item.name}</Text>
-                            <Text style={{color:'white', fontWeight:'normal',opacity:0.8}}>{item.col_total} times</Text>
+                            <Text style={{color:'white', fontWeight:'normal',opacity:0.8}}>{item.col_total} item</Text>
                         </View>
                     </View>
                     }
@@ -317,30 +319,45 @@ export const DetailFoto = ({visibleDetailFoto, setvisibleDetailFoto, selectedDet
                         <Text style={{textAlign:'right', color:'rgba(103, 48, 143, 1)'}}>X</Text>
                     </TouchableOpacity>
                 </View>
-              
                     <FlatList
                         data={listAlbum}
                         numColumns={2}
-                        contentContainerStyle={{width:Screen.width*0.9,paddingHorizontal:Screen.width*0.025}}
-                        renderItem={({ item })=>{
-                            if(item && item.col_highlight){
+                        contentContainerStyle={{width:Screen.width,marginLeft:-8}}
+                        renderItem={({ item, index })=>{
+                            if(item && item.col_highlight && item.col_highlight.length>0){
                                 return(
                                     <TouchableOpacity onPress={()=> uploadFotoToAlbum(item)}>
-                                        <View style={{backgroundColor:'grey',width: Screen.width * 0.45, height:150, borderRadius:20,marginTop:20}}>
+                                        <View style={{backgroundColor:'grey',width: Screen.width * 0.45, height:150, borderRadius:20,marginTop:20,marginLeft:12}}>
                                             <Image source={{uri:item.col_highlight[0].photo.url}} resizeMode='contain' style={{width:Screen.width*0.45, height:150}}/>
                                             <View style={{marginTop:8,marginBottom:20,marginLeft:12}}>
                                                 <Text style={{color:'black',fontWeight:'700'}}>{item.name}</Text>
-                                                <Text style={{color:'black', fontWeight:'normal',opacity:0.8}}>{item.col_total} times</Text>
+                                                <Text style={{color:'black', fontWeight:'normal',opacity:0.8}}>{item.col_total} item</Text>
                                             </View>
                                         </View>
                                     </TouchableOpacity>
                                 )
                             }else{
-                                return(
-                                    <TouchableOpacity onPress={()=> setcreateNewAlbum(true)}>
-                                        <Image source={images.newAlbum} resizeMode='contain' style={{width:Screen.width*0.45, height:200}}/>
-                                    </TouchableOpacity>
-                                )
+                                if(index<1){
+                                    return(
+                                        <TouchableOpacity onPress={()=> setcreateNewAlbum(true)}>
+                                            <Image source={images.newAlbum} resizeMode='contain' style={{width:Screen.width*0.45, height:200,marginLeft:12}}/>
+                                        </TouchableOpacity>
+                                    )
+                                }else{
+                                    return (
+                                        <TouchableOpacity onPress={()=> uploadFotoToAlbum(item)}>
+                                            <View style={{backgroundColor:'grey',width: Screen.width * 0.45, height:150, borderRadius:20,marginTop:20,marginLeft:12}}>
+                                                {/* <Image source={{uri:''}} resizeMode='contain' style={{width:Screen.width*0.45, height:150}}/> */}
+                                                <View style={{height:150}}/>
+                                                <View style={{marginTop:8,marginBottom:20,marginLeft:12}}>
+                                                    <Text style={{color:'black',fontWeight:'700'}}>{item.name}</Text>
+                                                    <Text style={{color:'black', fontWeight:'normal',opacity:0.8}}>{item.col_total} item</Text>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+                                    )
+                                }
+                                
                             }
                             
                         }}

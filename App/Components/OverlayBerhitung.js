@@ -8,7 +8,7 @@ import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
 import { SafeAreaView } from "react-native";
 import { Platform } from "react-native";
-export const OverlayBerhitung = ({ visible, toggleOverlay, music, setMusic, pemandu, setPemandu, listMusic , playSound, MusicRequest, token, playlistMusic}) => {
+export const OverlayBerhitung = ({ visible, toggleOverlay, music, setMusic, pemandu, setPemandu, listMusic , playSound, MusicRequest, token, playlistMusic,setplayMusic}) => {
 
     const [onfetch, setonfetch] = useState(false);
     let page =1
@@ -30,7 +30,10 @@ export const OverlayBerhitung = ({ visible, toggleOverlay, music, setMusic, pema
                     <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.25, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>
                         <Text style={{ color: 'white', fontWeight: 'bold' }}>Musik</Text>
                     </View>
-                    <TouchableOpacity onPress={()=>toggleOverlay()}>
+                    <TouchableOpacity onPress={()=>{
+                            toggleOverlay()
+                            setplayMusic(music)
+                        }}>
                         <Text style={{ color: '#67308F', marginLeft: 10, fontWeight: 'bold' }}>OK</Text>
                     </TouchableOpacity>
                 </View>

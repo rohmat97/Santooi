@@ -30,6 +30,7 @@ function BerhitungYuk(props) {
     const [reset, setreset] = useState(false);
     const [played, setplayed] = useState(false);
     const [music, setMusic] = useState()
+    const [playMusic, setplayMusic] = useState()
     const [pemandu, setPemandu] = useState('')
     const [duration, setduration] = useState(0)
     const [listMusic, setlistMusic] = useState([])
@@ -50,7 +51,7 @@ function BerhitungYuk(props) {
 
     const Start =(payload) =>{
         setstart(payload)
-        if(music && payload){
+        if(playMusic && payload){
             if(played){
                 KeepAwake.activate()
                 if(Platform.OS==='ios'){
@@ -62,9 +63,9 @@ function BerhitungYuk(props) {
             }else{
                 KeepAwake.deactivate()
                 SoundPlayer.stop()
-                console.log('play',music.file.url)
+                console.log('play',playMusic.file.url)
                 setTimeout(async() => {
-                    await playSound(music.file.url)
+                    await playSound(playMusic.file.url)
                 }, 500);
             }
         }else{
@@ -315,16 +316,16 @@ function BerhitungYuk(props) {
     useEffect(()=>{
         // console.log('music',dataMusic.data)
         
-        if(start && music){
+        if(start && playMusic){
             if(Platform.OS==='ios'){
                     clearTimeout(timerRef.current)
-                    SoundPlayer.loadUrl(music.file.url)
+                    SoundPlayer.loadUrl(playMusic.file.url)
                     setstatusLoad(true)
-                    console.log('data music', music.file.url)
+                    console.log('data music', playMusic.file.url)
                     KeepAwake.activate()
             }else{
                     clearTimeout(timerRef.current)
-                    const whoosh = new Sound(music.file.url, null, async(e) => {
+                    const whoosh = new Sound(playMusic.file.url, null, async(e) => {
                         if (e) {
                             console.log('error loading track:', e)
                         } else {
@@ -337,12 +338,12 @@ function BerhitungYuk(props) {
                         }
                     })
                     setstatusLoad(true)
-                    console.log('data music', music.file.url)
+                    console.log('data music', playMusic.file.url)
                     KeepAwake.activate()
                
             }
         }else{
-            if(!music){
+            if(!playMusic){
                 if(Platform.OS==='ios'){
                     SoundPlayer.stop()
                 }else{
@@ -350,7 +351,7 @@ function BerhitungYuk(props) {
                 }
             }
         }
-    },[music])
+    },[playMusic])
 
     return (
         <TemplateBackground cover={true}>
@@ -400,7 +401,20 @@ function BerhitungYuk(props) {
                 </View>
                 {props.screenShouldBeAwake?<KeepAwake />:null}
             </View>
-            <OverlayBerhitung visible={visible} toggleOverlay={toggleOverlay} music={music} setMusic={setMusic} pemandu={pemandu} setPemandu={setPemandu} listMusic={listMusic} playSound={playSound} MusicRequest={MusicRequest} token={token.data.access_token} playlistMusic={playlistMusic}/>
+            <OverlayBerhitung 
+                visible={visible} 
+                toggleOverlay={toggleOverlay} 
+                music={music} 
+                setMusic={setMusic} 
+                pemandu={pemandu} 
+                setPemandu={setPemandu} 
+                listMusic={listMusic} 
+                playSound={playSound} 
+                MusicRequest={MusicRequest} 
+                token={token.data.access_token} 
+                playlistMusic={playlistMusic}
+                setplayMusic={setplayMusic}
+                />
             <Overlay visible={statusLoad}>
                 <ActivityIndicator size='large' color='#67308F' />
             </Overlay>

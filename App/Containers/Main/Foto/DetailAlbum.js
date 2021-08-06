@@ -77,7 +77,7 @@ function DetailAlbum(props) {
     }
     useEffect(() => {
         setlisrGaleri([])
-        // console.log(getParam('params').col_highlight)
+        console.log(getParam('params'))
         if(getParam('params').name =='All Photos'){
           // console.log('params',getParam('params').name)
           const payload ={
@@ -286,7 +286,7 @@ function DetailAlbum(props) {
     return(
         <TemplateBackground cover={true}>
           <View style={styles.mainContainer}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30,height:'5%',marginTop:'5%', paddingHorizontal:12}}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30,marginTop:24,marginHorizontal:12 }}>
                   <TouchableOpacity
                       onPress={() => pop()}
                       style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -298,7 +298,7 @@ function DetailAlbum(props) {
                           setvisibleBottomSheet(!visibleBottomSheet)
                           setonPicked([])
                       }}
-                      style={{ flexDirection: 'row', alignItems: 'center',backgroundColor:'#67308F',padding:4,width:80,borderRadius:12, marginLeft: 15,justifyContent:'center' }}>
+                      style={{ flexDirection: 'row', alignItems: 'center',backgroundColor:'#67308F',padding:4,width:60,borderRadius:12, marginLeft: 15,justifyContent:'center' }}>
                       <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>{visibleBottomSheet?'Batal':'Pilih'}</Text>
                   </TouchableOpacity>
               </View>
@@ -308,16 +308,22 @@ function DetailAlbum(props) {
                       <TextInput 
                           value={title}
                           onChangeText={settitle}
+                          maxLength={20}
                           style={{flexDirection: 'row',backgroundColor:'#67308F',minWidth:80,borderRadius:8, marginLeft: 15,textAlign:'center', color:'white', fontWeight: '500', fontSize: 16}}
                           />
                       :
                       <TouchableOpacity
                           onPress={() => {
+                            if(getParam('params').name !=='All Photos'){
                               setisEdit(true)
+                            }
                           }}
                           style={{ flexDirection: 'row', alignItems: 'center',backgroundColor:'#67308F',padding:8,minWidth:80,borderRadius:8, marginLeft: 15,justifyContent:'center' }}>
                           <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>{title}</Text>
-                          <Image source={images.iconEditAlbum} style={{width:15,height:15, marginLeft:12}}/>
+                          {
+                            getParam('params').name !=='All Photos' &&  <Image source={images.iconEditAlbum} style={{width:15,height:15, marginLeft:12}}/>
+                          }
+                         
                       </TouchableOpacity>
                   }
                   {
@@ -436,16 +442,21 @@ function DetailAlbum(props) {
                       </TouchableOpacity>
                     </View>
                   }
-                  <Overlay visible={visible} onBackdropPress={()=> setVisible(false)} overlayStyle={{width:Screen.width*0.8, borderRadius:12,paddingBottom:-12}}>
+                  <Overlay visible={visible} onBackdropPress={()=> setVisible(false)} overlayStyle={{width:Screen.width*0.8, borderRadius:12,paddingBottom:-12,backgroundColor:'rgba(255, 255, 255, 0)'}}>
                       {actions.map(({title, type, options,color}) => {
                           return (
-                          <View style={{ borderBottomColor:'rgba(212, 212, 212, 1)', borderBottomWidth:color?0:1,width:Screen.width*0.8,marginLeft:-10,backgroundColor:color?'rgba(102, 45, 145, 0.85)':''}}>
+                          <View style={{ borderBottomColor:'rgba(212, 212, 212, 1)', borderBottomWidth:color?0:1,width:Screen.width*0.8,marginLeft:-10,backgroundColor:'white',borderTopRightRadius:type=='library'?0:8,borderTopLeftRadius:type=='library'?0:8, borderBottomLeftRadius:type=='library'?8:0, borderBottomRightRadius:type=='library'?8:0}}>
                               <TouchableOpacity onPress={() => onButtonPress(type, options)}>
                                   <Text style={{color:color?color:"rgba(0, 83, 220, 1)", fontSize:14, textAlign:'center',padding:12,paddingBottom:12,width:Screen.width*0.8}}>{title}</Text>
                               </TouchableOpacity> 
                           </View>
                           );
                       })}
+                      <View style={{ width:Screen.width*0.8,marginLeft:-10,backgroundColor:'rgba(102, 45, 145, 0.85)',marginTop:24,borderRadius:24}}>
+                        <TouchableOpacity onPress={() => setVisible(false)}>
+                            <Text style={{color:'white', fontSize:14, textAlign:'center',padding:12,paddingBottom:12,width:Screen.width*0.8}}>{'Batal'}</Text>
+                        </TouchableOpacity> 
+                      </View>
                   </Overlay>
       </View>
     {

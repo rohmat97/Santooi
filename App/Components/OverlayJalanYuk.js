@@ -8,7 +8,7 @@ import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
 import { Linking } from "react-native";
 export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps }) => {
-    // console.log(selected)
+    console.log(selected)
     return (
         <Overlay
             isVisible={visible}
@@ -19,7 +19,7 @@ export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps }) =
                 <Image source={images.close} style={{ width: 15, height: 15}} resizeMode='contain' />
             </TouchableOpacity>
             <TouchableOpacity onPress={()=> openMaps(selected.lat,selected.lng)}>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row',alignItems:'center' }}>
                     <Image source={images.location} style={{ width: 25, height: 25 }} resizeMode='contain' />
                     <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 15 }}>Petunjuk Jalan</Text>
                 </View>
@@ -35,9 +35,9 @@ export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps }) =
                 selected && selected.is_featured===1 &&
                 
                 <TouchableOpacity onPress={()=>Linking.openURL(selected.url)}>
-                    <View style={{ flexDirection: 'row' }}>
+                    <View style={{ flexDirection: 'row',alignItems:'center' }}>
                         <Image source={images.addChartOutline} style={{ width: 25, height: 25 }} resizeMode='contain' />
-                        <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 15 }}>{selected.name}</Text>
+                        <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 15 }}>{selected.wording}</Text>
                     </View>
                 </TouchableOpacity>
         }

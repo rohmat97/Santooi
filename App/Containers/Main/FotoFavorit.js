@@ -423,9 +423,11 @@ function FotoFavorit(props) {
     return (
         <TemplateBackground cover={true}>
             <View style={[styles.mainContainer]}>
-                <View style={{height:'20%', paddingHorizontal:12, paddingTop:12}}>
+                <View style={{height:'20%'}}>
                     {/* <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri}/> */}
-                    <HeaderFoto 
+                    {
+                      (!galleryfetching || !loading) &&
+                      <HeaderFoto 
                       isEmpty={isGaleri?listFoto.length>0?false:true:listGaleri.length>0?false:true}  
                       pop={pop} 
                       setisGaleri={setisGaleri} 
@@ -435,6 +437,8 @@ function FotoFavorit(props) {
                       setonPicked={setonPicked}
                       listFoto={listFoto}
                       />
+                    }
+                    
                 </View>
                 <ListFoto 
                   listFoto={listFoto} 
@@ -476,16 +480,25 @@ function FotoFavorit(props) {
               }}
             />
             }
-            <Overlay visible={visible} onBackdropPress={()=> setVisible(false)} overlayStyle={{width:Screen.width*0.8, borderRadius:12,paddingBottom:-12}}>
-                {actions.map(({title, type, options,color}) => {
+            <Overlay visible={visible} onBackdropPress={()=> setVisible(false)} overlayStyle={{width:Screen.width*0.8, borderRadius:12,paddingBottom:-12,backgroundColor:'rgba(255, 255, 255, 0)'}} transparent={true}>
+                {actions.map(({title, type, options}) => {
+                  console.log(title)
+                  // if(color){
+                  //   return
+                  // }
                     return (
-                    <View style={{ borderBottomColor:'rgba(212, 212, 212, 1)', borderBottomWidth:color?0:1,width:Screen.width*0.8,marginLeft:-10,backgroundColor:color?'rgba(102, 45, 145, 0.85)':''}}>
+                    <View style={{ borderBottomColor:'rgba(212, 212, 212, 1)', borderBottomWidth:1,width:Screen.width*0.8,marginLeft:-10,backgroundColor:'white',borderTopRightRadius:type=='library'?0:8,borderTopLeftRadius:type=='library'?0:8, borderBottomLeftRadius:type=='library'?8:0, borderBottomRightRadius:type=='library'?8:0}}>
                         <TouchableOpacity onPress={() => onButtonPress(type, options)}>
-                            <Text style={{color:color?color:"rgba(0, 83, 220, 1)", fontSize:14, textAlign:'center',padding:12,paddingBottom:12,width:Screen.width*0.8}}>{title}</Text>
+                            <Text style={{color:"rgba(0, 83, 220, 1)", fontSize:14, textAlign:'center',padding:12,paddingBottom:12,width:Screen.width*0.8}}>{title}</Text>
                         </TouchableOpacity> 
                     </View>
                     );
                 })}
+                <View style={{ width:Screen.width*0.8,marginLeft:-10,backgroundColor:'rgba(102, 45, 145, 0.85)',marginTop:24,borderRadius:24}}>
+                  <TouchableOpacity onPress={() => setVisible(false)}>
+                      <Text style={{color:'white', fontSize:14, textAlign:'center',padding:12,paddingBottom:12,width:Screen.width*0.8}}>{'Batal'}</Text>
+                  </TouchableOpacity> 
+                </View>
             </Overlay>
             <DetailFoto 
               visibleDetailFoto={visibleDetailFoto} 
@@ -526,7 +539,7 @@ const mapDispatchToProps = (dispatch) => {
 }
 export default connect(mapStateToProps, mapDispatchToProps)(FotoFavorit)
 
-interface Action {
+export interface Action {
     title: string;
     type: 'capture' | 'library';
     options: ImagePicker.CameraOptions | ImagePicker.ImageLibraryOptions;
@@ -553,11 +566,11 @@ export const actions: Action[] = [
         includeBase64: false,
       },
     },
-    {
-      title: 'Batal',
-      type: 'Close',
-      color:'white'
-    },
+    // {
+    //   title: 'Batal',
+    //   type: 'Close',
+    //   color:'white'
+    // },
     // {
     //   title: 'Take Video',
     //   type: 'capture',

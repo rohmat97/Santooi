@@ -44,7 +44,7 @@ export const Dashboard =({ImageProfile,token,styles,picked,toggleOverlay,navigat
                     }}
                   />
                   </LinearGradient>
-                  <Text>Hi,{ token && token.data.user.name}!</Text>
+                  <Text>Hi, { token && token.data.user.name}!</Text>
                 </View>
                 <TouchableOpacity onPress={()=>toggleOverlay(null)}>
                 <View style={{flexDirection:'row', justifyContent:'space-around'}}>
