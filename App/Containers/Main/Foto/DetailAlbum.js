@@ -298,7 +298,7 @@ function DetailAlbum(props) {
                           setvisibleBottomSheet(!visibleBottomSheet)
                           setonPicked([])
                       }}
-                      style={{ flexDirection: 'row', alignItems: 'center',backgroundColor:'#67308F',padding:4,width:60,borderRadius:12, marginLeft: 15,justifyContent:'center' }}>
+                      style={{ flexDirection: 'row', alignItems: 'center',backgroundColor:'#67308F',padding:4,width:60,borderRadius:20, marginLeft: 15,justifyContent:'center' }}>
                       <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>{visibleBottomSheet?'Batal':'Pilih'}</Text>
                   </TouchableOpacity>
               </View>
@@ -307,7 +307,11 @@ function DetailAlbum(props) {
                       isEdit?
                       <TextInput 
                           value={title}
-                          onChangeText={settitle}
+                          onChangeText={text=>{
+                            if(text.length<21){
+                              settitle(text)
+                            }
+                          }}
                           maxLength={20}
                           style={{flexDirection: 'row',backgroundColor:'#67308F',minWidth:80,borderRadius:8, marginLeft: 15,textAlign:'center', color:'white', fontWeight: '500', fontSize: 16}}
                           />

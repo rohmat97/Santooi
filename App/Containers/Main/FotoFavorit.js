@@ -367,7 +367,7 @@ function FotoFavorit(props) {
               backgroundColor: 'white',
               padding: 16,
               paddingTop:24,
-              height: 200,
+              height: Screen.height*0.1,
               flexDirection:'row',
               justifyContent:'center',
               alignItems:'flex-start'
@@ -469,7 +469,7 @@ function FotoFavorit(props) {
             {
               visibleBottomSheet && onPicked.length>0 &&<BottomSheet
               ref={sheetRef}
-              snapPoints={[willDelete?Platform.OS==='ios'?375:400:Platform.OS==='ios'?275:325,0,0]}
+              snapPoints={[willDelete?Platform.OS==='ios'?375:400:Platform.OS==='ios'?275:300,0,0]}
               borderRadius={10}
               renderContent={renderContent}
               enabledContentGestureInteraction={true}

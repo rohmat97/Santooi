@@ -14,12 +14,13 @@ import { bindActionCreators } from 'redux';
 import TokenRedux from '../../Redux/Authentication/TokenRedux'
 import GetPlaceRedux from '../../Redux/JalanYuk/GetPlaceRedux'
 import HistoryPlaceRedux from '../../Redux/JalanYuk/HistoryPlaceRedux'
+import UpdateHistoryRedux from '../../Redux/JalanYuk/UpdateHistoryRedux'
 import { set } from 'seamless-immutable';
 import { ActivityIndicator } from 'react-native';
 
 
 function JalanYuk(props) {
-    const { navigation,token,listplace,listhistory,GetPlaceRequest,HistoryPlaceRequest } = props
+    const { navigation,token,listplace,listhistory,GetPlaceRequest,HistoryPlaceRequest,UpdateHistoryRequest } = props
     const { navigate,pop } = navigation
 
     const [latlong, setlatlong] = useState()
@@ -155,10 +156,12 @@ function JalanYuk(props) {
                     </View>
                     {
                        search?
-                        <View style={{ marginBottom: 10,paddingBottom:Screen.height*0.15}}>
+                        // <View style={{ flexDirection:'column'}}>
                            <FlatList 
                                 data={listPlaces}
-                                horizontal={false}
+                                // horizontal={false}
+                                // scrollEnabled={true}
+                                contentContainerStyle={{height:Screen.height}}
                                 renderItem={({ item, index, separators }) => (
                                     <TouchableOpacity onPress={()=>toggleOverlay(item)}>
                                          <View style={{ flexDirection: 'row', marginBottom: 20, marginRight: 20  }}>
@@ -188,7 +191,8 @@ function JalanYuk(props) {
                                 </TouchableOpacity>
                                   )}
                             />  
-                        </View>:
+                        // </View>
+                        :
                         <ScrollView>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
@@ -256,7 +260,7 @@ function JalanYuk(props) {
                     </ScrollView>
                     }
                     
-                    <OverlayJalanYuk visible={visible} toggleOverlay={toggleOverlay} selected={selected} openMaps={openMaps}/>
+                    <OverlayJalanYuk visible={visible} toggleOverlay={toggleOverlay} selected={selected} openMaps={openMaps} UpdateHistoryRequest={UpdateHistoryRequest} token={token}/>
                 </View>
             </View>
         </TemplateBackground>
@@ -273,6 +277,6 @@ const mapStateToProps = (state) => {
   }
   
 const mapDispatchToProps = (dispatch) => {
-    return bindActionCreators(Object.assign(GetPlaceRedux,TokenRedux,HistoryPlaceRedux), dispatch)
+    return bindActionCreators(Object.assign(GetPlaceRedux,TokenRedux,HistoryPlaceRedux,UpdateHistoryRedux), dispatch)
 }
 export default connect(mapStateToProps, mapDispatchToProps)(JalanYuk)

@@ -38,6 +38,7 @@ import { DetailAlbumTypes } from '../Redux/FotoFav/DetailAlbumRedux';
 //jalanyuks
 import { GetPlaceTypes } from '../Redux/JalanYuk/GetPlaceRedux';
 import { HistoryPlaceTypes } from '../Redux/JalanYuk/HistoryPlaceRedux';
+import { UpdateHistoryTypes } from '../Redux/JalanYuk/UpdateHistoryRedux';
 /* ------------- Sagas ------------- */
 
 import { startup } from './StartupSagas'
@@ -47,7 +48,7 @@ import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook
 import { getMusic } from './BerhitungSagas';
 import { getKalimat, addFavorite } from './KalimatBijakSagas';
 import { getGallery, AddFoto, DeleteFoto, getAlbum, getAddAlbum, DeleteAlbum, UpdateAlbum, UploadAlbum,getDetailAlbum } from './FotoFavSagas';
-import { getPlace, getPlaceHistory } from './JalanYukSagas';
+import { getPlace, getPlaceHistory,updateHistory } from './JalanYukSagas';
 
 /* ------------- API ------------- */
 
@@ -89,5 +90,6 @@ export default function * root () {
     takeLatest(DetailAlbumTypes.DETAIL_ALBUM_REQUEST, getDetailAlbum, api),
     takeLatest(GetPlaceTypes.GET_PLACE_REQUEST, getPlace, api),
     takeLatest(HistoryPlaceTypes.HISTORY_PLACE_REQUEST, getPlaceHistory, api),
+    takeLatest(UpdateHistoryTypes.UPDATE_HISTORY_REQUEST, updateHistory, api),
   ])
 }

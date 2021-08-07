@@ -7,7 +7,7 @@ import { Screen } from "../Transforms/Screen";
 import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
 import { Linking } from "react-native";
-export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps }) => {
+export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps, token, UpdateHistoryRequest }) => {
     console.log(selected)
     return (
         <Overlay
@@ -34,7 +34,16 @@ export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps }) =
         {
                 selected && selected.is_featured===1 &&
                 
-                <TouchableOpacity onPress={()=>Linking.openURL(selected.url)}>
+                <TouchableOpacity onPress={()=>{
+                    const payload ={
+                        'token':token && token.data.access_token,
+                        'body':{
+                            "id_place":selected.id
+                        },
+                      }
+                    UpdateHistoryRequest(payload)
+                    Linking.openURL(selected.url)
+                    }}>
                     <View style={{ flexDirection: 'row',alignItems:'center' }}>
                         <Image source={images.addChartOutline} style={{ width: 25, height: 25 }} resizeMode='contain' />
                         <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 15 }}>{selected.wording}</Text>
