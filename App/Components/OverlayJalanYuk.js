@@ -13,20 +13,20 @@ export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps, tok
         <Overlay
             isVisible={visible}
             // onBackdropPress={toggleOverlay}
-            overlayStyle={{ width: Screen.width * 0.9, borderRadius: 20, minHeight: selected &&selected.is_featured===1? Screen.height * 0.22:Screen.height * 0.15, padding: Screen.width * 0.05 }}
+            overlayStyle={{ width: Screen.width * 0.9, borderRadius: 20, minHeight: selected &&selected.is_featured===1? Screen.height * 0.20:Screen.height * 0.15, padding: Screen.width * 0.05 }}
         >
-            <TouchableOpacity onPress={toggleOverlay} style={{justifyContent:'flex-end', flexDirection:'row'}}>
-                <Image source={images.close} style={{ width: 15, height: 15}} resizeMode='contain' />
+            <TouchableOpacity onPress={toggleOverlay} style={{justifyContent:'flex-end', flexDirection:'row',paddingHorizontal:12,height:20}}>
+                <Image source={images.close} style={{ width: 15, height: 15}} resizeMode='cover'/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=> openMaps(selected.lat,selected.lng)}>
-                <View style={{ flexDirection: 'row',alignItems:'center' }}>
-                    <Image source={images.location} style={{ width: 25, height: 25 }} resizeMode='contain' />
-                    <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 15 }}>Petunjuk Jalan</Text>
+            <TouchableOpacity onPress={()=> openMaps(selected.lat,selected.lng)} style={{marginVertical:12}}>
+                <View style={{ flexDirection: 'row',alignItems:'center',width:'60%' }}>
+                    <Image source={images.location} style={{ width: 30, height: 30 }} resizeMode='contain' />
+                    <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 16 }}>Petunjuk Jalan</Text>
                 </View>
             </TouchableOpacity>
             {
                 selected && selected.is_featured===1 &&
-                    <View style={{ height: 1, width: '100%', borderRadius: 1, borderWidth: 1, borderColor: '#D9078D', borderStyle: 'dashed', zIndex: 0, marginVertical: 30 }}>
+                    <View style={{ height: 1, width: '100%', borderRadius: 1, borderWidth: 1, borderColor: '#D9078D', borderStyle: 'dashed', zIndex: 0, marginVertical: 12 }}>
                         <View style={{ position: 'absolute', left: 0, bottom: 0, width: '100%', height: 1, backgroundColor: 'white', zIndex: 1 }} />
                     </View>
             }
@@ -43,15 +43,15 @@ export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps, tok
                       }
                     UpdateHistoryRequest(payload)
                     Linking.openURL(selected.url)
-                    }}>
+                    }}
+                    style={{paddingVertical:16}}
+                    >
                     <View style={{ flexDirection: 'row',alignItems:'center' }}>
-                        <Image source={images.addChartOutline} style={{ width: 25, height: 25 }} resizeMode='contain' />
-                        <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 15 }}>{selected.wording}</Text>
+                        <Image source={images.addChartOutline} style={{  width: 30, height: 30 }} resizeMode='contain' />
+                        <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 16 }}>{selected.wording}</Text>
                     </View>
                 </TouchableOpacity>
         }
-            
-
         </Overlay>
     )
 }

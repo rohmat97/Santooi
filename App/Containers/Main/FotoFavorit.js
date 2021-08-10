@@ -514,7 +514,6 @@ function FotoFavorit(props) {
               setnameNewAlbum={setnameNewAlbum}
               AddNewAlbum={AddNewAlbum}
               uploadFotoToAlbum={uploadFotoToAlbum}
-              
               />
         </TemplateBackground>
     )

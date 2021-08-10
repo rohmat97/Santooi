@@ -286,7 +286,7 @@ function DetailAlbum(props) {
     return(
         <TemplateBackground cover={true}>
           <View style={styles.mainContainer}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30,marginTop:24,marginHorizontal:12 }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30,marginTop:12,marginHorizontal:12 }}>
                   <TouchableOpacity
                       onPress={() => pop()}
                       style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -423,7 +423,7 @@ function DetailAlbum(props) {
                                                   
                                               }}
                                               source={{uri:item.photo.url}} style={{ width: Screen.width * 0.45, height: Screen.width * 0.45}} 
-                                              resizeMode={'contain'} 
+                                              resizeMode={'cover'} 
                                               PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
                                           />
                                       </View>
