@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity,FlatList, ActivityIndicator } from 'react-native'
 import { TextInput } from 'react-native-paper';
-import { Divider, Overlay } from 'react-native-elements'
-import { Image } from 'react-native-elements/dist/image/Image'
+import { Divider, Overlay, Image } from 'react-native-elements'
 import images from '../../../Themes/Images'
 import { Screen } from '../../../Transforms/Screen'
 export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri,setvisibleBottomSheet,visibleBottomSheet,setonPicked,listFoto}) =>{
@@ -25,9 +24,16 @@ export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri,setvisibleBo
                     <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>{visibleBottomSheet?'Batal':'Pilih'}</Text>
                 </TouchableOpacity>
             </View>
-            <View style={{height:Screen.height*0.7, justifyContent:'center'}}>
-                <ActivityIndicator color='#67308F' size={80} />
+            {
+                loading?
+                <View style={{height:Screen.height*0.7, justifyContent:'center'}}>
+                    <ActivityIndicator color='#67308F' size={80} />
+                </View>:null
+            }
+            <View style={{height:Screen.height*0.7, justifyContent:'center',alignItems:'center'}}>
+                <Image source={images.emptyStateFoto} style={{width:Screen.width*0.8,height:Screen.width*0.8, borderRadius:32}} resizeMode='contain' />
             </View>
+           
             {/* <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri}/> */}
         </View>
         )
@@ -57,18 +63,18 @@ export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri,setvisibleBo
 
 export const MenuFoto =({setisGaleri,isGaleri,isEmpty})=>{
     return(
-    <View style={{ width:Screen.width,flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30,marginTop:isEmpty?4:0 }}>
+    <View style={{ width:Screen.width*0.94,flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30,marginTop:isEmpty?4:0 }}>
         <TouchableOpacity
             onPress={() => setisGaleri(true)}
             style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{backgroundColor:isGaleri?'#67308F':'rgba(103, 48, 143, 0.6)',padding:4,borderRadius:4, marginLeft: 15,width:Screen.width*0.4,alignItems:'center'}}>
+            <View style={{backgroundColor:isGaleri?'#67308F':'rgba(103, 48, 143, 0.6)',padding:4,borderRadius:4,width:Screen.width*0.415,alignItems:'center'}}>
                 <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>Semua Galeri</Text>
             </View>
         </TouchableOpacity>
         <TouchableOpacity
             onPress={() => setisGaleri(false)}
             style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <View style={{backgroundColor:!isGaleri?'#67308F':'rgba(103, 48, 143, 0.6)',padding:4,borderRadius:4, marginLeft: 15,width:Screen.width*0.4,alignItems:'center'}}>
+            <View style={{backgroundColor:!isGaleri?'#67308F':'rgba(103, 48, 143, 0.6)',padding:4,borderRadius:4,width:Screen.width*0.415,alignItems:'center'}}>
                 <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>Album</Text>
             </View>
             {/* <Text style={{ color: 'white',backgroundColor:!isGaleri?'#67308F':'rgba(103, 48, 143, 0.6)',padding:4,borderRadius:4, marginLeft: 15, fontWeight: '500', fontSize: 16,width:Screen.width*0.4,textAlign:'center' }}>Album</Text> */}
@@ -377,7 +383,12 @@ export const DetailFoto = ({visibleDetailFoto, setvisibleDetailFoto, selectedDet
                         label="Nama album"
                         mode='outlined'
                         value={nameNewAlbum}
-                        onChangeText={text => setnameNewAlbum(text)}
+                        maxLength={20}
+                        onChangeText={text => {
+                            if(text.length<20){
+                                setnameNewAlbum(text)
+                            }
+                        }}
                     />
                     <View style={{ width: Screen.width*0.8, height:50,marginBottom:-10, flexDirection:'row',alignItems:'center',borderTopWidth:0.5, borderColor:'rgba(171, 169, 172, 1)', marginTop:24,marginLeft:-10}}>
                         <TouchableOpacity onPress={()=>{

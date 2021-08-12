@@ -3,6 +3,7 @@ import { View, Image, Text, TouchableOpacity, ActivityIndicator, LogBox, Platfor
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { connect } from 'react-redux';
 import Share from 'react-native-share';
+import RNFetchBlob from 'rn-fetch-blob'
 import BottomSheet from 'reanimated-bottom-sheet';
 import { FAB, Overlay } from 'react-native-elements';
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -381,12 +382,31 @@ function FotoFavorit(props) {
                   onPicked.map(img=>{
                     dataforshare.push(img.photo.url)
                   })
-                  const shareOptions = {
-                    title: 'Share file',
-                        urls:dataforshare,
-                      };
-    
-                    Share.open(shareOptions)
+                  // const shareOptions = {
+                  //   title: 'Share file',
+                  //       urls:dataforshare,
+                  //     };
+                  let imagePath = null;
+                  RNFetchBlob.config({
+                      fileCache: true
+                  })
+                  .fetch("GET", dataforshare[0])
+                  // the image is now dowloaded to device's storage
+                  .then(resp => {
+                      // the image path you can use it directly with Image component
+                      imagePath = resp.path();
+                      return resp.readFile("base64");
+                  })
+                  .then(async base64Data => {
+                      var base64Data = `data:image/png;base64,` + base64Data;
+                      // here's base64 encoded image
+                      await Share.open({ 
+                        title: 'Share file',
+                        url: base64Data })
+                      // remove the file from storage
+                      // return fs.unlink(imagePath);
+                  })
+
                 }}>
                 <Image
                   source={images.share} 
@@ -514,7 +534,6 @@ function FotoFavorit(props) {
               setnameNewAlbum={setnameNewAlbum}
               AddNewAlbum={AddNewAlbum}
               uploadFotoToAlbum={uploadFotoToAlbum}
-              
               />
         </TemplateBackground>
     )
