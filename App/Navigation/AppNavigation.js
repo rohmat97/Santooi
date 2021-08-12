@@ -23,6 +23,7 @@ import CurhatKeTeman from '../Containers/Main/CurhatKeTeman';
 import CurhatKeTemanContact from '../Containers/Main/CurhatKeTemanContact';
 import CurhatKeTemanContactDetail from '../Containers/Main/CurhatKeTemanContactDetail';
 import DetailAlbum from '../Containers/Main/Foto/DetailAlbum'
+import Chat from '../Containers/Main/Chat';
 
 // Manifest of possible screens
 const AuthNavigator = createStackNavigator({
@@ -52,6 +53,7 @@ const MainNavigator = createStackNavigator({
   KonselingWaiting: { screen: KonselingWaiting },
   SelectKonseling: { screen: SelectKonseling },
   CurhatKeTeman: { screen: CurhatKeTeman },
+  Chat: { screen: Chat },
   CurhatKeTemanContact: { screen: CurhatKeTemanContact },
   CurhatKeTemanContactDetail: { screen: CurhatKeTemanContactDetail },
   DetailAlbum: { screen: DetailAlbum }
