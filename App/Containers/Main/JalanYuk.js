@@ -166,6 +166,25 @@ function JalanYuk(props) {
                                     <TouchableOpacity onPress={()=>toggleOverlay(item)}>
                                          <View style={{ flexDirection: 'row', marginBottom: 20, marginRight: 20  }}>
                                             <Image source={{uri:item.photo.url}} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3, borderRadius:12 }} resizeMode='cover' PlaceholderContent={<ActivityIndicator />}/>
+                                             
+                                            {
+                                                item.is_featured===1&&
+                                                <Text 
+                                                style={{
+                                                    backgroundColor:'#7E3DAD',
+                                                    width:60,
+                                                    height:30,
+                                                    padding:8,
+                                                    color:'white',
+                                                    borderRadius:24,
+                                                    textAlign:'center',
+                                                    marginTop:Screen.width*0.005,
+                                                    fontSize:8,
+                                                    marginLeft:-Screen.width*0.16
+                                                    }}>
+                                                    Featured
+                                                </Text>
+                                            }
                                             <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end',marginTop: item.is_featured===0?-Screen.height*0.05:0 }}>
                                                 {
                                                      item.is_featured===1 &&
@@ -237,7 +256,7 @@ function JalanYuk(props) {
                                 paddingBottom:Screen.height*0.1
                             }}
                             renderItem={({ item, index, separators }) => {
-                                // console.log('data', item)
+                                console.log('data', item)
                                 return(
                                      <View style={{ flexDirection: 'row', marginBottom: 20, marginRight: 20  }}>
                                         <View>
@@ -267,15 +286,15 @@ function JalanYuk(props) {
                                             {
                                                 item.place.is_featured===1&&
                                                 <TouchableOpacity onPress={()=>Linking.openURL(item.place.url)}>
-                                                    <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.2, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
+                                                    <View style={{ backgroundColor: '#67308F', width: Screen.width*0.2+item.place.wording.length*3, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
                                                         <Image source={images.addChart} style={{ width: 15, height: 15 }} resizeMode='contain' PlaceholderContent={<ActivityIndicator />}/>
-                                                        <Text style={{ color: 'white', fontWeight: '500', marginLeft: 10, fontSize:12}}>Pesan</Text>
+                                                        <Text style={{ color: 'white', fontWeight: '500', marginLeft: 10, fontSize:12}}>{item.place.wording}</Text>
                                                     </View>
                                                 </TouchableOpacity>
                                             }
-                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }}numberOfLines={1}>{item.place.name}</Text>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13,width:Screen.width*0.6 }}numberOfLines={2}>{item.place.name}</Text>
                                             <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.place.created_at?new Date(item.place.created_at).toUTCString():''}</Text>
-                                            <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.4, fontSize: 13 }}numberOfLines={1}>{item.place.address}</Text>
+                                            <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.55, fontSize: 13 }}numberOfLines={1}>{item.place.address}</Text>
                                         </View>
                                     </View>
 

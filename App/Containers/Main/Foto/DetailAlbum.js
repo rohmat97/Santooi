@@ -427,14 +427,12 @@ function DetailAlbum(props) {
                                               PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
                                           />
                                       </View>
-                                    
                                           {
                                               check?
                                               <View style={{right: 20, bottom: 30,position:'absolute'}}>
                                                   <Image source={images.checkedFoto} style={{width:20,height:20}} resizeMode='contain'/>
                                               </View>:null
                                           }
-                                      
                                   </View>
                                       )
                       }}
