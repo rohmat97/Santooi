@@ -77,7 +77,7 @@ function DetailAlbum(props) {
     }
     useEffect(() => {
         setlisrGaleri([])
-        console.log(getParam('params'))
+        // console.log(getParam('params'))
         if(getParam('params').name =='All Photos'){
           // console.log('params',getParam('params').name)
           const payload ={
@@ -160,7 +160,7 @@ function DetailAlbum(props) {
     useEffect(() => {
         if(uploadfoto){
           setlisrGaleri([])
-          console.log('uploadfoto',uploadfoto)
+          // console.log('uploadfoto',uploadfoto)
           // const payload ={
           //   'token':token && token.data.access_token,
           //   'page':1
@@ -189,7 +189,7 @@ function DetailAlbum(props) {
           })
           foto.append('id_user_gallery_album',getParam('params').id)
           // console.log(foto._parts[0])
-          console.log(params)
+          // console.log(params)
           const payload ={
             'token':token && token.data.access_token,
             'body':foto
@@ -250,6 +250,8 @@ function DetailAlbum(props) {
                 alignItems:'flex-start'
               }}
             >
+              {
+                onPicked.length<2 &&
                 <TouchableOpacity onPress={()=>
                   {
                     let dataforshare= []
@@ -269,7 +271,9 @@ function DetailAlbum(props) {
                     resizeMode={'stretch'} 
                     PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
                   />
-                  </TouchableOpacity>
+              </TouchableOpacity>
+              }
+                
               <Text style={{fontSize:16, marginHorizontal:Screen.width*0.25}}>Pilih Item</Text>
               <TouchableOpacity onPress={()=>setwillDelete(true)}>
                 <Image

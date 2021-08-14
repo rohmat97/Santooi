@@ -47,7 +47,7 @@ import { getEmoticon,UpdateStatus,getStatus } from './DashboardSagas';
 import { getLogin,getCheckEmail,getSignup,getForgotPassword, getCallBackFacebook,getCallBackGoogle,getResetPassword, getCheckPhone} from './AuthSagas';
 import { getMusic } from './BerhitungSagas';
 import { getKalimat, addFavorite } from './KalimatBijakSagas';
-import { getGallery, AddFoto, DeleteFoto, getAlbum, getAddAlbum, DeleteAlbum, UpdateAlbum, UploadAlbum,getDetailAlbum } from './FotoFavSagas';
+import { getGallery, AddFoto, DeleteFoto, getAlbum, getAddAlbum, DeleteAlbum, UpdateAlbum, UploadFotoAlbum,getDetailAlbum } from './FotoFavSagas';
 import { getPlace, getPlaceHistory,updateHistory } from './JalanYukSagas';
 
 /* ------------- API ------------- */
@@ -86,7 +86,7 @@ export default function * root () {
     takeLatest(AddAlbumTypes.ADD_ALBUM_REQUEST, getAddAlbum, api),
     takeLatest(DeleteAlbumTypes.DELETE_ALBUM_REQUEST, DeleteAlbum, api),
     takeLatest(UpdateAlbumTypes.UPDATE_ALBUM_REQUEST, UpdateAlbum, api),
-    takeLatest(UploadAlbumTypes.UPLOAD_ALBUM_REQUEST, UploadAlbum, api),
+    takeLatest(UploadAlbumTypes.UPLOAD_ALBUM_REQUEST, UploadFotoAlbum, api),
     takeLatest(DetailAlbumTypes.DETAIL_ALBUM_REQUEST, getDetailAlbum, api),
     takeLatest(GetPlaceTypes.GET_PLACE_REQUEST, getPlace, api),
     takeLatest(HistoryPlaceTypes.HISTORY_PLACE_REQUEST, getPlaceHistory, api),

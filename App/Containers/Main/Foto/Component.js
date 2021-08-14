@@ -232,7 +232,7 @@ export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequ
             renderItem={({ item })=>{
             let data = []
             const check  = onPicked.includes(item)
-            console.log('item', item.col_highlight)
+            // console.log('item', item.col_highlight)
             return(
             <TouchableOpacity  
                 onLongPress={()=>{
@@ -334,12 +334,12 @@ export const DetailFoto = ({visibleDetailFoto, setvisibleDetailFoto, selectedDet
                         numColumns={2}
                         contentContainerStyle={{width:Screen.width,marginLeft:-8,height:Screen.height}}
                         renderItem={({ item, index })=>{
-                            console.log(item)
+                            // console.log(item)
                             if(item && item.col_highlight && item.col_highlight.length>0){
                                 return(
                                     <TouchableOpacity onPress={()=> uploadFotoToAlbum(item)}>
                                         <View style={{backgroundColor:'#FFF6FA',width: Screen.width * 0.45, height:200, borderRadius:20,marginTop:20,marginLeft:12}}>
-                                            <Image source={{uri:item.col_highlight[0].photo.url}} resizeMode='contain' style={{width:Screen.width*0.45, height:150}}/>
+                                            <Image source={{uri:item.col_highlight[0].photo.url}} resizeMode='cover' style={{width:Screen.width*0.45, height:150}}/>
                                             <View style={{marginTop:8,marginBottom:20,marginLeft:12}}>
                                                 <Text style={{color:'black',fontWeight:'700'}}>{item.name}</Text>
                                                 <Text style={{color:'black', fontWeight:'normal',opacity:0.8}}>{item.col_total} {item.col_total>1?'Items':'Item'}</Text>
