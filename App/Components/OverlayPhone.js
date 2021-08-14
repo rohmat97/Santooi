@@ -7,6 +7,7 @@ import { Screen } from "../Transforms/Screen";
 import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
 import { Fonts } from '../Themes/'
+import { Alert } from "react-native";
 
 export const OverlayPhone = ({ visible, toggleOverlay,api,token,navigation }) => {
     const [phoneNumber, setPhoneNumber] = useState()
@@ -45,12 +46,12 @@ export const OverlayPhone = ({ visible, toggleOverlay,api,token,navigation }) =>
                 }).then(
                     res => {
                         if(res.data.data.rows.length>0){
-                            alert('user found')
+                            // alert('user found')
                             navigation.navigate('CurhatKeTemanContactDetail', {
                                 params:res.data.data.rows[0]
                               })
                         }else{
-                            alert('user not found')
+                            Alert.alert('user not found')
                         }
                         // console.log(res.data.data.rows)
                     }
