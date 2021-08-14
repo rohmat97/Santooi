@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   ScrollView,
   View,
@@ -7,6 +7,13 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+
+import TokenRedux from '../../Redux/Authentication/TokenRedux';
+
+import API from '../../Services/Api'
+import FixtureAPI from '../../Services/FixtureApi'
+import DebugConfig from '../../Config/DebugConfig'
+
 import {TemplateBackground} from '../../Components/TemplateBackground';
 import images from '../../Themes/Images';
 import styles from '../Styles/LaunchScreenStyles';
@@ -17,9 +24,11 @@ import RoundedButton from '../../Components/RoundedButton';
 import {Fonts, Colors, Metrics} from '../../Themes/';
 import {OverlayInvite} from '../../Components/OverlayInvite';
 import {OverlayPhone} from '../../Components/OverlayPhone';
+import { bindActionCreators } from 'redux';
 
+const api = DebugConfig.useFixtures ? FixtureAPI : API.create()
 function CurhatKeTemanContact(props) {
-  const {navigation} = props;
+  const {navigation,token} = props;
   const {pop} = navigation;
   const [search, setsearch] = useState(null)
   const [conselingCode, setConselingCode] = useState(false);
@@ -57,6 +66,11 @@ function CurhatKeTemanContact(props) {
 
   let newName = '';
 
+  useEffect(() => {
+    api.searchFriend({
+      
+    })
+  }, [])
   return (
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
@@ -99,6 +113,7 @@ function CurhatKeTemanContact(props) {
             />
           </View>
 
+          <ScrollView>
           <TouchableOpacity onPress={toggleOverlayPhone}>
             <View
               style={{
@@ -141,7 +156,6 @@ function CurhatKeTemanContact(props) {
             </View>
           </TouchableOpacity>
 
-          <ScrollView>
             {x.map((e, index) => {
               let exist = false;
 
@@ -271,8 +285,11 @@ function CurhatKeTemanContact(props) {
           /> */}
         </View>
         <OverlayPhone
+          api={api.findFriend}
+          token={token}
           visible={visiblePhone}
           toggleOverlay={toggleOverlayPhone}
+          navigation={navigation}
         />
         <OverlayInvite
           visible={visibleInvite}
@@ -283,4 +300,13 @@ function CurhatKeTemanContact(props) {
   );
 }
 
-export default connect(null, null)(CurhatKeTemanContact);
+const mapStateToProps = (state) => {
+  return {
+    token: state.token.payload.data.access_token
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(Object.assign(TokenRedux), dispatch)
+}
+export default connect(mapStateToProps, mapDispatchToProps)(CurhatKeTemanContact);
