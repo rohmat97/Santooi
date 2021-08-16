@@ -127,7 +127,7 @@ function JalanYuk(props) {
         if(Platform.OS==='ios'){
             Linking.openURL(`maps://app?saddr=${lat}+${lng}&daddr=${latlong && latlong.lat}+${latlong && latlong.long}`)
         }else{
-            Linking.openURL(`google.navigation:q=${lat}+${lng}`)
+            Linking.openURL(`google.navigation:q=${lat}+${lng}&daddr=${latlong && latlong.lat}+${latlong && latlong.long}`)
         }
        
       }
@@ -162,39 +162,48 @@ function JalanYuk(props) {
                                 // horizontal={false}
                                 // scrollEnabled={true}
                                 contentContainerStyle={{height:Screen.height}}
-                                renderItem={({ item, index, separators }) => (
+                                renderItem={({ item, index, separators }) => 
+                                {
+                                    // console.log(item.status)
+                                    if(item.status ==1){
+                                        return(
                                     <TouchableOpacity onPress={()=>toggleOverlay(item)}>
                                          <View style={{ flexDirection: 'row', marginBottom: 20, marginRight: 20  }}>
                                             <Image source={{uri:item.photo.url}} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3, borderRadius:12 }} resizeMode='cover' PlaceholderContent={<ActivityIndicator />}/>
                                              
                                             {
                                                 item.is_featured===1&&
-                                                <Text 
-                                                style={{
+                                                <View style={{
                                                     backgroundColor:'#7E3DAD',
-                                                    width:60,
-                                                    height:30,
-                                                    padding:8,
-                                                    color:'white',
-                                                    borderRadius:24,
-                                                    textAlign:'center',
-                                                    marginTop:Screen.width*0.005,
-                                                    fontSize:8,
-                                                    marginLeft:-Screen.width*0.16
-                                                    }}>
-                                                    Featured
-                                                </Text>
+                                                        width:60,
+                                                        height:30,
+                                                        padding:8,
+                                                        borderRadius:40,
+                                                        marginTop:Screen.width*0.005,
+                                                        marginLeft:-Screen.width*0.16
+                                                }}>
+                                                    <Text 
+                                                    style={{
+                                                        color:'white',
+                                                        textAlign:'center',
+                                                        fontSize:8,
+                                                        }}>
+                                                        Featured
+                                                    </Text>
+                                                </View>
                                             }
-                                            <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end',marginTop: item.is_featured===0?-Screen.height*0.05:0 }}>
+                                            <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end',marginTop: item.is_featured===0?-Screen.height*0.05:Screen.height*0.015 }}>
                                                 {
                                                      item.is_featured===1 &&
-                                                     <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.2, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center', marginBottom: 10 }}>
-                                                        <Image source={images.addChart} style={{ width: 15, height: 15 }} resizeMode='contain' PlaceholderContent={<ActivityIndicator />}/>
-                                                        <Text style={{ color: 'white', fontWeight: '500', marginLeft: 10, fontSize:12}}>Pesan</Text>
-                                                    </View>
+                                                     <TouchableOpacity onPress={()=>Linking.openURL(item.url)}>
+                                                        <View style={{ backgroundColor: '#67308F', width: Screen.width*0.2+item.wording.length*3, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center', marginBottom: 10,marginTop:Screen.height*0.05 }}>
+                                                            <Image source={images.addChart} style={{ width: 15, height: 15 }} resizeMode='contain' PlaceholderContent={<ActivityIndicator />}/>
+                                                            <Text style={{ color: 'white', fontWeight: '500', marginLeft: 10, fontSize:12}}>{item.wording}</Text>
+                                                        </View>
+                                                     </TouchableOpacity>
                                                 }
                                                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13, width: Screen.width * 0.5 }}numberOfLines={2}>{item.name}</Text>
-                                                {/* <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.created_at?new Date(item.created_at).toLocaleString('es-AR'):''}</Text> */}
+                                                <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.created_at?new Date(item.created_at).toLocaleString('es-AR'):''}</Text>
                                                 <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.55, fontSize: 13 }}numberOfLines={2}>{item.address}</Text>
                                             </View>
                                         </View>
@@ -207,15 +216,16 @@ function JalanYuk(props) {
                                         </View>
                                     </View> */}
                                 </TouchableOpacity>
-                                  )}
+                                  )}}
+                                }
                             />  
                         // </View>
                         :
                         <ScrollView>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
-                            <View style={{ backgroundColor: '#67308F', width: Screen.width * 0.3, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>
-                                <Text style={{ color: 'white', fontWeight: 'bold' }}>Recommended</Text>
+                            <View style={{ backgroundColor: '#67308F', width: 140,height:30, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>
+                                <Text style={{ color: 'white', fontWeight: 'bold',fontSize:14 }}>Recommended</Text>
                             </View>
                             {/* <TouchableOpacity>
                                 <Text style={{ color: '#67308F', marginLeft: 10, fontWeight: 'bold' }}>See All</Text>
@@ -226,18 +236,23 @@ function JalanYuk(props) {
                             <FlatList 
                                 data={listPlaces}
                                 horizontal={true}
-                                renderItem={({ item, index, separators }) => (
-                                    <TouchableOpacity onPress={()=>toggleOverlay(item)}>
-                                    <View style={{ flexDirection: 'column', marginBottom: 20, marginRight: 20 }}>
-                                        <Image source={{uri: item.photo.url}} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3,borderRadius:12 }} resizeMode='cover' PlaceholderContent={<ActivityIndicator />}/>
-                                        <View style={{ width: Screen.width * 0.3, flexDirection: 'column', marginTop: 20 }}>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }} numberOfLines={1}>{item.name}</Text>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }} numberOfLines={1}>{item.address}</Text>
-                                            <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }}>{item.distance.toFixed(2)} km</Text>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-                                  )}
+                                renderItem={({ item, index, separators }) => {
+                                    // console.log(item)
+                                    if(item.status ===1){
+                                        return(
+                                            <TouchableOpacity onPress={()=>toggleOverlay(item)}>
+                                            <View style={{ flexDirection: 'column', marginBottom: 20, marginRight: 20 }}>
+                                                <Image source={{uri: item.photo.url}} style={{ width: Screen.width * 0.3, height: Screen.width * 0.3,borderRadius:12 }} resizeMode='cover' PlaceholderContent={<ActivityIndicator />}/>
+                                                <View style={{ width: Screen.width * 0.3, flexDirection: 'column', marginTop: 20 }}>
+                                                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13 }} numberOfLines={1}>{item.name}</Text>
+                                                    <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }} numberOfLines={1}>{item.address}</Text>
+                                                    <Text style={{ color: 'white', fontWeight: 'bold', width: Screen.width * 0.3, fontSize: 13 }}>{item.distance.toFixed(2)} km</Text>
+                                                </View>
+                                            </View>
+                                        </TouchableOpacity>
+                                          )
+                                    }
+                                    }}
                             />
                         </View>
 
@@ -256,7 +271,7 @@ function JalanYuk(props) {
                                 paddingBottom:Screen.height*0.1
                             }}
                             renderItem={({ item, index, separators }) => {
-                                console.log('data', item)
+                                // console.log('data', item)
                                 return(
                                      <View style={{ flexDirection: 'row', marginBottom: 20, marginRight: 20  }}>
                                         <View>
@@ -292,7 +307,7 @@ function JalanYuk(props) {
                                                     </View>
                                                 </TouchableOpacity>
                                             }
-                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13,width:Screen.width*0.6 }}numberOfLines={2}>{item.place.name}</Text>
+                                            <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13,width:Screen.width*0.55 }}numberOfLines={2}>{item.place.name}</Text>
                                             <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.place.created_at?new Date(item.place.created_at).toUTCString():''}</Text>
                                             <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.55, fontSize: 13 }}numberOfLines={1}>{item.place.address}</Text>
                                         </View>

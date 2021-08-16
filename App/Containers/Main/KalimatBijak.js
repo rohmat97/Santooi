@@ -128,7 +128,7 @@ function KalimatBijak(props) {
                 "token":token.data.access_token,
                 "page":1
             }
-            console.log(payload)
+            // console.log(payload)
             KalimatBijakRequest(payload)
         }
        

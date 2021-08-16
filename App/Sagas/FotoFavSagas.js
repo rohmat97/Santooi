@@ -104,14 +104,14 @@ export function * UpdateAlbum (api, action) {
 }
 
 
-export function * UploadAlbum (api, action) {
+export function * UploadFotoAlbum (api, action) {
   const { data } = action
   // console.log('data', data.body)
   // make the call to the api
   // console.log(data.body._searchParams[0])
   const response = yield call(api.getUpdatePhotoAlbum , data)
   if (response.ok) {
-    console.log('response getUpdatePhotoAlbum', response.data)
+    // console.log('response getUpdatePhotoAlbum', response.data)
     yield put(UploadPhotoAlbumRedux.UploadAlbumSuccess(response.data))
   }
  

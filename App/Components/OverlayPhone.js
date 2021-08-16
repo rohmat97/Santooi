@@ -7,8 +7,10 @@ import { Screen } from "../Transforms/Screen";
 import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
 import { Fonts } from '../Themes/'
+import { Alert } from "react-native";
 
-export const OverlayPhone = ({ visible, toggleOverlay }) => {
+export const OverlayPhone = ({ visible, toggleOverlay,api,token,navigation }) => {
+    const [phoneNumber, setPhoneNumber] = useState()
     return (
         <Overlay
             isVisible={visible}
@@ -29,12 +31,34 @@ export const OverlayPhone = ({ visible, toggleOverlay }) => {
                 <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 14 }}>Phone Number</Text>
                 <TextInput
                 placeholder={'Enter Number'}
-                ></TextInput>
+                value={phoneNumber}
+                onChangeText={phone => setPhoneNumber(phone)}
+                />
             </View>
 
             <Text style={{ color:'#333333',fontWeight: '500', fontSize: 13, textAlign:'right', opacity:0.5}}>Example:812-345-678</Text>
 
-            <TouchableOpacity onPress={toggleOverlay} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginEnd: 10, marginTop: 50 }}>
+            <TouchableOpacity onPress={()=>{
+                // console.log(token)
+                api({
+                    no:phoneNumber,
+                    token:token
+                }).then(
+                    res => {
+                        if(res.data.data.rows.length>0){
+                            // alert('user found')
+                            navigation.navigate('CurhatKeTemanContactDetail', {
+                                params:res.data.data.rows[0]
+                              })
+                        }else{
+                            Alert.alert('user not found')
+                        }
+                        // console.log(res.data.data.rows)
+                    }
+                ).catch(err => console.log(err.data))
+                // console.log(dataa)
+                // toggleOverlay
+            }} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginEnd: 10, marginTop: 50 }}>
                 <Text style={{ color: '#67308F', marginEnd: 15, fontSize: Fonts.size.regular }}>Search</Text>
                 <Image source={images.arrowRightPurple} style={{ width: 20, height: 20 }} />
             </TouchableOpacity>

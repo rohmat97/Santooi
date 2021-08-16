@@ -8,7 +8,7 @@ import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
 import { Linking } from "react-native";
 export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps, token, UpdateHistoryRequest }) => {
-    console.log(selected)
+    // console.log(selected)
     return (
         <Overlay
             isVisible={visible}

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Share from 'react-native-share';
 import RNFetchBlob from 'rn-fetch-blob'
 import BottomSheet from 'reanimated-bottom-sheet';
-import { FAB, Overlay } from 'react-native-elements';
+import { Button, Overlay } from 'react-native-elements';
 import { showMessage, hideMessage } from "react-native-flash-message";
 //redux
 import TokenRedux from '../../Redux/Authentication/TokenRedux'
@@ -33,7 +33,7 @@ function FotoFavorit(props) {
     const { 
       navigation,token,gallery,GalleryRequest,GallerySuccess,uploadfoto,AddfotoRequest,galleryfetching,AddfotoSuccess,
       DeletefotoRequest,DeletefotoSuccess,deletedFoto,album ,AlbumRequest, AddAlbumRequest, AddAlbumSuccess,addalbum,
-      UploadAlbumRequest, updateAlbum,DeleteAlbumRequest,deletealbum,DeleteAlbumSuccess } = props
+      UploadAlbumRequest, updateAlbum,DeleteAlbumRequest,deletealbum,DeleteAlbumSuccess,uploadAlbum,UploadAlbumSuccess} = props
     const { pop, navigate } = navigation
     const [listFoto, setlistFoto] = useState([])
     const [responseFoto, setresponseFoto] = useState([])
@@ -86,7 +86,7 @@ function FotoFavorit(props) {
 
     useEffect(() => {
       if(gallery && gallery.data){
-        console.log('galeri', gallery)
+        // console.log('galeri', gallery)
         const merger =listFoto.concat(gallery.data.rows.data)
         setlistFoto(merger)
         setloading(false)
@@ -128,8 +128,19 @@ function FotoFavorit(props) {
     }, [uploadfoto])
 
     useEffect(() => {
-      console.log('onPicked',onPicked)
-    }, [onPicked])
+      if(uploadAlbum){
+        // console.log('onPicked',uploadAlbum)
+        showMessage({
+          message: "Upload foto to Album Success",
+          type: "info",
+        });
+        UploadAlbumSuccess(null)
+        setcreateNewAlbum(false)
+        setaddToAlbum(false)
+        setvisibleDetailFoto(false)
+      }
+      
+    }, [uploadAlbum])
     useEffect(() => {
       if(deletedFoto && deletedFoto.status){
         let filter =[]
@@ -152,6 +163,12 @@ function FotoFavorit(props) {
       if(album && album.data && album.data.rows){
         // console.log('album',album.data.rows[21].col_highlight)
         setlisrGaleri(album.data.rows)
+        AddAlbumSuccess(null)
+        const payloadRequest ={
+          'token':token && token.data.access_token,
+          'page':1
+        }
+        AlbumRequest(payloadRequest)
       }
       
     }, [album])
@@ -196,7 +213,11 @@ function FotoFavorit(props) {
     useEffect(() => {
      if(updateAlbum){
        console.log('updateAlbum',updateAlbum)
-        
+       const payloadRequest ={
+        'token':token && token.data.access_token,
+        'page':1
+      }
+      AlbumRequest(payloadRequest)
      }
     }, [updateAlbum])
 
@@ -245,13 +266,23 @@ function FotoFavorit(props) {
             // type: data.type
           })
           foto.append('id_user_gallery_album',params.id)
-          // console.log(foto._parts[0])
-          console.log(params)
+
           const payload ={
             'token':token && token.data.access_token,
-            'body':foto
+            'body':{
+              'id_user_gallery_album':params.id,
+              'photos':[{"id":selectedDetailFoto.id}]
+            },
           }
-          AddfotoRequest(payload)
+          UploadAlbumRequest(payload)
+          AddAlbumSuccess(null)
+          // const payloadRequest ={
+          //   'token':token && token.data.access_token,
+          //   'page':1
+          // }
+          // AlbumRequest(payloadRequest)
+          // console.log(foto._parts[0])
+          // console.log(params)
     }
 
     const deleteFoto=()=>{
@@ -308,7 +339,7 @@ function FotoFavorit(props) {
         'token':token && token.data.access_token,
         'idAlbum': onPicked[0].id
       }
-      console.log('payload',payload)
+      // console.log('payload',payload)
       DeleteAlbumRequest(payload)
       
       // listGaleri.map(data =>{
@@ -325,7 +356,7 @@ function FotoFavorit(props) {
             style={{
               backgroundColor: 'white',
               padding: 16,
-              height: 300,
+              height:Platform.OS==='android'? Screen.height*0.3: Screen.height*0.4,
               flexDirection:'column',
               justifyContent:'center',
               alignItems:'flex-start'
@@ -368,14 +399,14 @@ function FotoFavorit(props) {
               backgroundColor: 'white',
               padding: 16,
               paddingTop:24,
-              height: Screen.height*0.1,
+              height: Platform.OS==='android'? Screen.height*0.25: Screen.height*0.35,
               flexDirection:'row',
               justifyContent:'center',
               alignItems:'flex-start'
             }}
           >
             {
-              isGaleri?
+              isGaleri && onPicked.length<2?
               <TouchableOpacity onPress={()=>
                 {
                   let dataforshare= []
@@ -416,7 +447,50 @@ function FotoFavorit(props) {
                 />
                 </TouchableOpacity>:null
             }
-           
+           {/* <Button
+           style={{width: Screen.width * 0.08, height: Screen.width * 0.08}}
+           onPress={()=>{
+            let dataforshare= []
+            onPicked.map(img=>{
+              dataforshare.push(img.photo.url)
+            })
+            // const shareOptions = {
+            //   title: 'Share file',
+            //       urls:dataforshare,
+            //     };
+            let imagePath = null;
+            RNFetchBlob.config({
+                fileCache: true
+            })
+            .fetch("GET", dataforshare[0])
+            // the image is now dowloaded to device's storage
+            .then(resp => {
+                // the image path you can use it directly with Image component
+                imagePath = resp.path();
+                return resp.readFile("base64");
+            })
+            .then(async base64Data => {
+                var base64Data = `data:image/png;base64,` + base64Data;
+                // here's base64 encoded image
+                await Share.open({ 
+                  title: 'Share file',
+                  url: base64Data })
+                // remove the file from storage
+                // return fs.unlink(imagePath);
+            })
+
+          }}
+            icon={
+              <Image
+              source={images.share} 
+              style={{ width: Screen.width * 0.08, height: Screen.width * 0.08}} 
+              resizeMode={'stretch'} 
+              PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
+            />
+            }
+            type="clear"
+            // title="Button with icon component"
+          /> */}
             <Text style={{fontSize:16, marginHorizontal:Screen.width*0.25}}>Pilih Item</Text>
             <TouchableOpacity onPress={()=>setwillDelete(true)}>
               <Image
@@ -489,7 +563,7 @@ function FotoFavorit(props) {
             {
               visibleBottomSheet && onPicked.length>0 &&<BottomSheet
               ref={sheetRef}
-              snapPoints={[willDelete?Platform.OS==='ios'?375:400:Platform.OS==='ios'?275:300,0,0]}
+              snapPoints={[willDelete?Platform.OS==='ios'?Screen.height*0.525:Screen.height*0.45:Platform.OS==='ios'?Screen.height*0.4:Screen.height*0.35,0,0]}
               borderRadius={10}
               renderContent={renderContent}
               enabledContentGestureInteraction={true}
@@ -502,7 +576,7 @@ function FotoFavorit(props) {
             }
             <Overlay visible={visible} onBackdropPress={()=> setVisible(false)} overlayStyle={{width:Screen.width*0.8, borderRadius:12,paddingBottom:-12,backgroundColor:'rgba(255, 255, 255, 0)'}} transparent={true}>
                 {actions.map(({title, type, options}) => {
-                  console.log(title)
+                  // console.log(title)
                   // if(color){
                   //   return
                   // }
@@ -549,6 +623,7 @@ const mapStateToProps = (state) => {
     album:state.album.payload,
     addalbum:state.addalbum.payload,
     updateAlbum:state.updateAlbum.payload,
+    uploadAlbum:state.uploadAlbum.payload,
     deletealbum: state.deletealbum.payload
   }
 }

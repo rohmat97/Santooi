@@ -72,6 +72,9 @@ const create = (baseURL = staging) => {
   const getPlace = payload => api.get(`/place?key=${payload.key}&id=${payload.id}&lat=${payload.lat}&lng=${payload.long}&limit=${payload.limit}&page=${payload.page}`,'',{headers:{Authorization:`Bearer ${payload.token}`}})
   const getHistoryPlace = payload => api.get(`/account/user/place?limit=10&page=${payload.page}`,'',{headers:{Authorization:`Bearer ${payload.token}`}})
   const updateHistory = payload => api.post('/account/user/place',payload.body,{headers: { Authorization: `Bearer ${payload.token}`}})
+  //curhat ke teman
+  const findFriend = payload => api.get(`/account/user?phone=${payload.no}`,'',{headers: { Authorization: `Bearer ${payload.token}`}})
+  const searchFriend = payload => api.get(`/account/user/friend?key=${payload.no}`,'',{headers: { Authorization: `Bearer ${payload.token}`}})
   // ------
   // STEP 3
   // ------
@@ -117,7 +120,9 @@ const create = (baseURL = staging) => {
     getDetailAlbum,
     getPlace,
     getHistoryPlace,
-    updateHistory
+    updateHistory,
+    findFriend,
+    searchFriend
   }
 }
 
