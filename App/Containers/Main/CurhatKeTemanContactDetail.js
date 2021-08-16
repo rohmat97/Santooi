@@ -114,21 +114,21 @@ function CurhatKeTemanContactDetail(props) {
                 Message
               </Text>
             </TouchableOpacity>
-
-            <View style={{alignItems: 'center'}}>
-              <Image
-                source={images.call}
-                style={{
-                  width: Screen.height * 0.07,
-                  height: Screen.height * 0.07,
-                }}
-                resizeMode="contain"
-              />
-              <Text style={{fontSize: 13, marginTop: 5, color: 'white'}}>
-                Call
-              </Text>
-            </View>
-
+            <TouchableOpacity onPress={()=> navigation.navigate('VideoCall')}>
+              <View style={{alignItems: 'center'}}>
+                <Image
+                  source={images.call}
+                  style={{
+                    width: Screen.height * 0.07,
+                    height: Screen.height * 0.07,
+                  }}
+                  resizeMode="contain"
+                />
+                <Text style={{fontSize: 13, marginTop: 5, color: 'white'}}>
+                  Call
+                </Text>
+              </View>
+            </TouchableOpacity>
             <View style={{alignItems: 'center'}}>
               <Image
                 source={images.video}
