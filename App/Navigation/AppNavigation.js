@@ -24,7 +24,8 @@ import CurhatKeTemanContact from '../Containers/Main/CurhatKeTemanContact';
 import CurhatKeTemanContactDetail from '../Containers/Main/CurhatKeTemanContactDetail';
 import DetailAlbum from '../Containers/Main/Foto/DetailAlbum'
 import Chat from '../Containers/Main/Chat';
-import VideoCall from '../Containers/Main/Chat/VideoCall'
+import ChatRoom from '../Containers/Main/Chat/ChatRoom';
+import VideoRoom from '../Containers/Main/Chat/VideoRoom';
 
 // Manifest of possible screens
 const AuthNavigator = createStackNavigator({
@@ -58,7 +59,8 @@ const MainNavigator = createStackNavigator({
   CurhatKeTemanContact: { screen: CurhatKeTemanContact },
   CurhatKeTemanContactDetail: { screen: CurhatKeTemanContactDetail },
   DetailAlbum: { screen: DetailAlbum },
-  VideoCall: { screen: VideoCall }
+  ChatRoom: { screen: ChatRoom },
+  VideoRoom: { screen: VideoRoom }
 }, {
   // Default config for all screens
   headerMode: 'none',

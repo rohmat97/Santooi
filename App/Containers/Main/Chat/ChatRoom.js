@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, TextInput,Button } from 'react-native';
 import { useInitializeAgora, useRequestAudioHook } from './Agora';
 import styles from './styles';
 
-const VideoCall = () => {
+const ChatRoom = () => {
   useRequestAudioHook();
   const {
     channelName,
@@ -64,4 +64,4 @@ const VideoCall = () => {
   );
 };
 
-export default VideoCall;
+export default ChatRoom;

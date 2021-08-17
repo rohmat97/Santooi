@@ -1,12 +1,13 @@
 
 import React, { useState } from "react";
-import { FlatList, TextInput, View, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
+import { FlatList, TextInput, View, ScrollView, TouchableOpacity, StyleSheet, Linking } from "react-native";
 import { Divider, Image, Overlay, Text } from "react-native-elements";
 import { Colors, Images } from "../Themes";
 import { Screen } from "../Transforms/Screen";
 import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
-export const OverlayInvite = ({ visible, toggleOverlay }) => {
+export const OverlayInvite = ({ visible, toggleOverlay,token}) => {
+    console.log('token',token)
     return (
         <Overlay
             isVisible={visible}
@@ -16,20 +17,24 @@ export const OverlayInvite = ({ visible, toggleOverlay }) => {
             <TouchableOpacity onPress={toggleOverlay} style={{justifyContent:'flex-end', flexDirection:'row'}}>
                 <Image source={images.close} style={{ width: 15, height: 15}} resizeMode='contain' />
             </TouchableOpacity>
-
-            <View style={{ flexDirection: 'row' }}>
-                <Image source={images.messageOverlay} style={{ width: 25, height: 25 }} resizeMode='contain' />
-                <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 15 }}>Message</Text>
-            </View>
+            <TouchableOpacity onPress={()=> Linking.openURL(`sms:?body=I'm on Santooi as ${token.data.user.name}. Install the app to follow my account,  ${'https://happiness-admin.demoapp.xyz/'}`)}>
+                <View style={{ flexDirection: 'row' }}>
+                    <Image source={images.messageOverlay} style={{ width: 25, height: 25 }} resizeMode='contain' />
+                    <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 15 }}>Message</Text>
+                </View>
+            </TouchableOpacity>
 
             <View style={{ height: 1, width: '100%', borderRadius: 1, borderWidth: 1, borderColor: '#D9078D', borderStyle: 'dashed', zIndex: 0, marginVertical: 30 }}>
                 <View style={{ position: 'absolute', left: 0, bottom: 0, width: '100%', height: 1, backgroundColor: 'white', zIndex: 1 }} />
             </View>
 
-            <View style={{ flexDirection: 'row' }}>
-                <Image source={images.mail} style={{ width: 25, height: 25 }} resizeMode='contain' />
-                <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 15 }}>Mail</Text>
-            </View>
+            <TouchableOpacity onPress={()=> Linking.openURL(`mailto:example@gmail.com?subject=example&body=I'm on Santooi as ${token.data.user.name}. Install the app to follow my account,  ${'https://happiness-admin.demoapp.xyz/'}`)}>
+                <View style={{ flexDirection: 'row' }}>
+                    <Image source={images.mail} style={{ width: 25, height: 25 }} resizeMode='contain' />
+                    <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 15 }}>Mail</Text>
+                </View>
+            </TouchableOpacity>
+            
 
         </Overlay>
     )

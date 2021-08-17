@@ -117,7 +117,7 @@ function CurhatKeTemanContactDetail(props) {
                 Message
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=> navigation.navigate('VideoCall')}>
+            <TouchableOpacity onPress={()=> navigation.navigate('ChatRoom')}>
               <View style={{alignItems: 'center'}}>
                 <Image
                   source={images.call}
@@ -132,19 +132,21 @@ function CurhatKeTemanContactDetail(props) {
                 </Text>
               </View>
             </TouchableOpacity>
-            <View style={{alignItems: 'center'}}>
-              <Image
-                source={images.video}
-                style={{
-                  width: Screen.height * 0.07,
-                  height: Screen.height * 0.07,
-                }}
-                resizeMode="contain"
-              />
-              <Text style={{fontSize: 13, marginTop: 5, color: 'white'}}>
-                Video
-              </Text>
-            </View>
+            <TouchableOpacity onPress={()=> navigation.navigate('VideoRoom')}>
+              <View style={{alignItems: 'center'}}>
+                <Image
+                  source={images.video}
+                  style={{
+                    width: Screen.height * 0.07,
+                    height: Screen.height * 0.07,
+                  }}
+                  resizeMode="contain"
+                />
+                <Text style={{fontSize: 13, marginTop: 5, color: 'white'}}>
+                  Video
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
           <View style={{marginLeft: 20, flex: Screen.width * 0.8}}>
             <View

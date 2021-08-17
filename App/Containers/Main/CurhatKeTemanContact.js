@@ -286,13 +286,14 @@ function CurhatKeTemanContact(props) {
         </View>
         <OverlayPhone
           api={api.findFriend}
-          token={token}
+          token={token.data.access_token}
           visible={visiblePhone}
           toggleOverlay={toggleOverlayPhone}
           navigation={navigation}
         />
         <OverlayInvite
           visible={visibleInvite}
+          token={token}
           toggleOverlay={toggleOverlayInvite}
         />
       </View>
@@ -302,7 +303,7 @@ function CurhatKeTemanContact(props) {
 
 const mapStateToProps = (state) => {
   return {
-    token: state.token.payload.data.access_token
+    token: state.token.payload,
   }
 }
 
