@@ -18,7 +18,7 @@ import {Fonts, Colors, Metrics} from '../../Themes/';
 
 function CurhatKeTemanContactDetail(props) {
   const {navigation} = props;
-  const {nama,params} = navigation.state.params;
+  const {nama, params} = navigation.state.params;
   const {pop} = navigation;
   const [conselingCode, setConselingCode] = useState(false);
   const [password, setPassword] = useState('');
@@ -30,8 +30,8 @@ function CurhatKeTemanContactDetail(props) {
     setVisible(!visible);
   };
   useEffect(() => {
-    console.log(params)
-  }, [])
+    console.log(params);
+  }, []);
   return (
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
@@ -65,19 +65,18 @@ function CurhatKeTemanContactDetail(props) {
             >
               <Text
                 style={{
-                  color: params && params.is_friend?'#67308F':'bluesky',
+                  color: params && params.is_friend ? '#67308F' : 'bluesky',
                   marginLeft: 15,
                   fontWeight: '500',
                   fontSize: 16,
                 }}>
-                  {params && params.is_friend?'Edit':'Request'}
-                
+                {params && params.is_friend ? 'Edit' : 'Request'}
               </Text>
             </TouchableOpacity>
           </View>
 
           <Image
-            source={params&&params.photo?{uri:params.photo}: images.pp}
+            source={params && params.photo ? {uri: params.photo} : images.pp}
             style={{width: 100, height: 100, alignSelf: 'center'}}
             resizeMode="contain"
           />
@@ -89,7 +88,7 @@ function CurhatKeTemanContactDetail(props) {
               textAlign: 'center',
               marginTop: 10,
             }}>
-            {params?params.name:nama}
+            {params ? params.name : nama}
           </Text>
           <View
             style={{
@@ -103,7 +102,9 @@ function CurhatKeTemanContactDetail(props) {
               marginVertical: 30,
             }}>
             <TouchableOpacity
-              onPress={() => navigation.navigate('Chat', {nama: params?params.name:nama})}
+              onPress={() =>
+                navigation.navigate('Chat', {nama: params ? params.name : nama})
+              }
               style={{alignItems: 'center'}}>
               <Image
                 source={images.message}
@@ -117,7 +118,7 @@ function CurhatKeTemanContactDetail(props) {
                 Message
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=> navigation.navigate('VideoCall')}>
+            <TouchableOpacity onPress={() => navigation.navigate('VoiceCall')}>
               <View style={{alignItems: 'center'}}>
                 <Image
                   source={images.call}
@@ -132,19 +133,21 @@ function CurhatKeTemanContactDetail(props) {
                 </Text>
               </View>
             </TouchableOpacity>
-            <View style={{alignItems: 'center'}}>
-              <Image
-                source={images.video}
-                style={{
-                  width: Screen.height * 0.07,
-                  height: Screen.height * 0.07,
-                }}
-                resizeMode="contain"
-              />
-              <Text style={{fontSize: 13, marginTop: 5, color: 'white'}}>
-                Video
-              </Text>
-            </View>
+            <TouchableOpacity onPress={() => navigation.navigate('VideoCall')}>
+              <View style={{alignItems: 'center'}}>
+                <Image
+                  source={images.video}
+                  style={{
+                    width: Screen.height * 0.07,
+                    height: Screen.height * 0.07,
+                  }}
+                  resizeMode="contain"
+                />
+                <Text style={{fontSize: 13, marginTop: 5, color: 'white'}}>
+                  Video
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
           <View style={{marginLeft: 20, flex: Screen.width * 0.8}}>
             <View
@@ -159,7 +162,9 @@ function CurhatKeTemanContactDetail(props) {
               }}
             />
             <Text style={{fontWeight: 'bold', color: 'white'}}>Phone</Text>
-            <Text style={{color: 'white'}}>{params && params.phone_number}</Text>
+            <Text style={{color: 'white'}}>
+              {params && params.phone_number}
+            </Text>
             <View
               style={{
                 height: 1,
@@ -172,7 +177,7 @@ function CurhatKeTemanContactDetail(props) {
               }}
             />
             <Text style={{fontWeight: 'bold', color: 'white'}}>Email</Text>
-            <Text style={{color: 'white'}}>{params&&params.email}</Text>
+            <Text style={{color: 'white'}}>{params && params.email}</Text>
             <View
               style={{
                 height: 1,
