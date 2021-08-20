@@ -8,6 +8,7 @@ import BottomSheet from 'reanimated-bottom-sheet';
 import { TouchableOpacity as RNGHTouchableOpacity } from 'react-native-gesture-handler';
 import { Button, Overlay } from 'react-native-elements';
 import { showMessage, hideMessage } from "react-native-flash-message";
+import {check, PERMISSIONS, RESULTS} from 'react-native-permissions';
 //redux
 import TokenRedux from '../../Redux/Authentication/TokenRedux'
 import GalleryRedux from '../../Redux/FotoFav/GalleryRedux'
@@ -52,10 +53,61 @@ function FotoFavorit(props) {
     const [createNewAlbum, setcreateNewAlbum] = useState(false)
     const [nameNewAlbum, setnameNewAlbum] = useState()
 
+    const requesPemission=async(options)=>{
+      if(Platform.OS==='android'){
+        check(PERMISSIONS.ANDROID.CAMERA)
+        .then((result) => {
+          switch (result) {
+            case RESULTS.UNAVAILABLE:
+              console.log('This feature is not available (on this device / in this context)');
+              break;
+            case RESULTS.DENIED:
+              console.log('The permission has not been requested / is denied but requestable');
+              break;
+            case RESULTS.LIMITED:
+              console.log('The permission is limited: some actions are possible');
+              break;
+            case RESULTS.GRANTED:
+              console.log('The permission is granted');
+              launchCamera(options, setResponse);
+              break;
+            case RESULTS.BLOCKED:
+              console.log('The permission is denied and not requestable anymore');
+              break;
+          }
+        })
+      }else{
+        check(PERMISSIONS.IOS.CAMERA)
+        .then((result) => {
+          switch (result) {
+            case RESULTS.UNAVAILABLE:
+              console.log('This feature is not available (on this device / in this context)');
+              break;
+            case RESULTS.DENIED:
+              console.log('The permission has not been requested / is denied but requestable');
+              break;
+            case RESULTS.LIMITED:
+              console.log('The permission is limited: some actions are possible');
+              break;
+            case RESULTS.GRANTED:
+              console.log('The permission is granted');
+              launchCamera(options, setResponse);
+              break;
+            case RESULTS.BLOCKED:
+              console.log('The permission is denied and not requestable anymore');
+              break;
+          }
+    })
+    .catch((error) => {
+      // …
+      console.log(`error`, error)
+    });
+      }
+    }
     const onButtonPress = React.useCallback((type, options) => {
       // console.log(options,type)
         if (type === 'capture') {
-          launchCamera(options, setResponse);
+          requesPemission(options)
           // setVisible(false)
         }  else if(type ==='library'){
           launchImageLibrary(options, setResponse);
@@ -132,7 +184,7 @@ function FotoFavorit(props) {
       if(uploadAlbum){
         // console.log('onPicked',uploadAlbum)
         showMessage({
-          message: "Upload foto to Album Success",
+          message: "Upload Foto Success",
           type: "info",
         });
         UploadAlbumSuccess(null)
@@ -189,10 +241,10 @@ function FotoFavorit(props) {
         setcreateNewAlbum(false)
         setaddToAlbum(false)
         setvisibleDetailFoto(false)
-        showMessage({
-          message: "Add album Success",
-          type: "info",
-        });
+        // showMessage({
+        //   message: "Add album Success",
+        //   type: "info",
+        // });
         const payload ={
           'token':token && token.data.access_token,
           'body':{

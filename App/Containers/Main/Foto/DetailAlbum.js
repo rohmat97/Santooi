@@ -298,7 +298,7 @@ function DetailAlbum(props) {
                   />
               </RNGHTouchableOpacity>
               :
-                <TouchableOpacity onPress={()=>
+              onPicked.length<2 && <TouchableOpacity onPress={()=>
                   {
                     let dataforshare= []
                     onPicked.map(img=>{

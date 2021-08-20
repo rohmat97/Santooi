@@ -65,7 +65,7 @@ function CurhatKeTemanContactDetail(props) {
 
   useEffect(() => {
     if (dataDetail) {
-      console.log('DetailAlbum', dataDetail.photo.url);
+      console.log('DetailAlbum', dataDetail);
     }
   }, [dataDetail]);
 
@@ -85,9 +85,16 @@ function CurhatKeTemanContactDetail(props) {
         });
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
+  if(!dataDetail){
+    return(
+      <View style={{flex:1}}>
+        <ActivityIndicator color="white" size={32}/>
+      </View>
+    )
+  }
   return (
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
@@ -138,8 +145,8 @@ function CurhatKeTemanContactDetail(props) {
           </View>
           <View style={{flex: 1, alignItems: 'center'}}>
             <Image
-              source={dataDetail ? {uri: dataDetail.photo.url} : images.pp}
-              style={{width: 100, height: 100, alignSelf: 'center'}}
+              source={dataDetail&&dataDetail.photo? {uri: dataDetail.photo.url} : images.pp}
+              style={{width: 100, height: 100, alignSelf: 'center', borderRadius:100}}
               resizeMode="contain"
               PlaceholderContent={
                 <ActivityIndicator color={'white'} size={32} />

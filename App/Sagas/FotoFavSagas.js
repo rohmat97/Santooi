@@ -27,7 +27,7 @@ export function * AddFoto (api, action) {
   // console.log('data', data.body)
   // make the call to the api
   const response = yield call(api.addFoto, data)
-  console.log('response AddFoto', response)
+  console.log('response AddFoto', response.data)
   yield put(AddFotoRedux.AddfotoSuccess(response.data))
 }
 

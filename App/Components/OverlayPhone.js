@@ -114,6 +114,7 @@ export const OverlayPhone = ({
                 .then((res) => {
                   if (res.data.data.rows.length > 0) {
                     // alert('user found')
+                    toggleOverlay()
                     navigation.navigate('CurhatKeTemanContactDetail', {
                       params: res.data.data.rows[0],
                     });

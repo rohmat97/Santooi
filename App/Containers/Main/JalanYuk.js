@@ -163,9 +163,9 @@ function JalanYuk(props) {
             <View style={styles.mainContainer}>
                 <View style={styles.section}>
                 <ScrollView
-                    contentContainerStyle={{flex:1}}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
+                    scrollEnabled={false}
                     refreshControl={
                     <RefreshControl
                         refreshing={refreshing}
