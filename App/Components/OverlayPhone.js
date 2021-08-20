@@ -1,78 +1,163 @@
-
-import React, { useState } from "react";
-import { FlatList, TextInput, View, ScrollView, TouchableOpacity, StyleSheet } from "react-native";
-import { Divider, Image, Overlay, Text } from "react-native-elements";
-import { Colors, Images } from "../Themes";
-import { Screen } from "../Transforms/Screen";
+import React, {useEffect, useState} from 'react';
+import {
+  FlatList,
+  TextInput,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import {Divider, Image, Overlay, Text} from 'react-native-elements';
+import {Colors, Images} from '../Themes';
+import {Screen} from '../Transforms/Screen';
 import images from '../Themes/Images';
-import { RadioButton } from 'react-native-paper'
-import { Fonts } from '../Themes/'
-import { Alert } from "react-native";
+import {RadioButton} from 'react-native-paper';
+import {Fonts} from '../Themes/';
+import {Alert} from 'react-native';
 
-export const OverlayPhone = ({ visible, toggleOverlay,api,token,navigation }) => {
-    const [phoneNumber, setPhoneNumber] = useState()
-    return (
-        <Overlay
-            isVisible={visible}
-            // onBackdropPress={toggleOverlay}
-            overlayStyle={{ width: Screen.width * 0.9, borderRadius: 20, minHeight: Screen.height * 0.22, padding: Screen.width * 0.05 }}
-        >
-            <TouchableOpacity onPress={toggleOverlay} style={{ justifyContent: 'flex-end', flexDirection: 'row' }}>
-                <Image source={images.close} style={{ width: 15, height: 15 }} resizeMode='contain' />
-            </TouchableOpacity>
+export const OverlayPhone = ({
+  visible,
+  toggleOverlay,
+  api,
+  token,
+  navigation,
+}) => {
+  const [phoneNumber, setPhoneNumber] = useState('');
 
-            <Text style={{ color: '#67308F', fontWeight: 'bold', marginLeft: 10, fontSize: 15, textAlign: 'center' }}>Find User</Text>
+  useEffect(() => {
+    setPhoneNumber('');
+  }, [visible]);
 
-            <View style={{ flexDirection: 'row', marginTop: 20, justifyContent: 'space-between' }}>
-                <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 14 }}>Country Code</Text>
-                <Text style={{ fontWeight: '500', marginLeft: 10, fontSize: 14 }}>+62(ID)</Text>
-            </View>
-            <View style={{ flexDirection: 'row', marginTop: 10, justifyContent: 'space-between', alignItems:'center' }}>
-                <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 14 }}>Phone Number</Text>
-                <TextInput
-                placeholder={'Enter Number'}
-                value={phoneNumber}
-                onChangeText={phone => setPhoneNumber(phone)}
-                />
-            </View>
+  return (
+    <Overlay
+      isVisible={visible}
+      // onBackdropPress={toggleOverlay}
+      overlayStyle={{
+        width: Screen.width * 0.9,
+        borderRadius: 20,
+        minHeight: Screen.height * 0.22,
+        padding: Screen.width * 0.05,
+      }}>
+      <TouchableOpacity
+        onPress={toggleOverlay}
+        style={{justifyContent: 'flex-end', flexDirection: 'row'}}>
+        <Image
+          source={images.close}
+          style={{width: 15, height: 15}}
+          resizeMode="contain"
+        />
+      </TouchableOpacity>
 
-            <Text style={{ color:'#333333',fontWeight: '500', fontSize: 13, textAlign:'right', opacity:0.5}}>Example:812-345-678</Text>
+      <Text
+        style={{
+          color: '#67308F',
+          fontWeight: 'bold',
+          marginLeft: 10,
+          fontSize: 15,
+          textAlign: 'center',
+        }}>
+        Find User
+      </Text>
 
-            <TouchableOpacity onPress={()=>{
-                // console.log(token)
-                api({
-                    no:phoneNumber,
-                    token:token
-                }).then(
-                    res => {
-                        if(res.data.data.rows.length>0){
-                            // alert('user found')
-                            // console.log(res.data.data)
-                            toggleOverlay()
-                            setPhoneNumber()
-                            navigation.navigate('CurhatKeTemanContactDetail', {
-                                params:res.data.data.rows[0]
-                              })
-                        }else{
-                            Alert.alert('user not found')
-                        }
-                        // console.log(res.data.data.rows)
-                    }
-                ).catch(err => console.log(err.data))
-                // console.log(dataa)
-                // toggleOverlay
-            }} style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginEnd: 10, marginTop: 50 }}>
-                <Text style={{ color: '#67308F', marginEnd: 15, fontSize: Fonts.size.regular }}>Search</Text>
-                <Image source={images.arrowRightPurple} style={{ width: 20, height: 20 }} />
-            </TouchableOpacity>
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: 20,
+          justifyContent: 'space-between',
+        }}>
+        <Text
+          style={{
+            color: '#67308F',
+            fontWeight: '500',
+            marginLeft: 10,
+            fontSize: 14,
+          }}>
+          Country Code
+        </Text>
+        <Text style={{fontWeight: '500', marginLeft: 10, fontSize: 14}}>
+          +62(ID)
+        </Text>
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          marginTop: 10,
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+        <Text
+          style={{
+            color: '#67308F',
+            fontWeight: '500',
+            marginLeft: 10,
+            fontSize: 14,
+          }}>
+          Phone Number
+        </Text>
+        <TextInput
+          placeholder={'Enter Number'}
+          value={phoneNumber}
+          keyboardType={'number-pad'}
+          maxLength={15}
+          onChangeText={(phone) => setPhoneNumber(phone)}
+        />
+      </View>
 
-        </Overlay>
-    )
-}
+      <TouchableOpacity
+        onPress={() => {
+          // console.log(token)
+          phoneNumber.length > 0
+            ? api({
+                no: phoneNumber,
+                token: token,
+              })
+                .then((res) => {
+                  if (res.data.data.rows.length > 0) {
+                    // alert('user found')
+                    navigation.navigate('CurhatKeTemanContactDetail', {
+                      params: res.data.data.rows[0],
+                    });
+                  } else {
+                    Alert.alert('user not found');
+                  }
+                  // console.log(res.data.data.rows)
+                })
+                .catch((err) => console.log(err.data))
+            : Alert.alert('phone number empty!');
+          // console.log(dataa)
+          // toggleOverlay
+        }}
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginEnd: 10,
+          marginTop: 20,
+        }}>
+        <Text
+          style={{
+            color: '#67308F',
+            marginEnd: 15,
+            fontSize: Fonts.size.regular,
+          }}>
+          Search
+        </Text>
+        <Image
+          source={images.arrowRightPurple}
+          style={{width: 20, height: 20}}
+        />
+      </TouchableOpacity>
+    </Overlay>
+  );
+};
 
 const style = StyleSheet.create({
-    borderShadow: {
-        shadowColor: "#000", shadowOffset: { width: 0, height: 2, }, shadowOpacity: 0.8, shadowRadius: 12, elevation: 4
-    },
-    icon: { width: 35, height: 40, margin: Screen.width * 0.05 }
-})
+  borderShadow: {
+    shadowColor: '#000',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.8,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  icon: {width: 35, height: 40, margin: Screen.width * 0.05},
+});

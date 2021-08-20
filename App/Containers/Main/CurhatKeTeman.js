@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   View,
@@ -6,9 +6,9 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  FlatList,
 } from 'react-native';
 import RtmEngine from 'agora-react-native-rtm';
-
 import {TemplateBackground} from '../../Components/TemplateBackground';
 import images from '../../Themes/Images';
 import styles from '../Styles/LaunchScreenStyles';
@@ -18,6 +18,8 @@ import Images from '../../Themes/Images';
 import RoundedButton from '../../Components/RoundedButton';
 import {Fonts, Colors, Metrics} from '../../Themes/';
 import {CustomBottomTab2} from '../../Components/CustomBottomTab2';
+import {Avatar} from 'react-native-elements';
+import LinearGradient from 'react-native-linear-gradient';
 
 function CurhatKeTeman(props) {
   const {navigation} = props;
@@ -28,30 +30,26 @@ function CurhatKeTeman(props) {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [visible, setVisible] = useState(false);
 
-  
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
   let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
-  const InitiatorAgora =async()=>{
+  const InitiatorAgora = async () => {
     // let rtmEngine =  new RtmEngine().createClient('4ede35933b9e4e009c0522f13c42f778')
-    
+
     this.rtmEngine = new RtmEngine();
     await this.rtmEngine.createClient('4ede35933b9e4e009c0522f13c42f778');
-    await this.rtmEngine?.login({ uid: 'santooi' });
+    await this.rtmEngine?.login({uid: 'santooi'});
     await this.rtmEngine?.joinChannel('rd');
     // await this.rtmEngine?.sendMessageByChannelId(channelName, msg);
     // await this.rtmEngine?.logout();
     // this.rtmEngine?.destroyClient();
-  }
+  };
   useEffect(() => {
-    InitiatorAgora()
-  }, [])
+    InitiatorAgora();
+  }, []);
   return (
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
         <View style={styles.section}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
               onPress={() => pop()}
               style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -72,35 +70,53 @@ function CurhatKeTeman(props) {
             </TouchableOpacity>
           </View>
           <TouchableOpacity
-            onPress={() => navigation.navigate('CurhatKeTemanContact')}>
+            onPress={() => navigation.navigate('CurhatKeTemanContact')}
+            style={{
+              alignSelf: 'flex-end',
+              marginBottom: 20,
+            }}>
             <Image
               source={images.newMessage}
-              style={{
-                width: Screen.width * 0.3,
-                height: 40,
-                alignSelf: 'flex-end',
-                marginBottom: 20,
-              }}
+              style={{height: 40, width: Screen.width * 0.3}}
               resizeMode="contain"
             />
           </TouchableOpacity>
-          <ScrollView style={{marginBottom: Screen.height * 0.1}}>
-            {x.map((e, index) => (
+          <FlatList
+            data={x}
+            style={{marginBottom: Screen.height * 0.2}}
+            renderItem={(e, index) => (
               <TouchableOpacity
                 onPress={() => navigation.navigate('Chat', {nama: 'Nissa'})}
                 key={index}
                 style={{
                   flexDirection: 'row',
-                  height: 80,
+                  height: 60,
                   justifyContent: 'center',
                 }}>
-                <Image
-                  source={images.pp}
-                  style={{width: 50, height: 50}}
-                  resizeMode="contain"
-                />
+                <LinearGradient
+                  colors={['#DB068D', '#6F2A91']}
+                  style={{borderRadius: 100, width: 40, height: 40}}>
+                  <Avatar
+                    rounded
+                    size="medium"
+                    // title={'Nissa'}
+                    // source={{
+                    //   uri:ImageProfile?ImageProfile:'',
+                    // }}
+                    containerStyle={
+                      {
+                        // marginRight:8,
+                        // borderWidth:1,
+                        // borderTopColor:'#DB068D',
+                        // borderLeftColor:'#DB068D',
+                        // borderRightColor:'#6F2A91',
+                        // borderBottomColor:'#6F2A91',
+                      }
+                    }
+                  />
+                </LinearGradient>
 
-                <View style={{marginLeft: 20, flex: Screen.width * 0.8}}>
+                <View style={{marginLeft: 20, flex: 1}}>
                   <View
                     style={{
                       flexDirection: 'row',
@@ -124,13 +140,13 @@ function CurhatKeTeman(props) {
                       borderWidth: 0.5,
                       borderColor: 'white',
                       zIndex: 0,
-                      marginVertical: 10,
+                      marginVertical: 12,
                     }}
                   />
                 </View>
               </TouchableOpacity>
-            ))}
-          </ScrollView>
+            )}
+          />
         </View>
       </View>
       <CustomBottomTab2 />

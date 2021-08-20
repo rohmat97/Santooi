@@ -1,5 +1,4 @@
-
-import { PermissionsAndroid } from 'react-native';
+import {PermissionsAndroid} from 'react-native';
 
 export const requestAudioPermission = async () => {
   try {
@@ -19,7 +18,7 @@ export const requestAudioPermission = async () => {
   }
 };
 
-export const requestCameraAndAudioPermission=async()=> {
+export const requestCameraAndAudioPermission = async () => {
   try {
     const granted = await PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -38,4 +37,4 @@ export const requestCameraAndAudioPermission=async()=> {
   } catch (err) {
     console.warn(err);
   }
-}
+};

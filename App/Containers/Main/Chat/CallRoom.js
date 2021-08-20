@@ -1,6 +1,6 @@
 import React from 'react';
-import { SafeAreaView, View, Text, TextInput,Button } from 'react-native';
-import { useInitializeAgora, useRequestAudioHook } from './Agora';
+import {SafeAreaView, View, Text, TextInput, Button} from 'react-native';
+import {useInitializeAgora, useRequestAudioHook} from './Agora';
 import styles from './styles';
 
 const CallRoom = () => {

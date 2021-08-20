@@ -27,52 +27,57 @@ function Chat(props) {
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
         <View style={styles.section}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <TouchableOpacity
-              onPress={() => pop()}
-              style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image
-                source={images.arrowBack}
-                style={{width: 18, height: 18}}
-                resizeMode="contain"
-              />
-              <Text
-                style={{
-                  color: '#67308F',
-                  marginLeft: 15,
-                  fontWeight: '500',
-                  fontSize: 16,
-                }}>
-                {navigation.state.params.nama}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 30,
-              width: '100%',
-              alignSelf: 'center',
-              flexDirection: 'row',
-            }}>
-            <View style={styles.containerSearch}>
-              <TextInput
-                style={{color: 'white',width: '90%'}}
-                placeholder={'Text Message'}
-                placeholderTextColor="rgba(255, 255, 255, 0.5)"
-                value={textChat}
-                onChangeText={(text) => setTextChat(text)}
-                keyboardType={'default'}
-                // inputRef={(ref) => (this.number = ref)}
-              />
+          <View style={{height: '92%'}}>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                onPress={() => pop()}
+                style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Image
+                  source={images.arrowBack}
+                  style={{width: 18, height: 18}}
+                  resizeMode="contain"
+                />
+                <Text
+                  style={{
+                    color: '#67308F',
+                    marginLeft: 15,
+                    fontWeight: '500',
+                    fontSize: 16,
+                  }}>
+                  {navigation.state.params.nama}
+                </Text>
+              </TouchableOpacity>
             </View>
-            <View style={{justifyContent: 'center', width: '10%', marginLeft: 10}}>
-              <Image
-                source={images.iconNext}
-                style={{width: 30, height: 30}}
-                resizeMode="contain"
-              />
+
+            <ScrollView style={{flex: 1}} />
+
+            <View
+              style={{
+                width: '95%',
+                flexDirection: 'row',
+              }}>
+              <View style={styles.containerSearch}>
+                <TextInput
+                  style={{color: 'white', width: '90%'}}
+                  placeholder={'Text Message'}
+                  placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                  value={textChat}
+                  onChangeText={(text) => setTextChat(text)}
+                  keyboardType={'default'}
+                />
+              </View>
+              <View
+                style={{
+                  justifyContent: 'center',
+                  width: '10%',
+                  marginLeft: 10,
+                }}>
+                <Image
+                  source={images.iconNext}
+                  style={{width: 30, height: 30}}
+                  resizeMode="contain"
+                />
+              </View>
             </View>
           </View>
         </View>

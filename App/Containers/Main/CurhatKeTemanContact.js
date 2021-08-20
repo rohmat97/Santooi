@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   View,
@@ -10,9 +10,9 @@ import {
 
 import TokenRedux from '../../Redux/Authentication/TokenRedux';
 
-import API from '../../Services/Api'
-import FixtureAPI from '../../Services/FixtureApi'
-import DebugConfig from '../../Config/DebugConfig'
+import API from '../../Services/Api';
+import FixtureAPI from '../../Services/FixtureApi';
+import DebugConfig from '../../Config/DebugConfig';
 
 import {TemplateBackground} from '../../Components/TemplateBackground';
 import images from '../../Themes/Images';
@@ -24,14 +24,14 @@ import RoundedButton from '../../Components/RoundedButton';
 import {Fonts, Colors, Metrics} from '../../Themes/';
 import {OverlayInvite} from '../../Components/OverlayInvite';
 import {OverlayPhone} from '../../Components/OverlayPhone';
-import { bindActionCreators } from 'redux';
-import { FlatList } from 'react-native';
+import {bindActionCreators} from 'redux';
+import {FlatList} from 'react-native';
 
-const api = DebugConfig.useFixtures ? FixtureAPI : API.create()
+const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 function CurhatKeTemanContact(props) {
-  const {navigation,token} = props;
+  const {navigation, token} = props;
   const {pop} = navigation;
-  const [search, setsearch] = useState(null)
+  const [search, setsearch] = useState(null);
   const [conselingCode, setConselingCode] = useState(false);
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState();
@@ -52,7 +52,7 @@ function CurhatKeTemanContact(props) {
     {
       nama: 'Brian',
     },
-  ])
+  ]);
   const [visiblePhone, setVisiblePhone] = useState(false);
   const toggleOverlayPhone = () => {
     setVisiblePhone(!visiblePhone);
@@ -63,19 +63,21 @@ function CurhatKeTemanContact(props) {
     setVisibleInvite(!visibleInvite);
   };
 
-
   let newName = '';
 
   useEffect(() => {
-    api.listContact({
-      token:token.data.access_token
-    }).then(success => {
-      // console.log(`success`, success.data.data)
-      setListFriend(success.data.data.rows)
-    }).catch( err =>{
-      console.log(`err`, err)
-    })
-  }, [])
+    api
+      .listContact({
+        token: token.data.access_token,
+      })
+      .then((success) => {
+        // console.log(`success`, success.data.data)
+        setListFriend(success.data.data.rows);
+      })
+      .catch((err) => {
+        console.log('err', err);
+      });
+  }, []);
   return (
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
@@ -109,125 +111,134 @@ function CurhatKeTemanContact(props) {
             />
             <TextInput
               style={{color: 'white', flex: 1, marginLeft: 10}}
-              placeholder={'Search a phone name...'}
+              placeholder={'Search a friend...'}
               placeholderTextColor="rgba(255, 255, 255, 0.5)"
               value={search}
-              onChangeText={text => setsearch(text)}
+              onChangeText={(text) => setsearch(text)}
               keyboardType={'default'}
               // inputRef={(ref) => (this.number = ref)}
             />
           </View>
 
           <ScrollView>
-          <TouchableOpacity onPress={toggleOverlayPhone}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: 20,
-              }}>
-              <Image
-                source={images.findByPhone}
-                style={{width: Screen.width * 0.5, maxHeight: 50}}
-                resizeMode="contain"
-              />
-              <Image
-                source={images.next}
-                style={{width: 20, height: 20}}
-                resizeMode="contain"
-              />
-            </View>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={toggleOverlayPhone}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: 20,
+                }}>
+                <Image
+                  source={images.findByPhone}
+                  style={{width: Screen.width * 0.5, maxHeight: 50}}
+                  resizeMode="contain"
+                />
+                <Image
+                  source={images.next}
+                  style={{width: 20, height: 20}}
+                  resizeMode="contain"
+                />
+              </View>
+            </TouchableOpacity>
 
-          <TouchableOpacity onPress={toggleOverlayInvite}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom:22,
-              }}>
-              <Image
-                source={images.invite}
-                style={{width: Screen.width * 0.5, maxHeight: 50}}
-                resizeMode="contain"
-              />
-              <Image
-                source={images.next}
-                style={{width: 20, height: 20}}
-                resizeMode="contain"
-              />
-            </View>
-          </TouchableOpacity>
-           {listFriend .length>0?<FlatList 
-              data={listFriend}
-              renderItem={({item,index}) =>{
-                let exist = false;
+            <TouchableOpacity onPress={toggleOverlayInvite}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: 22,
+                }}>
+                <Image
+                  source={images.invite}
+                  style={{width: Screen.width * 0.5, maxHeight: 50}}
+                  resizeMode="contain"
+                />
+                <Image
+                  source={images.next}
+                  style={{width: 20, height: 20}}
+                  resizeMode="contain"
+                />
+              </View>
+            </TouchableOpacity>
+            {listFriend.length > 0 ? (
+              <FlatList
+                data={listFriend}
+                renderItem={({item, index}) => {
+                  let exist = false;
 
-                if (index === 0) {
-                  newName = item.nama.substring(0, 1).toUpperCase();
-                  exist = true;
-                } else {
-                  if (item.nama.substring(0, 1).toUpperCase() !== newName) {
+                  if (index === 0) {
                     newName = item.nama.substring(0, 1).toUpperCase();
                     exist = true;
+                  } else {
+                    if (item.nama.substring(0, 1).toUpperCase() !== newName) {
+                      newName = item.nama.substring(0, 1).toUpperCase();
+                      exist = true;
+                    }
                   }
-                }
-                return (
-                  <View key={index}>
-                    {exist && (
-                      <View
-                        style={{
-                          backgroundColor: '#67308F',
-                          width: Screen.width,
-                          paddingVertical: 5,
-                          paddingHorizontal: 20,
-                          marginBottom: 20,
-                          marginLeft: -15,
-                        }}>
-                        <Text style={{color: 'white', fontWeight: 'bold'}}>
-                          {item.nama.substring(0, 1).toUpperCase()}
-                        </Text>
-                      </View>
-                    )}
-                    <TouchableOpacity
-                      onPress={() =>
-                        navigation.navigate('CurhatKeTemanContactDetail', {
-                          nama : item.nama
-                        })
-                      }>
-                      <Text style={{color: 'white'}}>{item.nama}</Text>
-                      <View
-                        style={{
-                          height: 1,
-                          width: Screen.width,
-                          borderRadius: 1,
-                          borderWidth: 0.5,
-                          borderColor: 'white',
-                          zIndex: 0,
-                          marginVertical: 15,
-                        }}
-                      />
-                    </TouchableOpacity>
-                  </View>
-                )
-              }}
-            />:
-               <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
-                 <View
-                        style={{
-                          backgroundColor: '#67308F',
-                          width: Screen.width,
-                          paddingVertical: 1,
-                          paddingHorizontal: 20,
-                          marginBottom: 20,
-                          marginLeft: -15,
-                        }}>
-                      </View>
-                 <Text style={{color:'white', fontSize:32}}>Belum Ada Teman</Text>
-               </View>
-              }
+                  return (
+                    <View key={index}>
+                      {exist && (
+                        <View
+                          style={{
+                            backgroundColor: '#67308F',
+                            width: Screen.width,
+                            paddingVertical: 5,
+                            paddingHorizontal: 20,
+                            marginBottom: 20,
+                            marginLeft: -15,
+                          }}>
+                          <Text style={{color: 'white', fontWeight: 'bold'}}>
+                            {item.nama.substring(0, 1).toUpperCase()}
+                          </Text>
+                        </View>
+                      )}
+                      <TouchableOpacity
+                        onPress={() =>
+                          navigation.navigate('CurhatKeTemanContactDetail', {
+                            nama: item.nama,
+                          })
+                        }>
+                        <Text style={{color: 'white'}}>{item.nama}</Text>
+                        <View
+                          style={{
+                            height: 1,
+                            width: Screen.width,
+                            borderRadius: 1,
+                            borderWidth: 0.5,
+                            borderColor: 'white',
+                            zIndex: 0,
+                            marginVertical: 15,
+                          }}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  );
+                }}
+              />
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View
+                  style={{
+                    backgroundColor: '#67308F',
+                    width: Screen.width,
+                    paddingVertical: 1,
+                    paddingHorizontal: 20,
+                    marginBottom: 20,
+                    marginLeft: -15,
+                  }}
+                />
+                <Text style={{color: 'white', fontSize: 32}}>
+                  Belum Ada Teman
+                </Text>
+              </View>
+            )}
             {/* {listFriend.map((e, index) => {
               let exist = false;
 
@@ -261,7 +272,7 @@ function CurhatKeTemanContact(props) {
                   <TouchableOpacity
                     onPress={() =>
                       navigation.navigate('CurhatKeTemanContactDetail', {
-                        nama : e.nama
+                        nama: e.nama,
                       })
                     }>
                     <Text style={{color: 'white'}}>{e.nama}</Text>
@@ -376,10 +387,13 @@ function CurhatKeTemanContact(props) {
 const mapStateToProps = (state) => {
   return {
     token: state.token.payload,
-  }
-}
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(Object.assign(TokenRedux), dispatch)
-}
-export default connect(mapStateToProps, mapDispatchToProps)(CurhatKeTemanContact);
+  return bindActionCreators(Object.assign(TokenRedux), dispatch);
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CurhatKeTemanContact);
