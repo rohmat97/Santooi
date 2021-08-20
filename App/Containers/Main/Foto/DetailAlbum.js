@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { View, FlatList,TouchableOpacity, Text, ActivityIndicator, TextInput } from 'react-native'
 import { Image, Overlay } from 'react-native-elements'
+import { TouchableOpacity as RNGHTouchableOpacity } from 'react-native-gesture-handler';
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import images from '../../../Themes/Images'
@@ -19,6 +20,7 @@ import AddFotoRedux from '../../../Redux/FotoFav/AddFotoRedux'
 
 import { Screen } from '../../../Transforms/Screen'
 import { actions } from '../FotoFavorit'
+import { Platform } from 'react-native';
 function DetailAlbum(props) {
     const sheetRef = React.useRef(null);
     const {
@@ -205,7 +207,7 @@ function DetailAlbum(props) {
               style={{
                 backgroundColor: 'white',
                 padding: 16,
-                height: 300,
+                height:Platform.OS==='android'? Screen.height*0.3: Screen.height*0.4,
                 flexDirection:'column',
                 justifyContent:'center',
                 alignItems:'flex-start'
@@ -220,20 +222,43 @@ function DetailAlbum(props) {
                 />
                 <Text>Hapus</Text>
               </View>
-              <TouchableOpacity onPress={()=>{
+              {
+              Platform.OS==='android'?
+                <RNGHTouchableOpacity onPress={()=>{
                   setwillDelete(false)
                   setonPicked([])
                   setvisibleBottomSheet(false)
                   deleteFoto()
                   
-                }} style={{width:'100%',alignItems:'center'}}>
+                }} style={{width:Screen.width*0.9,alignItems:'center'}}>
                   <Text 
                     style={{color:'red',borderWidth:1, borderColor:'red',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Hapus Item</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={()=>setwillDelete(false)} style={{width:'100%',alignItems:'center'}}>
-                <Text 
-                  style={{color:'rgba(103, 48, 143, 1)',borderWidth:1, borderColor:'rgba(103, 48, 143, 1)',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Batal</Text>
-              </TouchableOpacity>
+                </RNGHTouchableOpacity>
+              :
+                <TouchableOpacity onPress={()=>{
+                  setwillDelete(false)
+                  setonPicked([])
+                  setvisibleBottomSheet(false)
+                  deleteFoto()
+                  
+                }} style={{width:Screen.width*0.9,alignItems:'center'}}>
+                  <Text 
+                    style={{color:'red',borderWidth:1, borderColor:'red',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Hapus Item</Text>
+                </TouchableOpacity>
+              }
+              {
+              Platform.OS==='android'?
+                <RNGHTouchableOpacity onPress={()=>setwillDelete(false)} style={{width:Screen.width*0.9,alignItems:'center'}}>
+                  <Text 
+                    style={{color:'rgba(103, 48, 143, 1)',borderWidth:1, borderColor:'rgba(103, 48, 143, 1)',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Batal</Text>
+                </RNGHTouchableOpacity>
+              :
+                <TouchableOpacity onPress={()=>setwillDelete(false)} style={{width:Screen.width*0.9,alignItems:'center'}}>
+                  <Text 
+                    style={{color:'rgba(103, 48, 143, 1)',borderWidth:1, borderColor:'rgba(103, 48, 143, 1)',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Batal</Text>
+                </TouchableOpacity>
+              }
+              
             </View>
           )
         }
@@ -251,7 +276,28 @@ function DetailAlbum(props) {
               }}
             >
               {
-                onPicked.length<2 &&
+                onPicked.length<2 && Platform.OS==='android'?
+                <RNGHTouchableOpacity onPress={()=>
+                  {
+                    let dataforshare= []
+                    onPicked.map(img=>{
+                      dataforshare.push(img.photo.url)
+                    })
+                    const shareOptions = {
+                      title: 'Share file',
+                          urls:dataforshare,
+                        };
+      
+                      Share.open(shareOptions)
+                  }}>
+                  <Image
+                    source={images.share} 
+                    style={{ width: Screen.width * 0.08, height: Screen.width * 0.08}} 
+                    resizeMode={'stretch'} 
+                    PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
+                  />
+              </RNGHTouchableOpacity>
+              :
                 <TouchableOpacity onPress={()=>
                   {
                     let dataforshare= []
@@ -273,16 +319,27 @@ function DetailAlbum(props) {
                   />
               </TouchableOpacity>
               }
-                
               <Text style={{fontSize:16, marginHorizontal:Screen.width*0.25}}>Pilih Item</Text>
-              <TouchableOpacity onPress={()=>setwillDelete(true)}>
-                <Image
-                  source={images.delete_outline} 
-                  style={{ width: Screen.width * 0.08, height: Screen.width * 0.08}} 
-                  resizeMode={'stretch'} 
-                  PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
-                />
-              </TouchableOpacity>
+              {
+                Platform.OS==='android'?
+                <RNGHTouchableOpacity onPress={()=>setwillDelete(true)}>
+                  <Image
+                    source={images.delete_outline} 
+                    style={{ width: Screen.width * 0.08, height: Screen.width * 0.08}} 
+                    resizeMode={'stretch'} 
+                    PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
+                  />
+                </RNGHTouchableOpacity>
+              :
+                <TouchableOpacity onPress={()=>setwillDelete(true)}>
+                  <Image
+                    source={images.delete_outline} 
+                    style={{ width: Screen.width * 0.08, height: Screen.width * 0.08}} 
+                    resizeMode={'stretch'} 
+                    PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
+                  />
+                </TouchableOpacity>
+              }
             </View>
           )
         }
@@ -335,24 +392,38 @@ function DetailAlbum(props) {
                       </TouchableOpacity>
                   }
                   {
-                      isEdit && <TouchableOpacity
-                      onPress={() => {
-                          const payload ={
-                              'token':token && token.data.access_token,
-                              'idPhoto':getParam('params').id,
-                              'body':{
-                                  'name':title
+                      isEdit && Platform.OS==='android'?
+                        <RNGHTouchableOpacity
+                          onPress={() => {
+                              const payload ={
+                                  'token':token && token.data.access_token,
+                                  'idPhoto':getParam('params').id,
+                                  'body':{
+                                      'name':title
+                                  }
+                                }
+                              UpdateAlbumRequest(payload)
+                          }}
+                          style={{ flexDirection: 'row', alignItems: 'center',backgroundColor:'#67308F',padding:8,borderRadius:8, marginLeft: 15,justifyContent:'center' }}>
+                          <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>OK</Text>
+                        </RNGHTouchableOpacity>
+                        :
+                        <TouchableOpacity
+                        onPress={() => {
+                            const payload ={
+                                'token':token && token.data.access_token,
+                                'idPhoto':getParam('params').id,
+                                'body':{
+                                    'name':title
+                                }
                               }
-                            }
-                          UpdateAlbumRequest(payload)
-                      }}
-                      style={{ flexDirection: 'row', alignItems: 'center',backgroundColor:'#67308F',padding:8,borderRadius:8, marginLeft: 15,justifyContent:'center' }}>
-                      <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>OK</Text>
-                      </TouchableOpacity>
+                            UpdateAlbumRequest(payload)
+                        }}
+                        style={{ flexDirection: 'row', alignItems: 'center',backgroundColor:'#67308F',padding:8,borderRadius:8, marginLeft: 15,justifyContent:'center' }}>
+                        <Text style={{ color: 'white', fontWeight: '500', fontSize: 16 }}>OK</Text>
+                        </TouchableOpacity>
                   }
-                
               </View>
-              
               <FlatList
                       contentContainerStyle={{margin:4}}
                       horizontal={false}
@@ -442,7 +513,7 @@ function DetailAlbum(props) {
                       }}
                   />
                   {
-                  !visibleBottomSheet && <View style={{bottom:0,left:Screen.width*0.45,width:Screen.width, paddingVertical:20}}>
+                  !visibleBottomSheet && <View style={{bottom:0,left:Screen.width*0.425,width:Screen.width, paddingVertical:20}}>
                       <TouchableOpacity onPress={()=> setVisible(true)}>
                           <Image source={images.addFill} style={{width:52,height:52}} resizeMode='contain' />
                       </TouchableOpacity>
@@ -468,7 +539,7 @@ function DetailAlbum(props) {
     {
               visibleBottomSheet&& onPicked.length>0 &&<BottomSheet
               ref={sheetRef}
-              snapPoints={[willDelete?Platform.OS==='ios'?375:400:Platform.OS==='ios'?275:325,0,0]}
+              snapPoints={[willDelete?Platform.OS==='ios'?Screen.height*0.525:Screen.height*0.45:Platform.OS==='ios'?Screen.height*0.4:Screen.height*0.35,willDelete?Platform.OS==='ios'?Screen.height*0.525:Screen.height*0.45:Platform.OS==='ios'?Screen.height*0.4:Screen.height*0.35,willDelete?Platform.OS==='ios'?Screen.height*0.525:Screen.height*0.45:Platform.OS==='ios'?Screen.height*0.4:Screen.height*0.35]}
               borderRadius={10}
               renderContent={renderContent}
               enabledContentGestureInteraction={true}
