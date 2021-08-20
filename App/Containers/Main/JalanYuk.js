@@ -392,7 +392,9 @@ function JalanYuk(props) {
                             
                               )}}
                         />  :
-                        <Text style={{color:'white', textAlign:'center', fontSize:20}}>Tidak ada History</Text>
+                        <View style={{flex:1,paddingBottom:Screen.height*0.6}}>
+                            <Text style={{color:'white', textAlign:'center', fontSize:20}}>Tidak ada History</Text>
+                        </View>
                         }
                     </ScrollView>
                     }

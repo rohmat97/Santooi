@@ -44,7 +44,7 @@ function CurhatKeTemanContactDetail(props) {
   };
   useEffect(() => {
     // console.log('params',params)
-    // if(params && params.id_user){
+    if(params && params.id_user){
       api.getDetailContact({
         id:87,
         token:token.data.access_token
@@ -54,9 +54,9 @@ function CurhatKeTemanContactDetail(props) {
       }).catch(err =>{
         // console.log(`err`, err)
       })
-    // }{
-    //   setDataDetail(params)
-    // }
+    }{
+      setDataDetail(params)
+    }
   }, [])
 
   useEffect(() => {
