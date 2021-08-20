@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   ScrollView,
   View,
@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import RtmEngine from 'agora-react-native-rtm';
+
 import {TemplateBackground} from '../../Components/TemplateBackground';
 import images from '../../Themes/Images';
 import styles from '../Styles/LaunchScreenStyles';
@@ -24,12 +26,27 @@ function CurhatKeTeman(props) {
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-
   const [visible, setVisible] = useState(false);
+
+  
   const toggleOverlay = () => {
     setVisible(!visible);
   };
   let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+  const InitiatorAgora =async()=>{
+    // let rtmEngine =  new RtmEngine().createClient('4ede35933b9e4e009c0522f13c42f778')
+    
+    this.rtmEngine = new RtmEngine();
+    await this.rtmEngine.createClient('4ede35933b9e4e009c0522f13c42f778');
+    await this.rtmEngine?.login({ uid: 'santooi' });
+    await this.rtmEngine?.joinChannel('rd');
+    // await this.rtmEngine?.sendMessageByChannelId(channelName, msg);
+    // await this.rtmEngine?.logout();
+    // this.rtmEngine?.destroyClient();
+  }
+  useEffect(() => {
+    InitiatorAgora()
+  }, [])
   return (
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>

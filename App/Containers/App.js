@@ -25,7 +25,7 @@ class App extends Component {
     return (
       <Provider store={store} uriPrefix={'santooi://'}>
         <RootContainer/>
-        <FlashMessage position="top" /> 
+        <FlashMessage position="bottom" /> 
       </Provider>
     )
   }

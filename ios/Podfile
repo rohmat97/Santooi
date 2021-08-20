@@ -22,6 +22,8 @@ target 'Santooi' do
 
   pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
   
+  pod 'agora-react-native-rtm', :path => '../node_modules/agora-react-native-rtm'
+
   target 'SantooiTests' do
     inherit! :complete
     # Pods for testing

@@ -47,6 +47,9 @@ export const OverlayPhone = ({ visible, toggleOverlay,api,token,navigation }) =>
                     res => {
                         if(res.data.data.rows.length>0){
                             // alert('user found')
+                            // console.log(res.data.data)
+                            toggleOverlay()
+                            setPhoneNumber()
                             navigation.navigate('CurhatKeTemanContactDetail', {
                                 params:res.data.data.rows[0]
                               })
