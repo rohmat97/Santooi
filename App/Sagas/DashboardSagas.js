@@ -35,8 +35,8 @@ export function * getStatus(api, action) {
   // console.log(action.data)
   const response = yield call(api.getStatus, action.data)
   if (response.ok) {
-    console.log('getStatus',response.data)
-    yield put(StatusRedux.StatusSuccess(response.data.data.rows))
+    console.log('getStatus',response.data.data)
+    yield put(StatusRedux.StatusSuccess(response.data.data))
   } else {
     yield put(StatusRedux.StatusFailure(response))
     // Alert.alert(response.data.message)

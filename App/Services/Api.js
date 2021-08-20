@@ -52,7 +52,7 @@ const create = (baseURL = staging) => {
   const checkEmail = payload => api.get('/auth/is-available/email?key='+payload)
   const checkPhone = payload => api.get('/auth/is-available/phone?key='+payload)
   const updateStatus = payload => api.patch('/account/user/'+payload.id,payload.body,{headers: { Authorization: `Bearer ${payload.token}` }})
-  const getStatus = payload => api.get('/account/user?id='+payload.id,'',{headers: { Authorization: `Bearer ${payload.token}` }})
+  const getStatus = payload => api.get('/auth/me','',{headers: { Authorization: `Bearer ${payload.token}` }})
   //berhitung
   const getMusic = payload => api.get('/music?limit=4&page='+payload.page,'',{headers: { Authorization: `Bearer ${payload.token}` }})
   const getKalimatBijak = payload =>api.get(`/wise?fav=${payload.fav}&sort=${payload.filter}&limit=10&page=${payload.page}`,'',{headers: { Authorization: `Bearer ${payload.token}` }})
