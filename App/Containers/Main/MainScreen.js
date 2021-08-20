@@ -181,7 +181,7 @@ function MainScreen (props) {
 
   useEffect(()=>{
 
-    // console.log('filterAuto',picked)
+    console.log('filterAuto',picked)
 
   },[picked])
   useEffect(()=>{
@@ -204,8 +204,7 @@ function MainScreen (props) {
       setvisibleStatus(UpdateStatusfetching)
     }else{
       setTimeout(() => {
-        
-    setvisibleStatus(UpdateStatusfetching)
+        setvisibleStatus(UpdateStatusfetching)
       }, 500);
     }
   },[UpdateStatusfetching])

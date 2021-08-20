@@ -393,7 +393,7 @@ const validationEmoticon =(stat,status) =>{
                           <View
                             style={{borderWidth:1, minHeight:80, width:Screen.width*0.9, borderRadius:20,paddingBottom:12, alignItems:'flex-start',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
                             {
-                            // emoticonList && emoticonList.length>0?
+                            status && status.emoticons && status.emoticons.length>0&&
                             <FlatList
                                 data={status.emoticons}
                                 renderItem={renderItem}
