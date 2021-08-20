@@ -2,11 +2,18 @@ import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   View,
-  Image,
   Text,
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import API from '../../Services/Api';
+import FixtureAPI from '../../Services/FixtureApi';
+import DebugConfig from '../../Config/DebugConfig';
+
+import TokenRedux, {success} from '../../Redux/Authentication/TokenRedux';
+
+import {showMessage, hideMessage} from 'react-native-flash-message';
+
 import {TemplateBackground} from '../../Components/TemplateBackground';
 import images from '../../Themes/Images';
 import styles from '../Styles/LaunchScreenStyles';
@@ -15,23 +22,72 @@ import {connect} from 'react-redux';
 import Images from '../../Themes/Images';
 import RoundedButton from '../../Components/RoundedButton';
 import {Fonts, Colors, Metrics} from '../../Themes/';
+import {bindActionCreators} from 'redux';
+import {Image} from 'react-native-elements/dist/image/Image';
+import {ActivityIndicator} from 'react-native';
+import DetailAlbum from './Foto/DetailAlbum';
 
+const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 function CurhatKeTemanContactDetail(props) {
-  const {navigation} = props;
+  const {navigation, token} = props;
   const {nama, params} = navigation.state.params;
   const {pop} = navigation;
   const [conselingCode, setConselingCode] = useState(false);
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const [dataDetail, setDataDetail] = useState();
 
   const [visible, setVisible] = useState(false);
   const toggleOverlay = () => {
     setVisible(!visible);
   };
   useEffect(() => {
-    console.log(params);
+    // console.log('params',params)
+    if (params && params.id_user) {
+      api
+        .getDetailContact({
+          id: 87,
+          token: token.data.access_token,
+        })
+        .then((succ) => {
+          // console.log(`succ`, succ.data.data.rows)
+          setDataDetail(succ.data.data.rows);
+        })
+        .catch((err) => {
+          // console.log(`err`, err)
+        });
+    }
+    {
+      setDataDetail(params);
+    }
   }, []);
+
+  useEffect(() => {
+    if (dataDetail) {
+      console.log('DetailAlbum', dataDetail.photo.url);
+    }
+  }, [dataDetail]);
+
+  const addToContact = () => {
+    api
+      .addFriend({
+        body: {
+          id_account: dataDetail.id,
+        },
+        token: token.data.access_token,
+      })
+      .then((success) => {
+        // console.log(success.data)
+        showMessage({
+          message: success.data.message,
+          type: 'info',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
@@ -61,35 +117,45 @@ function CurhatKeTemanContactDetail(props) {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-            // onPress={() => pop()}
-            >
+              onPress={() => {
+                if (dataDetail && dataDetail.is_friend) {
+                  alert('still on development');
+                } else {
+                  addToContact();
+                }
+              }}>
               <Text
                 style={{
-                  color: params && params.is_friend ? '#67308F' : 'bluesky',
+                  color:
+                    dataDetail && dataDetail.is_friend ? '#4287f5' : '#4287f5',
                   marginLeft: 15,
                   fontWeight: '500',
                   fontSize: 16,
                 }}>
-                {params && params.is_friend ? 'Edit' : 'Request'}
+                {dataDetail && dataDetail.is_friend ? 'Edit' : 'Request'}
               </Text>
             </TouchableOpacity>
           </View>
-
-          <Image
-            source={params && params.photo ? {uri: params.photo} : images.pp}
-            style={{width: 100, height: 100, alignSelf: 'center'}}
-            resizeMode="contain"
-          />
-          <Text
-            style={{
-              fontWeight: '500',
-              color: 'white',
-              fontSize: 30,
-              textAlign: 'center',
-              marginTop: 10,
-            }}>
-            {params ? params.name : nama}
-          </Text>
+          <View style={{flex: 1, alignItems: 'center'}}>
+            <Image
+              source={dataDetail ? {uri: dataDetail.photo.url} : images.pp}
+              style={{width: 100, height: 100, alignSelf: 'center'}}
+              resizeMode="contain"
+              PlaceholderContent={
+                <ActivityIndicator color={'white'} size={32} />
+              }
+            />
+            <Text
+              style={{
+                fontWeight: '500',
+                color: 'white',
+                fontSize: 30,
+                textAlign: 'center',
+                marginTop: 10,
+              }}>
+              {dataDetail ? dataDetail.name : nama}
+            </Text>
+          </View>
           <View
             style={{
               width: '100%',
@@ -100,10 +166,13 @@ function CurhatKeTemanContactDetail(props) {
               flexDirection: 'row',
               paddingHorizontal: 12,
               marginVertical: 30,
+              marginTop: 200,
             }}>
             <TouchableOpacity
               onPress={() =>
-                navigation.navigate('Chat', {nama: params ? params.name : nama})
+                navigation.navigate('Chat', {
+                  nama: dataDetail ? dataDetail.name : nama,
+                })
               }
               style={{alignItems: 'center'}}>
               <Image
@@ -118,7 +187,10 @@ function CurhatKeTemanContactDetail(props) {
                 Message
               </Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('VoiceCall')}>
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('CallRoom', {params: dataDetail.agora})
+              }>
               <View style={{alignItems: 'center'}}>
                 <Image
                   source={images.call}
@@ -133,7 +205,7 @@ function CurhatKeTemanContactDetail(props) {
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('VideoCall')}>
+            <TouchableOpacity onPress={() => navigation.navigate('VideoRoom')}>
               <View style={{alignItems: 'center'}}>
                 <Image
                   source={images.video}
@@ -163,7 +235,7 @@ function CurhatKeTemanContactDetail(props) {
             />
             <Text style={{fontWeight: 'bold', color: 'white'}}>Phone</Text>
             <Text style={{color: 'white'}}>
-              {params && params.phone_number}
+              {dataDetail && dataDetail.phone_number}
             </Text>
             <View
               style={{
@@ -177,7 +249,9 @@ function CurhatKeTemanContactDetail(props) {
               }}
             />
             <Text style={{fontWeight: 'bold', color: 'white'}}>Email</Text>
-            <Text style={{color: 'white'}}>{params && params.email}</Text>
+            <Text style={{color: 'white'}}>
+              {dataDetail && dataDetail.email}
+            </Text>
             <View
               style={{
                 height: 1,
@@ -196,4 +270,17 @@ function CurhatKeTemanContactDetail(props) {
   );
 }
 
-export default connect(null, null)(CurhatKeTemanContactDetail);
+const mapStateToProps = (state) => {
+  return {
+    token: state.token.payload,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(Object.assign(TokenRedux), dispatch);
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CurhatKeTemanContactDetail);

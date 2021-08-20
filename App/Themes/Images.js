@@ -100,7 +100,8 @@ const images = {
   share: require('../Images/foto-foto/share.png'),
   delete_outline: require('../Images/foto-foto/delete_outline.png'),
   newAlbum: require('../Images/foto-foto/newAlbum.png'),
-  iconEditAlbum: require('../Images/foto-foto/iconedit.png')
+  iconEditAlbum: require('../Images/foto-foto/iconedit.png'),
+  featured: require('../Images/jalanyuks/featured.png')
 
 
 }

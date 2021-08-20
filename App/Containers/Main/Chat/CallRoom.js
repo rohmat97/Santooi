@@ -10,11 +10,11 @@ import {
   ScrollView,
 } from 'react-native';
 import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
-import {useInitializeAgora, useRequestCameraAudioHook} from './AgoraVideo';
+import {useInitializeAgora, useRequestAudioHook} from './Agora';
 import styles from './styles';
 
-const VideoCall = () => {
-  useRequestCameraAudioHook();
+const CallRoom = () => {
+  useRequestAudioHook();
   const {
     channelName,
     isMute,
@@ -29,8 +29,7 @@ const VideoCall = () => {
   } = useInitializeAgora();
 
   const renderVideos = () => {
-    return joinSucceed ?
-    (
+    return joinSucceed ? (
       <View style={styles.fullView}>
         <RtcLocalView.SurfaceView
           style={styles.max}
@@ -118,4 +117,4 @@ const VideoCall = () => {
   );
 };
 
-export default VideoCall;
+export default CallRoom;
