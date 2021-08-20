@@ -25,6 +25,7 @@ import {Fonts, Colors, Metrics} from '../../Themes/';
 import {OverlayInvite} from '../../Components/OverlayInvite';
 import {OverlayPhone} from '../../Components/OverlayPhone';
 import { bindActionCreators } from 'redux';
+import { FlatList } from 'react-native';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create()
 function CurhatKeTemanContact(props) {
@@ -35,18 +36,7 @@ function CurhatKeTemanContact(props) {
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-
-  const [visiblePhone, setVisiblePhone] = useState(false);
-  const toggleOverlayPhone = () => {
-    setVisiblePhone(!visiblePhone);
-  };
-
-  const [visibleInvite, setVisibleInvite] = useState(false);
-  const toggleOverlayInvite = () => {
-    setVisibleInvite(!visibleInvite);
-  };
-
-  let x = [
+  const [listFriend, setListFriend] = useState([
     {
       nama: 'Agus',
     },
@@ -62,13 +52,28 @@ function CurhatKeTemanContact(props) {
     {
       nama: 'Brian',
     },
-  ];
+  ])
+  const [visiblePhone, setVisiblePhone] = useState(false);
+  const toggleOverlayPhone = () => {
+    setVisiblePhone(!visiblePhone);
+  };
+
+  const [visibleInvite, setVisibleInvite] = useState(false);
+  const toggleOverlayInvite = () => {
+    setVisibleInvite(!visibleInvite);
+  };
+
 
   let newName = '';
 
   useEffect(() => {
-    api.searchFriend({
-      
+    api.listContact({
+      token:token.data.access_token
+    }).then(success => {
+      // console.log(`success`, success.data.data)
+      setListFriend(success.data.data.rows)
+    }).catch( err =>{
+      console.log(`err`, err)
     })
   }, [])
   return (
@@ -155,8 +160,75 @@ function CurhatKeTemanContact(props) {
               />
             </View>
           </TouchableOpacity>
+           {listFriend .length>0?<FlatList 
+              data={listFriend}
+              renderItem={({item,index}) =>{
+                let exist = false;
 
-            {x.map((e, index) => {
+                if (index === 0) {
+                  newName = item.nama.substring(0, 1).toUpperCase();
+                  exist = true;
+                } else {
+                  if (item.nama.substring(0, 1).toUpperCase() !== newName) {
+                    newName = item.nama.substring(0, 1).toUpperCase();
+                    exist = true;
+                  }
+                }
+                return (
+                  <View key={index}>
+                    {exist && (
+                      <View
+                        style={{
+                          backgroundColor: '#67308F',
+                          width: Screen.width,
+                          paddingVertical: 5,
+                          paddingHorizontal: 20,
+                          marginBottom: 20,
+                          marginLeft: -15,
+                        }}>
+                        <Text style={{color: 'white', fontWeight: 'bold'}}>
+                          {item.nama.substring(0, 1).toUpperCase()}
+                        </Text>
+                      </View>
+                    )}
+                    <TouchableOpacity
+                      onPress={() =>
+                        navigation.navigate('CurhatKeTemanContactDetail', {
+                          nama : item.nama
+                        })
+                      }>
+                      <Text style={{color: 'white'}}>{item.nama}</Text>
+                      <View
+                        style={{
+                          height: 1,
+                          width: Screen.width,
+                          borderRadius: 1,
+                          borderWidth: 0.5,
+                          borderColor: 'white',
+                          zIndex: 0,
+                          marginVertical: 15,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )
+              }}
+            />:
+               <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+                 <View
+                        style={{
+                          backgroundColor: '#67308F',
+                          width: Screen.width,
+                          paddingVertical: 1,
+                          paddingHorizontal: 20,
+                          marginBottom: 20,
+                          marginLeft: -15,
+                        }}>
+                      </View>
+                 <Text style={{color:'white', fontSize:32}}>Belum Ada Teman</Text>
+               </View>
+              }
+            {/* {listFriend.map((e, index) => {
               let exist = false;
 
               if (index === 0) {
@@ -207,7 +279,7 @@ function CurhatKeTemanContact(props) {
                   </TouchableOpacity>
                 </View>
               );
-            })}
+            })} */}
           </ScrollView>
 
           {/* <View

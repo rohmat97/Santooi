@@ -13,16 +13,19 @@ export const CustomBottomTab =({tab, settab})=>{
                     source={images.iconHome}
                     style={{ width: Screen.height*0.035, height: Screen.height*0.055,tintColor:tab===0?'#DD118C':'gray' }}
                     onPress={()=> settab(0)}
+                    resizeMode='contain'
                     />
                 <Image
                     source={images.iconJournal}
                     style={{ width: Screen.height*0.045, height: Screen.height*0.055,tintColor:tab===1?'#DD118C':'gray'  }}
                     onPress={()=> settab(1)}
+                    resizeMode='contain'
                     />
                 <Image
                     source={images.iconAccount}
                     style={{ width: Screen.height*0.05, height: Screen.height*0.055,tintColor:tab===2?'#DD118C':'gray'  }}
                     onPress={()=> settab(2)}
+                    resizeMode='contain'
                     />
             </View>
         </View>

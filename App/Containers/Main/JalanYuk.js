@@ -17,6 +17,8 @@ import HistoryPlaceRedux from '../../Redux/JalanYuk/HistoryPlaceRedux'
 import UpdateHistoryRedux from '../../Redux/JalanYuk/UpdateHistoryRedux'
 import { set } from 'seamless-immutable';
 import { ActivityIndicator } from 'react-native';
+import moment from 'moment';
+import { RefreshControl } from 'react-native';
 
 
 function JalanYuk(props) {
@@ -29,6 +31,31 @@ function JalanYuk(props) {
     const [selected, setselected] = useState()
     const [search, setsearch] = useState(null)
     const [visible, setVisible] = useState(false);
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const wait = (timeout) => {
+        return new Promise(resolve => setTimeout(resolve, timeout));
+      }
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        const payloadPlace ={
+                'token':token && token.data.access_token,
+                'page':1,
+                'limit':5,
+                'lat':latlong&&latlong.latitude,
+                'long':latlong&&latlong.longitude,
+                'key':'',
+                'id':''
+              }
+        GetPlaceRequest(payloadPlace)
+        const payloadHistory ={
+                'token':token && token.data.access_token,
+                'page':1,
+              }
+        HistoryPlaceRequest(payloadHistory)
+        wait(2000).then(() => setRefreshing(false));
+    }, []);
+
     const toggleOverlay = (params) => {
         setVisible(!visible);
         setselected(params)
@@ -68,11 +95,11 @@ function JalanYuk(props) {
                 'key':'',
                 'id':''
               }
+            GetPlaceRequest(payloadPlace)
             const payloadHistory ={
                 'token':token && token.data.access_token,
                 'page':1,
               }
-            GetPlaceRequest(payloadPlace)
             HistoryPlaceRequest(payloadHistory)
             // console.log('latlong',latlong)
         }
@@ -134,11 +161,22 @@ function JalanYuk(props) {
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
+            <ScrollView
+                    contentContainerStyle={{flex:1}}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                    }
+                >
                 <View style={styles.section}>
                     <TouchableOpacity onPress={() => pop()}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={images.arrowBack} style={{ width: 18, height: 18 }} resizeMode='contain' />
-                            <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Jalan yuk!</Text>
+                            <Text style={{ color: '#67308F', marginLeft: 15, fontWeight: '500', fontSize: 16 }}>Jalan Yuk!</Text>
                         </View>
                     </TouchableOpacity>
 
@@ -173,24 +211,38 @@ function JalanYuk(props) {
                                              
                                             {
                                                 item.is_featured===1&&
-                                                <View style={{
-                                                    backgroundColor:'#7E3DAD',
-                                                        width:60,
-                                                        height:30,
-                                                        padding:8,
-                                                        borderRadius:40,
-                                                        marginTop:Screen.width*0.005,
-                                                        marginLeft:-Screen.width*0.16
-                                                }}>
-                                                    <Text 
+                                                <View 
                                                     style={{
-                                                        color:'white',
-                                                        textAlign:'center',
-                                                        fontSize:8,
-                                                        }}>
-                                                        Featured
-                                                    </Text>
+                                                        marginLeft:-Screen.width*0.165
+                                                    }}
+                                                >
+                                                    <Image 
+                                                        source={images.featured} 
+                                                        style={{
+                                                                    width:60,
+                                                                    height:30,
+                                                            }}
+                                                        resizeMode='contain'
+                                                        />
                                                 </View>
+                                                // <View style={{
+                                                //     backgroundColor:'#7E3DAD',
+                                                //         width:60,
+                                                //         height:30,
+                                                //         padding:8,
+                                                //         borderRadius:40,
+                                                //         marginTop:Screen.width*0.005,
+                                                //         marginLeft:-Screen.width*0.16
+                                                // }}>
+                                                //     <Text 
+                                                //     style={{
+                                                //         color:'white',
+                                                //         textAlign:'center',
+                                                //         fontSize:8,
+                                                //         }}>
+                                                //         Featured
+                                                //     </Text>
+                                                // </View>
                                             }
                                             <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end',marginTop: item.is_featured===0?-Screen.height*0.05:Screen.height*0.015 }}>
                                                 {
@@ -203,7 +255,7 @@ function JalanYuk(props) {
                                                      </TouchableOpacity>
                                                 }
                                                 <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13, width: Screen.width * 0.5 }}numberOfLines={2}>{item.name}</Text>
-                                                <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.created_at?new Date(item.created_at).toLocaleString('es-AR'):''}</Text>
+                                                {/* <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.created_at?new Date(item.created_at).toLocaleString('es-AR'):''}</Text> */}
                                                 <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.55, fontSize: 13 }}numberOfLines={2}>{item.address}</Text>
                                             </View>
                                         </View>
@@ -221,7 +273,10 @@ function JalanYuk(props) {
                             />  
                         // </View>
                         :
-                        <ScrollView>
+                        <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        >
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 }}>
                             <View style={{ backgroundColor: '#67308F', width: 140,height:30, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>
@@ -279,20 +334,36 @@ function JalanYuk(props) {
                                             
                                             {
                                                 item.place.is_featured===1&&
-                                                <Text 
-                                                style={{
-                                                    backgroundColor:'#7E3DAD',
-                                                    width:60,
-                                                    padding:8,
-                                                    color:'white',
-                                                    borderRadius:24,
-                                                    textAlign:'center',
-                                                    marginTop:-Screen.width*0.28,
-                                                    fontSize:8,
-                                                    marginLeft:Screen.width*0.14
-                                                    }}>
-                                                    Featured
-                                                </Text>
+                                                <View 
+                                                    style={{
+                                                        marginTop:-Screen.width*0.3,
+                                                        marginLeft:Screen.width*0.135
+                                                        // marginLeft:-Screen.width*0.165
+                                                    }}
+                                                >
+                                                    <Image 
+                                                        source={images.featured} 
+                                                        style={{
+                                                                    width:60,
+                                                                    height:30,
+                                                            }}
+                                                        resizeMode='contain'
+                                                        />
+                                                </View>
+                                                // <Text 
+                                                // style={{
+                                                //     backgroundColor:'#7E3DAD',
+                                                //     width:60,
+                                                //     padding:8,
+                                                //     color:'white',
+                                                //     borderRadius:24,
+                                                //     textAlign:'center',
+                                                //     marginTop:-Screen.width*0.28,
+                                                //     fontSize:8,
+                                                //     marginLeft:Screen.width*0.14
+                                                //     }}>
+                                                //     Featured
+                                                // </Text>
                                             }
                                             
                                         </View>
@@ -308,7 +379,7 @@ function JalanYuk(props) {
                                                 </TouchableOpacity>
                                             }
                                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13,width:Screen.width*0.55 }}numberOfLines={2}>{item.place.name}</Text>
-                                            <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.place.created_at?new Date(item.place.created_at).toUTCString():''}</Text>
+                                            <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.place.created_at?new Date (item.place.created_at).toUTCString().split('GMT')[0]:''}</Text>
                                             <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.55, fontSize: 13 }}numberOfLines={1}>{item.place.address}</Text>
                                         </View>
                                     </View>
@@ -321,8 +392,9 @@ function JalanYuk(props) {
                     </ScrollView>
                     }
                     
-                    <OverlayJalanYuk visible={visible} toggleOverlay={toggleOverlay} selected={selected} openMaps={openMaps} UpdateHistoryRequest={UpdateHistoryRequest} token={token}/>
+                    <OverlayJalanYuk visible={visible} toggleOverlay={toggleOverlay} selected={selected} openMaps={openMaps} UpdateHistoryRequest={UpdateHistoryRequest} token={token} HistoryPlaceRequest={HistoryPlaceRequest} />
                 </View>
+                </ScrollView>
             </View>
         </TemplateBackground>
     )

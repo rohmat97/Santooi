@@ -76,7 +76,7 @@ export const Dashboard =({ImageProfile,token,styles,picked,toggleOverlay,navigat
                           :null
                       }
                       </View> */}
-                      <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:emoticon && emoticon.length>0?12:quote?14:0}} numberOfLines={4}>{quote?quote:'Bagaimana Perasaanmu Hari ini?'}</Text>
+                      <Text style={{color:'#662D91', fontStyle:'italic',marginHorizontal:12,marginTop:emoticon && emoticon.length>0?12:quote?14:0}} numberOfLines={4}>{quote?quote:'Bagaimana Perasaanmu Hari Ini?'}</Text>
                       {
                         emoticon && emoticon.length>0 || quote?
                         <View style={{width:'100%', justifyContent:'flex-end', flexDirection:'row', marginTop:24}}>

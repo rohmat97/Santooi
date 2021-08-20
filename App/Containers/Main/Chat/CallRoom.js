@@ -3,7 +3,7 @@ import { SafeAreaView, View, Text, TextInput,Button } from 'react-native';
 import { useInitializeAgora, useRequestAudioHook } from './Agora';
 import styles from './styles';
 
-const ChatRoom = () => {
+const CallRoom = () => {
   useRequestAudioHook();
   const {
     channelName,
@@ -64,4 +64,4 @@ const ChatRoom = () => {
   );
 };
 
-export default ChatRoom;
+export default CallRoom;

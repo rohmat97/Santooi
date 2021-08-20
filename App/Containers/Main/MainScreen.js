@@ -38,7 +38,7 @@ function MainScreen (props) {
       //   pickedEmoticon.push({"id":data.id})
       // })
       UpdateStatusSuccess([])
-      console.log('submit emoticon',pickedEmoticon)
+      // console.log('submit emoticon',pickedEmoticon)
       const param = {
         "id":token && token.data.user.id,
         "body":{
@@ -53,10 +53,10 @@ function MainScreen (props) {
     }else{
       setVisible(!visible); 
       if(quote && status){
-        console.log('show up 2')
+        // console.log('show up 2')
         validationEmoticon(quote, status)
       } else if(quote){
-        console.log('show up 1')
+        // console.log('show up 1')
         ValidateTextForEmoticon(quote)
       }
     }
@@ -89,7 +89,7 @@ function MainScreen (props) {
           // console.log('filter manual manual === '+dat.id+" --- "+text.id)
           return dat.id !== text.id
         }))
-        setpicked( [...new Set(filterAuto)])
+        setpicked( filterAuto)
       setmanualPicked(filter)
       
     } else if(status) {
@@ -181,12 +181,12 @@ function MainScreen (props) {
 
   useEffect(()=>{
 
-    console.log('filterAuto',picked)
+    // console.log('filterAuto',picked)
 
   },[picked])
   useEffect(()=>{
 
-    console.log('filterManualPicked',manualPicked)
+    // console.log('filterManualPicked',manualPicked)
   },[manualPicked])
   useEffect(()=>{
     if(token){

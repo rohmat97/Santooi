@@ -24,7 +24,7 @@ import CurhatKeTemanContact from '../Containers/Main/CurhatKeTemanContact';
 import CurhatKeTemanContactDetail from '../Containers/Main/CurhatKeTemanContactDetail';
 import DetailAlbum from '../Containers/Main/Foto/DetailAlbum'
 import Chat from '../Containers/Main/Chat';
-import ChatRoom from '../Containers/Main/Chat/ChatRoom';
+import CallRoom from '../Containers/Main/Chat/CallRoom';
 import VideoRoom from '../Containers/Main/Chat/VideoRoom';
 
 // Manifest of possible screens
@@ -59,7 +59,7 @@ const MainNavigator = createStackNavigator({
   CurhatKeTemanContact: { screen: CurhatKeTemanContact },
   CurhatKeTemanContactDetail: { screen: CurhatKeTemanContactDetail },
   DetailAlbum: { screen: DetailAlbum },
-  ChatRoom: { screen: ChatRoom },
+  CallRoom: { screen: CallRoom },
   VideoRoom: { screen: VideoRoom }
 }, {
   // Default config for all screens

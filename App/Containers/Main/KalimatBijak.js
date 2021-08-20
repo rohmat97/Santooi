@@ -73,15 +73,16 @@ function KalimatBijak(props) {
     },[])
 
     useEffect(() => {
-        setemoticonList(picked ? picked.concat(manualPicked):manualPicked?manualPicked:null)
+        // setemoticonList(picked ? picked.concat(manualPicked):manualPicked?manualPicked:null)
+        console.log(picked,manualPicked)
     }, [picked,manualPicked])
     useEffect(()=>{
         if(status){
-          // console.log('status',status.emoticons)
+        //   console.log('status kalimat bijak',status.emoticons)
         setpicked([])
         setmanualPicked([])
           setquote(status.status)
-        //   setpicked(status.emoticons)
+          setpicked(status.emoticons)
           validationEmoticon(null,status)
         }
         // 
@@ -103,16 +104,16 @@ function KalimatBijak(props) {
     },[listKalimatBijak])
 
     useEffect(() => {
-        if(addFavorite){
-            console.log(`addFavorite`, addFavorite)
-            // const payload= {
-            //     "fav":null,
-            //     "filter":'ASC',
-            //     "token":token.data.access_token
-            // }
-            // setTimeout(() => {
-            //     KalimatBijakRequest(payload)
-            // }, 1000);
+        if(addFavorite && token){
+            // console.log(`addFavorite`, addFavorite)
+            const payload= {
+                "fav":null,
+                "filter":'ASC',
+                "token":token.data.access_token
+            }
+            setTimeout(() => {
+                KalimatBijakRequest(payload)
+            }, 1000);
         }
         // return () => {
         //     cleanup
@@ -158,7 +159,7 @@ function KalimatBijak(props) {
                     "token":token.data.access_token,
                     "page":1
                 }
-                console.log(payload)
+                // console.log(payload)
                 KalimatBijakRequest(payload)
             }else{
                 setlistKalimat([])
@@ -168,7 +169,7 @@ function KalimatBijak(props) {
                     "token":token.data.access_token,
                     "page":1
                 }
-                console.log(payload)
+                // console.log(payload)
                 KalimatBijakRequest(payload)
             }
         }
@@ -186,14 +187,14 @@ function KalimatBijak(props) {
                 "body":{
                     id_wise_sentence:payload
                 },
-                "token":token.data.access_token,
+                "token":token && token.data.access_token,
                 "param":param
             }
             addFavoriteRequest(data)
         }else{
             const data ={
                 "body":payload,
-                "token":token.data.access_token,
+                "token":token&&token.data.access_token,
                 "param":param
             }
             addFavoriteRequest(data)
@@ -202,10 +203,10 @@ function KalimatBijak(props) {
             const payload1= {
                 "fav":filterByFavorite?1:0,
                 "filter":filterByLatest?'ASC':'DESC',
-                "token":token.data.access_token,
+                "token":token&&token.data.access_token,
                 "page":1
             }
-            console.log(payload1)
+            // console.log(payload1)
                 KalimatBijakRequest(payload1)
                 setlistKalimat([])
         }else{
@@ -223,7 +224,7 @@ function KalimatBijak(props) {
     }
 
     const onShare = async (payload,url) => {
-        console.log(url)
+        // console.log(url)
         const mark = '\n\nDikirim dari Santooi. \nhttps://happiness-api.demoapp.xyz/kalimat-bijak'
         try {
           const result = await Share.share({
@@ -248,7 +249,7 @@ function KalimatBijak(props) {
       }
 
   const toggleOverlay = (payload) => {
-    if(payload){
+    if(payload&&token){
       let pickedEmoticon =[]
       picked && picked.map(data =>{
         pickedEmoticon.push({"id":data.id})
@@ -266,17 +267,17 @@ function KalimatBijak(props) {
       }
       setVisibleStatus(!visibleStatus);
       UpdateStatusRequest(param)
-      console.log('show dpwn')
+    //   console.log('show dpwn')
       // console.log('param',param)
     }else{
 
         setVisibleStatus(!visibleStatus); 
         if(quote && status){
             validationEmoticon(quote, status)
-            console.log('show up 2')
+            // console.log('show up 2')
           } else if(quote){
             ValidateTextForEmoticon(quote)
-            console.log('show up 1')
+            // console.log('show up 1')
           }
     //   setVisibleStatus(!visibleStatus);
     //   ValidateTextForEmoticon(quote)
@@ -322,6 +323,7 @@ function KalimatBijak(props) {
 
 const validationEmoticon =(stat,status) =>{
     if(stat && status){
+        console.log('stat && status', status)
         const filtertext = stat.split(' ')
         const filterAuto =status && status.emoticons &&  status.emoticons.filter(dat => filtertext.find(text =>{
           // console.log(dat.name.toLowerCase()+ ' = ' + text.toLowerCase())
@@ -343,7 +345,7 @@ const validationEmoticon =(stat,status) =>{
             return dat.name.toLowerCase() === text.toLowerCase()
         }))
         const filterManualPicked = status && status.emoticons && status.emoticons.filter(dat => filtertext.find(text =>{
-          console.log(dat.name.toLowerCase() + ' = ' + text.toLowerCase())
+        //   console.log(dat.name.toLowerCase() + ' = ' + text.toLowerCase())
           return dat.name.toLowerCase() !== text.toLowerCase()
         }))
         const filter = filterManualPicked && filterManualPicked.filter(dat => filterAuto.find(text =>{
@@ -354,6 +356,7 @@ const validationEmoticon =(stat,status) =>{
         setpicked(filterAuto)
         setmanualPicked(filter)
       }else{
+        console.log('setmanualPicked', status)
         setmanualPicked(status.emoticons)
       }
     }
@@ -363,7 +366,7 @@ const validationEmoticon =(stat,status) =>{
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
                 <View style={{flex:1}}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30,margin:24 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 30,padding:25,margin:-10 }}>
                         <TouchableOpacity
                             onPress={() => pop()}
                             style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -390,15 +393,16 @@ const validationEmoticon =(stat,status) =>{
                           <View
                             style={{borderWidth:1, minHeight:80, width:Screen.width*0.9, borderRadius:20,paddingBottom:12, alignItems:'flex-start',justifyContent:'center', backgroundColor:'white',borderColor:Colors.transparent}}>
                             {
-                            emoticonList && emoticonList.length>0?
+                            // emoticonList && emoticonList.length>0?
                             <FlatList
-                                data={[... new Set(emoticonList)]}
+                                data={status.emoticons}
                                 renderItem={renderItem}
                                 keyExtractor={item => item.id}
                                 contentContainerStyle={{maxWidth:Screen.width*0.875, margin:12}}
                                 numColumns={10}
                                 
-                            />:null
+                            />
+                            // :null
                             }
                             {/* <View style={{flexDirection:'row',maxWidth:Screen.width*0.1,backgroundColor:'red'}}>
                             {
@@ -441,7 +445,7 @@ const validationEmoticon =(stat,status) =>{
                                         const payload= {
                                             "fav":filterByFavorite,
                                             "filter":filterByLatest?'ASC':'DESC',
-                                            "token":token.data.access_token,
+                                            "token":token&&token.data.access_token,
                                             "page":page
                                         }
                                         KalimatBijakRequest(payload)
@@ -576,6 +580,8 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(mapStateToProps, mapDispatchToProps)(KalimatBijak)
 
 
-const renderItem = ({ item }) => (
+const renderItem = ({ item }) => {
+    console.log(item)
+    return(
     <Image source={{uri:item.image && item.image.url}} style={[style.iconic]} resizeMode='contain'/>
-)
+)}

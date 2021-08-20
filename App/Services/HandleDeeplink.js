@@ -45,19 +45,33 @@ export const Transition = (navigate, getParam) =>{
 }
 
 export const ExtractURL =(url, navigate, routeName,goBack) =>{
-    const route = url && url.replace(/.*?:\/\//g, '');
-    const paramName = route && route.split('?')
-    const email = paramName && paramName[1].match(/email=([^&]*)/)
-    const token = paramName && paramName[1].match(/token=([^&]*)/)
+    const route =  url && url.replace(/.*?:\/\//g, '');
+    console.log(url)
+    let paramName = route && route.split('?')
+    if(paramName&&paramName.length>1) {
+
+        console.log(paramName)
+        const email = paramName&& paramName[1].match(/email=([^&]*)/)
+        const token = paramName&& paramName[1].match(/token=([^&]*)/)
+        const id_user = paramName && paramName[1].match(/id_user=([^&]*)/)
+        setTimeout(() => {
+            navigate(paramName[0], {
+                params :{
+                    email:email && email[1],
+                    token:token && token[1],
+                    id_user: id_user&& id_user[1]
+                }
+            })
+        }, 1000);
+    }else{
+        console.log('else',paramName)
+        setTimeout(() => {
+            navigate(paramName[0])
+        }, 1000);
+    }
+    
     //   console.log('  param',paramName)
     //   console.log('  email ',email )
     //   console.log('  token ',token )
-    setTimeout(() => {
-        navigate(paramName[0], {
-            params :{
-                email:email[1],
-                token:token[1]
-            }
-        })
-    }, 1000);
+   
 }

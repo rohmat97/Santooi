@@ -7,7 +7,7 @@ import { Screen } from "../Transforms/Screen";
 import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
 import { Linking } from "react-native";
-export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps, token, UpdateHistoryRequest }) => {
+export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps, token, UpdateHistoryRequest,HistoryPlaceRequest}) => {
     // console.log(selected)
     return (
         <Overlay
@@ -34,15 +34,23 @@ export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps, tok
         {
                 selected && selected.is_featured===1 &&
                 
-                <TouchableOpacity onPress={()=>{
+                <TouchableOpacity onPress={async()=>{
                     const payload ={
                         'token':token && token.data.access_token,
                         'body':{
                             "id_place":selected.id
                         },
                       }
-                    UpdateHistoryRequest(payload)
+   
+                    const payloadHistory ={
+                        'token':token && token.data.access_token,
+                        'page':1,
+                    }
+                    await UpdateHistoryRequest(payload)
                     Linking.openURL(selected.url)
+                    setTimeout(() => { 
+                        HistoryPlaceRequest(payloadHistory)
+                    }, 5000);
                     }}
                     style={{paddingVertical:16}}
                     >

@@ -75,6 +75,9 @@ const create = (baseURL = staging) => {
   //curhat ke teman
   const findFriend = payload => api.get(`/account/user?phone=${payload.no}`,'',{headers: { Authorization: `Bearer ${payload.token}`}})
   const searchFriend = payload => api.get(`/account/user/friend?key=${payload.no}`,'',{headers: { Authorization: `Bearer ${payload.token}`}})
+  const listContact = payload => api.get(`/account/user/friend`,'',{headers: { Authorization: `Bearer ${payload.token}`}})
+  const addFriend = payload => api.post(`/account/user/friend`,payload.body,{headers: { Authorization: `Bearer ${payload.token}`}})
+  const getDetailContact = payload => api.get(`/account/user?id=${payload.id}`,'',{headers: { Authorization: `Bearer ${payload.token}`}})
   // ------
   // STEP 3
   // ------
@@ -122,7 +125,10 @@ const create = (baseURL = staging) => {
     getHistoryPlace,
     updateHistory,
     findFriend,
-    searchFriend
+    searchFriend,
+    listContact,
+    addFriend,
+    getDetailContact
   }
 }
 

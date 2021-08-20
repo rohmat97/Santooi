@@ -7,7 +7,7 @@ import { Screen } from "../Transforms/Screen";
 import images from '../Themes/Images';
 import { RadioButton } from 'react-native-paper'
 export const OverlayInvite = ({ visible, toggleOverlay,token}) => {
-    console.log('token',token)
+    // console.log('token',token.data.user.id)
     return (
         <Overlay
             isVisible={visible}
@@ -17,7 +17,7 @@ export const OverlayInvite = ({ visible, toggleOverlay,token}) => {
             <TouchableOpacity onPress={toggleOverlay} style={{justifyContent:'flex-end', flexDirection:'row'}}>
                 <Image source={images.close} style={{ width: 15, height: 15}} resizeMode='contain' />
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=> Linking.openURL(`sms:?body=I'm on Santooi as ${token.data.user.name}. Install the app to follow my account,  ${'https://happiness-admin.demoapp.xyz/'}`)}>
+            <TouchableOpacity onPress={()=> Linking.openURL(`sms:?body=I'm on Santooi as ${token.data.user.name}. Install the app to follow my account,  https://happiness-api.demoapp.xyz/invite/${token.data.user.id}`)}>
                 <View style={{ flexDirection: 'row' }}>
                     <Image source={images.messageOverlay} style={{ width: 25, height: 25 }} resizeMode='contain' />
                     <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 15 }}>Message</Text>
@@ -28,7 +28,7 @@ export const OverlayInvite = ({ visible, toggleOverlay,token}) => {
                 <View style={{ position: 'absolute', left: 0, bottom: 0, width: '100%', height: 1, backgroundColor: 'white', zIndex: 1 }} />
             </View>
 
-            <TouchableOpacity onPress={()=> Linking.openURL(`mailto:example@gmail.com?subject=example&body=I'm on Santooi as ${token.data.user.name}. Install the app to follow my account,  ${'https://happiness-admin.demoapp.xyz/'}`)}>
+            <TouchableOpacity onPress={()=> Linking.openURL(`mailto:example@gmail.com?subject=example&body=I'm on Santooi as ${token.data.user.name}. Install the app to follow my account,  https://happiness-api.demoapp.xyz/invite/${token.data.user.id}`)}>
                 <View style={{ flexDirection: 'row' }}>
                     <Image source={images.mail} style={{ width: 25, height: 25 }} resizeMode='contain' />
                     <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 15 }}>Mail</Text>
