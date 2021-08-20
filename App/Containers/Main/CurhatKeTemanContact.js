@@ -1,4 +1,4 @@
-import React, {useState,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   ScrollView,
   View,
@@ -10,9 +10,9 @@ import {
 
 import TokenRedux from '../../Redux/Authentication/TokenRedux';
 
-import API from '../../Services/Api'
-import FixtureAPI from '../../Services/FixtureApi'
-import DebugConfig from '../../Config/DebugConfig'
+import API from '../../Services/Api';
+import FixtureAPI from '../../Services/FixtureApi';
+import DebugConfig from '../../Config/DebugConfig';
 
 import {TemplateBackground} from '../../Components/TemplateBackground';
 import images from '../../Themes/Images';
@@ -24,13 +24,13 @@ import RoundedButton from '../../Components/RoundedButton';
 import {Fonts, Colors, Metrics} from '../../Themes/';
 import {OverlayInvite} from '../../Components/OverlayInvite';
 import {OverlayPhone} from '../../Components/OverlayPhone';
-import { bindActionCreators } from 'redux';
+import {bindActionCreators} from 'redux';
 
-const api = DebugConfig.useFixtures ? FixtureAPI : API.create()
+const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 function CurhatKeTemanContact(props) {
-  const {navigation,token} = props;
+  const {navigation, token} = props;
   const {pop} = navigation;
-  const [search, setsearch] = useState(null)
+  const [search, setsearch] = useState(null);
   const [conselingCode, setConselingCode] = useState(false);
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState();
@@ -67,10 +67,8 @@ function CurhatKeTemanContact(props) {
   let newName = '';
 
   useEffect(() => {
-    api.searchFriend({
-      
-    })
-  }, [])
+    api.searchFriend({});
+  }, []);
   return (
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
@@ -104,57 +102,57 @@ function CurhatKeTemanContact(props) {
             />
             <TextInput
               style={{color: 'white', flex: 1, marginLeft: 10}}
-              placeholder={'Search a phone name...'}
+              placeholder={'Search a friend...'}
               placeholderTextColor="rgba(255, 255, 255, 0.5)"
               value={search}
-              onChangeText={text => setsearch(text)}
+              onChangeText={(text) => setsearch(text)}
               keyboardType={'default'}
               // inputRef={(ref) => (this.number = ref)}
             />
           </View>
 
           <ScrollView>
-          <TouchableOpacity onPress={toggleOverlayPhone}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom: 20,
-              }}>
-              <Image
-                source={images.findByPhone}
-                style={{width: Screen.width * 0.5, maxHeight: 50}}
-                resizeMode="contain"
-              />
-              <Image
-                source={images.next}
-                style={{width: 20, height: 20}}
-                resizeMode="contain"
-              />
-            </View>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={toggleOverlayPhone}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: 20,
+                }}>
+                <Image
+                  source={images.findByPhone}
+                  style={{width: Screen.width * 0.5, maxHeight: 50}}
+                  resizeMode="contain"
+                />
+                <Image
+                  source={images.next}
+                  style={{width: 20, height: 20}}
+                  resizeMode="contain"
+                />
+              </View>
+            </TouchableOpacity>
 
-          <TouchableOpacity onPress={toggleOverlayInvite}>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginBottom:22,
-              }}>
-              <Image
-                source={images.invite}
-                style={{width: Screen.width * 0.5, maxHeight: 50}}
-                resizeMode="contain"
-              />
-              <Image
-                source={images.next}
-                style={{width: 20, height: 20}}
-                resizeMode="contain"
-              />
-            </View>
-          </TouchableOpacity>
+            <TouchableOpacity onPress={toggleOverlayInvite}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: 22,
+                }}>
+                <Image
+                  source={images.invite}
+                  style={{width: Screen.width * 0.5, maxHeight: 50}}
+                  resizeMode="contain"
+                />
+                <Image
+                  source={images.next}
+                  style={{width: 20, height: 20}}
+                  resizeMode="contain"
+                />
+              </View>
+            </TouchableOpacity>
 
             {x.map((e, index) => {
               let exist = false;
@@ -189,7 +187,7 @@ function CurhatKeTemanContact(props) {
                   <TouchableOpacity
                     onPress={() =>
                       navigation.navigate('CurhatKeTemanContactDetail', {
-                        nama : e.nama
+                        nama: e.nama,
                       })
                     }>
                     <Text style={{color: 'white'}}>{e.nama}</Text>
@@ -302,11 +300,14 @@ function CurhatKeTemanContact(props) {
 
 const mapStateToProps = (state) => {
   return {
-    token: state.token.payload.data.access_token
-  }
-}
+    token: state.token.payload.data.access_token,
+  };
+};
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(Object.assign(TokenRedux), dispatch)
-}
-export default connect(mapStateToProps, mapDispatchToProps)(CurhatKeTemanContact);
+  return bindActionCreators(Object.assign(TokenRedux), dispatch);
+};
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CurhatKeTemanContact);
