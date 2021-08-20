@@ -161,7 +161,8 @@ function JalanYuk(props) {
     return (
         <TemplateBackground cover={true}>
             <View style={styles.mainContainer}>
-            <ScrollView
+                <View style={styles.section}>
+                <ScrollView
                     contentContainerStyle={{flex:1}}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
@@ -171,8 +172,7 @@ function JalanYuk(props) {
                         onRefresh={onRefresh}
                     />
                     }
-                >
-                <View style={styles.section}>
+                >   
                     <TouchableOpacity onPress={() => pop()}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Image source={images.arrowBack} style={{ width: 18, height: 18 }} resizeMode='contain' />
@@ -192,6 +192,8 @@ function JalanYuk(props) {
                         >
                         </TextInput>
                     </View>
+
+                </ScrollView>
                     {
                        search?
                         // <View style={{ flexDirection:'column'}}>
@@ -327,6 +329,9 @@ function JalanYuk(props) {
                             }}
                             renderItem={({ item, index, separators }) => {
                                 // console.log('data', item)
+                                let formatedDate  =new Date (item.place.created_at)
+                                let monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
+                                let date =formatedDate.getDate()+' '+monthNames[formatedDate.getMonth()]+' '+formatedDate.getFullYear()+', '+formatedDate.getHours()+':'+formatedDate.getMinutes()
                                 return(
                                      <View style={{ flexDirection: 'row', marginBottom: 20, marginRight: 20  }}>
                                         <View>
@@ -379,7 +384,7 @@ function JalanYuk(props) {
                                                 </TouchableOpacity>
                                             }
                                             <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 13,width:Screen.width*0.55 }}numberOfLines={2}>{item.place.name}</Text>
-                                            <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.place.created_at?new Date (item.place.created_at).toUTCString().split('GMT')[0]:''}</Text>
+                                            <Text style={{ color: 'white', fontWeight: '500', marginBottom: 10, fontSize: 13 }}numberOfLines={1}>{item.place.created_at?date:''}</Text>
                                             <Text style={{ color: 'white', fontWeight: '500', width: Screen.width * 0.55, fontSize: 13 }}numberOfLines={1}>{item.place.address}</Text>
                                         </View>
                                     </View>
@@ -394,7 +399,6 @@ function JalanYuk(props) {
                     
                     <OverlayJalanYuk visible={visible} toggleOverlay={toggleOverlay} selected={selected} openMaps={openMaps} UpdateHistoryRequest={UpdateHistoryRequest} token={token} HistoryPlaceRequest={HistoryPlaceRequest} />
                 </View>
-                </ScrollView>
             </View>
         </TemplateBackground>
     )

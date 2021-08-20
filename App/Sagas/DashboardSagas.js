@@ -19,7 +19,7 @@ export function * getEmoticon(api, action) {
 
 export function * UpdateStatus(api, action) {
   // make the call to the api
-  // console.log(action.data)
+  console.log(action.data)
   const response = yield call(api.updateStatus, action.data)
   console.log('UpdateStatus',response.data)
   if (response.ok) {
@@ -35,7 +35,7 @@ export function * getStatus(api, action) {
   // console.log(action.data)
   const response = yield call(api.getStatus, action.data)
   if (response.ok) {
-    // console.log('getStatus',response.data.data.rows)
+    console.log('getStatus',response.data)
     yield put(StatusRedux.StatusSuccess(response.data.data.rows))
   } else {
     yield put(StatusRedux.StatusFailure(response))

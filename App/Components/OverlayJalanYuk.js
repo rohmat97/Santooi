@@ -18,7 +18,25 @@ export const OverlayJalanYuk = ({ visible, toggleOverlay,selected, openMaps, tok
             <TouchableOpacity onPress={toggleOverlay} style={{justifyContent:'flex-end', flexDirection:'row',paddingHorizontal:12,height:20}}>
                 <Image source={images.close} style={{ width: 15, height: 15}} resizeMode='cover'/>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=> openMaps(selected.lat,selected.lng)} style={{marginVertical:12}}>
+            <TouchableOpacity onPress={async()=> {
+                    openMaps(selected.lat,selected.lng)
+                    const payload ={
+                        'token':token && token.data.access_token,
+                        'body':{
+                            "id_place":selected.id
+                        },
+                      }
+   
+                    const payloadHistory ={
+                        'token':token && token.data.access_token,
+                        'page':1,
+                    }
+                    await UpdateHistoryRequest(payload)
+                    Linking.openURL(selected.url)
+                    setTimeout(() => { 
+                        HistoryPlaceRequest(payloadHistory)
+                    }, 5000);
+                }} style={{marginVertical:12}}>
                 <View style={{ flexDirection: 'row',alignItems:'center',width:'60%' }}>
                     <Image source={images.location} style={{ width: 30, height: 30 }} resizeMode='contain' />
                     <Text style={{ color: '#67308F', fontWeight: '500', marginLeft: 10, fontSize: 16 }}>Petunjuk Jalan</Text>
