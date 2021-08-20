@@ -1,15 +1,5 @@
 import React from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Button,
-  Platform,
-  ScrollView,
-} from 'react-native';
-import {RtcLocalView, RtcRemoteView, VideoRenderMode} from 'react-native-agora';
+import {SafeAreaView, View, Text, TextInput, Button} from 'react-native';
 import {useInitializeAgora, useRequestAudioHook} from './Agora';
 import styles from './styles';
 
@@ -28,40 +18,6 @@ const CallRoom = () => {
     toggleIsSpeakerEnable,
   } = useInitializeAgora();
 
-  const renderVideos = () => {
-    return joinSucceed ? (
-      <View style={styles.fullView}>
-        <RtcLocalView.SurfaceView
-          style={styles.max}
-          channelId={channelName}
-          renderMode={VideoRenderMode.Hidden}
-        />
-        {renderRemoteVideos()}
-      </View>
-    ) : null;
-  };
-
-  const renderRemoteVideos = () => {
-    return (
-      <ScrollView
-        style={styles.remoteContainer}
-        contentContainerStyle={{paddingHorizontal: 2.5}}
-        horizontal={true}>
-        {peerIds.map((value, index, array) => {
-          return (
-            <RtcRemoteView.SurfaceView
-              style={styles.remote}
-              uid={value}
-              channelId={channelName}
-              renderMode={VideoRenderMode.Hidden}
-              zOrderMediaOverlay={true}
-            />
-          );
-        })}
-      </ScrollView>
-    );
-  };
-
   return (
     <SafeAreaView>
       <View style={styles.container}>
@@ -76,41 +32,32 @@ const CallRoom = () => {
           />
         </View>
 
-        <View style={styles.max}>
-          <View style={styles.max}>
-            {/* <View style={styles.buttonHolder}>
-            <TouchableOpacity
-              onPress={joinSucceed ? leaveChannel : joinChannel}
-              style={styles.button}>
-              <Text style={styles.buttonText}>
-                {' '}
-                {`${joinSucceed ? 'End' : 'Start'} Call`}{' '}
-              </Text>
-            </TouchableOpacity>
-          </View> */}
-            <View style={styles.joinLeaveButtonContainer}>
-              <Button
-                onPress={joinSucceed ? leaveChannel : joinChannel}
-                title={`${joinSucceed ? 'End' : 'Start'} Call`}
-              />
-            </View>
+        <View style={styles.joinLeaveButtonContainer}>
+          <Button
+            onPress={joinSucceed ? leaveChannel : joinChannel}
+            title={`${joinSucceed ? 'Leave' : 'Join'} channel`}
+          />
+        </View>
 
-            {renderVideos()}
+        <View style={styles.floatRight}>
+          <Button onPress={toggleIsMute} title={isMute ? 'UnMute' : 'Mute'} />
+        </View>
 
-            <View style={styles.floatRight}>
-              <Button
-                onPress={toggleIsMute}
-                title={isMute ? 'UnMute' : 'Mute'}
-              />
-            </View>
+        <View style={styles.floatLeft}>
+          <Button
+            onPress={toggleIsSpeakerEnable}
+            title={isSpeakerEnable ? 'Disable Speaker' : 'Enable Speaker'}
+          />
+        </View>
 
-            <View style={styles.floatLeft}>
-              <Button
-                onPress={toggleIsSpeakerEnable}
-                title={isSpeakerEnable ? 'Disable Speaker' : 'Enable Speaker'}
-              />
-            </View>
-          </View>
+        <View style={styles.usersListContainer}>
+          {peerIds.map((peerId) => {
+            return (
+              <View key={peerId}>
+                <Text>{`Joined User ${peerId}`}</Text>
+              </View>
+            );
+          })}
         </View>
       </View>
     </SafeAreaView>

@@ -103,35 +103,6 @@ export const OverlayPhone = ({
         />
       </View>
 
-            <TouchableOpacity onPress={()=>{
-                // console.log(token)
-                phoneNumber.length > 0 ?
-                api({
-                    no:phoneNumber,
-                    token:token
-                }).then(
-                    res => {
-                        if(res.data.data.rows.length>0){
-                            // alert('user found')
-                            // console.log(res.data.data)
-                            toggleOverlay()
-                            setPhoneNumber()
-                            navigation.navigate('CurhatKeTemanContactDetail', {
-                                params:res.data.data.rows[0]
-                              })
-                        }else{
-                            Alert.alert('user not found')
-                        }
-                        // console.log(res.data.data.rows)
-                    }
-                ).catch(err => console.log(err.data))
-                // console.log(dataa)
-                // toggleOverlay
-            } :  Alert.alert('phone number empty!') } style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginEnd: 10, marginTop: 50 }}>
-                <Text style={{ color: '#67308F', marginEnd: 15, fontSize: Fonts.size.regular }}>Search</Text>
-                <Image source={images.arrowRightPurple} style={{ width: 20, height: 20 }} />
-            </TouchableOpacity>
-
       <TouchableOpacity
         onPress={() => {
           // console.log(token)
@@ -161,7 +132,7 @@ export const OverlayPhone = ({
           justifyContent: 'center',
           alignItems: 'center',
           marginEnd: 10,
-          marginTop: 50,
+          marginTop: 20,
         }}>
         <Text
           style={{

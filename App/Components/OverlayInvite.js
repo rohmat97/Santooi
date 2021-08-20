@@ -22,12 +22,16 @@ export const OverlayInvite = ({visible, toggleOverlay, token}) => {
       overlayStyle={{
         width: Screen.width * 0.9,
         borderRadius: 20,
-        minHeight: Screen.height * 0.22,
+        // height: Screen.height * 0.22,
         padding: Screen.width * 0.05,
       }}>
       <TouchableOpacity
         onPress={toggleOverlay}
-        style={{justifyContent: 'flex-end', flexDirection: 'row'}}>
+        style={{
+          justifyContent: 'flex-end',
+          flexDirection: 'row',
+          marginBottom: 10,
+        }}>
         <Image
           source={images.close}
           style={{width: 15, height: 15}}
@@ -52,28 +56,35 @@ export const OverlayInvite = ({visible, toggleOverlay, token}) => {
               fontWeight: '500',
               marginLeft: 10,
               fontSize: 15,
+              alignSelf: 'center',
             }}>
             Message
           </Text>
         </View>
       </TouchableOpacity>
 
-      <View style={{flexDirection: 'row'}}>
-        <Image
-          source={images.messageOverlay}
-          style={{width: 25, height: 25}}
-          resizeMode="contain"
-        />
-        <Text
+      <View
+        style={{
+          height: 1,
+          width: '100%',
+          borderRadius: 1,
+          borderWidth: 1,
+          borderColor: '#D9078D',
+          borderStyle: 'dashed',
+          zIndex: 0,
+          marginVertical: 25,
+        }}>
+        <View
           style={{
-            color: '#67308F',
-            fontWeight: '500',
-            marginLeft: 10,
-            fontSize: 15,
-            alignSelf: 'center',
-          }}>
-          Message
-        </Text>
+            position: 'absolute',
+            left: 0,
+            bottom: 0,
+            width: '100%',
+            height: 1,
+            backgroundColor: 'white',
+            zIndex: 1,
+          }}
+        />
       </View>
 
       <TouchableOpacity
@@ -82,7 +93,7 @@ export const OverlayInvite = ({visible, toggleOverlay, token}) => {
             `mailto:example@gmail.com?subject=example&body=I'm on Santooi as ${token.data.user.name}. Install the app to follow my account,  https://happiness-api.demoapp.xyz/invite/${token.data.user.id}`,
           )
         }>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', marginBottom: 10}}>
           <Image
             source={images.mail}
             style={{width: 25, height: 25}}
@@ -94,29 +105,12 @@ export const OverlayInvite = ({visible, toggleOverlay, token}) => {
               fontWeight: '500',
               marginLeft: 10,
               fontSize: 15,
+              alignSelf: 'center',
             }}>
             Mail
           </Text>
         </View>
       </TouchableOpacity>
-
-      <View style={{flexDirection: 'row', marginBottom: 10}}>
-        <Image
-          source={images.mail}
-          style={{width: 25, height: 25}}
-          resizeMode="contain"
-        />
-        <Text
-          style={{
-            color: '#67308F',
-            fontWeight: '500',
-            marginLeft: 10,
-            fontSize: 15,
-            alignSelf: 'center',
-          }}>
-          Mail
-        </Text>
-      </View>
     </Overlay>
   );
 };
