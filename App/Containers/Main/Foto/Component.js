@@ -4,6 +4,7 @@ import { TextInput } from 'react-native-paper';
 import { Divider, Overlay, Image } from 'react-native-elements'
 import images from '../../../Themes/Images'
 import { Screen } from '../../../Transforms/Screen'
+import { Platform } from 'react-native';
 export const HeaderFoto =({isEmpty,pop,loading,setisGaleri,isGaleri,setvisibleBottomSheet,visibleBottomSheet,setonPicked,listFoto}) =>{
     if(isEmpty){
         return(
@@ -116,7 +117,7 @@ export const ListFoto =({listFoto,album,isGaleri,listGaleri,gallery,GalleryReque
                                 let data = []
                                 // console.log(item)
                                 return(
-                                <View style={{ width: Screen.width * 0.5, height: Screen.width * 0.5,padding:Screen.width*0.02}}>
+                                <View style={{ width: Screen.width * 0.5, height: Screen.width * 0.5,paddingHorizontal:Screen.width*0.02}}>
                                     <View style={{backgroundColor:'transparent',width: Screen.width * 0.45, height: Screen.width * 0.45}}>
                                         <Image
                                             onLongPress={()=>{
@@ -274,7 +275,7 @@ export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequ
                 }
                 
             }}>
-            <View style={{ width: Screen.width * 0.4, height: Screen.width * 0.45,marginVertical:16,marginHorizontal:Screen.width*0.05,marginBottom:24}}>
+            <View style={{ width: Screen.width * 0.4, height: Screen.width * 0.45,marginHorizontal:Screen.width*0.05,marginBottom:32}}>
                     {
                     item&&item.col_highlight&&item.col_highlight.length>0?
                     <View style={{backgroundColor:'#FFF6FA',width: Screen.width * 0.4, height: Screen.width * 0.4, borderRadius:20}}>
@@ -283,7 +284,7 @@ export const ThumbnailAlbum =({ listGaleri, visibleBottomSheet, album, AlbumRequ
                         resizeMode={'cover'} 
                         PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
                         />
-                        <View style={{marginTop:8,marginBottom:24}}>
+                        <View style={{marginLeft:8,marginBottom:24}}>
                             <Text style={{color:'white',fontWeight:'700'}}>{item.name}</Text>
                             <Text style={{color:'white', fontWeight:'normal',opacity:0.8}}>{item.col_total} item</Text>
                         </View>
@@ -332,15 +333,15 @@ export const DetailFoto = ({visibleDetailFoto, setvisibleDetailFoto, selectedDet
                     <FlatList
                         data={listAlbum}
                         numColumns={2}
-                        contentContainerStyle={{width:Screen.width,marginLeft:-8,height:Screen.height}}
+                        contentContainerStyle={{width:Platform.OS==='android'?Screen.width:Screen.width*0.9,marginLeft:-8,paddingBottom:12,marginBottom:12}}
                         renderItem={({ item, index })=>{
                             // console.log(item)
                             if(item && item.col_highlight && item.col_highlight.length>0){
                                 return(
                                     <TouchableOpacity onPress={()=> uploadFotoToAlbum(item)}>
-                                        <View style={{backgroundColor:'#FFF6FA',width: Screen.width * 0.45, height:200, borderRadius:20,marginTop:20,marginLeft:12}}>
-                                            <Image source={{uri:item.col_highlight[0].photo.url}} resizeMode='cover' style={{width:Screen.width*0.45, height:150}}/>
-                                            <View style={{marginTop:8,marginBottom:20,marginLeft:12}}>
+                                        <View style={{backgroundColor:'#FFF6FA',width: Screen.width * 0.45, height:160, borderRadius:20,marginTop:20,marginLeft:12}}>
+                                            <Image source={{uri:item.col_highlight[0].photo.url}} resizeMode='cover' style={{width:Screen.width*0.45, height:120,borderRadius:20}}/>
+                                            <View style={{marginBottom:20,marginLeft:12}}>
                                                 <Text style={{color:'black',fontWeight:'700'}}>{item.name}</Text>
                                                 <Text style={{color:'black', fontWeight:'normal',opacity:0.8}}>{item.col_total} {item.col_total>1?'Items':'Item'}</Text>
                                             </View>

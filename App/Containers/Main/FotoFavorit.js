@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Share from 'react-native-share';
 import RNFetchBlob from 'rn-fetch-blob'
 import BottomSheet from 'reanimated-bottom-sheet';
+import { TouchableOpacity as RNGHTouchableOpacity } from 'react-native-gesture-handler';
 import { Button, Overlay } from 'react-native-elements';
 import { showMessage, hideMessage } from "react-native-flash-message";
 //redux
@@ -164,11 +165,11 @@ function FotoFavorit(props) {
         // console.log('album',album.data.rows[21].col_highlight)
         setlisrGaleri(album.data.rows)
         AddAlbumSuccess(null)
-        const payloadRequest ={
-          'token':token && token.data.access_token,
-          'page':1
-        }
-        AlbumRequest(payloadRequest)
+        // const payloadRequest ={
+        //   'token':token && token.data.access_token,
+        //   'page':1
+        // }
+        // AlbumRequest(payloadRequest)
       }
       
     }, [album])
@@ -285,25 +286,6 @@ function FotoFavorit(props) {
           // console.log(params)
     }
 
-    const deleteFoto=()=>{
-      let foto =[]
-      let filter = []
-      onPicked.map(data=>{
-        foto.push({'id':data.id})
-      })
-      const payload = {
-        'token':token && token.data.access_token,
-        'body': {
-          'photos':foto
-        }}
-      listFoto.map(data =>{
-        if(!onPicked.includes(data)){
-            filter.push(data)
-        }
-      })
-      setlistFoto(filter)
-      DeletefotoRequest(payload)
-    }
     const deleteDetailFoto=(params)=>{
       let foto =[]
       let filter = []
@@ -328,19 +310,46 @@ function FotoFavorit(props) {
           'name':nameNewAlbum
         }}
         if(createNewAlbum){
+          setnameNewAlbum('')
           setcreateNewAlbum(false)
+          setvisibleDetailFoto(false)
           AddAlbumRequest(payload)
         }
       
     }
-    const deleteAlbum=()=>{
+
+    const deleteFoto=()=>{
+      let foto =[]
       let filter = []
+      onPicked.map(data=>{
+        foto.push({'id':data.id})
+      })
       const payload = {
         'token':token && token.data.access_token,
-        'idAlbum': onPicked[0].id
-      }
-      // console.log('payload',payload)
-      DeleteAlbumRequest(payload)
+        'body': {
+          'photos':foto
+        }}
+      listFoto.map(data =>{
+        if(!onPicked.includes(data)){
+            filter.push(data)
+        }
+      })
+      setlistFoto(filter)
+      DeletefotoRequest(payload)
+    }
+
+    const deleteAlbum=async()=>{
+      let filter = []
+      await onPicked.map( async data=>{
+        // foto.push({'id':data.id})
+        const payload = {
+          'token':token && token.data.access_token,
+          'idAlbum': data.id
+        }
+        // console.log('payload',payload)
+        await DeleteAlbumRequest(payload)
+      })
+      
       
       // listGaleri.map(data =>{
       //   if(!onPicked.includes(data)){
@@ -365,13 +374,15 @@ function FotoFavorit(props) {
             <View style={{flexDirection:'row',alignItems:'center',width:'95%',marginTop:-50,marginBottom:30}}>
               <Image
                 source={images.delete_outline} 
-                style={{ width: Screen.width * 0.08, height: Screen.width * 0.08}} 
+                style={{ width: Screen.width * 0.09, height: Screen.width * 0.08}} 
                 resizeMode={'stretch'} 
                 PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
               />
               <Text>Hapus</Text>
             </View>
-            <TouchableOpacity onPress={()=>{
+            {
+              Platform.OS==='android'?
+              <RNGHTouchableOpacity onPress={()=>{
                 setwillDelete(false)
                 setonPicked([])
                 setvisibleBottomSheet(false)
@@ -381,14 +392,37 @@ function FotoFavorit(props) {
                   deleteAlbum()
                 }
                 
-              }} style={{width:'100%',alignItems:'center'}}>
+              }} style={{width:Screen.width*0.9,alignItems:'center'}}>
+                <Text 
+                  style={{color:'red',borderWidth:1, borderColor:'red',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Hapus Item</Text>
+              </RNGHTouchableOpacity>:
+              <TouchableOpacity onPress={()=>{
+                setwillDelete(false)
+                setonPicked([])
+                setvisibleBottomSheet(false)
+                if(isGaleri){
+                  deleteFoto()
+                }else{
+                  deleteAlbum()
+                }
+                
+              }} style={{width:Screen.width*0.9,alignItems:'center'}}>
                 <Text 
                   style={{color:'red',borderWidth:1, borderColor:'red',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Hapus Item</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>setwillDelete(false)} style={{width:'100%',alignItems:'center'}}>
-              <Text 
-                style={{color:'rgba(103, 48, 143, 1)',borderWidth:1, borderColor:'rgba(103, 48, 143, 1)',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Batal</Text>
-            </TouchableOpacity>
+            }
+            {
+              Platform.OS==='android'?
+              <RNGHTouchableOpacity onPress={()=>setwillDelete(false)} style={{width:Screen.width*0.9,alignItems:'center'}}>
+                <Text 
+                  style={{color:'rgba(103, 48, 143, 1)',borderWidth:1, borderColor:'rgba(103, 48, 143, 1)',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Batal</Text>
+              </RNGHTouchableOpacity>:
+              <TouchableOpacity onPress={()=>setwillDelete(false)} style={{width:Screen.width*0.9,alignItems:'center'}}>
+                <Text 
+                  style={{color:'rgba(103, 48, 143, 1)',borderWidth:1, borderColor:'rgba(103, 48, 143, 1)',borderRadius:20,padding:12,width:'90%',textAlign:'center',marginBottom:12}}>Batal</Text>
+              </TouchableOpacity>
+            }
+            
           </View>
         )
       }
@@ -402,12 +436,13 @@ function FotoFavorit(props) {
               height: Platform.OS==='android'? Screen.height*0.25: Screen.height*0.35,
               flexDirection:'row',
               justifyContent:'center',
-              alignItems:'flex-start'
+              alignItems:'flex-start',
             }}
           >
             {
               isGaleri && onPicked.length<2?
-              <TouchableOpacity onPress={()=>
+              Platform.OS==='android'?
+              <RNGHTouchableOpacity onPress={()=>
                 {
                   let dataforshare= []
                   onPicked.map(img=>{
@@ -445,7 +480,47 @@ function FotoFavorit(props) {
                   resizeMode={'stretch'} 
                   PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
                 />
-                </TouchableOpacity>:null
+                </RNGHTouchableOpacity>:
+                <TouchableOpacity onPress={()=>
+                  {
+                    let dataforshare= []
+                    onPicked.map(img=>{
+                      dataforshare.push(img.photo.url)
+                    })
+                    // const shareOptions = {
+                    //   title: 'Share file',
+                    //       urls:dataforshare,
+                    //     };
+                    let imagePath = null;
+                    RNFetchBlob.config({
+                        fileCache: true
+                    })
+                    .fetch("GET", dataforshare[0])
+                    // the image is now dowloaded to device's storage
+                    .then(resp => {
+                        // the image path you can use it directly with Image component
+                        imagePath = resp.path();
+                        return resp.readFile("base64");
+                    })
+                    .then(async base64Data => {
+                        var base64Data = `data:image/png;base64,` + base64Data;
+                        // here's base64 encoded image
+                        await Share.open({ 
+                          title: 'Share file',
+                          url: base64Data })
+                        // remove the file from storage
+                        // return fs.unlink(imagePath);
+                    })
+  
+                  }}>
+                  <Image
+                    source={images.share} 
+                    style={{ width: Screen.width * 0.08, height: Screen.width * 0.08}} 
+                    resizeMode={'stretch'} 
+                    PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
+                  />
+                  </TouchableOpacity>
+                :null
             }
            {/* <Button
            style={{width: Screen.width * 0.08, height: Screen.width * 0.08}}
@@ -492,7 +567,17 @@ function FotoFavorit(props) {
             // title="Button with icon component"
           /> */}
             <Text style={{fontSize:16, marginHorizontal:Screen.width*0.25}}>Pilih Item</Text>
-            <TouchableOpacity onPress={()=>setwillDelete(true)}>
+            {
+              Platform.OS==='android'?
+              <RNGHTouchableOpacity onPress={()=>setwillDelete(true)}>
+              <Image
+                source={images.delete_outline} 
+                style={{ width: Screen.width * 0.08, height: Screen.width * 0.08}} 
+                resizeMode={'stretch'} 
+                PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
+              />
+              </RNGHTouchableOpacity>:
+              <TouchableOpacity onPress={()=>setwillDelete(true)}>
               <Image
                 source={images.delete_outline} 
                 style={{ width: Screen.width * 0.08, height: Screen.width * 0.08}} 
@@ -500,6 +585,7 @@ function FotoFavorit(props) {
                 PlaceholderContent={<ActivityIndicator color={'#67308F'} size='large' />}
               />
             </TouchableOpacity>
+            }
           </View>
         )
       }
@@ -517,7 +603,7 @@ function FotoFavorit(props) {
     return (
         <TemplateBackground cover={true}>
             <View style={[styles.mainContainer]}>
-                <View style={{height:'20%'}}>
+                <View style={{height:120}}>
                     {/* <MenuFoto setisGaleri={setisGaleri} isGaleri={isGaleri}/> */}
                     {
                       (!galleryfetching || !loading) &&
@@ -532,7 +618,6 @@ function FotoFavorit(props) {
                       listFoto={listFoto}
                       />
                     }
-                    
                 </View>
                 <ListFoto 
                   listFoto={listFoto} 
@@ -552,7 +637,7 @@ function FotoFavorit(props) {
                   navigate={navigate}
                   />
                 {
-                  !visibleBottomSheet && <View style={{bottom:0,left:Screen.width*0.45,width:Screen.width, paddingVertical:20}}>
+                  !visibleBottomSheet && <View style={{bottom:0,left:0,paddingHorizontal:Screen.width*0.425,width:Screen.width, paddingVertical:20}}>
                     <TouchableOpacity onPress={()=> setVisible(true)}>
                         <Image source={images.addFill} style={{width:52,height:52}} resizeMode='contain' />
                     </TouchableOpacity>
@@ -563,7 +648,7 @@ function FotoFavorit(props) {
             {
               visibleBottomSheet && onPicked.length>0 &&<BottomSheet
               ref={sheetRef}
-              snapPoints={[willDelete?Platform.OS==='ios'?Screen.height*0.525:Screen.height*0.45:Platform.OS==='ios'?Screen.height*0.4:Screen.height*0.35,0,0]}
+              snapPoints={[willDelete?Platform.OS==='ios'?Screen.height*0.525:Screen.height*0.45:Platform.OS==='ios'?Screen.height*0.4:Screen.height*0.35,willDelete?Platform.OS==='ios'?Screen.height*0.525:Screen.height*0.45:Platform.OS==='ios'?Screen.height*0.4:Screen.height*0.35,willDelete?Platform.OS==='ios'?Screen.height*0.525:Screen.height*0.45:Platform.OS==='ios'?Screen.height*0.4:Screen.height*0.35]}
               borderRadius={10}
               renderContent={renderContent}
               enabledContentGestureInteraction={true}
