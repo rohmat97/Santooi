@@ -10,6 +10,7 @@ import styles from '../../Styles/LaunchScreenStyles'
 import BottomSheet from 'reanimated-bottom-sheet';
 import Share from 'react-native-share';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import {check, PERMISSIONS, RESULTS,request} from 'react-native-permissions';
 //redux
 import TokenRedux from '../../../Redux/Authentication/TokenRedux'
 import DetailAlbumRedux from '../../../Redux/FotoFav/DetailAlbumRedux'
@@ -48,7 +49,17 @@ function DetailAlbum(props) {
     const onButtonPress = React.useCallback((type, options) => {
       // console.log(options,type)
         if (type === 'capture') {
-          launchCamera(options, setResponse);
+          if(Platform.OS==='android'){
+            request(PERMISSIONS.ANDROID.CAMERA).then((result) => {
+              // console.log('sucess', result)
+              launchCamera(options, setResponse);
+            });
+          }else{
+            request(PERMISSIONS.IOS.CAMERA).then((result) => {
+              console.log('sucess', result)
+              launchCamera(options, setResponse);
+            });
+          }
           // setVisible(false)
         }  else if(type ==='library'){
           launchImageLibrary(options, setResponse);

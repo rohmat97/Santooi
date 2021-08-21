@@ -86,13 +86,13 @@
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires access to the camera.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
-	<string></string>
+	<string/>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>NSRemindersUsageDescription</key>
 	<string>YOUR TEXT</string>
 	<key>NSMainNibFile</key>
