@@ -246,7 +246,7 @@ function JalanYuk(props) {
                                                 //     </Text>
                                                 // </View>
                                             }
-                                            <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end',marginTop: item.is_featured===0?-Screen.height*0.05:Screen.height*0.015 }}>
+                                            <View style={{ marginLeft: 20, height: Screen.width * 0.3, flexDirection: 'column', justifyContent: 'flex-end',marginTop: item.is_featured===0?-Screen.height*0.05:-Screen.height*0.01 }}>
                                                 {
                                                      item.is_featured===1 &&
                                                      <TouchableOpacity onPress={()=>Linking.openURL(item.url)}>
@@ -328,8 +328,8 @@ function JalanYuk(props) {
                                 paddingBottom:Screen.height*0.1
                             }}
                             renderItem={({ item, index, separators }) => {
-                                // console.log('data', item)
-                                let formatedDate  =new Date (item.place.created_at)
+                                console.log('data', item)
+                                let formatedDate  =new Date (item.updated_at)
                                 let monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
                                 let date =formatedDate.getDate()+' '+monthNames[formatedDate.getMonth()]+' '+formatedDate.getFullYear()+', '+formatedDate.getHours()+':'+formatedDate.getMinutes()
                                 return(

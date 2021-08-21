@@ -26,6 +26,8 @@ import {bindActionCreators} from 'redux';
 import {Image} from 'react-native-elements/dist/image/Image';
 import {ActivityIndicator} from 'react-native';
 import DetailAlbum from './Foto/DetailAlbum';
+import { Avatar } from 'react-native-elements';
+import LinearGradient from 'react-native-linear-gradient';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 function CurhatKeTemanContactDetail(props) {
@@ -144,14 +146,30 @@ function CurhatKeTemanContactDetail(props) {
             </TouchableOpacity>
           </View>
           <View style={{flex: 1, alignItems: 'center'}}>
-            <Image
+            <LinearGradient colors={['#DB068D', '#6F2A91']} style={{borderRadius:100, padding:2, marginRight:8}}>
+                <Avatar
+                        rounded
+                        size='xlarge'
+                        title={dataDetail && dataDetail.name.charAt(0)}
+                        source={dataDetail&&dataDetail.photo? {uri: dataDetail.photo.url}:''}
+                        containerStyle={{
+                          // marginRight:8,
+                          // borderWidth:1,
+                          // borderTopColor:'#DB068D',
+                          // borderLeftColor:'#DB068D',
+                          // borderRightColor:'#6F2A91',
+                          // borderBottomColor:'#6F2A91',
+                        }}
+                      />
+              </LinearGradient>
+            {/* <Image
               source={dataDetail&&dataDetail.photo? {uri: dataDetail.photo.url} : images.pp}
               style={{width: 100, height: 100, alignSelf: 'center', borderRadius:100}}
               resizeMode="contain"
               PlaceholderContent={
                 <ActivityIndicator color={'white'} size={32} />
               }
-            />
+            /> */}
             <Text
               style={{
                 fontWeight: '500',
@@ -173,7 +191,7 @@ function CurhatKeTemanContactDetail(props) {
               flexDirection: 'row',
               paddingHorizontal: 12,
               marginVertical: 30,
-              marginTop: 200,
+              marginTop: 225,
             }}>
             <TouchableOpacity
               onPress={() =>
