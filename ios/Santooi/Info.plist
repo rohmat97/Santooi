@@ -81,20 +81,21 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSContactsUsageDescription</key>
-	<string>YOUR TEXT</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Privacy - Media Library Usage Description
+</string>
 	<key>NSCameraUsageDescription</key>
 	<string>This app requires access to the camera.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>app read contact if needed</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string/>
-	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
-	<string/>
+	<string>app use location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string/>
+	<string>app use location</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<string>app use temporary location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
-	<key>NSRemindersUsageDescription</key>
-	<string>YOUR TEXT</string>
+	<string>app use location with description</string>
 	<key>NSMainNibFile</key>
 	<string>LaunchScreen</string>
 	<key>NSMicrophoneUsageDescription</key>
@@ -103,6 +104,8 @@
 	<string>This app requires access to the photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires access to the photo library.</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>YOUR TEXT</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>

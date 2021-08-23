@@ -13,6 +13,7 @@ import {Colors, Images} from '../Themes';
 import {Screen} from '../Transforms/Screen';
 import images from '../Themes/Images';
 import {RadioButton} from 'react-native-paper';
+import { Platform } from 'react-native';
 export const OverlayInvite = ({visible, toggleOverlay, token}) => {
   // console.log('token',token.data.user.id)
   return (
@@ -39,10 +40,15 @@ export const OverlayInvite = ({visible, toggleOverlay, token}) => {
         />
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() =>
-          Linking.openURL(
-            `sms:?body=I'm on Santooi as ${token.data.user.name}. Install the app to follow my account,  https://happiness-api.demoapp.xyz/invite/${token.data.user.id}`,
-          )
+        onPress={() =>{
+          if(Platform.OS==='ios'){
+            Linking.openURL(`sms:&addresses=&body=I'm on Santooi as ${token.data.user.name}. Install the app to follow my account,  https://happiness-api.demoapp.xyz/invite/${token.data.user.id}`)
+          }else{
+            Linking.openURL(
+              `sms:?body=I'm on Santooi as ${token.data.user.name}. Install the app to follow my account,  https://happiness-api.demoapp.xyz/invite/${token.data.user.id}`,
+            )
+          }
+        }
         }>
         <View style={{flexDirection: 'row'}}>
           <Image
@@ -90,7 +96,7 @@ export const OverlayInvite = ({visible, toggleOverlay, token}) => {
       <TouchableOpacity
         onPress={() =>
           Linking.openURL(
-            `mailto:example@gmail.com?subject=example&body=I'm on Santooi as ${token.data.user.name}. Install the app to follow my account,  https://happiness-api.demoapp.xyz/invite/${token.data.user.id}`,
+            `mailto:?subject=example&body=I'm on Santooi as ${token.data.user.name}. Install the app to follow my account,  https://happiness-api.demoapp.xyz/invite/${token.data.user.id}`,
           )
         }>
         <View style={{flexDirection: 'row', marginBottom: 10}}>
