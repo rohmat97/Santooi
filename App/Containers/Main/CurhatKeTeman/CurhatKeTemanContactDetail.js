@@ -6,26 +6,26 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import API from '../../Services/Api';
-import FixtureAPI from '../../Services/FixtureApi';
-import DebugConfig from '../../Config/DebugConfig';
+import API from '../../../Services/Api';
+import FixtureAPI from '../../../Services/FixtureApi';
+import DebugConfig from '../../../Config/DebugConfig';
 
-import TokenRedux, {success} from '../../Redux/Authentication/TokenRedux';
+import TokenRedux, {success} from '../../../Redux/Authentication/TokenRedux';
 
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
-import {TemplateBackground} from '../../Components/TemplateBackground';
-import images from '../../Themes/Images';
-import styles from '../Styles/LaunchScreenStyles';
-import {Screen} from '../../Transforms/Screen';
+import {TemplateBackground} from '../../../Components/TemplateBackground';
+import images from '../../../Themes/Images';
+import styles from '../../Styles/LaunchScreenStyles';
+import {Screen} from '../../../Transforms/Screen';
 import {connect} from 'react-redux';
-import Images from '../../Themes/Images';
-import RoundedButton from '../../Components/RoundedButton';
-import {Fonts, Colors, Metrics} from '../../Themes/';
+import Images from '../../../Themes/Images';
+import RoundedButton from '../../../Components/RoundedButton';
+import {Fonts, Colors, Metrics} from '../../../Themes';
 import {bindActionCreators} from 'redux';
 import {Image} from 'react-native-elements/dist/image/Image';
 import {ActivityIndicator} from 'react-native';
-import DetailAlbum from './Foto/DetailAlbum';
+import DetailAlbum from '../Foto/DetailAlbum';
 import { Avatar } from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 

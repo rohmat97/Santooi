@@ -17,13 +17,10 @@ target 'Santooi' do
   pod 'Firebase/Firestore'
   
   pod 'RNSound', :path => '../node_modules/react-native-sound'
-
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
-
   pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
-  
   pod 'agora-react-native-rtm', :path => '../node_modules/agora-react-native-rtm'
-
+  pod 'react-native-contacts', :path => '../node_modules/react-native-contacts'
   permissions_path = '../node_modules/react-native-permissions/ios'
 
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera"

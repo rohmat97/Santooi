@@ -8,22 +8,22 @@ import {
   TextInput,
 } from 'react-native';
 
-import TokenRedux from '../../Redux/Authentication/TokenRedux';
+import TokenRedux from '../../../Redux/Authentication/TokenRedux';
 
-import API from '../../Services/Api';
-import FixtureAPI from '../../Services/FixtureApi';
-import DebugConfig from '../../Config/DebugConfig';
+import API from '../../../Services/Api';
+import FixtureAPI from '../../../Services/FixtureApi';
+import DebugConfig from '../../../Config/DebugConfig';
 
-import {TemplateBackground} from '../../Components/TemplateBackground';
-import images from '../../Themes/Images';
-import styles from '../Styles/LaunchScreenStyles';
-import {Screen} from '../../Transforms/Screen';
+import {TemplateBackground} from '../../../Components/TemplateBackground';
+import images from '../../../Themes/Images';
+import styles from '../../Styles/LaunchScreenStyles';
+import {Screen} from '../../../Transforms/Screen';
 import {connect} from 'react-redux';
-import Images from '../../Themes/Images';
-import RoundedButton from '../../Components/RoundedButton';
-import {Fonts, Colors, Metrics} from '../../Themes/';
-import {OverlayInvite} from '../../Components/OverlayInvite';
-import {OverlayPhone} from '../../Components/OverlayPhone';
+import Images from '../../../Themes/Images';
+import RoundedButton from '../../../Components/RoundedButton';
+import {Fonts, Colors, Metrics} from '../../../Themes';
+import {OverlayInvite} from '../../../Components/OverlayInvite';
+import {OverlayPhone} from '../../../Components/OverlayPhone';
 import {bindActionCreators} from 'redux';
 import {FlatList} from 'react-native';
 
