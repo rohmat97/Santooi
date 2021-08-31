@@ -56,8 +56,18 @@ function CurhatKeTemanContact(props) {
       request(PERMISSIONS.ANDROID.READ_CONTACTS).then(async(result) => {
         Contacts.getAll().then(contacts => {
           // update the first record
-          // console.log(`contacts`, contacts[0].phoneNumbers[0].number)
-          setListFriend(contacts)
+          const data = contacts.sort((a,b)=>{
+            if(a.displayName > b.displayName){
+                return 1;
+            }
+            if(a.displayName < b.displayName){
+                return -1;
+            }
+            return 0;
+       });
+
+          console.log(`contacts`, data)
+          setListFriend(data)
         })
       });
     }else{
@@ -174,11 +184,11 @@ function CurhatKeTemanContact(props) {
                   let exist = false;
 
                   if (index === 0) {
-                    newName = item.displayName.substring(0, 1).toUpperCase();
+                    newName = item && item.displayName &&item.displayName.substring(0, 1).toUpperCase();
                     exist = true;
                   } else {
-                    if (item.displayName.substring(0, 1).toUpperCase() !== newName) {
-                      newName = item.displayName.substring(0, 1).toUpperCase();
+                    if (item && item.displayName &&item.displayName.substring(0, 1).toUpperCase() !== newName) {
+                      newName = item && item.displayName &&item.displayName.substring(0, 1).toUpperCase();
                       exist = true;
                     }
                   }
