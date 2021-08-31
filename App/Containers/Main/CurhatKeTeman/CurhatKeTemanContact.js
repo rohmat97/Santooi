@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-
+import Contacts from 'react-native-contacts';
 import TokenRedux from '../../../Redux/Authentication/TokenRedux';
 
 import API from '../../../Services/Api';
@@ -26,6 +26,8 @@ import {OverlayInvite} from '../../../Components/OverlayInvite';
 import {OverlayPhone} from '../../../Components/OverlayPhone';
 import {bindActionCreators} from 'redux';
 import {FlatList} from 'react-native';
+import {check, PERMISSIONS, RESULTS,request} from 'react-native-permissions';
+import { Alert } from 'react-native';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 function CurhatKeTemanContact(props) {
@@ -36,23 +38,7 @@ function CurhatKeTemanContact(props) {
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const [listFriend, setListFriend] = useState([
-    {
-      nama: 'Agus',
-    },
-    {
-      nama: 'Amel',
-    },
-    {
-      nama: 'Alma',
-    },
-    {
-      nama: 'Bagus',
-    },
-    {
-      nama: 'Brian',
-    },
-  ]);
+  const [listFriend, setListFriend] = useState([]);
   const [visiblePhone, setVisiblePhone] = useState(false);
   const toggleOverlayPhone = () => {
     setVisiblePhone(!visiblePhone);
@@ -66,17 +52,36 @@ function CurhatKeTemanContact(props) {
   let newName = '';
 
   useEffect(() => {
-    api
-      .listContact({
-        token: token.data.access_token,
-      })
-      .then((success) => {
-        // console.log(`success`, success.data.data)
-        setListFriend(success.data.data.rows);
-      })
-      .catch((err) => {
-        console.log('err', err);
+    if(Platform.OS==='android'){
+      request(PERMISSIONS.ANDROID.READ_CONTACTS).then(async(result) => {
+        Contacts.getAll().then(contacts => {
+          // update the first record
+          // console.log(`contacts`, contacts[0].phoneNumbers[0].number)
+          setListFriend(contacts)
+        })
       });
+    }else{
+      request(PERMISSIONS.IOS.CONTACTS).then((result) => {
+        // console.log('sucess', result[0].phoneNumbers)
+        Contacts.getAll().then(contacts => {
+          // update the first record
+          console.log(`contacts`, result[0].phoneNumbers)
+          setListFriend(contacts)
+        })
+      });
+    }
+    
+    // api
+    //   .listContact({
+    //     token: token.data.access_token,
+    //   })
+    //   .then((success) => {
+    //     // console.log(`success`, success.data.data)
+    //     setListFriend(success.data.data.rows);
+    //   })
+    //   .catch((err) => {
+    //     console.log('err', err);
+    //   });
   }, []);
   return (
     <TemplateBackground cover={true}>
@@ -169,11 +174,11 @@ function CurhatKeTemanContact(props) {
                   let exist = false;
 
                   if (index === 0) {
-                    newName = item.nama.substring(0, 1).toUpperCase();
+                    newName = item.displayName.substring(0, 1).toUpperCase();
                     exist = true;
                   } else {
-                    if (item.nama.substring(0, 1).toUpperCase() !== newName) {
-                      newName = item.nama.substring(0, 1).toUpperCase();
+                    if (item.displayName.substring(0, 1).toUpperCase() !== newName) {
+                      newName = item.displayName.substring(0, 1).toUpperCase();
                       exist = true;
                     }
                   }
@@ -190,17 +195,36 @@ function CurhatKeTemanContact(props) {
                             marginLeft: -15,
                           }}>
                           <Text style={{color: 'white', fontWeight: 'bold'}}>
-                            {item.nama.substring(0, 1).toUpperCase()}
+                            {item.displayName.substring(0, 1).toUpperCase()}
                           </Text>
                         </View>
                       )}
                       <TouchableOpacity
-                        onPress={() =>
-                          navigation.navigate('CurhatKeTemanContactDetail', {
-                            nama: item.nama,
+                        onPress={() =>{
+                          console.log(item.phoneNumbers[0].number)
+                          api.findFriend({
+                            no: item.phoneNumbers[0].number,
+                            token: token.data.access_token,
                           })
+                            .then((res) => {
+                              if (res.data.data.rows.length > 0) {
+                                // alert('user found')
+                                // toggleOverlayPhone()
+                                navigation.navigate('CurhatKeTemanContactDetail', {
+                                  params: res.data.data.rows[0],
+                                });
+                              } else {
+                                Alert.alert('user not found');
+                              }
+                              // console.log(res.data.data.rows)
+                            })
+                            .catch((err) => console.log("error",err.data))
+                        }
+                          // navigation.navigate('CurhatKeTemanContactDetail', {
+                          //   nama: item.displayName,
+                          // })
                         }>
-                        <Text style={{color: 'white'}}>{item.nama}</Text>
+                        <Text style={{color: 'white'}}>{item.displayName}</Text>
                         <View
                           style={{
                             height: 1,

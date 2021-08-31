@@ -100,9 +100,10 @@ constructor(props){
             placeholder="Enter Your message!"
             onChangeText={(text) => this.setState({text})}
           />
-          <Button onPress={()=> this.send_message()}>
-            <Text>Send</Text>
-          </Button> 
+          <Button 
+          title="Send"
+          onPress={()=> this.send_message()}
+          />
         </View>
       </View>
     );
