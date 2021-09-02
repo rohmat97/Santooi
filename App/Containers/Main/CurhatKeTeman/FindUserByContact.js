@@ -30,7 +30,7 @@ import {check, PERMISSIONS, RESULTS,request} from 'react-native-permissions';
 import { Alert } from 'react-native';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
-function CurhatKeTemanContact(props) {
+function FindUserByContact(props) {
   const {navigation, token} = props;
   const {pop} = navigation;
   const [search, setsearch] = useState(null);
@@ -41,8 +41,7 @@ function CurhatKeTemanContact(props) {
   const [listFriend, setListFriend] = useState([]);
   const [visiblePhone, setVisiblePhone] = useState(false);
   const toggleOverlayPhone = () => {
-    // setVisiblePhone(!visiblePhone);
-    navigation.navigate('FindUserByContact')
+    setVisiblePhone(!visiblePhone);
   };
 
   const [visibleInvite, setVisibleInvite] = useState(false);
@@ -53,46 +52,45 @@ function CurhatKeTemanContact(props) {
   let newName = '';
 
   useEffect(() => {
-    // if(Platform.OS==='android'){
-    //   request(PERMISSIONS.ANDROID.READ_CONTACTS).then(async(result) => {
-    //     Contacts.getAll().then(contacts => {
-    //       // update the first record
-    //       const data = contacts.sort((a,b)=>{
-    //         if(a.displayName > b.displayName){
-    //             return 1;
-    //         }
-    //         if(a.displayName < b.displayName){
-    //             return -1;
-    //         }
-    //         return 0;
-    //    });
-
-    //       console.log(`contacts`, data)
-    //       setListFriend(data)
-    //     })
-    //   });
-    // }else{
-    //   request(PERMISSIONS.IOS.CONTACTS).then((result) => {
-    //     // console.log('sucess', result[0].phoneNumbers)
-    //     Contacts.getAll().then(contacts => {
-    //       // update the first record
-    //       console.log(`contacts`, result[0].phoneNumbers)
-    //       setListFriend(contacts)
-    //     })
-    //   });
-    // }
-    
-    api
-      .listContact({
-        token: token.data.access_token,
-      })
-      .then((success) => {
-        // console.log(`success`, success.data.data)
-        setListFriend(success.data.data.rows);
-      })
-      .catch((err) => {
-        console.log('err', err);
+    if(Platform.OS==='android'){
+      request(PERMISSIONS.ANDROID.READ_CONTACTS).then(async(result) => {
+        Contacts.getAll().then(contacts => {
+          // update the first record
+          const data = contacts.sort((a,b)=>{
+            if(a.displayName > b.displayName){
+                return 1;
+            }
+            if(a.displayName < b.displayName){
+                return -1;
+            }
+            return 0;
+       });
+          console.log(`contacts`, data)
+          setListFriend(data)
+        })
       });
+    }else{
+      request(PERMISSIONS.IOS.CONTACTS).then((result) => {
+        // console.log('sucess', result[0].phoneNumbers)
+        Contacts.getAll().then(contacts => {
+          // update the first record
+          console.log(`contacts`, result[0].phoneNumbers)
+          setListFriend(contacts)
+        })
+      });
+    }
+    
+    // api
+    //   .listContact({
+    //     token: token.data.access_token,
+    //   })
+    //   .then((success) => {
+    //     // console.log(`success`, success.data.data)
+    //     setListFriend(success.data.data.rows);
+    //   })
+    //   .catch((err) => {
+    //     console.log('err', err);
+    //   });
   }, []);
   return (
     <TemplateBackground cover={true}>
@@ -137,7 +135,7 @@ function CurhatKeTemanContact(props) {
           </View>
 
           <ScrollView>
-            <TouchableOpacity onPress={toggleOverlayPhone}>
+            {/* <TouchableOpacity onPress={toggleOverlayPhone}>
               <View
                 style={{
                   flexDirection: 'row',
@@ -145,11 +143,11 @@ function CurhatKeTemanContact(props) {
                   justifyContent: 'space-between',
                   marginBottom: 20,
                 }}>
-                {/* <Image
+                <Image
                   source={images.findByPhone}
                   style={{width: Screen.width * 0.5, maxHeight: 50}}
                   resizeMode="contain"
-                /> */}
+                />
                 <Image
                   source={images.next}
                   style={{width: 20, height: 20}}
@@ -177,7 +175,7 @@ function CurhatKeTemanContact(props) {
                   resizeMode="contain"
                 />
               </View>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             {listFriend.length > 0 ? (
               <FlatList
                 data={listFriend}
@@ -431,4 +429,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(CurhatKeTemanContact);
+)(FindUserByContact);

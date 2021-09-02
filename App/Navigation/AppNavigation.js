@@ -22,6 +22,7 @@ import SelectKonseling from '../Containers/Main/SelectKonseling ';
 import CurhatKeTeman from '../Containers/Main/CurhatKeTeman';
 import CurhatKeTemanContact from '../Containers/Main/CurhatKeTeman/CurhatKeTemanContact';
 import CurhatKeTemanContactDetail from '../Containers/Main/CurhatKeTeman/CurhatKeTemanContactDetail';
+import FindUserByContact from '../Containers/Main/CurhatKeTeman/FindUserByContact'
 import DetailAlbum from '../Containers/Main/Foto/DetailAlbum';
 import Chat from '../Containers/Main/Chat';
 import CallRoom from '../Containers/Main/CurhatKeTeman/CallRoom';
@@ -66,7 +67,8 @@ const MainNavigator = createStackNavigator(
     DetailAlbum: {screen: DetailAlbum},
     CallRoom: { screen: CallRoom },
     VideoRoom: { screen: VideoRoom },
-    SampleChat: { screen: SampleChat }
+    SampleChat: { screen: SampleChat },
+    FindUserByContact: { screen: FindUserByContact }
   },
   {
     // Default config for all screens

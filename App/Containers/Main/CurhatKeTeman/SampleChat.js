@@ -65,7 +65,6 @@ constructor(props){
   loop(){
     let element = [];
      for (var index = 0; index < this.state.messages_array.length; index++) {
-
             element.push(<View key={"container"+index} >
                             <Text key = {"author"+index}>
                               {this.state.messages_array[index].name}
