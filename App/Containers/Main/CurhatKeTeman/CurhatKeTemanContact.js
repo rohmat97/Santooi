@@ -33,12 +33,13 @@ const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 function CurhatKeTemanContact(props) {
   const {navigation, token} = props;
   const {pop} = navigation;
-  const [search, setsearch] = useState(null);
+  const [search, setsearch] = useState('');
   const [conselingCode, setConselingCode] = useState(false);
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [listFriend, setListFriend] = useState([]);
+  const [listContact, setlistContact] = useState([]);
   const [visiblePhone, setVisiblePhone] = useState(false);
   const toggleOverlayPhone = () => {
     // setVisiblePhone(!visiblePhone);
@@ -88,12 +89,24 @@ function CurhatKeTemanContact(props) {
       })
       .then((success) => {
         // console.log(`success`, success.data.data)
+        setlistContact(success.data.data.rows)
         setListFriend(success.data.data.rows);
       })
       .catch((err) => {
         console.log('err', err);
       });
   }, []);
+
+  useEffect(() => {
+    if(search && search.length>0){
+      let filter = listContact.filter(data => {return data.displayName&& data.displayName.toLowerCase().indexOf(search.toLowerCase()) >= 0})
+        // console.log(filter)
+      setListFriend(filter)
+    }else if(search.length<1){
+      setListFriend(listContact)
+    }
+  }, [search])
+
   return (
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
@@ -127,7 +140,7 @@ function CurhatKeTemanContact(props) {
             />
             <TextInput
               style={{color: 'white', flex: 1, marginLeft: 10}}
-              placeholder={'Search a friend...'}
+              placeholder={'Search Contact...'}
               placeholderTextColor="rgba(255, 255, 255, 0.5)"
               value={search}
               onChangeText={(text) => setsearch(text)}
@@ -145,11 +158,11 @@ function CurhatKeTemanContact(props) {
                   justifyContent: 'space-between',
                   marginBottom: 20,
                 }}>
-                {/* <Image
+                <Image
                   source={images.findByPhone}
-                  style={{width: Screen.width * 0.5, maxHeight: 50}}
+                  style={{width: 150, maxHeight: 50}}
                   resizeMode="contain"
-                /> */}
+                />
                 <Image
                   source={images.next}
                   style={{width: 20, height: 20}}
@@ -168,7 +181,7 @@ function CurhatKeTemanContact(props) {
                 }}>
                 <Image
                   source={images.invite}
-                  style={{width: Screen.width * 0.5, maxHeight: 50}}
+                  style={{width: 200, maxHeight: 50}}
                   resizeMode="contain"
                 />
                 <Image
@@ -185,11 +198,11 @@ function CurhatKeTemanContact(props) {
                   let exist = false;
 
                   if (index === 0) {
-                    newName = item && item.displayName &&item.displayName.substring(0, 1).toUpperCase();
+                    newName = item.nama.substring(0, 1).toUpperCase();
                     exist = true;
                   } else {
-                    if (item && item.displayName &&item.displayName.substring(0, 1).toUpperCase() !== newName) {
-                      newName = item && item.displayName &&item.displayName.substring(0, 1).toUpperCase();
+                    if (item.nama.substring(0, 1).toUpperCase() !== newName) {
+                      newName = item.nama.substring(0, 1).toUpperCase();
                       exist = true;
                     }
                   }
@@ -206,7 +219,7 @@ function CurhatKeTemanContact(props) {
                             marginLeft: -15,
                           }}>
                           <Text style={{color: 'white', fontWeight: 'bold'}}>
-                            {item.displayName.substring(0, 1).toUpperCase()}
+                            {item.nama.substring(0, 1).toUpperCase()}
                           </Text>
                         </View>
                       )}
@@ -235,7 +248,7 @@ function CurhatKeTemanContact(props) {
                           //   nama: item.displayName,
                           // })
                         }>
-                        <Text style={{color: 'white'}}>{item.displayName}</Text>
+                        <Text style={{color: 'white'}}>{item.nama}</Text>
                         <View
                           style={{
                             height: 1,

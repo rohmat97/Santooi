@@ -28,17 +28,19 @@ import {bindActionCreators} from 'redux';
 import {FlatList} from 'react-native';
 import {check, PERMISSIONS, RESULTS,request} from 'react-native-permissions';
 import { Alert } from 'react-native';
+import { filter } from 'lodash';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 function FindUserByContact(props) {
   const {navigation, token} = props;
   const {pop} = navigation;
-  const [search, setsearch] = useState(null);
+  const [search, setsearch] = useState('');
   const [conselingCode, setConselingCode] = useState(false);
   const [password, setPassword] = useState('');
   const [errorPassword, setErrorPassword] = useState();
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [listFriend, setListFriend] = useState([]);
+  const [listContact, setlistContact] = useState([]);
   const [visiblePhone, setVisiblePhone] = useState(false);
   const toggleOverlayPhone = () => {
     setVisiblePhone(!visiblePhone);
@@ -51,7 +53,7 @@ function FindUserByContact(props) {
 
   let newName = '';
 
-  useEffect(() => {
+  const RequestContact = ()=>{
     if(Platform.OS==='android'){
       request(PERMISSIONS.ANDROID.READ_CONTACTS).then(async(result) => {
         Contacts.getAll().then(contacts => {
@@ -67,6 +69,7 @@ function FindUserByContact(props) {
        });
           console.log(`contacts`, data)
           setListFriend(data)
+          setlistContact(data)
         })
       });
     }else{
@@ -79,7 +82,10 @@ function FindUserByContact(props) {
         })
       });
     }
-    
+  }
+  useEffect(() => {
+    RequestContact()
+
     // api
     //   .listContact({
     //     token: token.data.access_token,
@@ -92,6 +98,16 @@ function FindUserByContact(props) {
     //     console.log('err', err);
     //   });
   }, []);
+
+  useEffect(() => {
+    if(search && search.length>0){
+      let filter = listContact.filter(data => {return data.displayName&& data.displayName.toLowerCase().indexOf(search.toLowerCase()) >= 0})
+        // console.log(filter)
+      setListFriend(filter)
+    }else if(search.length<1){
+      setListFriend(listContact)
+    }
+  }, [search])
   return (
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
@@ -125,7 +141,7 @@ function FindUserByContact(props) {
             />
             <TextInput
               style={{color: 'white', flex: 1, marginLeft: 10}}
-              placeholder={'Search a friend...'}
+              placeholder={'Search Contact'}
               placeholderTextColor="rgba(255, 255, 255, 0.5)"
               value={search}
               onChangeText={(text) => setsearch(text)}

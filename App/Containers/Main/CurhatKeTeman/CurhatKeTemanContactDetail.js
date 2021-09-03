@@ -72,10 +72,11 @@ function CurhatKeTemanContactDetail(props) {
   }, [dataDetail]);
 
   const addToContact = () => {
+    // console.log(`object`, dataDetail)
     api
       .addFriend({
         body: {
-          id_account: dataDetail.id,
+          id_account: dataDetail.id_account,
         },
         token: token.data.access_token,
       })
@@ -194,10 +195,14 @@ function CurhatKeTemanContactDetail(props) {
               marginTop: 225,
             }}>
             <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('Chat', {
-                  nama: dataDetail ? dataDetail.name : nama,
-                })
+              onPress={() =>{
+                if(dataDetail.is_friend){
+                  navigation.navigate('Chat', {
+                    nama: dataDetail ? dataDetail.name : nama,
+                  })
+                }
+              }
+               
               }
               style={{alignItems: 'center'}}>
               <Image
@@ -207,15 +212,18 @@ function CurhatKeTemanContactDetail(props) {
                   height: Screen.height * 0.07,
                 }}
                 resizeMode="contain"
+                containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
               />
               <Text style={{fontSize: 13, marginTop: 5, color: 'white'}}>
                 Message
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() =>
-                navigation.navigate('CallRoom', {params: dataDetail.agora})
-              }>
+              onPress={() =>{
+                if(dataDetail.is_friend){
+                  navigation.navigate('CallRoom', {params: dataDetail.agora})
+                }
+              }}>
               <View style={{alignItems: 'center'}}>
                 <Image
                   source={images.call}
@@ -224,13 +232,18 @@ function CurhatKeTemanContactDetail(props) {
                     height: Screen.height * 0.07,
                   }}
                   resizeMode="contain"
+                  containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
                 />
                 <Text style={{fontSize: 13, marginTop: 5, color: 'white'}}>
                   Call
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('VideoRoom')}>
+            <TouchableOpacity onPress={() => {
+                if(dataDetail.is_friend){
+                  navigation.navigate('VideoRoom')
+                }
+              }}>
               <View style={{alignItems: 'center'}}>
                 <Image
                   source={images.video}
@@ -239,6 +252,7 @@ function CurhatKeTemanContactDetail(props) {
                     height: Screen.height * 0.07,
                   }}
                   resizeMode="contain"
+                  containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
                 />
                 <Text style={{fontSize: 13, marginTop: 5, color: 'white'}}>
                   Video
