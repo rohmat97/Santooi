@@ -28,16 +28,12 @@ import {bindActionCreators} from 'redux';
 import {FlatList} from 'react-native';
 import {check, PERMISSIONS, RESULTS,request} from 'react-native-permissions';
 import { Alert } from 'react-native';
+import { CustomBottomTab2 } from '../../../Components/CustomBottomTab2';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
-function CurhatKeTemanContact(props) {
-  const {navigation, token} = props;
-  const {pop} = navigation;
+function ListContact(props) {
+  const {navigation, token, page, SetPage} = props;
   const [search, setsearch] = useState('');
-  const [conselingCode, setConselingCode] = useState(false);
-  const [password, setPassword] = useState('');
-  const [errorPassword, setErrorPassword] = useState();
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [listFriend, setListFriend] = useState([]);
   const [listContact, setlistContact] = useState([]);
   const [visiblePhone, setVisiblePhone] = useState(false);
@@ -111,26 +107,6 @@ function CurhatKeTemanContact(props) {
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
         <View style={styles.section}>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <TouchableOpacity
-              onPress={() => pop()}
-              style={{flexDirection: 'row', alignItems: 'center'}}>
-              <Image
-                source={images.arrowBack}
-                style={{width: 18, height: 18}}
-                resizeMode="contain"
-              />
-              <Text
-                style={{
-                  color: '#67308F',
-                  marginLeft: 15,
-                  fontWeight: '500',
-                  fontSize: 16,
-                }}>
-                Curhat ke Teman
-              </Text>
-            </TouchableOpacity>
-          </View>
 
           <View style={styles.containerSearch}>
             <Image
@@ -198,11 +174,11 @@ function CurhatKeTemanContact(props) {
                   let exist = false;
 
                   if (index === 0) {
-                    newName = item && item.displayName &&item.displayName.substring(0, 1).toUpperCase();
+                    newName = item.nama.substring(0, 1).toUpperCase();
                     exist = true;
                   } else {
-                    if (item && item.displayName &&item.displayName.substring(0, 1).toUpperCase() !== newName) {
-                      newName = item && item.displayName &&item.displayName.substring(0, 1).toUpperCase();
+                    if (item.nama.substring(0, 1).toUpperCase() !== newName) {
+                      newName = item.nama.substring(0, 1).toUpperCase();
                       exist = true;
                     }
                   }
@@ -219,7 +195,7 @@ function CurhatKeTemanContact(props) {
                             marginLeft: -15,
                           }}>
                           <Text style={{color: 'white', fontWeight: 'bold'}}>
-                            {item.displayName.substring(0, 1).toUpperCase()}
+                            {item.nama.substring(0, 1).toUpperCase()}
                           </Text>
                         </View>
                       )}
@@ -248,7 +224,7 @@ function CurhatKeTemanContact(props) {
                           //   nama: item.displayName,
                           // })
                         }>
-                        <Text style={{color: 'white'}}>{item.displayName}</Text>
+                        <Text style={{color: 'white'}}>{item.nama}</Text>
                         <View
                           style={{
                             height: 1,
@@ -428,6 +404,7 @@ function CurhatKeTemanContact(props) {
           toggleOverlay={toggleOverlayInvite}
         />
       </View>
+      <CustomBottomTab2 page={page} SetPage={SetPage}/>
     </TemplateBackground>
   );
 }
@@ -444,4 +421,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(CurhatKeTemanContact);
+)(ListContact);

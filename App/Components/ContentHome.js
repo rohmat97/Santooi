@@ -24,7 +24,7 @@ export function ContentHome({navigate}) {
                 </TouchableOpacity>
             </View>
             <View style={{ width: Screen.width, minHeight: 10, flexDirection: 'row', justifyContent: 'space-around', marginTop: 12 }}>
-                <TouchableOpacity onPress={()=> navigate('CurhatKeTemanContact')}>
+                <TouchableOpacity onPress={()=> navigate('CurhatKeTeman')}>
                     <Image source={images.curhat} style={{ height: Screen.width * 0.3, width: Screen.width * 0.3, aspectRatio: 1 }} />
                 </TouchableOpacity>
                 <TouchableOpacity onPress={()=> navigate('Konseling')}>

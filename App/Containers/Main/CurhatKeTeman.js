@@ -21,6 +21,7 @@ import {CustomBottomTab2} from '../../Components/CustomBottomTab2';
 import {Avatar} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import { Chats } from './CurhatKeTeman/Chats';
+import ListContact from './CurhatKeTeman/ListContact';
 
 function CurhatKeTeman(props) {
   const {navigation} = props;
@@ -46,7 +47,9 @@ function CurhatKeTeman(props) {
     case 'Chats':
       return <Chats props={props} page={page} SetPage={SetPage}/>
       break;
-  
+    case 'Contacts':
+      return <ListContact  props={props} page={page} SetPage={SetPage} />
+      break;
     default:
       return  <CustomBottomTab2 page={page} SetPage={SetPage}/>
       break;
