@@ -59,7 +59,7 @@ function FindUserByContact(props) {
             localcontact.push({
               "company": dat.company, 
               "department": dat.department, 
-              "displayName": dat.displayName&&dat.displayName.toUpperCase(), 
+              "displayName": dat.displayName&&dat.displayName, 
               "emailAddresses": dat.emailAddresses, 
               "familyName": dat.familyName, 
               "givenName": dat.givenName, 
@@ -79,10 +79,10 @@ function FindUserByContact(props) {
             })
           })
           const data = localcontact.sort((a,b)=>{
-            if(a.displayName > b.displayName){
+            if(a.displayName && b.displayName && a.displayName.toLowerCase() > b.displayName.toLowerCase()){
                 return 1;
             }
-            if(a.displayName < b.displayName){
+            if(a.displayName && b.displayName && a.displayName.toLowerCase() < b.displayName.toLowerCase()){
                 return -1;
             }
             return 0;
@@ -102,7 +102,7 @@ function FindUserByContact(props) {
             localcontact.push({
               "company": dat.company, 
               "department": dat.department, 
-              "displayName": dat.displayName&&dat.displayName.toUpperCase(), 
+              "displayName": dat.displayName&&dat.displayName, 
               "emailAddresses": dat.emailAddresses, 
               "familyName": dat.familyName, 
               "givenName": dat.givenName, 
@@ -122,10 +122,10 @@ function FindUserByContact(props) {
             })
           })
           const data = localcontact.sort((a,b)=>{
-            if(a.displayName > b.displayName){
+            if(a.displayName && b.displayName && a.displayName.toLowerCase() > b.displayName.toLowerCase()){
                 return 1;
             }
-            if(a.displayName < b.displayName){
+            if(a.displayName && b.displayName && a.displayName.toLowerCase() < b.displayName.toLowerCase()){
                 return -1;
             }
             return 0;
@@ -270,7 +270,7 @@ function FindUserByContact(props) {
                         onPress={() =>{
                           // console.log(item.phoneNumbers[0].number)
                           api.findFriend({
-                            no: item.phoneNumbers&&item.phoneNumbers[0].number,
+                            no: item.phoneNumbers.length>0&&item.phoneNumbers[0].number,
                             token: token.data.access_token,
                           })
                             .then((res) => {
