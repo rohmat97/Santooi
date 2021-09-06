@@ -35,10 +35,6 @@ function FindUserByContact(props) {
   const {navigation, token} = props;
   const {pop} = navigation;
   const [search, setsearch] = useState('');
-  const [conselingCode, setConselingCode] = useState(false);
-  const [password, setPassword] = useState('');
-  const [errorPassword, setErrorPassword] = useState();
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [listFriend, setListFriend] = useState([]);
   const [listContact, setlistContact] = useState([]);
   const [visiblePhone, setVisiblePhone] = useState(false);
@@ -56,9 +52,33 @@ function FindUserByContact(props) {
   const RequestContact = ()=>{
     if(Platform.OS==='android'){
       request(PERMISSIONS.ANDROID.READ_CONTACTS).then(async(result) => {
-        Contacts.getAll().then(contacts => {
+        Contacts.getAll().then(async contacts => {
           // update the first record
-          const data = contacts.sort((a,b)=>{
+          let localcontact =[]
+          await contacts.map(dat=>{
+            localcontact.push({
+              "company": dat.company, 
+              "department": dat.department, 
+              "displayName": dat.displayName&&dat.displayName.toUpperCase(), 
+              "emailAddresses": dat.emailAddresses, 
+              "familyName": dat.familyName, 
+              "givenName": dat.givenName, 
+              "hasThumbnail": dat.hasThumbnail, 
+              "imAddresses": dat.imAddresses, 
+              "jobTitle": dat.jobTitle, 
+              "middleName": dat.middleName, 
+              "note": dat.note, 
+              "phoneNumbers": dat.phoneNumbers, 
+              "postalAddresses": dat.postalAddresses, 
+              "prefix": dat.prefix, 
+              "rawContactId": dat.rawContactId, 
+              "recordID": dat.recordID, 
+              "suffix": dat.suffix, 
+              "thumbnailPath": dat.thumbnailPath, 
+              "urlAddresses": dat.urlAddresses
+            })
+          })
+          const data = localcontact.sort((a,b)=>{
             if(a.displayName > b.displayName){
                 return 1;
             }
@@ -67,7 +87,7 @@ function FindUserByContact(props) {
             }
             return 0;
        });
-          console.log(`contacts`, data)
+          // console.log(`contacts`, contacts[0])
           setListFriend(data)
           setlistContact(data)
         })
@@ -75,28 +95,50 @@ function FindUserByContact(props) {
     }else{
       request(PERMISSIONS.IOS.CONTACTS).then((result) => {
         // console.log('sucess', result[0].phoneNumbers)
-        Contacts.getAll().then(contacts => {
+        Contacts.getAll().then(async contacts => {
           // update the first record
-          console.log(`contacts`, result[0].phoneNumbers)
-          setListFriend(contacts)
+          let localcontact =[]
+          await contacts.map(dat=>{
+            localcontact.push({
+              "company": dat.company, 
+              "department": dat.department, 
+              "displayName": dat.displayName&&dat.displayName.toUpperCase(), 
+              "emailAddresses": dat.emailAddresses, 
+              "familyName": dat.familyName, 
+              "givenName": dat.givenName, 
+              "hasThumbnail": dat.hasThumbnail, 
+              "imAddresses": dat.imAddresses, 
+              "jobTitle": dat.jobTitle, 
+              "middleName": dat.middleName, 
+              "note": dat.note, 
+              "phoneNumbers": dat.phoneNumbers, 
+              "postalAddresses": dat.postalAddresses, 
+              "prefix": dat.prefix, 
+              "rawContactId": dat.rawContactId, 
+              "recordID": dat.recordID, 
+              "suffix": dat.suffix, 
+              "thumbnailPath": dat.thumbnailPath, 
+              "urlAddresses": dat.urlAddresses
+            })
+          })
+          const data = localcontact.sort((a,b)=>{
+            if(a.displayName > b.displayName){
+                return 1;
+            }
+            if(a.displayName < b.displayName){
+                return -1;
+            }
+            return 0;
+       });
+          // console.log(`contacts`, contacts[0])
+          setListFriend(data)
+          setlistContact(data)
         })
       });
     }
   }
   useEffect(() => {
     RequestContact()
-
-    // api
-    //   .listContact({
-    //     token: token.data.access_token,
-    //   })
-    //   .then((success) => {
-    //     // console.log(`success`, success.data.data)
-    //     setListFriend(success.data.data.rows);
-    //   })
-    //   .catch((err) => {
-    //     console.log('err', err);
-    //   });
   }, []);
 
   useEffect(() => {
@@ -202,7 +244,7 @@ function FindUserByContact(props) {
                     newName = item && item.displayName &&item.displayName.substring(0, 1).toUpperCase();
                     exist = true;
                   } else {
-                    if (item && item.displayName &&item.displayName.substring(0, 1).toUpperCase() !== newName) {
+                    if (item && item.displayName &&item.displayName.substring(0, 1).toUpperCase() !== newName.toUpperCase()) {
                       newName = item && item.displayName &&item.displayName.substring(0, 1).toUpperCase();
                       exist = true;
                     }
@@ -226,9 +268,9 @@ function FindUserByContact(props) {
                       )}
                       <TouchableOpacity
                         onPress={() =>{
-                          console.log(item.phoneNumbers[0].number)
+                          // console.log(item.phoneNumbers[0].number)
                           api.findFriend({
-                            no: item.phoneNumbers[0].number,
+                            no: item.phoneNumbers&&item.phoneNumbers[0].number,
                             token: token.data.access_token,
                           })
                             .then((res) => {

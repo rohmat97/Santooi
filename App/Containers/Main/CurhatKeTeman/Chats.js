@@ -17,7 +17,7 @@ import LinearGradient from 'react-native-linear-gradient';
 export const  Chats = ({props,page,SetPage}) => {
   const {navigation} = props;
   const {pop} = navigation;
-  let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+  let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
       return (
         <TemplateBackground cover={true}>
           <View style={styles.mainContainer}>
@@ -56,7 +56,7 @@ export const  Chats = ({props,page,SetPage}) => {
               </TouchableOpacity>
               <FlatList
                 data={x}
-                style={{marginBottom: Screen.height * 0.2}}
+                style={{paddingBottom: Screen.height * 0.1}}
                 renderItem={(e, index) => (
                   <TouchableOpacity
                     onPress={() => navigation.navigate('Chat', {nama: 'Nissa'})}

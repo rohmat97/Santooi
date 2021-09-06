@@ -264,7 +264,7 @@ function CurhatKeTemanContactDetail(props) {
             <View
               style={{
                 height: 1,
-                width: Screen.width,
+                width: Screen.width*0.8,
                 borderRadius: 1,
                 borderWidth: 0.5,
                 borderColor: 'white',
@@ -279,7 +279,7 @@ function CurhatKeTemanContactDetail(props) {
             <View
               style={{
                 height: 1,
-                width: Screen.width,
+                width: Screen.width*0.8,
                 borderRadius: 1,
                 borderWidth: 0.5,
                 borderColor: 'white',
@@ -294,7 +294,7 @@ function CurhatKeTemanContactDetail(props) {
             <View
               style={{
                 height: 1,
-                width: Screen.width,
+                width: Screen.width*0.8,
                 borderRadius: 1,
                 borderWidth: 0.5,
                 borderColor: 'white',

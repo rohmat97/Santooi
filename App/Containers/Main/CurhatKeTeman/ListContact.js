@@ -31,8 +31,9 @@ import { Alert } from 'react-native';
 import { CustomBottomTab2 } from '../../../Components/CustomBottomTab2';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
-function ListContact(props) {
-  const {navigation, token, page, SetPage} = props;
+function ListContact({props,page,SetPage}) {
+
+  const {navigation, token } = props;
   const [search, setsearch] = useState('');
   const [listFriend, setListFriend] = useState([]);
   const [listContact, setlistContact] = useState([]);
@@ -50,35 +51,6 @@ function ListContact(props) {
   let newName = '';
 
   useEffect(() => {
-    // if(Platform.OS==='android'){
-    //   request(PERMISSIONS.ANDROID.READ_CONTACTS).then(async(result) => {
-    //     Contacts.getAll().then(contacts => {
-    //       // update the first record
-    //       const data = contacts.sort((a,b)=>{
-    //         if(a.displayName > b.displayName){
-    //             return 1;
-    //         }
-    //         if(a.displayName < b.displayName){
-    //             return -1;
-    //         }
-    //         return 0;
-    //    });
-
-    //       console.log(`contacts`, data)
-    //       setListFriend(data)
-    //     })
-    //   });
-    // }else{
-    //   request(PERMISSIONS.IOS.CONTACTS).then((result) => {
-    //     // console.log('sucess', result[0].phoneNumbers)
-    //     Contacts.getAll().then(contacts => {
-    //       // update the first record
-    //       console.log(`contacts`, result[0].phoneNumbers)
-    //       setListFriend(contacts)
-    //     })
-    //   });
-    // }
-    
     api
       .listContact({
         token: token.data.access_token,
@@ -107,7 +79,26 @@ function ListContact(props) {
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
         <View style={styles.section}>
-
+          <View style={{flexDirection: 'row'}}>
+                  <TouchableOpacity
+                    onPress={() => navigation.pop()}
+                    style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Image
+                      source={images.arrowBack}
+                      style={{width: 18, height: 18}}
+                      resizeMode="contain"
+                    />
+                    <Text
+                      style={{
+                        color: '#67308F',
+                        marginLeft: 15,
+                        fontWeight: '500',
+                        fontSize: 16,
+                      }}>
+                      Curhat ke Teman
+                    </Text>
+                  </TouchableOpacity>
+                </View>
           <View style={styles.containerSearch}>
             <Image
               source={images.search}
@@ -116,7 +107,7 @@ function ListContact(props) {
             />
             <TextInput
               style={{color: 'white', flex: 1, marginLeft: 10}}
-              placeholder={'Search Contact...'}
+              placeholder={'Search Friend...'}
               placeholderTextColor="rgba(255, 255, 255, 0.5)"
               value={search}
               onChangeText={(text) => setsearch(text)}
@@ -263,133 +254,7 @@ function ListContact(props) {
                 </Text>
               </View>
             )}
-            {/* {listFriend.map((e, index) => {
-              let exist = false;
-
-              if (index === 0) {
-                newName = e.nama.substring(0, 1).toUpperCase();
-                exist = true;
-              } else {
-                if (e.nama.substring(0, 1).toUpperCase() !== newName) {
-                  newName = e.nama.substring(0, 1).toUpperCase();
-                  exist = true;
-                }
-              }
-
-              return (
-                <View key={index}>
-                  {exist && (
-                    <View
-                      style={{
-                        backgroundColor: '#67308F',
-                        width: Screen.width,
-                        paddingVertical: 5,
-                        paddingHorizontal: 20,
-                        marginBottom: 20,
-                        marginLeft: -15,
-                      }}>
-                      <Text style={{color: 'white', fontWeight: 'bold'}}>
-                        {e.nama.substring(0, 1).toUpperCase()}
-                      </Text>
-                    </View>
-                  )}
-                  <TouchableOpacity
-                    onPress={() =>
-                      navigation.navigate('CurhatKeTemanContactDetail', {
-                        nama: e.nama,
-                      })
-                    }>
-                    <Text style={{color: 'white'}}>{e.nama}</Text>
-                    <View
-                      style={{
-                        height: 1,
-                        width: Screen.width,
-                        borderRadius: 1,
-                        borderWidth: 0.5,
-                        borderColor: 'white',
-                        zIndex: 0,
-                        marginVertical: 15,
-                      }}
-                    />
-                  </TouchableOpacity>
-                </View>
-              );
-            })} */}
           </ScrollView>
-
-          {/* <View
-            style={{
-              backgroundColor: '#67308F',
-              width: Screen.width,
-              paddingVertical: 5,
-              paddingHorizontal: 20,
-              marginVertical: 20,
-              marginLeft: -15,
-            }}>
-            <Text style={{color: 'white', fontWeight: 'bold'}}>A</Text>
-          </View>
-
-          <Text style={{color: 'white'}}>Amel</Text>
-          <View
-            style={{
-              height: 1,
-              width: Screen.width,
-              borderRadius: 1,
-              borderWidth: 0.5,
-              borderColor: 'white',
-              zIndex: 0,
-              marginVertical: 15,
-            }}
-          />
-          <Text style={{color: 'white'}}>Alma</Text>
-          <View
-            style={{
-              height: 1,
-              width: Screen.width,
-              borderRadius: 1,
-              borderWidth: 0.5,
-              borderColor: 'white',
-              zIndex: 0,
-              marginVertical: 15,
-            }}
-          />
-
-          <View
-            style={{
-              backgroundColor: '#67308F',
-              width: Screen.width,
-              paddingVertical: 5,
-              paddingHorizontal: 20,
-              marginVertical: 20,
-              marginLeft: -15,
-            }}>
-            <Text style={{color: 'white', fontWeight: 'bold'}}>B</Text>
-          </View>
-
-          <Text style={{color: 'white'}}>Bayu</Text>
-          <View
-            style={{
-              height: 1,
-              width: Screen.width,
-              borderRadius: 1,
-              borderWidth: 0.5,
-              borderColor: 'white',
-              zIndex: 0,
-              marginVertical: 15,
-            }}
-          />
-          <Text style={{color: 'white'}}>Brian</Text>
-          <View
-            style={{
-              height: 1,
-              width: Screen.width,
-              borderRadius: 1,
-              borderWidth: 0.5,
-              borderColor: 'white',
-              zIndex: 0,
-              marginVertical: 15,
-            }}
-          /> */}
         </View>
         <OverlayPhone
           api={api.findFriend}

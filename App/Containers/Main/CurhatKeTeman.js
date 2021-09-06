@@ -23,6 +23,9 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Chats } from './CurhatKeTeman/Chats';
 import ListContact from './CurhatKeTeman/ListContact';
 
+import TokenRedux from '../../Redux/Authentication/TokenRedux';
+import { bindActionCreators } from 'redux';
+
 function CurhatKeTeman(props) {
   const {navigation} = props;
   const {pop} = navigation;
@@ -56,5 +59,13 @@ function CurhatKeTeman(props) {
   }
   
 }
+const mapStateToProps = (state) => {
+  return {
+    token: state.token.payload,
+  };
+};
 
-export default connect(null, null)(CurhatKeTeman);
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(Object.assign(TokenRedux), dispatch);
+};
+export default connect(mapStateToProps,mapDispatchToProps)(CurhatKeTeman);

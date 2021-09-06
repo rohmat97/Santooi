@@ -140,7 +140,7 @@ function CurhatKeTemanContact(props) {
             />
             <TextInput
               style={{color: 'white', flex: 1, marginLeft: 10}}
-              placeholder={'Search Contact...'}
+              placeholder={'Search Friend...'}
               placeholderTextColor="rgba(255, 255, 255, 0.5)"
               value={search}
               onChangeText={(text) => setsearch(text)}

@@ -9,7 +9,7 @@ import { TouchableOpacity } from 'react-native';
 export const CustomBottomTab2 = ({page, SetPage }) => {
     return (
         <View style={{ flex: 1, width: Screen.width, alignItems: 'center' }}>
-            <View style={{ backgroundColor: 'white', bottom: 90, width: "100%", alignItems: 'center', justifyContent: 'space-around', height: Screen.height * 0.1, maxHeight: 80, flexDirection: 'row', paddingHorizontal: 12,position:'absolute',bottom:0 }}>
+            <View style={{ backgroundColor: 'white', width: "100%", alignItems: 'center', justifyContent: 'space-around', height:70, flexDirection: 'row', paddingHorizontal: 12,position:'absolute',bottom:0,marginBottom:-6 }}>
                 <TouchableOpacity onPress={()=> SetPage('Chats')}>
                     <View style={{ alignItems: 'center' }}>
                         <Image
