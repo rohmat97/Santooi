@@ -56,27 +56,29 @@ function FindUserByContact(props) {
           // update the first record
           let localcontact =[]
           await contacts.map(dat=>{
-            localcontact.push({
-              "company": dat.company, 
-              "department": dat.department, 
-              "displayName": dat.displayName&&dat.displayName, 
-              "emailAddresses": dat.emailAddresses, 
-              "familyName": dat.familyName, 
-              "givenName": dat.givenName, 
-              "hasThumbnail": dat.hasThumbnail, 
-              "imAddresses": dat.imAddresses, 
-              "jobTitle": dat.jobTitle, 
-              "middleName": dat.middleName, 
-              "note": dat.note, 
-              "phoneNumbers": dat.phoneNumbers, 
-              "postalAddresses": dat.postalAddresses, 
-              "prefix": dat.prefix, 
-              "rawContactId": dat.rawContactId, 
-              "recordID": dat.recordID, 
-              "suffix": dat.suffix, 
-              "thumbnailPath": dat.thumbnailPath, 
-              "urlAddresses": dat.urlAddresses
-            })
+            if(dat.displayName&&dat.phoneNumbers){
+              localcontact.push({
+                // "company": dat.company, 
+                // "department": dat.department, 
+                "displayName": dat.displayName&&dat.displayName, 
+                // "emailAddresses": dat.emailAddresses, 
+                // "familyName": dat.familyName, 
+                // "givenName": dat.givenName, 
+                // "hasThumbnail": dat.hasThumbnail, 
+                // "imAddresses": dat.imAddresses, 
+                // "jobTitle": dat.jobTitle, 
+                // "middleName": dat.middleName, 
+                // "note": dat.note, 
+                "phoneNumbers": dat.phoneNumbers, 
+                // "postalAddresses": dat.postalAddresses, 
+                // "prefix": dat.prefix, 
+                // "rawContactId": dat.rawContactId, 
+                // "recordID": dat.recordID, 
+                // "suffix": dat.suffix, 
+                // "thumbnailPath": dat.thumbnailPath, 
+                // "urlAddresses": dat.urlAddresses
+              })
+            }
           })
           const data = localcontact.sort((a,b)=>{
             if(a.displayName && b.displayName && a.displayName.toLowerCase() > b.displayName.toLowerCase()){
@@ -99,27 +101,30 @@ function FindUserByContact(props) {
           // update the first record
           let localcontact =[]
           await contacts.map(dat=>{
-            localcontact.push({
-              // "company": dat.company, 
-              // "department": dat.department, 
-              "displayName": dat.displayName&&dat.displayName, 
-              "emailAddresses": dat.emailAddresses, 
-              // "familyName": dat.familyName, 
-              // "givenName": dat.givenName, 
-              // "hasThumbnail": dat.hasThumbnail, 
-              // "imAddresses": dat.imAddresses, 
-              // "jobTitle": dat.jobTitle, 
-              // "middleName": dat.middleName, 
-              // "note": dat.note, 
-              // "phoneNumbers": dat.phoneNumbers, 
-              // "postalAddresses": dat.postalAddresses, 
-              // "prefix": dat.prefix, 
-              // "rawContactId": dat.rawContactId, 
-              // "recordID": dat.recordID, 
-              // "suffix": dat.suffix, 
-              // "thumbnailPath": dat.thumbnailPath, 
-              // "urlAddresses": dat.urlAddresses
-            })
+            if(dat.displayName&&dat.phoneNumbers){
+              localcontact.push({
+                // "company": dat.company, 
+                // "department": dat.department, 
+                "displayName": dat.displayName&&dat.displayName, 
+                // "emailAddresses": dat.emailAddresses, 
+                // "familyName": dat.familyName, 
+                // "givenName": dat.givenName, 
+                // "hasThumbnail": dat.hasThumbnail, 
+                // "imAddresses": dat.imAddresses, 
+                // "jobTitle": dat.jobTitle, 
+                // "middleName": dat.middleName, 
+                // "note": dat.note, 
+                "phoneNumbers": dat.phoneNumbers, 
+                // "postalAddresses": dat.postalAddresses, 
+                // "prefix": dat.prefix, 
+                // "rawContactId": dat.rawContactId, 
+                // "recordID": dat.recordID, 
+                // "suffix": dat.suffix, 
+                // "thumbnailPath": dat.thumbnailPath, 
+                // "urlAddresses": dat.urlAddresses
+              })
+            }
+            
           })
           const data = localcontact.sort((a,b)=>{
             if(a.displayName && b.displayName && a.displayName.toLowerCase() > b.displayName.toLowerCase()){
