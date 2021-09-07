@@ -100,25 +100,25 @@ function FindUserByContact(props) {
           let localcontact =[]
           await contacts.map(dat=>{
             localcontact.push({
-              "company": dat.company, 
-              "department": dat.department, 
+              // "company": dat.company, 
+              // "department": dat.department, 
               "displayName": dat.displayName&&dat.displayName, 
               "emailAddresses": dat.emailAddresses, 
-              "familyName": dat.familyName, 
-              "givenName": dat.givenName, 
-              "hasThumbnail": dat.hasThumbnail, 
-              "imAddresses": dat.imAddresses, 
-              "jobTitle": dat.jobTitle, 
-              "middleName": dat.middleName, 
-              "note": dat.note, 
-              "phoneNumbers": dat.phoneNumbers, 
-              "postalAddresses": dat.postalAddresses, 
-              "prefix": dat.prefix, 
-              "rawContactId": dat.rawContactId, 
-              "recordID": dat.recordID, 
-              "suffix": dat.suffix, 
-              "thumbnailPath": dat.thumbnailPath, 
-              "urlAddresses": dat.urlAddresses
+              // "familyName": dat.familyName, 
+              // "givenName": dat.givenName, 
+              // "hasThumbnail": dat.hasThumbnail, 
+              // "imAddresses": dat.imAddresses, 
+              // "jobTitle": dat.jobTitle, 
+              // "middleName": dat.middleName, 
+              // "note": dat.note, 
+              // "phoneNumbers": dat.phoneNumbers, 
+              // "postalAddresses": dat.postalAddresses, 
+              // "prefix": dat.prefix, 
+              // "rawContactId": dat.rawContactId, 
+              // "recordID": dat.recordID, 
+              // "suffix": dat.suffix, 
+              // "thumbnailPath": dat.thumbnailPath, 
+              // "urlAddresses": dat.urlAddresses
             })
           })
           const data = localcontact.sort((a,b)=>{
@@ -244,7 +244,7 @@ function FindUserByContact(props) {
                     newName = item && item.displayName &&item.displayName.substring(0, 1).toUpperCase();
                     exist = true;
                   } else {
-                    if (item && item.displayName &&item.displayName.substring(0, 1).toUpperCase() !== newName.toUpperCase()) {
+                    if (item && item.displayName &&item.displayName.substring(0, 1).toLowerCase() !== newName.toLowerCase()) {
                       newName = item && item.displayName &&item.displayName.substring(0, 1).toUpperCase();
                       exist = true;
                     }
