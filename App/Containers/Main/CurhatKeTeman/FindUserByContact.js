@@ -96,48 +96,49 @@ function FindUserByContact(props) {
       });
     }else{
       request(PERMISSIONS.IOS.CONTACTS).then((result) => {
-        // console.log('sucess', result[0].phoneNumbers)
+        // console.log('sucess', result)
         Contacts.getAll().then(async contacts => {
-          // update the first record
-          let localcontact =[]
-          await contacts.map(dat=>{
-            if(dat.displayName&&dat.phoneNumbers){
-              localcontact.push({
-                // "company": dat.company, 
-                // "department": dat.department, 
-                "displayName": dat.displayName&&dat.displayName, 
-                // "emailAddresses": dat.emailAddresses, 
-                // "familyName": dat.familyName, 
-                // "givenName": dat.givenName, 
-                // "hasThumbnail": dat.hasThumbnail, 
-                // "imAddresses": dat.imAddresses, 
-                // "jobTitle": dat.jobTitle, 
-                // "middleName": dat.middleName, 
-                // "note": dat.note, 
-                "phoneNumbers": dat.phoneNumbers, 
-                // "postalAddresses": dat.postalAddresses, 
-                // "prefix": dat.prefix, 
-                // "rawContactId": dat.rawContactId, 
-                // "recordID": dat.recordID, 
-                // "suffix": dat.suffix, 
-                // "thumbnailPath": dat.thumbnailPath, 
-                // "urlAddresses": dat.urlAddresses
-              })
-            }
-            
-          })
-          const data = localcontact.sort((a,b)=>{
-            if(a.displayName && b.displayName && a.displayName.toLowerCase() > b.displayName.toLowerCase()){
-                return 1;
-            }
-            if(a.displayName && b.displayName && a.displayName.toLowerCase() < b.displayName.toLowerCase()){
-                return -1;
-            }
-            return 0;
-       });
-          // console.log(`contacts`, contacts[0])
-          setListFriend(data)
-          setlistContact(data)
+            // update the first record
+            // console.log(`contacts`, contacts)
+            let localcontact =[]
+            await contacts.map(dat=>{
+              console.log(dat)
+              if((dat.familyName||dat.givenName)&&dat.phoneNumbers){
+                localcontact.push({
+                  // "company": dat.company, 
+                  // "department": dat.department, 
+                  "displayName":dat.familyName+' '+dat.givenName, 
+                  // "emailAddresses": dat.emailAddresses, 
+                  // "familyName": dat.familyName, 
+                  // "givenName": dat.givenName, 
+                  // "hasThumbnail": dat.hasThumbnail, 
+                  // "imAddresses": dat.imAddresses, 
+                  // "jobTitle": dat.jobTitle, 
+                  // "middleName": dat.middleName, 
+                  // "note": dat.note, 
+                  "phoneNumbers": dat.phoneNumbers, 
+                  // "postalAddresses": dat.postalAddresses, 
+                  // "prefix": dat.prefix, 
+                  // "rawContactId": dat.rawContactId, 
+                  // "recordID": dat.recordID, 
+                  // "suffix": dat.suffix, 
+                  // "thumbnailPath": dat.thumbnailPath, 
+                  // "urlAddresses": dat.urlAddresses
+                })
+              }
+            })
+            await localcontact.sort((a,b)=>{
+              if(a.displayName && b.displayName && a.displayName.toLowerCase() > b.displayName.toLowerCase()){
+                  return 1;
+              }
+              if(a.displayName && b.displayName && a.displayName.toLowerCase() < b.displayName.toLowerCase()){
+                  return -1;
+              }
+              return 0;
+         });
+           console.log(localcontact)
+            setListFriend(localcontact)
+            setlistContact(localcontact)
         })
       });
     }
