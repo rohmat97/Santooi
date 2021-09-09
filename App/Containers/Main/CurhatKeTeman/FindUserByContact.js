@@ -56,7 +56,7 @@ function FindUserByContact(props) {
           // update the first record
           let localcontact =[]
           await contacts.map(dat=>{
-            if(dat.displayName&&dat.phoneNumbers){
+            if(dat.displayName&&dat.displayName.length>0&&dat.phoneNumbers){
               localcontact.push({
                 // "company": dat.company, 
                 // "department": dat.department, 
@@ -286,7 +286,8 @@ function FindUserByContact(props) {
                                   params: res.data.data.rows[0],
                                 });
                               } else {
-                                Alert.alert('user not found');
+                                console.log(res.data)
+                                Alert.alert('','User belum terdaftar pada aplikasi Santooi');
                               }
                               // console.log(res.data.data.rows)
                             })
