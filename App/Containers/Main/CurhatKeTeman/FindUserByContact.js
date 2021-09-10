@@ -104,41 +104,31 @@ function FindUserByContact(props) {
             await contacts.map(dat=>{
               console.log(dat)
               if((dat.familyName||dat.givenName)&&dat.phoneNumbers){
-                localcontact.push({
-                  // "company": dat.company, 
-                  // "department": dat.department, 
-                  "displayName":dat.familyName+' '+dat.givenName, 
-                  // "emailAddresses": dat.emailAddresses, 
-                  // "familyName": dat.familyName, 
-                  // "givenName": dat.givenName, 
-                  // "hasThumbnail": dat.hasThumbnail, 
-                  // "imAddresses": dat.imAddresses, 
-                  // "jobTitle": dat.jobTitle, 
-                  // "middleName": dat.middleName, 
-                  // "note": dat.note, 
-                  "phoneNumbers": dat.phoneNumbers, 
-                  // "postalAddresses": dat.postalAddresses, 
-                  // "prefix": dat.prefix, 
-                  // "rawContactId": dat.rawContactId, 
-                  // "recordID": dat.recordID, 
-                  // "suffix": dat.suffix, 
-                  // "thumbnailPath": dat.thumbnailPath, 
-                  // "urlAddresses": dat.urlAddresses
-                })
+                if(dat.familyName&&dat.familyName.length>1){
+                  localcontact.push({
+                    "displayName":dat.familyName+' '+dat.givenName,
+                    "phoneNumbers": dat.phoneNumbers,
+                  })
+                }else{
+                  localcontact.push({
+                    "displayName":dat.givenName,
+                    "phoneNumbers": dat.phoneNumbers,
+                  })
+                }
+                  
               }
             })
-            await localcontact.sort((a,b)=>{
-              if(a.displayName && b.displayName && a.displayName.toLowerCase() > b.displayName.toLowerCase()){
+            const data = localcontact.sort((a,b)=>{
+              if(a.displayName && b.displayName && a.displayName.substring(0, 1).toLowerCase() > b.displayName.substring(0, 1).toLowerCase()){
                   return 1;
               }
-              if(a.displayName && b.displayName && a.displayName.toLowerCase() < b.displayName.toLowerCase()){
+              if(a.displayName && b.displayName && a.displayName.substring(0, 1).toLowerCase() < b.displayName.substring(0, 1).toLowerCase()){
                   return -1;
               }
               return 0;
          });
-           console.log(localcontact)
-            setListFriend(localcontact)
-            setlistContact(localcontact)
+            setListFriend(data)
+            setlistContact(data)
         })
       });
     }
@@ -194,52 +184,10 @@ function FindUserByContact(props) {
               value={search}
               onChangeText={(text) => setsearch(text)}
               keyboardType={'default'}
-              // inputRef={(ref) => (this.number = ref)}
             />
           </View>
 
           <ScrollView>
-            {/* <TouchableOpacity onPress={toggleOverlayPhone}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: 20,
-                }}>
-                <Image
-                  source={images.findByPhone}
-                  style={{width: Screen.width * 0.5, maxHeight: 50}}
-                  resizeMode="contain"
-                />
-                <Image
-                  source={images.next}
-                  style={{width: 20, height: 20}}
-                  resizeMode="contain"
-                />
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={toggleOverlayInvite}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: 22,
-                }}>
-                <Image
-                  source={images.invite}
-                  style={{width: Screen.width * 0.5, maxHeight: 50}}
-                  resizeMode="contain"
-                />
-                <Image
-                  source={images.next}
-                  style={{width: 20, height: 20}}
-                  resizeMode="contain"
-                />
-              </View>
-            </TouchableOpacity> */}
             {listFriend.length > 0 ? (
               <FlatList
                 data={listFriend}
