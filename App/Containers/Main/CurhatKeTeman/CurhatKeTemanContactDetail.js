@@ -220,6 +220,7 @@ function CurhatKeTemanContactDetail(props) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>{
+                console.log(dataDetail)
                 if(dataDetail.is_friend){
                   navigation.navigate('CallRoom', {params: dataDetail.agora})
                 }

@@ -57,8 +57,17 @@ function ListContact({props,page,SetPage}) {
       })
       .then((success) => {
         // console.log(`success`, success.data.data)
-        setlistContact(success.data.data.rows)
-        setListFriend(success.data.data.rows);
+        const data = success.data.data.rows.sort((a,b)=>{
+          if(a.friend.name && b.friend.name && a.friend.name.toLowerCase() > b.friend.name.toLowerCase()){
+              return 1;
+          }
+          if(a.friend.name && b.friend.name && a.friend.name.toLowerCase() < b.friend.name.toLowerCase()){
+              return -1;
+          }
+          return 0;
+     });
+        setlistContact(data)
+        setListFriend(data);
       })
       .catch((err) => {
         console.log('err', err);
@@ -77,200 +86,181 @@ function ListContact({props,page,SetPage}) {
 
   return (
     <TemplateBackground cover={true}>
-      <View style={styles.mainContainer}>
-        <View style={styles.section}>
-          <View style={{flexDirection: 'row'}}>
-                  <TouchableOpacity
-                    onPress={() => navigation.pop()}
-                    style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Image
-                      source={images.arrowBack}
-                      style={{width: 18, height: 18}}
-                      resizeMode="contain"
-                    />
-                    <Text
-                      style={{
-                        color: '#67308F',
-                        marginLeft: 15,
-                        fontWeight: '500',
-                        fontSize: 16,
-                      }}>
-                      Curhat ke Teman
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-          <View style={styles.containerSearch}>
-            <Image
-              source={images.search}
-              style={{width: 25, height: 25}}
-              resizeMode="contain"
-            />
-            <TextInput
-              style={{color: 'white', flex: 1, marginLeft: 10}}
-              placeholder={'Search Friend...'}
-              placeholderTextColor="rgba(255, 255, 255, 0.5)"
-              value={search}
-              onChangeText={(text) => setsearch(text)}
-              keyboardType={'default'}
-              // inputRef={(ref) => (this.number = ref)}
-            />
-          </View>
+    <View style={styles.mainContainer}>
+      <View style={styles.section}>
+        <View style={styles.containerSearch}>
+          <Image
+            source={images.search}
+            style={{width: 25, height: 25}}
+            resizeMode="contain"
+          />
+          <TextInput
+            style={{color: 'white', flex: 1, marginLeft: 10}}
+            placeholder={'Search Friend...'}
+            placeholderTextColor="rgba(255, 255, 255, 0.5)"
+            value={search}
+            onChangeText={(text) => setsearch(text)}
+            keyboardType={'default'}
+            // inputRef={(ref) => (this.number = ref)}
+          />
+        </View>
 
-          <ScrollView>
-            <TouchableOpacity onPress={toggleOverlayPhone}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: 20,
-                }}>
-                <Image
-                  source={images.findByPhone}
-                  style={{width: 150, maxHeight: 50}}
-                  resizeMode="contain"
-                />
-                <Image
-                  source={images.next}
-                  style={{width: 20, height: 20}}
-                  resizeMode="contain"
-                />
-              </View>
-            </TouchableOpacity>
+        <ScrollView>
+          <TouchableOpacity onPress={toggleOverlayPhone}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 20,
+              }}>
+              <Image
+                source={images.findByPhone}
+                style={{width: 150, maxHeight: 50}}
+                resizeMode="contain"
+              />
+              <Image
+                source={images.next}
+                style={{width: 20, height: 20}}
+                resizeMode="contain"
+              />
+            </View>
+          </TouchableOpacity>
 
-            <TouchableOpacity onPress={toggleOverlayInvite}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: 22,
-                }}>
-                <Image
-                  source={images.invite}
-                  style={{width: 200, maxHeight: 50}}
-                  resizeMode="contain"
-                />
-                <Image
-                  source={images.next}
-                  style={{width: 20, height: 20}}
-                  resizeMode="contain"
-                />
-              </View>
-            </TouchableOpacity>
-            {listFriend.length > 0 ? (
-              <FlatList
-                data={listFriend}
-                renderItem={({item, index}) => {
-                  let exist = false;
+          <TouchableOpacity onPress={toggleOverlayInvite}>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: 22,
+              }}>
+              <Image
+                source={images.invite}
+                style={{width: 200, maxHeight: 50}}
+                resizeMode="contain"
+              />
+              <Image
+                source={images.next}
+                style={{width: 20, height: 20}}
+                resizeMode="contain"
+              />
+            </View>
+          </TouchableOpacity>
+          {listFriend.length > 0 ? (
+            <FlatList
+              data={listFriend}
+              renderItem={({item, index}) => {
+                let exist = false;
 
-                  if (index === 0) {
-                    newName = item.nama.substring(0, 1).toUpperCase();
+                if (index === 0) {
+                  newName = item && item.friend.name &&item.friend.name.substring(0, 1).toUpperCase();
+                  exist = true;
+                } else {
+                  if (item && item.friend.name &&item.friend.name.substring(0, 1).toUpperCase() !== newName) {
+                    newName = item && item.friend.name &&item.friend.name.substring(0, 1).toUpperCase();
                     exist = true;
-                  } else {
-                    if (item.nama.substring(0, 1).toUpperCase() !== newName) {
-                      newName = item.nama.substring(0, 1).toUpperCase();
-                      exist = true;
-                    }
                   }
-                  return (
-                    <View key={index}>
-                      {exist && (
-                        <View
-                          style={{
-                            backgroundColor: '#67308F',
-                            width: Screen.width,
-                            paddingVertical: 5,
-                            paddingHorizontal: 20,
-                            marginBottom: 20,
-                            marginLeft: -15,
-                          }}>
-                          <Text style={{color: 'white', fontWeight: 'bold'}}>
-                            {item.nama.substring(0, 1).toUpperCase()}
-                          </Text>
-                        </View>
-                      )}
-                      <TouchableOpacity
-                        onPress={() =>{
-                          console.log(item.phoneNumbers[0].number)
-                          api.findFriend({
-                            no: item.phoneNumbers[0].number,
-                            token: token.data.access_token,
+                }
+                return (
+                  <View key={index}>
+                    {exist && (
+                      <View
+                        style={{
+                          backgroundColor: '#67308F',
+                          width: Screen.width,
+                          paddingVertical: 5,
+                          paddingHorizontal: 20,
+                          marginBottom: 20,
+                          marginLeft: -15,
+                        }}>
+                        <Text style={{color: 'white', fontWeight: 'bold'}}>
+                          {item.friend.name.substring(0, 1).toUpperCase()}
+                        </Text>
+                      </View>
+                    )}
+                    <TouchableOpacity
+                      onPress={() =>{
+                        // console.log(item.friend.number)
+                        api.findFriend({
+                          no: item.friend&&item.friend.number,
+                          token: token.data.access_token,
+                        })
+                          .then((res) => {
+                            if (res.data.data.rows.length > 0) {
+                              // alert('user found')
+                              // toggleOverlayPhone()
+                              navigation.navigate('CurhatKeTemanContactDetail', {
+                                params: res.data.data.rows[0],
+                              });
+                            } else {
+                              Alert.alert('user not found');
+                            }
+                            // console.log(res.data.data.rows)
                           })
-                            .then((res) => {
-                              if (res.data.data.rows.length > 0) {
-                                // alert('user found')
-                                // toggleOverlayPhone()
-                                navigation.navigate('CurhatKeTemanContactDetail', {
-                                  params: res.data.data.rows[0],
-                                });
-                              } else {
-                                Alert.alert('user not found');
-                              }
-                              // console.log(res.data.data.rows)
-                            })
-                            .catch((err) => console.log("error",err.data))
-                        }
-                          // navigation.navigate('CurhatKeTemanContactDetail', {
-                          //   nama: item.displayName,
-                          // })
-                        }>
-                        <Text style={{color: 'white'}}>{item.nama}</Text>
-                        <View
-                          style={{
-                            height: 1,
-                            width: Screen.width,
-                            borderRadius: 1,
-                            borderWidth: 0.5,
-                            borderColor: 'white',
-                            zIndex: 0,
-                            marginVertical: 15,
-                          }}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  );
+                          .catch((err) => console.log("error",err.data))
+                      }
+                        // navigation.navigate('CurhatKeTemanContactDetail', {
+                        //   nama: item.friend.name,
+                        // })
+                      }>
+                      <Text style={{color: 'white'}}>{item.friend.name}</Text>
+                      <View
+                        style={{
+                          height: 1,
+                          width: Screen.width,
+                          borderRadius: 1,
+                          borderWidth: 0.5,
+                          borderColor: 'white',
+                          zIndex: 0,
+                          marginVertical: 15,
+                        }}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                );
+              }}
+            />
+          ) : (
+            <View
+              style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              <View
+                style={{
+                  backgroundColor: '#67308F',
+                  width: Screen.width,
+                  paddingVertical: 1,
+                  paddingHorizontal: 20,
+                  marginBottom: 20,
+                  marginLeft: -15,
                 }}
               />
-            ) : (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <View
-                  style={{
-                    backgroundColor: '#67308F',
-                    width: Screen.width,
-                    paddingVertical: 1,
-                    paddingHorizontal: 20,
-                    marginBottom: 20,
-                    marginLeft: -15,
-                  }}
-                />
-                <Text style={{color: 'white', fontSize: 32}}>
-                  Belum Ada Teman
-                </Text>
-              </View>
-            )}
-          </ScrollView>
-        </View>
-        <OverlayPhone
-          api={api.findFriend}
-          token={token.data.access_token}
-          visible={visiblePhone}
-          toggleOverlay={toggleOverlayPhone}
-          navigation={navigation}
-        />
-        <OverlayInvite
-          visible={visibleInvite}
-          token={token}
-          toggleOverlay={toggleOverlayInvite}
-        />
+              <Text style={{color: 'white', fontSize: 32}}>
+                Belum Ada Teman
+              </Text>
+            </View>
+          )}
+        </ScrollView>
       </View>
-      <CustomBottomTab2 page={page} SetPage={SetPage}/>
-    </TemplateBackground>
+      <OverlayPhone
+        api={api.findFriend}
+        token={token.data.access_token}
+        visible={visiblePhone}
+        toggleOverlay={toggleOverlayPhone}
+        navigation={navigation}
+      />
+      <OverlayInvite
+        visible={visibleInvite}
+        token={token}
+        toggleOverlay={toggleOverlayInvite}
+      />
+    </View>
+
+    <CustomBottomTab2 page={page} SetPage={SetPage}/>
+  </TemplateBackground>
   );
 }
 
