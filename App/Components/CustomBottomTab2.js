@@ -19,11 +19,11 @@ export const CustomBottomTab2 = ({page, SetPage }) => {
                         <Text style={{ fontSize: 12, marginTop: 5, color:'#939598' }}>Chats</Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={()=> SetPage('Calls')}>
+                <TouchableOpacity onPress={()=> SetPage('HistoryCalls')}>
                     <View style={{ alignItems: 'center' }}>
                         <Image
                             source={images.CallsMenu}
-                            style={{ width: Screen.height * 0.035, height: Screen.height * 0.035,tintColor:page==='Calls'?'#DD118C':'gray' }} resizeMode='contain'
+                            style={{ width: Screen.height * 0.035, height: Screen.height * 0.035,tintColor:page==='HistoryCalls'?'#DD118C':'gray' }} resizeMode='contain'
                         />
                         <Text style={{ fontSize: 12, marginTop: 5, color:'#939598'}}>Calls</Text>
                     </View>

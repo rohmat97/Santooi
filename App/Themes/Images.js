@@ -101,9 +101,11 @@ const images = {
   delete_outline: require('../Images/foto-foto/delete_outline.png'),
   newAlbum: require('../Images/foto-foto/newAlbum.png'),
   iconEditAlbum: require('../Images/foto-foto/iconedit.png'),
-  featured: require('../Images/jalanyuks/featured.png')
-
-
+  featured: require('../Images/jalanyuks/featured.png'),
+  EmptyStateChat: require('../Images/curhatKeTeman/EmptyStateChat.png'),
+  MulaiCurhat: require('../Images/curhatKeTeman/MulaiCurhat.png'),
+  InCall: require('../Images/curhatKeTeman/In-call.png'),
+  Outcall: require('../Images/curhatKeTeman/Out-call.png')
 }
 
 export default images

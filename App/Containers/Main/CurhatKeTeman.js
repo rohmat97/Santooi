@@ -25,9 +25,11 @@ import ListContact from './CurhatKeTeman/ListContact';
 
 import TokenRedux from '../../Redux/Authentication/TokenRedux';
 import { bindActionCreators } from 'redux';
+import { RequestFriends } from './CurhatKeTeman/RequestFriends';
+import { HistoryCall } from './CurhatKeTeman/HistoryCall';
 
 function CurhatKeTeman(props) {
-  const {navigation} = props;
+  const {navigation, token} = props;
   const {pop} = navigation;
   const [page, SetPage ] =useState('Chats')
   const [conselingCode, setConselingCode] = useState(false);
@@ -51,7 +53,13 @@ function CurhatKeTeman(props) {
       return <Chats props={props} page={page} SetPage={SetPage}/>
       break;
     case 'Contacts':
-      return <ListContact  props={props} page={page} SetPage={SetPage} />
+      return <ListContact props={props} page={page} SetPage={SetPage} />
+      break;
+    case 'HistoryCalls':
+      return <HistoryCall props={props} page={page} SetPage={SetPage} token={token} />
+      break;
+    case 'Request':
+      return <RequestFriends props={props} page={page} SetPage={SetPage} token={token}  />
       break;
     default:
       return  <CustomBottomTab2 page={page} SetPage={SetPage}/>

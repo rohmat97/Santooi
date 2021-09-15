@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Image,
   Text,
+  TouchableOpacity,
   FlatList,
 } from 'react-native';
+
+import API from '../../../Services/Api';
+import FixtureAPI from '../../../Services/FixtureApi';
+import DebugConfig from '../../../Config/DebugConfig';
+
 import {TemplateBackground} from '../../../Components/TemplateBackground';
 import images from '../../../Themes/Images';
 import styles from '../../Styles/LaunchScreenStyles';
@@ -12,25 +18,31 @@ import {Screen} from '../../../Transforms/Screen';
 import {CustomBottomTab2} from '../../../Components/CustomBottomTab2';
 import {Avatar} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export const  Chats = ({props,page,SetPage}) => {
-  const {navigation} = props;
+const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
+export const HistoryCall = ({props,page,SetPage}) => {
+  const {navigation, token} = props;
   const {pop} = navigation;
+  const [listRequestFriends, setlistRequestFriends] = useState([])
+
+  useEffect(()=>{
+    api.listContact({
+      token: token.data.access_token,
+    }).then((success) => {
+      console.log(`success`, success.data.data.rows)
+      setlistRequestFriends(success.data.data.rows)
+    })
+    .catch((err) => {
+      console.log('err', err);
+    });
+    // 
+  },[])
   let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
       return (
         <TemplateBackground cover={true}>
           <View style={styles.mainContainer}>
             <View style={styles.section}>
-              <View style={{flexDirection: 'row'}}>
-                <TouchableOpacity
-                  onPress={() => pop()}
-                  style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Image
-                    source={images.arrowBack}
-                    style={{width: 18, height: 18}}
-                    resizeMode="contain"
-                  />
+              <View style={{flexDirection: 'row', paddingBottom:24}}>
                   <Text
                     style={{
                       color: '#67308F',
@@ -38,52 +50,21 @@ export const  Chats = ({props,page,SetPage}) => {
                       fontWeight: '500',
                       fontSize: 16,
                     }}>
-                    Curhat ke Teman
+                    Riwayat Panggilan
                   </Text>
-                </TouchableOpacity>
               </View>
-              {/* <TouchableOpacity
-                onPress={() => navigation.navigate('CurhatKeTemanContact')}
-                style={{
-                  alignSelf: 'flex-end',
-                  marginBottom: 20,
-                }}>
-                <Image
-                  source={images.newMessage}
-                  style={{height: 40, width: Screen.width * 0.3}}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity> */}
               <FlatList
-                data={[]}
+                data={listRequestFriends}
                 ListEmptyComponent={
-                  <View style={{flex:1,justifyContent:'center',alignItems:'center',width:Screen.width*0.9,height:Screen.height*0.7}}>
-                    <Image
-                      source={images.EmptyStateChat}
-                      style={{height: Screen.width * 0.7, width: Screen.width * 0.6}}
-                      resizeMode="cover"
-                    />
-                    <TouchableOpacity
-                       onPress={() => navigation.navigate('CurhatKeTemanContact')}
-                      >
-                      <Image
-                        source={images.MulaiCurhat}
-                        style={{height: Screen.height * 0.075, width: Screen.width * 0.8,marginTop:40}}
-                        resizeMode="cover"
-                      />
-                    </TouchableOpacity>
+                  <View style={{flex:1, justifyContent:"center",alignItems:"center", height:Screen.height*0.6}}>
+                    <Text style={{color:'white', fontSize:20}}> Belum Ada Permintaan Pertemanan</Text>
                   </View>
                 }
                 style={{paddingBottom: Screen.height * 0.1}}
-                renderItem={({item, index}) => (
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('Chat', {nama: 'Nissa'})}
-                    key={index}
-                    style={{
-                      flexDirection: 'row',
-                      height: 60,
-                      justifyContent: 'center',
-                    }}>
+                renderItem={({item, index}) => {
+                  // console.log(item)
+                  return(
+                  <View style={{flexDirection:'row', paddingVertical:12}}>
                     <LinearGradient
                       colors={['#DB068D', '#6F2A91']}
                       style={{borderRadius: 100, width: 40, height: 40}}>
@@ -115,12 +96,17 @@ export const  Chats = ({props,page,SetPage}) => {
                         }}>
                         <View>
                           <Text style={{fontWeight: 'bold', color: 'white'}}>
-                            Nissa
+                            {item.friend.name}
                           </Text>
                           <Text style={{color: 'white'}}>Ok</Text>
                         </View>
                         <View style={{marginEnd: 10}}>
-                          <Text style={{color: 'white', fontSize: 13}}>07.00</Text>
+                          {/* <Text style={{color: 'white', fontSize: 13}}>07.00</Text> */}
+                          <Image
+                            source={images.InCall}
+                            style={{width: 32, height: 32}}
+                            resizeMode="contain"
+                          />
                         </View>
                       </View>
                       <View
@@ -135,8 +121,8 @@ export const  Chats = ({props,page,SetPage}) => {
                         }}
                       />
                     </View>
-                  </TouchableOpacity>
-                )}
+                  </View>
+                )}}
               />
             </View>
           </View>

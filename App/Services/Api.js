@@ -77,6 +77,7 @@ const create = (baseURL = staging) => {
   const searchFriend = payload => api.get(`/account/user/friend?key=${payload.no}`,'',{headers: { Authorization: `Bearer ${payload.token}`}})
   const listContact = payload => api.get(`/account/user/friend`,'',{headers: { Authorization: `Bearer ${payload.token}`}})
   const addFriend = payload => api.post(`/account/user/friend`,payload.body,{headers: { Authorization: `Bearer ${payload.token}`}})
+  const acceptFriend = payload => api.patch(`/account/user/friend`,payload.body,{headers: { Authorization: `Bearer ${payload.token}`}})
   const getDetailContact = payload => api.get(`/account/user?id=${payload.id}`,'',{headers: { Authorization: `Bearer ${payload.token}`}})
   // ------
   // STEP 3
@@ -128,7 +129,8 @@ const create = (baseURL = staging) => {
     searchFriend,
     listContact,
     addFriend,
-    getDetailContact
+    getDetailContact,
+    acceptFriend
   }
 }
 
