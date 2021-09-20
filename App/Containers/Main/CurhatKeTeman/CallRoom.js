@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {SafeAreaView, View, Text, TextInput, Button} from 'react-native';
+import { Image } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TemplateBackground } from '../../../Components/TemplateBackground';
+import images from '../../../Themes/Images';
+import { Screen } from '../../../Transforms/Screen';
 import {useInitializeAgora, useRequestAudioHook} from './Agora';
 import styles from './styles';
 
-const CallRoom = () => {
+function CallRoom (props){
+  const {navigation, token} = props;
+  const {nama, params} = navigation.state.params;
+
+  const [DataProfile, setDataProfile] = useState()
   useRequestAudioHook();
   const {
     channelName,
@@ -16,17 +25,86 @@ const CallRoom = () => {
     leaveChannel,
     toggleIsMute,
     toggleIsSpeakerEnable,
-  } = useInitializeAgora();
+  } = useInitializeAgora(params.agora.app_id,params.agora.token);
 
+  useEffect(() => {
+    console.log('params call', params)
+    setDataProfile(params)
+    setChannelName(params.agora.channel)
+    joinChannel()
+  }, [])
   return (
-    <SafeAreaView>
+    <TemplateBackground cover={true}>
       <View style={styles.container}>
-        <View style={styles.channelInputContainer}>
+        <View style={styles.Main}>
+            <Image
+                source={{uri: DataProfile&& DataProfile.photo?DataProfile.photo:''}}
+                style={{
+                  width: Screen.width * 0.4,
+                  height: Screen.width * 0.4,
+                  backgroundColor:DataProfile&&DataProfile.photo?null:'purple',
+                  borderRadius:100
+                }}
+                resizeMode="cover"
+                // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+            /> 
+            <Text style={{color:'white', fontSize:32}}>Teddy bear</Text> 
+            {peerIds.length<2 && <Text style={{color:'white', fontSize:22, marginTop:50}}> Calling ...</Text>}
+        </View>
+        <View style={styles.BottomFeature}>
+          <TouchableOpacity 
+            onPress={()=>{
+              toggleIsSpeakerEnable()
+            }}
+          > 
+            <Image
+                source={images.Sound}
+                style={{
+                  width: Screen.width * 0.08,
+                  height: Screen.width * 0.08,
+                  opacity: isSpeakerEnable?1:0.5
+                }}
+                resizeMode='contain'
+                // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={()=> {
+              leaveChannel()
+              navigation.pop()
+            }}
+            > 
+            <Image
+                source={images.endCall}
+                style={{
+                  width: Screen.width * 0.2,
+                  height: Screen.width * 0.2,
+                }}
+                resizeMode="contain"
+                // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+              />
+          </TouchableOpacity> 
+          <TouchableOpacity
+            onPress={()=> toggleIsMute()}
+          > 
+            <Image
+              source={images.Mic}
+              style={{
+                width: Screen.width * 0.08,
+                height: Screen.width * 0.08,
+              }}
+              resizeMode="contain"
+              containerStyle={{opacity:isMute?1:0.5}}
+            />
+          </TouchableOpacity> 
+        </View>
+       
+        {/* <View style={styles.channelInputContainer}>
           <Text>Enter Channel Name:</Text>
 
           <TextInput
             style={styles.input}
-            onChangeText={(text) => setChannelName(text)}
+            // onChangeText={(text) => setChannelName(params.agora.channel)}
             placeholder={'Channel Name'}
             value={channelName}
           />
@@ -34,7 +112,7 @@ const CallRoom = () => {
 
         <View style={styles.joinLeaveButtonContainer}>
           <Button
-            onPress={joinSucceed ? leaveChannel : joinChannel}
+            onPress={()=>joinSucceed ? leaveChannel() : joinChannel()}
             title={`${joinSucceed ? 'Leave' : 'Join'} channel`}
           />
         </View>
@@ -58,9 +136,9 @@ const CallRoom = () => {
               </View>
             );
           })}
-        </View>
+        </View> */}
       </View>
-    </SafeAreaView>
+    </TemplateBackground>
   );
 };
 

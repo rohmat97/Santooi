@@ -24,17 +24,20 @@ export const RequestFriends = ({props,page,SetPage}) => {
   const {navigation, token} = props;
   const {pop} = navigation;
   const [listRequestFriends, setlistRequestFriends] = useState([])
-
-  useEffect(()=>{
+  const GetRequestFriends =() =>{
     api.listContact({
       token: token.data.access_token,
+      request: '?&request_follow=1'
     }).then((success) => {
       console.log(`success`, success.data.data.rows)
       setlistRequestFriends(success.data.data.rows)
     })
     .catch((err) => {
-      console.log('err', err);
+      // console.log('err', err);
     });
+  }
+  useEffect(()=>{
+    GetRequestFriends()
     // 
   },[])
   let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
@@ -100,9 +103,60 @@ export const RequestFriends = ({props,page,SetPage}) => {
                           </Text>
                           {/* <Text style={{color: 'white'}}>Ok</Text> */}
                         </View>
-                        {/* <View style={{marginEnd: 10}}>
-                          <Text style={{color: 'white', fontSize: 13}}>07.00</Text>
-                        </View> */}
+                        <View style={{marginEnd: 10,flexDirection:'row'}}>
+                          {/* <Text style={{color: 'white', fontSize: 13}}>07.00</Text> */}
+                          <TouchableOpacity
+                            onPress={()=>{
+                              api.acceptFriend({
+                                body:{
+                                  id_account:item.friend.id,
+                                  status:2
+                                },
+                                token:token.data.access_token
+                              }).then(
+                                sucess =>{
+                                  console.log(`sucess`, sucess.data)
+                                  GetRequestFriends()
+                                }
+                              ).catch(err => console.log(`err`, err))
+                            }}
+                            >
+                            <Image
+                                source={images.Decline}
+                                style={{
+                                  width: 32,
+                                  height: 32,
+                                  marginRight:10
+                                }}
+                                resizeMode="contain"
+                              />
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={()=>{
+                              api.acceptFriend({
+                                body:{
+                                  id_account:item.friend.id,
+                                  status:1
+                                },
+                                token:token.data.access_token
+                              }).then(
+                                sucess =>{
+                                  console.log(`sucess`, sucess.data)
+                                  GetRequestFriends()
+                                }
+                              ).catch(err => console.log(`err`, err))
+                            }}
+                            >
+                            <Image
+                                source={images.Check}
+                                style={{
+                                  width: 32,
+                                  height: 32,
+                                }}
+                                resizeMode="contain"
+                              />
+                          </TouchableOpacity>
+                        </View>
                       </View>
                       <View
                         style={{

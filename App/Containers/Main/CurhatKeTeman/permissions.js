@@ -18,7 +18,11 @@ export const requestAudioPermission = async () => {
   }
 };
 
-export const requestCameraAndAudioPermission = async () => {
+/**
+ * @name requestCameraAndAudioPermission
+ * @description Function to request permission for Audio and Camera
+ */
+export  const requestCameraAndAudioPermission=async()=> {
   try {
     const granted = await PermissionsAndroid.requestMultiple([
       PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -37,4 +41,4 @@ export const requestCameraAndAudioPermission = async () => {
   } catch (err) {
     console.warn(err);
   }
-};
+}

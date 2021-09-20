@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {Dimensions, StyleSheet} from 'react-native';
+import {Dimensions, Image, StyleSheet} from 'react-native';
 import {Platform, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import RtcEngine, {
   RtcLocalView,
   RtcRemoteView,
   VideoRenderMode,
 } from 'react-native-agora';
+import images from '../../../Themes/Images';
+import { Screen } from '../../../Transforms/Screen';
 import {requestCameraAndAudioPermission} from './permissions';
 
 interface State {
@@ -26,17 +28,29 @@ class Video extends Component<{}, State> {
       channelName: 'santooi',
       joinSucceed: false,
       peerIds: [],
+      isMute:false,
+      isSpeakerEnable:false
     };
-    if (Platform.OS === 'android') {
-      // Request required permissions from Android
-      requestCameraAndAudioPermission().then(() => {
-        console.log('requested!');
-      });
-    }
+    
   }
 
-  componentDidMount() {
-    this.init();
+  // const [isMute, setIsMute] = useState(false);
+  // const [isSpeakerEnable, setIsSpeakerEnable] = useState(true);
+  async componentDidMount() {
+    const {nama, params} = this.props.navigation.state.params;
+    await this.setState({
+      appId:params.agora.app_id,
+      token:params.agora.token,
+      channelName:params.agora.channel
+    })
+    if (Platform.OS === 'android') {
+      // Request required permissions from Android
+      await requestCameraAndAudioPermission().then(() => {
+        console.log('requested!');
+        this.init();
+      });
+      await this.startCall()
+    }
   }
 
   /**
@@ -44,9 +58,11 @@ class Video extends Component<{}, State> {
    * @description Function to initialize the Rtc Engine, attach event listeners and actions
    */
   init = async () => {
-    const {appId} = this.state;
-    _engine = await RtcEngine.create(appId);
+
+    const _engine = await RtcEngine.create(this.state.appId);
     await _engine.enableVideo();
+    await _engine.muteLocalAudioStream(false);
+    await _engine.isSpeakerphoneEnabled(true);
 
     _engine.addListener('Warning', (warn) => {
       console.log('Warning', warn);
@@ -93,6 +109,8 @@ class Video extends Component<{}, State> {
    */
   startCall = async () => {
     // Join Channel using null token and channel name
+
+    const _engine = await RtcEngine.create(this.state.appId);
     await _engine?.joinChannel(
       this.state.token,
       this.state.channelName,
@@ -106,23 +124,87 @@ class Video extends Component<{}, State> {
    * @description Function to end the call
    */
   endCall = async () => {
+    const _engine = await RtcEngine.create(this.state.appId);
     await _engine?.leaveChannel();
     this.setState({peerIds: [], joinSucceed: false});
   };
+
+
+  toggleIsMute = async () => {
+    const _engine = await RtcEngine.create(this.state.appId);
+    await _engine.muteLocalAudioStream(!this.state.isMute);
+    // setIsMute(!isMute);
+    this.setState({isMute: !this.state.isMute})
+  }
+
+  toggleIsSpeakerEnable = async () => {
+    const _engine = await RtcEngine.create(this.state.appId);
+    await _engine.setEnableSpeakerphone(!this.state.isSpeakerEnable);
+    // setIsSpeakerEnable(!isSpeakerEnable);
+
+    this.setState({isSpeakerEnable: !this.state.isSpeakerEnable})
+  }
 
   render() {
     return (
       <View style={styles.max}>
         <View style={styles.max}>
+          {this._renderVideos()}
           <View style={styles.buttonHolder}>
-            <TouchableOpacity onPress={this.startCall} style={styles.button}>
+            <TouchableOpacity 
+              onPress={()=>{
+                this.toggleIsSpeakerEnable()
+              }}
+            > 
+              <Image
+                  source={images.Sound}
+                  style={{
+                    width: Screen.width * 0.08,
+                    height: Screen.width * 0.08,
+                    opacity:this.state.isSpeakerEnable?1:0.5
+                  }}
+                  resizeMode="contain"
+                  // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={()=> {
+                this.endCall()
+                this.props.navigation.pop()
+              }}
+              > 
+              <Image
+                  source={images.endCall}
+                  style={{
+                    width: Screen.width * 0.2,
+                    height: Screen.width * 0.2,
+                  }}
+                  resizeMode="contain"
+                  // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+                />
+            </TouchableOpacity> 
+            <TouchableOpacity
+              onPress={()=>{
+                this.toggleIsMute()
+              }}
+            > 
+              <Image
+                source={images.Mic}
+                style={{
+                  width: Screen.width * 0.08,
+                  height: Screen.width * 0.08,
+                  opacity:this.state.isMute?1:0.5
+                }}
+                resizeMode="contain"
+              />
+            </TouchableOpacity> 
+            {/* <TouchableOpacity onPress={this.startCall} style={styles.button}>
               <Text style={styles.buttonText}> Start Call </Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={this.endCall} style={styles.button}>
               <Text style={styles.buttonText}> End Call </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
-          {this._renderVideos()}
         </View>
       </View>
     );
@@ -165,8 +247,8 @@ class Video extends Component<{}, State> {
   };
 }
 const dimensions = {
-  width: Dimensions.get('window').width,
-  height: Dimensions.get('window').height,
+  width: Dimensions.get('screen').width,
+  height: Dimensions.get('screen').height,
 };
 const styles = StyleSheet.create({
   max: {
@@ -178,6 +260,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
+    marginTop:-120
   },
   button: {
     paddingHorizontal: 20,
@@ -190,7 +273,7 @@ const styles = StyleSheet.create({
   },
   fullView: {
     width: dimensions.width,
-    height: dimensions.height - 100,
+    height: dimensions.height,
   },
   remoteContainer: {
     width: '100%',

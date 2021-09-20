@@ -15,13 +15,13 @@ export const useRequestAudioHook = () => {
   }, []);
 };
 
-export const useInitializeAgora = () => {
+export const useInitializeAgora = (appId,token) => {
   // Replace yourAppId with the App ID of your Agora project.
-  const appId = '4ede35933b9e4e009c0522f13c42f778';
-  const token =
-    '0064ede35933b9e4e009c0522f13c42f778IAC6fmFeo2Qa1TdGHGA5dkDbPWJVc275qJOqCRlpvgo+a1kVm9QAAAAAEAC+QOqNnQkbYQEAAQCdCRth';
-
-  const [channelName, setChannelName] = useState('santooi');
+  // const appId = '4ede35933b9e4e009c0522f13c42f778';
+  // const token =
+  //   '0064ede35933b9e4e009c0522f13c42f778IAC6fmFeo2Qa1TdGHGA5dkDbPWJVc275qJOqCRlpvgo+a1kVm9QAAAAAEAC+QOqNnQkbYQEAAQCdCRth';
+  // console.log(appId,token)
+  const [channelName, setChannelName] = useState('');
   const [joinSucceed, setJoinSucceed] = useState(false);
   const [peerIds, setPeerIds] = useState([]);
   const [isMute, setIsMute] = useState(false);
@@ -73,9 +73,9 @@ export const useInitializeAgora = () => {
     });
   }, []);
 
-  const joinChannel = useCallback(async () => {
+  const joinChannel =async () => {
     await rtcEngine.current?.joinChannel(token, channelName, null, 0);
-  }, [channelName]);
+  };
 
   const leaveChannel = useCallback(async () => {
     await rtcEngine.current?.leaveChannel();

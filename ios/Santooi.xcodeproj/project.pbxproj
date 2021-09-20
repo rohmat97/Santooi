@@ -864,7 +864,7 @@
 				CODE_SIGN_ENTITLEMENTS = Santooi/Santooi.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 29;
 				DEVELOPMENT_TEAM = HAKUL8SVC3;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = armv7;
@@ -900,7 +900,7 @@
 				CODE_SIGN_ENTITLEMENTS = Santooi/Santooi.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 28;
+				CURRENT_PROJECT_VERSION = 29;
 				DEVELOPMENT_TEAM = HAKUL8SVC3;
 				EXCLUDED_ARCHS = armv7;
 				INFOPLIST_FILE = Santooi/Info.plist;

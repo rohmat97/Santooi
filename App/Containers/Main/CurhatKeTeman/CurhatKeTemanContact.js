@@ -196,9 +196,8 @@ function CurhatKeTemanContact(props) {
                       )}
                       <TouchableOpacity
                         onPress={() =>{
-                          console.log( item.friend.number)
                           api.findFriend({
-                            no:  item.friend.number,
+                            no: item.friend&&item.friend.user.phone_number,
                             token: token.data.access_token,
                           })
                             .then((res) => {

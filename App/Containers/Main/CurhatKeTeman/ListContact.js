@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  Platform,
 } from 'react-native';
 import Contacts from 'react-native-contacts';
 import TokenRedux from '../../../Redux/Authentication/TokenRedux';
@@ -54,9 +55,11 @@ function ListContact({props,page,SetPage}) {
     api
       .listContact({
         token: token.data.access_token,
+        request: ''
       })
       .then((success) => {
-        // console.log(`success`, success.data.data)
+        // Platform.OS==='ios'&& console.log(`success ios`, success.data)
+        // Platform.OS==='android'&& console.log(`success android`, success.data.data)
         const data = success.data.data.rows.sort((a,b)=>{
           if(a.friend.name && b.friend.name && a.friend.name.toLowerCase() > b.friend.name.toLowerCase()){
               return 1;
@@ -181,15 +184,16 @@ function ListContact({props,page,SetPage}) {
                     )}
                     <TouchableOpacity
                       onPress={() =>{
-                        // console.log(item.friend.number)
+                        // console.log(item.friend)
                         api.findFriend({
-                          no: item.friend&&item.friend.number,
+                          no: item.friend&&item.friend.user.phone_number,
                           token: token.data.access_token,
                         })
                           .then((res) => {
                             if (res.data.data.rows.length > 0) {
                               // alert('user found')
                               // toggleOverlayPhone()
+                              // console.log(res.data.data.rows[0])
                               navigation.navigate('CurhatKeTemanContactDetail', {
                                 params: res.data.data.rows[0],
                               });
@@ -258,8 +262,7 @@ function ListContact({props,page,SetPage}) {
         toggleOverlay={toggleOverlayInvite}
       />
     </View>
-
-    <CustomBottomTab2 page={page} SetPage={SetPage}/>
+      <CustomBottomTab2 page={page} SetPage={SetPage}/>
   </TemplateBackground>
   );
 }

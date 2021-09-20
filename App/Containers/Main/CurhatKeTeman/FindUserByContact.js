@@ -229,6 +229,8 @@ function FindUserByContact(props) {
                             token: token.data.access_token,
                           })
                             .then((res) => {
+
+                              // console.log('addfriend',res.data)
                               if (res.data.data.rows.length > 0) {
                                 // alert('user found')
                                 // toggleOverlayPhone()
@@ -239,9 +241,8 @@ function FindUserByContact(props) {
                                 console.log(res.data)
                                 Alert.alert('','User belum terdaftar pada aplikasi Santooi');
                               }
-                              // console.log(res.data.data.rows)
                             })
-                            .catch((err) => console.log("error",err.data))
+                            .catch((err) => console.log("error",err))
                         }
                           // navigation.navigate('CurhatKeTemanContactDetail', {
                           //   nama: item.displayName,

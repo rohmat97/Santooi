@@ -45,29 +45,29 @@ function CurhatKeTemanContactDetail(props) {
     setVisible(!visible);
   };
   useEffect(() => {
-    // console.log('params',params)
-    if (params && params.id_user) {
+    console.log('params',params)
+    if (params) {
       api
         .getDetailContact({
-          id: 87,
+          id: params.id_account,
           token: token.data.access_token,
         })
         .then((succ) => {
-          // console.log(`succ`, succ.data.data.rows)
+          console.log(`succ`, succ.data.data.rows)
           setDataDetail(succ.data.data.rows);
         })
         .catch((err) => {
-          // console.log(`err`, err)
+          console.log(`err`, err)
         });
     }
-    {
-      setDataDetail(params);
-    }
+    // // {
+    //   setDataDetail(params);
+    // // }
   }, []);
 
   useEffect(() => {
     if (dataDetail) {
-      console.log('DetailAlbum', dataDetail);
+      // console.log('DetailAlbum', dataDetail);
     }
   }, [dataDetail]);
 
@@ -81,7 +81,7 @@ function CurhatKeTemanContactDetail(props) {
         token: token.data.access_token,
       })
       .then((success) => {
-        // console.log(success.data)
+        console.log('sucess add',success.data)
         showMessage({
           message: success.data.message,
           type: 'info',
@@ -220,9 +220,10 @@ function CurhatKeTemanContactDetail(props) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() =>{
-                console.log(dataDetail)
+                // console.log(dataDetail)
                 if(dataDetail.is_friend){
-                  navigation.navigate('CallRoom', {params: dataDetail.agora})
+                  // console.log(`dataDetail`, dataDetail)
+                  navigation.navigate('CallRoom', {params: dataDetail})
                 }
               }}>
               <View style={{alignItems: 'center'}}>
@@ -242,7 +243,7 @@ function CurhatKeTemanContactDetail(props) {
             </TouchableOpacity>
             <TouchableOpacity onPress={() => {
                 if(dataDetail.is_friend){
-                  navigation.navigate('VideoRoom')
+                  navigation.navigate('VideoRoom', {params: dataDetail})
                 }
               }}>
               <View style={{alignItems: 'center'}}>

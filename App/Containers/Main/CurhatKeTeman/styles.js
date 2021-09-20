@@ -1,4 +1,5 @@
 import {StyleSheet, Dimensions} from 'react-native';
+import { Screen } from '../../../Transforms/Screen';
 
 const dimensions = {
   width: Dimensions.get('window').width,
@@ -7,9 +8,9 @@ const dimensions = {
 
 export default StyleSheet.create({
   container: {
-    height: '100%',
-    width: '100%',
-    paddingVertical: 24,
+    height: dimensions.height,
+    width: dimensions.width,
+    // paddingVertical: 24,
   },
   channelInputContainer: {
     padding: 10,
@@ -75,4 +76,20 @@ export default StyleSheet.create({
     paddingVertical: 5,
     color: '#0093E9',
   },
+  BottomFeature: {
+    position:'absolute',
+    bottom:0,
+    width:Screen.width,
+    flexDirection:'row',
+    justifyContent:'space-around',
+    marginBottom:20,
+    alignItems:'center',
+    paddingHorizontal:Screen.width*0.1
+  },
+  Main :{
+    justifyContent:"center",
+    width:Screen.width,
+    alignItems:'center',
+    marginTop:Screen.height*0.1
+  }
 });
