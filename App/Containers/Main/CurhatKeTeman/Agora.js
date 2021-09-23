@@ -21,7 +21,7 @@ export const useInitializeAgora = (appId,token) => {
   // const token =
   //   '0064ede35933b9e4e009c0522f13c42f778IAC6fmFeo2Qa1TdGHGA5dkDbPWJVc275qJOqCRlpvgo+a1kVm9QAAAAAEAC+QOqNnQkbYQEAAQCdCRth';
   // console.log(appId,token)
-  const [channelName, setChannelName] = useState('');
+  const [channelName, setChannelName] = useState();
   const [joinSucceed, setJoinSucceed] = useState(false);
   const [peerIds, setPeerIds] = useState([]);
   const [isMute, setIsMute] = useState(false);
@@ -73,8 +73,8 @@ export const useInitializeAgora = (appId,token) => {
     });
   }, []);
 
-  const joinChannel =async () => {
-    await rtcEngine.current?.joinChannel(token, channelName, null, 0);
+  const joinChannel = () => {
+    rtcEngine.current?.joinChannel(token, channelName, null, 0);
   };
 
   const leaveChannel = useCallback(async () => {
@@ -117,5 +117,6 @@ export const useInitializeAgora = (appId,token) => {
     leaveChannel,
     toggleIsMute,
     toggleIsSpeakerEnable,
+    rtcEngine
   };
 };

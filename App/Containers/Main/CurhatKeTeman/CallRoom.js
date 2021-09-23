@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, View, Text, TextInput, Button} from 'react-native';
-import { Image } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { TemplateBackground } from '../../../Components/TemplateBackground';
+import RtcEngine from 'react-native-agora';
+import {Image} from 'react-native-elements';
+import {TouchableOpacity} from 'react-native-gesture-handler';
+import {TemplateBackground} from '../../../Components/TemplateBackground';
 import images from '../../../Themes/Images';
-import { Screen } from '../../../Transforms/Screen';
+import {Screen} from '../../../Transforms/Screen';
 import {useInitializeAgora, useRequestAudioHook} from './Agora';
 import styles from './styles';
 
-function CallRoom (props){
-  const {navigation, token} = props;
+function CallRoom(props) {
+  const {navigation} = props;
   const {nama, params} = navigation.state.params;
 
-  const [DataProfile, setDataProfile] = useState()
+  const [DataProfile, setDataProfile] = useState();
   useRequestAudioHook();
   const {
     channelName,
@@ -25,68 +26,98 @@ function CallRoom (props){
     leaveChannel,
     toggleIsMute,
     toggleIsSpeakerEnable,
-  } = useInitializeAgora(params.agora.app_id,params.agora.token);
+  } = useInitializeAgora(params.agora.app_id, params.agora.token);
+
+  const init = async () => {
+    // await setDataProfile(params)
+    // await setChannelName(params.agora.channel)
+    // setTimeout(() => {
+    //   alert('join')
+    //   joinChannel()
+    // }, 2000);
+    // const rtcEngine = await RtcEngine.create(params.agora.app_id)
+    // rtcEngine.joinChannel(params.agora.token, params.agora.channel, null, 0);
+  };
+  useEffect(() => {
+    console.log('params call', params);
+    // alert(params.agora.channel)
+    // init()
+    setDataProfile(params);
+    setChannelName(params.agora.channel);
+    // init()
+  }, []);
 
   useEffect(() => {
-    console.log('params call', params)
-    setDataProfile(params)
-    setChannelName(params.agora.channel)
-    joinChannel()
-  }, [])
+    console.log('peerIds', peerIds);
+  }, [peerIds]);
+
+  useEffect(() => {
+    if (joinSucceed) {
+      console.log('joinSucceed', joinSucceed);
+    }
+  }, [joinSucceed]);
+  setTimeout(() => {
+    joinChannel();
+    // alert('join');
+  }, 1000);
   return (
     <TemplateBackground cover={true}>
       <View style={styles.container}>
         <View style={styles.Main}>
-            <Image
-                source={{uri: DataProfile&& DataProfile.photo?DataProfile.photo:''}}
-                style={{
-                  width: Screen.width * 0.4,
-                  height: Screen.width * 0.4,
-                  backgroundColor:DataProfile&&DataProfile.photo?null:'purple',
-                  borderRadius:100
-                }}
-                resizeMode="cover"
-                // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
-            /> 
-            <Text style={{color:'white', fontSize:32}}>Teddy bear</Text> 
-            {peerIds.length<2 && <Text style={{color:'white', fontSize:22, marginTop:50}}> Calling ...</Text>}
+          <Image
+            source={{
+              uri: DataProfile && DataProfile.photo ? DataProfile.photo : '',
+            }}
+            style={{
+              width: Screen.width * 0.4,
+              height: Screen.width * 0.4,
+              backgroundColor:
+                DataProfile && DataProfile.photo ? null : 'purple',
+              borderRadius: 100,
+            }}
+            resizeMode="cover"
+            // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+          />
+          <Text style={{color: 'white', fontSize: 32}}>Teddy bear</Text>
+          {peerIds.length < 2 && (
+            <Text style={{color: 'white', fontSize: 22, marginTop: 50}}>
+              {' '}
+              Calling ...
+            </Text>
+          )}
         </View>
         <View style={styles.BottomFeature}>
-          <TouchableOpacity 
-            onPress={()=>{
-              toggleIsSpeakerEnable()
-            }}
-          > 
+          <TouchableOpacity
+            onPress={() => {
+              toggleIsSpeakerEnable();
+            }}>
             <Image
-                source={images.Sound}
-                style={{
-                  width: Screen.width * 0.08,
-                  height: Screen.width * 0.08,
-                  opacity: isSpeakerEnable?1:0.5
-                }}
-                resizeMode='contain'
-                // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+              source={images.Sound}
+              style={{
+                width: Screen.width * 0.08,
+                height: Screen.width * 0.08,
+                opacity: isSpeakerEnable ? 1 : 0.5,
+              }}
+              resizeMode="contain"
+              // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
             />
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={()=> {
-              leaveChannel()
-              navigation.pop()
-            }}
-            > 
+            onPress={() => {
+              leaveChannel();
+              navigation.pop();
+            }}>
             <Image
-                source={images.endCall}
-                style={{
-                  width: Screen.width * 0.2,
-                  height: Screen.width * 0.2,
-                }}
-                resizeMode="contain"
-                // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
-              />
-          </TouchableOpacity> 
-          <TouchableOpacity
-            onPress={()=> toggleIsMute()}
-          > 
+              source={images.endCall}
+              style={{
+                width: Screen.width * 0.2,
+                height: Screen.width * 0.2,
+              }}
+              resizeMode="contain"
+              // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => toggleIsMute()}>
             <Image
               source={images.Mic}
               style={{
@@ -94,11 +125,11 @@ function CallRoom (props){
                 height: Screen.width * 0.08,
               }}
               resizeMode="contain"
-              containerStyle={{opacity:isMute?1:0.5}}
+              containerStyle={{opacity: isMute ? 1 : 0.5}}
             />
-          </TouchableOpacity> 
+          </TouchableOpacity>
         </View>
-       
+
         {/* <View style={styles.channelInputContainer}>
           <Text>Enter Channel Name:</Text>
 
@@ -112,7 +143,8 @@ function CallRoom (props){
 
         <View style={styles.joinLeaveButtonContainer}>
           <Button
-            onPress={()=>joinSucceed ? leaveChannel() : joinChannel()}
+            onPress={()=>{
+              joinSucceed ? leaveChannel() : joinChannel()}}
             title={`${joinSucceed ? 'Leave' : 'Join'} channel`}
           />
         </View>
@@ -126,7 +158,7 @@ function CallRoom (props){
             onPress={toggleIsSpeakerEnable}
             title={isSpeakerEnable ? 'Disable Speaker' : 'Enable Speaker'}
           />
-        </View>
+        </View> */}
 
         <View style={styles.usersListContainer}>
           {peerIds.map((peerId) => {
@@ -136,10 +168,10 @@ function CallRoom (props){
               </View>
             );
           })}
-        </View> */}
+        </View>
       </View>
     </TemplateBackground>
   );
-};
+}
 
 export default CallRoom;
