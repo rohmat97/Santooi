@@ -78,10 +78,11 @@ function CallRoom(props) {
             resizeMode="cover"
             // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
           />
-          <Text style={{color: 'white', fontSize: 32}}>Teddy bear</Text>
+          <Text style={{color: 'white', fontSize: 32}}>
+            {DataProfile.col_call}
+          </Text>
           {peerIds.length < 2 && (
             <Text style={{color: 'white', fontSize: 22, marginTop: 50}}>
-              {' '}
               Calling ...
             </Text>
           )}
