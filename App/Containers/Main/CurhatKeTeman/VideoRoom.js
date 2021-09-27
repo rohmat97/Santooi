@@ -7,7 +7,7 @@ import RtcEngine, {
   VideoRenderMode,
 } from 'react-native-agora';
 import images from '../../../Themes/Images';
-import { Screen } from '../../../Transforms/Screen';
+import {Screen} from '../../../Transforms/Screen';
 import {requestCameraAndAudioPermission} from './permissions';
 
 interface State {
@@ -28,10 +28,9 @@ class Video extends Component<{}, State> {
       channelName: 'santooi',
       joinSucceed: false,
       peerIds: [],
-      isMute:false,
-      isSpeakerEnable:false
+      isMute: false,
+      isSpeakerEnable: false,
     };
-    
   }
 
   // const [isMute, setIsMute] = useState(false);
@@ -39,17 +38,17 @@ class Video extends Component<{}, State> {
   async componentDidMount() {
     const {nama, params} = this.props.navigation.state.params;
     await this.setState({
-      appId:params.agora.app_id,
-      token:params.agora.token,
-      channelName:params.agora.channel
-    })
+      appId: params.friend.user.agora.app_id,
+      token: params.friend.user.agora.token,
+      channelName: params.friend.user.agora.channel,
+    });
     if (Platform.OS === 'android') {
       // Request required permissions from Android
       await requestCameraAndAudioPermission().then(() => {
         console.log('requested!');
         this.init();
       });
-      await this.startCall()
+      await this.startCall();
     }
   }
 
@@ -58,7 +57,6 @@ class Video extends Component<{}, State> {
    * @description Function to initialize the Rtc Engine, attach event listeners and actions
    */
   init = async () => {
-
     const _engine = await RtcEngine.create(this.state.appId);
     await _engine.enableVideo();
     await _engine.muteLocalAudioStream(false);
@@ -129,21 +127,20 @@ class Video extends Component<{}, State> {
     this.setState({peerIds: [], joinSucceed: false});
   };
 
-
   toggleIsMute = async () => {
     const _engine = await RtcEngine.create(this.state.appId);
     await _engine.muteLocalAudioStream(!this.state.isMute);
     // setIsMute(!isMute);
-    this.setState({isMute: !this.state.isMute})
-  }
+    this.setState({isMute: !this.state.isMute});
+  };
 
   toggleIsSpeakerEnable = async () => {
     const _engine = await RtcEngine.create(this.state.appId);
     await _engine.setEnableSpeakerphone(!this.state.isSpeakerEnable);
     // setIsSpeakerEnable(!isSpeakerEnable);
 
-    this.setState({isSpeakerEnable: !this.state.isSpeakerEnable})
-  }
+    this.setState({isSpeakerEnable: !this.state.isSpeakerEnable});
+  };
 
   render() {
     return (
@@ -151,53 +148,50 @@ class Video extends Component<{}, State> {
         <View style={styles.max}>
           {this._renderVideos()}
           <View style={styles.buttonHolder}>
-            <TouchableOpacity 
-              onPress={()=>{
-                this.toggleIsSpeakerEnable()
-              }}
-            > 
+            <TouchableOpacity
+              onPress={() => {
+                this.toggleIsSpeakerEnable();
+              }}>
               <Image
-                  source={images.Sound}
-                  style={{
-                    width: Screen.width * 0.08,
-                    height: Screen.width * 0.08,
-                    opacity:this.state.isSpeakerEnable?1:0.5
-                  }}
-                  resizeMode="contain"
-                  // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+                source={images.Sound}
+                style={{
+                  width: Screen.width * 0.08,
+                  height: Screen.width * 0.08,
+                  opacity: this.state.isSpeakerEnable ? 1 : 0.5,
+                }}
+                resizeMode="contain"
+                // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
               />
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={()=> {
-                this.endCall()
-                this.props.navigation.pop()
-              }}
-              > 
+              onPress={() => {
+                this.endCall();
+                this.props.navigation.pop();
+              }}>
               <Image
-                  source={images.endCall}
-                  style={{
-                    width: Screen.width * 0.2,
-                    height: Screen.width * 0.2,
-                  }}
-                  resizeMode="contain"
-                  // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
-                />
-            </TouchableOpacity> 
+                source={images.endCall}
+                style={{
+                  width: Screen.width * 0.2,
+                  height: Screen.width * 0.2,
+                }}
+                resizeMode="contain"
+                // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+              />
+            </TouchableOpacity>
             <TouchableOpacity
-              onPress={()=>{
-                this.toggleIsMute()
-              }}
-            > 
+              onPress={() => {
+                this.toggleIsMute();
+              }}>
               <Image
                 source={images.Mic}
                 style={{
                   width: Screen.width * 0.08,
                   height: Screen.width * 0.08,
-                  opacity:this.state.isMute?1:0.5
+                  opacity: this.state.isMute ? 1 : 0.5,
                 }}
                 resizeMode="contain"
               />
-            </TouchableOpacity> 
+            </TouchableOpacity>
             {/* <TouchableOpacity onPress={this.startCall} style={styles.button}>
               <Text style={styles.buttonText}> Start Call </Text>
             </TouchableOpacity>
@@ -260,7 +254,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
-    marginTop:-120
+    marginTop: -120,
   },
   button: {
     paddingHorizontal: 20,

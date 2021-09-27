@@ -22,12 +22,13 @@ import SelectKonseling from '../Containers/Main/SelectKonseling ';
 import CurhatKeTeman from '../Containers/Main/CurhatKeTeman';
 import CurhatKeTemanContact from '../Containers/Main/CurhatKeTeman/CurhatKeTemanContact';
 import CurhatKeTemanContactDetail from '../Containers/Main/CurhatKeTeman/CurhatKeTemanContactDetail';
-import FindUserByContact from '../Containers/Main/CurhatKeTeman/FindUserByContact'
+import FindUserByContact from '../Containers/Main/CurhatKeTeman/FindUserByContact';
 import DetailAlbum from '../Containers/Main/Foto/DetailAlbum';
 import Chat from '../Containers/Main/Chat';
 import CallRoom from '../Containers/Main/CurhatKeTeman/CallRoom';
 import VideoRoom from '../Containers/Main/CurhatKeTeman/VideoRoom';
 import SampleChat from '../Containers/Main/CurhatKeTeman/SampleChat';
+import DetailChat from '../Containers/Main/CurhatKeTeman/Chat/DetailChat';
 
 // Manifest of possible screens
 const AuthNavigator = createStackNavigator(
@@ -65,10 +66,11 @@ const MainNavigator = createStackNavigator(
     CurhatKeTemanContact: {screen: CurhatKeTemanContact},
     CurhatKeTemanContactDetail: {screen: CurhatKeTemanContactDetail},
     DetailAlbum: {screen: DetailAlbum},
-    CallRoom: { screen: CallRoom },
-    VideoRoom: { screen: VideoRoom },
-    SampleChat: { screen: SampleChat },
-    FindUserByContact: { screen: FindUserByContact }
+    CallRoom: {screen: CallRoom},
+    VideoRoom: {screen: VideoRoom},
+    SampleChat: {screen: SampleChat},
+    FindUserByContact: {screen: FindUserByContact},
+    DetailChat: {screen: DetailChat},
   },
   {
     // Default config for all screens

@@ -1,0 +1,8 @@
+{
+    "appId":"1256851",
+    "key":"7e9f1810c310e649dcf1",
+    "secret":"1b9351768d43bc531610",
+    "cluster":"ap1",
+    "encrypted":true,
+    "restServer":"https://happiness-api.demoapp.xyz/api"
+}

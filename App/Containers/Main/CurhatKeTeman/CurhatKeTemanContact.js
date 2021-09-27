@@ -26,12 +26,12 @@ import {OverlayInvite} from '../../../Components/OverlayInvite';
 import {OverlayPhone} from '../../../Components/OverlayPhone';
 import {bindActionCreators} from 'redux';
 import {FlatList} from 'react-native';
-import {check, PERMISSIONS, RESULTS,request} from 'react-native-permissions';
-import { Alert } from 'react-native';
+import {check, PERMISSIONS, RESULTS, request} from 'react-native-permissions';
+import {Alert} from 'react-native';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 function CurhatKeTemanContact(props) {
-  const {navigation, token,page ,SetPage} = props;
+  const {navigation, token, page, SetPage} = props;
   const {pop} = navigation;
   const [search, setsearch] = useState('');
   const [conselingCode, setConselingCode] = useState(false);
@@ -43,7 +43,7 @@ function CurhatKeTemanContact(props) {
   const [visiblePhone, setVisiblePhone] = useState(false);
   const toggleOverlayPhone = () => {
     // setVisiblePhone(!visiblePhone);
-    navigation.navigate('FindUserByContact')
+    navigation.navigate('FindUserByContact');
   };
 
   const [visibleInvite, setVisibleInvite] = useState(false);
@@ -60,7 +60,7 @@ function CurhatKeTemanContact(props) {
       })
       .then((success) => {
         // console.log(`success`, success.data.data)
-        setlistContact(success.data.data.rows)
+        setlistContact(success.data.data.rows);
         setListFriend(success.data.data.rows);
       })
       .catch((err) => {
@@ -69,14 +69,19 @@ function CurhatKeTemanContact(props) {
   }, []);
 
   useEffect(() => {
-    if(search && search.length>0){
-      let filter = listContact.filter(data => {return data.friend.name&& data.friend.name.toLowerCase().indexOf(search.toLowerCase()) >= 0})
-        // console.log(filter)
-      setListFriend(filter)
-    }else if(search.length<1){
-      setListFriend(listContact)
+    if (search && search.length > 0) {
+      let filter = listContact.filter((data) => {
+        return (
+          data.friend.name &&
+          data.friend.name.toLowerCase().indexOf(search.toLowerCase()) >= 0
+        );
+      });
+      // console.log(filter)
+      setListFriend(filter);
+    } else if (search.length < 1) {
+      setListFriend(listContact);
     }
-  }, [search])
+  }, [search]);
 
   return (
     <TemplateBackground cover={true}>
@@ -169,11 +174,21 @@ function CurhatKeTemanContact(props) {
                   let exist = false;
 
                   if (index === 0) {
-                    newName = item && item.friend.name &&item.friend.name.substring(0, 1).toUpperCase();
+                    newName =
+                      item &&
+                      item.friend.name &&
+                      item.friend.name.substring(0, 1).toUpperCase();
                     exist = true;
                   } else {
-                    if (item && item.friend.name &&item.friend.name.substring(0, 1).toUpperCase() !== newName) {
-                      newName = item && item.friend.name &&item.friend.name.substring(0, 1).toUpperCase();
+                    if (
+                      item &&
+                      item.friend.name &&
+                      item.friend.name.substring(0, 1).toUpperCase() !== newName
+                    ) {
+                      newName =
+                        item &&
+                        item.friend.name &&
+                        item.friend.name.substring(0, 1).toUpperCase();
                       exist = true;
                     }
                   }
@@ -195,25 +210,31 @@ function CurhatKeTemanContact(props) {
                         </View>
                       )}
                       <TouchableOpacity
-                        onPress={() =>{
-                          api.findFriend({
-                            no: item.friend&&item.friend.user.phone_number,
-                            token: token.data.access_token,
-                          })
-                            .then((res) => {
-                              if (res.data.data.rows.length > 0) {
-                                // alert('user found')
-                                // toggleOverlayPhone()
-                                navigation.navigate('CurhatKeTemanContactDetail', {
-                                  params: res.data.data.rows[0],
-                                });
-                              } else {
-                                Alert.alert('user not found');
-                              }
-                              // console.log(res.data.data.rows)
-                            })
-                            .catch((err) => console.log("error",err.data))
-                        }
+                        onPress={
+                          () => {
+                            api
+                              .findFriend({
+                                no:
+                                  item.friend && item.friend.user.phone_number,
+                                token: token.data.access_token,
+                              })
+                              .then((res) => {
+                                if (res.data.data.rows.length > 0) {
+                                  // alert('user found')
+                                  // toggleOverlayPhone()
+                                  navigation.navigate(
+                                    'CurhatKeTemanContactDetail',
+                                    {
+                                      params: res.data.data.rows[0],
+                                    },
+                                  );
+                                } else {
+                                  Alert.alert('user not found');
+                                }
+                                // console.log(res.data.data.rows)
+                              })
+                              .catch((err) => console.log('error', err.data));
+                          }
                           // navigation.navigate('CurhatKeTemanContactDetail', {
                           //   nama: item.friend.name,
                           // })
@@ -272,7 +293,6 @@ function CurhatKeTemanContact(props) {
           toggleOverlay={toggleOverlayInvite}
         />
       </View>
-
     </TemplateBackground>
   );
 }

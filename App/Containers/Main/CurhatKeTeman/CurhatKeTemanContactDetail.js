@@ -11,7 +11,7 @@ import API from '../../../Services/Api';
 import FixtureAPI from '../../../Services/FixtureApi';
 import DebugConfig from '../../../Config/DebugConfig';
 
-import TokenRedux, {success} from '../../../Redux/Authentication/TokenRedux';
+import TokenRedux from '../../../Redux/Authentication/TokenRedux';
 
 import {showMessage, hideMessage} from 'react-native-flash-message';
 
@@ -27,7 +27,7 @@ import {bindActionCreators} from 'redux';
 import {Image} from 'react-native-elements/dist/image/Image';
 import {ActivityIndicator} from 'react-native';
 import DetailAlbum from '../Foto/DetailAlbum';
-import { Avatar } from 'react-native-elements';
+import {Avatar} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
@@ -46,24 +46,25 @@ function CurhatKeTemanContactDetail(props) {
     setVisible(!visible);
   };
   useEffect(() => {
-    console.log('params',params)
-    if (params) {
-      api
-        .getDetailContact({
-          id: params.id_account,
-          token: token.data.access_token,
-        })
-        .then((succ) => {
-          console.log(`succ`, succ.data.data.rows)
-          setDataDetail(succ.data.data.rows);
-        })
-        .catch((err) => {
-          console.log(`err`, err)
-        });
-    }
+    console.log('params curhat keteman detail', params);
+    // if (params) {
+    //   api
+    //     .getDetailContact({
+    //       id: params.id_account,
+    //       token: token.data.access_token,
+    //     })
+    //     .then((succ) => {
+    //       console.log('succ', succ.data.data.rows);
+    //       setDataDetail(succ.data.data.rows);
+    //     })
+    //     .catch((err) => {
+    //       console.log('err', err);
+    //     });
+    // }
     // // {
-    //   setDataDetail(params);
     // // }
+
+    setDataDetail(params);
   }, []);
 
   useEffect(() => {
@@ -82,7 +83,7 @@ function CurhatKeTemanContactDetail(props) {
         token: token.data.access_token,
       })
       .then((success) => {
-        console.log('sucess add',success.data)
+        console.log('sucess add', success.data);
         showMessage({
           message: success.data.message,
           type: 'info',
@@ -92,12 +93,12 @@ function CurhatKeTemanContactDetail(props) {
         // console.log(err);
       });
   };
-  if(!dataDetail){
-    return(
-      <View style={{flex:1}}>
-        <ActivityIndicator color="white" size={32}/>
+  if (!dataDetail) {
+    return (
+      <View style={{flex: 1}}>
+        <ActivityIndicator color="white" size={32} />
       </View>
-    )
+    );
   }
   return (
     <TemplateBackground cover={true}>
@@ -129,7 +130,7 @@ function CurhatKeTemanContactDetail(props) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                if (dataDetail && dataDetail.is_friend) {
+                if (dataDetail && dataDetail.friend.user.is_friend) {
                   alert('still on development');
                 } else {
                   addToContact();
@@ -138,32 +139,44 @@ function CurhatKeTemanContactDetail(props) {
               <Text
                 style={{
                   color:
-                    dataDetail && dataDetail.is_friend ? '#4287f5' : '#4287f5',
+                    dataDetail && dataDetail.friend.user.is_friend
+                      ? '#4287f5'
+                      : '#4287f5',
                   marginLeft: 15,
                   fontWeight: '500',
                   fontSize: 16,
                 }}>
-                {dataDetail && dataDetail.is_friend ? 'Edit' : 'Request'}
+                {dataDetail && dataDetail.friend.user.is_friend
+                  ? 'Edit'
+                  : 'Request'}
               </Text>
             </TouchableOpacity>
           </View>
           <View style={{flex: 1, alignItems: 'center'}}>
-            <LinearGradient colors={['#DB068D', '#6F2A91']} style={{borderRadius:100, padding:2, marginRight:8}}>
-                <Avatar
-                        rounded
-                        size='xlarge'
-                        title={dataDetail && dataDetail.name.charAt(0)}
-                        source={dataDetail&&dataDetail.photo? {uri: dataDetail.photo.url}:''}
-                        containerStyle={{
-                          // marginRight:8,
-                          // borderWidth:1,
-                          // borderTopColor:'#DB068D',
-                          // borderLeftColor:'#DB068D',
-                          // borderRightColor:'#6F2A91',
-                          // borderBottomColor:'#6F2A91',
-                        }}
-                      />
-              </LinearGradient>
+            <LinearGradient
+              colors={['#DB068D', '#6F2A91']}
+              style={{borderRadius: 100, padding: 2, marginRight: 8}}>
+              <Avatar
+                rounded
+                size="xlarge"
+                title={dataDetail && dataDetail.friend.name.charAt(0)}
+                source={
+                  dataDetail && dataDetail.photo
+                    ? {uri: dataDetail.photo.url}
+                    : ''
+                }
+                containerStyle={
+                  {
+                    // marginRight:8,
+                    // borderWidth:1,
+                    // borderTopColor:'#DB068D',
+                    // borderLeftColor:'#DB068D',
+                    // borderRightColor:'#6F2A91',
+                    // borderBottomColor:'#6F2A91',
+                  }
+                }
+              />
+            </LinearGradient>
             {/* <Image
               source={dataDetail&&dataDetail.photo? {uri: dataDetail.photo.url} : images.pp}
               style={{width: 100, height: 100, alignSelf: 'center', borderRadius:100}}
@@ -179,8 +192,9 @@ function CurhatKeTemanContactDetail(props) {
                 fontSize: 30,
                 textAlign: 'center',
                 marginTop: 10,
+                height: 100,
               }}>
-              {dataDetail ? dataDetail.name : nama}
+              {dataDetail && dataDetail.friend.name}
             </Text>
           </View>
           <View
@@ -196,15 +210,14 @@ function CurhatKeTemanContactDetail(props) {
               marginTop: 225,
             }}>
             <TouchableOpacity
-              onPress={() =>{
-                if(dataDetail.is_friend){
-                  navigation.navigate('Chat', {
-                    nama: dataDetail ? dataDetail.name : nama,
-                  })
+              onPress={() => {
+                if (dataDetail.friend.user.is_friend) {
+                  navigation.navigate('DetailChat', {
+                    params: dataDetail,
+                    token: token,
+                  });
                 }
-              }
-               
-              }
+              }}
               style={{alignItems: 'center'}}>
               <Image
                 source={images.message}
@@ -213,18 +226,20 @@ function CurhatKeTemanContactDetail(props) {
                   height: Screen.height * 0.07,
                 }}
                 resizeMode="contain"
-                containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+                containerStyle={{
+                  opacity: dataDetail.friend.user.is_friend ? 1 : 0.5,
+                }}
               />
               <Text style={{fontSize: 13, marginTop: 5, color: 'white'}}>
                 Message
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() =>{
+              onPress={() => {
                 // console.log(dataDetail)
-                if(dataDetail.is_friend){
+                if (dataDetail.friend.user.is_friend) {
                   // console.log(`dataDetail`, dataDetail)
-                  navigation.navigate('CallRoom', {params: dataDetail})
+                  navigation.navigate('CallRoom', {params: dataDetail});
                 }
               }}>
               <View style={{alignItems: 'center'}}>
@@ -235,16 +250,19 @@ function CurhatKeTemanContactDetail(props) {
                     height: Screen.height * 0.07,
                   }}
                   resizeMode="contain"
-                  containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+                  containerStyle={{
+                    opacity: dataDetail.friend.user.is_friend ? 1 : 0.5,
+                  }}
                 />
                 <Text style={{fontSize: 13, marginTop: 5, color: 'white'}}>
                   Call
                 </Text>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
-                if(dataDetail.is_friend){
-                  navigation.navigate('VideoRoom', {params: dataDetail})
+            <TouchableOpacity
+              onPress={() => {
+                if (dataDetail.friend.user.is_friend) {
+                  navigation.navigate('VideoRoom', {params: dataDetail});
                 }
               }}>
               <View style={{alignItems: 'center'}}>
@@ -255,7 +273,9 @@ function CurhatKeTemanContactDetail(props) {
                     height: Screen.height * 0.07,
                   }}
                   resizeMode="contain"
-                  containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
+                  containerStyle={{
+                    opacity: dataDetail.friend.user.is_friend ? 1 : 0.5,
+                  }}
                 />
                 <Text style={{fontSize: 13, marginTop: 5, color: 'white'}}>
                   Video
@@ -267,7 +287,7 @@ function CurhatKeTemanContactDetail(props) {
             <View
               style={{
                 height: 1,
-                width: Screen.width*0.8,
+                width: Screen.width * 0.8,
                 borderRadius: 1,
                 borderWidth: 0.5,
                 borderColor: 'white',
@@ -277,12 +297,12 @@ function CurhatKeTemanContactDetail(props) {
             />
             <Text style={{fontWeight: 'bold', color: 'white'}}>Phone</Text>
             <Text style={{color: 'white'}}>
-              {dataDetail && dataDetail.phone_number}
+              {dataDetail && dataDetail.account_2_phone_number}
             </Text>
             <View
               style={{
                 height: 1,
-                width: Screen.width*0.8,
+                width: Screen.width * 0.8,
                 borderRadius: 1,
                 borderWidth: 0.5,
                 borderColor: 'white',
@@ -292,12 +312,12 @@ function CurhatKeTemanContactDetail(props) {
             />
             <Text style={{fontWeight: 'bold', color: 'white'}}>Email</Text>
             <Text style={{color: 'white'}}>
-              {dataDetail && dataDetail.email}
+              {dataDetail && dataDetail.account_2_email}
             </Text>
             <View
               style={{
                 height: 1,
-                width: Screen.width*0.8,
+                width: Screen.width * 0.8,
                 borderRadius: 1,
                 borderWidth: 0.5,
                 borderColor: 'white',

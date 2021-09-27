@@ -26,7 +26,10 @@ function CallRoom(props) {
     leaveChannel,
     toggleIsMute,
     toggleIsSpeakerEnable,
-  } = useInitializeAgora(params.agora.app_id, params.agora.token);
+  } = useInitializeAgora(
+    params.friend.user.agora.app_id,
+    params.friend.user.agora.token,
+  );
 
   const init = async () => {
     // await setDataProfile(params)
@@ -42,8 +45,8 @@ function CallRoom(props) {
     console.log('params call', params);
     // alert(params.agora.channel)
     // init()
-    setDataProfile(params);
-    setChannelName(params.agora.channel);
+    setDataProfile(params.friend.user);
+    setChannelName(params.friend.user.agora.channel);
     // init()
   }, []);
 
