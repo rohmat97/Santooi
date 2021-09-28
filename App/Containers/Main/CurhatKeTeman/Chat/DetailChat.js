@@ -81,7 +81,7 @@ function DetailChat(props) {
         setmessages_array(success.data.data.rows.data);
         setloading(false);
         setTimeout(() => {
-          onPressFunction()
+          onPressFunction();
         }, 1000);
       });
     //instantiate pusher
