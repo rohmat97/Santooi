@@ -212,11 +212,11 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
-  - agora-react-native-rtm (1.2.2-alpha.3):
-    - AgoraRtm_iOS (= 1.2.2)
+  - agora-react-native-rtm (1.4.8):
+    - AgoraRtm_iOS (= 1.4.8)
     - React
   - AgoraRtcEngine_iOS_Crypto (3.1.2)
-  - AgoraRtm_iOS (1.2.2)
+  - AgoraRtm_iOS (1.4.8)
   - AppAuth (1.4.0):
     - AppAuth/Core (= 1.4.0)
     - AppAuth/ExternalUserAgent (= 1.4.0)
@@ -656,29 +656,29 @@ PODS:
     - React
   - react-native-contacts (7.0.2):
     - React-Core
-  - react-native-fbsdk-next (4.3.0):
+  - react-native-fbsdk-next (4.3.1):
     - React-Core
-    - react-native-fbsdk-next/Core (= 4.3.0)
-    - react-native-fbsdk-next/Login (= 4.3.0)
-    - react-native-fbsdk-next/Share (= 4.3.0)
-  - react-native-fbsdk-next/Core (4.3.0):
+    - react-native-fbsdk-next/Core (= 4.3.1)
+    - react-native-fbsdk-next/Login (= 4.3.1)
+    - react-native-fbsdk-next/Share (= 4.3.1)
+  - react-native-fbsdk-next/Core (4.3.1):
     - FBSDKCoreKit (~> 9.3)
     - React-Core
-  - react-native-fbsdk-next/Login (4.3.0):
+  - react-native-fbsdk-next/Login (4.3.1):
     - FBSDKLoginKit (~> 9.3)
     - React-Core
-  - react-native-fbsdk-next/Share (4.3.0):
+  - react-native-fbsdk-next/Share (4.3.1):
     - FBSDKShareKit (~> 9.3)
     - React-Core
   - react-native-geolocation (2.0.2):
     - React
-  - react-native-image-picker (4.0.4):
+  - react-native-image-picker (4.1.1):
     - React-Core
   - react-native-keep-awake (4.0.0):
     - React
-  - react-native-netinfo (6.0.1):
+  - react-native-netinfo (6.0.2):
     - React-Core
-  - react-native-safe-area-context (3.3.0):
+  - react-native-safe-area-context (3.3.2):
     - React-Core
   - react-native-splash-screen (3.2.0):
     - React
@@ -766,7 +766,7 @@ PODS:
     - React-Core
   - RNPermissions (3.0.5):
     - React-Core
-  - RNReanimated (2.2.0):
+  - RNReanimated (2.2.2):
     - DoubleConversion
     - FBLazyVector
     - FBReactNativeSpec
@@ -797,13 +797,13 @@ PODS:
     - Yoga
   - RNScreens (2.18.1):
     - React-Core
-  - RNShare (6.2.1):
+  - RNShare (6.5.0):
     - React-Core
-  - RNSound (0.11.0):
-    - React
-    - RNSound/Core (= 0.11.0)
-  - RNSound/Core (0.11.0):
-    - React
+  - RNSound (0.11.1):
+    - React-Core
+    - RNSound/Core (= 0.11.1)
+  - RNSound/Core (0.11.1):
+    - React-Core
   - RNSoundPlayer (0.10.9):
     - React
   - RNSVG (12.1.1):
@@ -1080,9 +1080,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
-  agora-react-native-rtm: 46282635c00a56e9b4e937c88237fa0c79bb4ba5
+  agora-react-native-rtm: f2ec8a91796db30cdce149b76d261056a3034629
   AgoraRtcEngine_iOS_Crypto: 42a7a2142317c588f1b5c2e74b98fd01d73f8f60
-  AgoraRtm_iOS: c6ba986a3af73dd0f02e6e2995ae4fe9c155e6ae
+  AgoraRtm_iOS: 382a54763803dad098d3b31a2608ccd62972e00b
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
@@ -1146,12 +1146,12 @@ SPEC CHECKSUMS:
   react-native-agora: 72b4ac4e1932f60d266b7358e78a5f9aa096f29e
   react-native-config: f2c2ae45625a068c35681a16b9bfb1ca58b0adc7
   react-native-contacts: bc424db19c3384e44e6a9d9da9a78ee51b0aa7a1
-  react-native-fbsdk-next: 19e974b071047b7ed1dad86a9dc3fe77dff76b8c
+  react-native-fbsdk-next: 5a8e6915d7e4191dcb2c9843ea9771e3a29def9c
   react-native-geolocation: cbd9d6bd06bac411eed2671810f454d4908484a8
-  react-native-image-picker: 8d96c42425d3f143af7dd41dbbb4887b2c3ac851
+  react-native-image-picker: 7c37cd600a9b7338ced8609cc3ad108ebe6c444f
   react-native-keep-awake: eba3137546b10003361b37c761f6c429b59814ae
-  react-native-netinfo: 0f64266bbaa1989ebd51b43ee1723d582f6b3e47
-  react-native-safe-area-context: 8465df05de8106c584b117f0e027e17174d6e02e
+  react-native-netinfo: 8917788f12f8c422d16a56f840a1b06faa56e2b6
+  react-native-safe-area-context: 5cf05f49df9d17261e40e518481f2e334c6cd4b5
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   React-RCTActionSheet: 89a0ca9f4a06c1f93c26067af074ccdce0f40336
   React-RCTAnimation: 1bde3ecc0c104c55df246eda516e0deb03c4e49b
@@ -1173,10 +1173,10 @@ SPEC CHECKSUMS:
   RNGestureHandler: a479ebd5ed4221a810967000735517df0d2db211
   RNGoogleSignin: e64616a4080cf7d83f4b292fad82d174587444e2
   RNPermissions: 3e5bb8afd93c787681bbacbf54d586a6272ecc92
-  RNReanimated: d9da990fc90123f4ffbfdda93d00fc15174863a8
+  RNReanimated: 6ec2460b9c6c8f3b1403bd0eaa12d359a98650e3
   RNScreens: f7ad633b2e0190b77b6a7aab7f914fad6f198d8d
-  RNShare: 5ac8f6532ca4cd80fc71caef1cfbba1854a6a045
-  RNSound: c980916b596cc15c8dcd2f6ecd3b13c4881dbe20
+  RNShare: 047d42214f875d731bde73a2b67418638af85ad9
+  RNSound: 9253013eeaa051eab63d354fd4654f7aa67c82f0
   RNSoundPlayer: e7f72cf262c8de4f1427b5f29cc47aebadd1d872
   RNSVG: 551acb6562324b1d52a4e0758f7ca0ec234e278f
   RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4

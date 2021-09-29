@@ -119,13 +119,13 @@ export const Chats = ({props, page, SetPage}) => {
                 }}>
                 <LinearGradient
                   colors={['#DB068D', '#6F2A91']}
-                  style={{borderRadius: 100, width: 40, height: 40}}>
+                  style={{borderRadius: 100, width: 52, height:51,alignItems:'center'}}>
                   <Avatar
                     rounded
                     size="medium"
                     // title={'Nissa'}
                     source={{
-                      uri:item.friend.photo?item.friend.photo:'',
+                      uri:item.friend.photo?item.friend.photo.url:'',
                     }}
                     containerStyle={
                       {
@@ -138,6 +138,7 @@ export const Chats = ({props, page, SetPage}) => {
                       }
                     }
                   />
+                  {/* <Text>{console.log(item.friend.photo)}</Text> */}
                 </LinearGradient>
 
                 <View style={{marginLeft: 20, flex: 1}}>
@@ -150,7 +151,7 @@ export const Chats = ({props, page, SetPage}) => {
                       <Text style={{fontWeight: 'bold', color: 'white'}}>
                         {item.friend.name}
                       </Text>
-                     {item.last_message && <Text style={{color: 'white'}}>{item.last_message.message}</Text>}
+                     {item.last_message ? <Text style={{color: 'white'}}>{item.last_message.message}</Text>:<Text></Text>}
                     </View>
                     <View style={{marginEnd: 10}}>
                       <Text style={{color: 'white', fontSize: 13}}>{item.total_unread_message}</Text>

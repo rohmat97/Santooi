@@ -78,7 +78,7 @@ function DetailChat(props) {
         // console.log(`success`, success.data.data);
         // this.setState({messages_array: success.data.data.rows.data});
         setdata(success.data.data);
-        setmessages_array(success.data.data.rows.data);
+        setmessages_array(success.data.data.rows.data.reverse());
         setloading(false);
         setTimeout(() => {
           onPressFunction();
@@ -99,7 +99,10 @@ function DetailChat(props) {
       settext('');
       setmessages_array(message);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps\
+    return () => {
+      console.log(`backto chat list`)
+    }
   }, []);
   const onRefresh = () => {
     console.log(
@@ -120,7 +123,7 @@ function DetailChat(props) {
           // console.log(`success`, success.data.data.rows.data);
           // this.setState({messages_array: success.data.data.rows.data});
           setdata(success.data.data);
-          let merge = messages_array.concat(success.data.data.rows.data);
+          let merge = success.data.data.rows.data.concat(messages_array);
           // console.log(`merge.length`, merge.length);
           setmessages_array(merge);
           setisFetching(false);
@@ -158,6 +161,7 @@ function DetailChat(props) {
         data={loading ? [] : messages_array}
         onRefresh={onRefresh}
         refreshing={isFetching}
+        contentContainerStyle={{marginHorizontal:12}}
         ListEmptyComponent={
           <View
             style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>

@@ -230,12 +230,13 @@ function FindUserByContact(props) {
                           })
                             .then((res) => {
 
-                              // console.log('addfriend',res.data)
+                              console.log('addfriend',res.data.data.rows[0])
                               if (res.data.data.rows.length > 0) {
                                 // alert('user found')
                                 // toggleOverlayPhone()
                                 navigation.navigate('CurhatKeTemanContactDetail', {
                                   params: res.data.data.rows[0],
+                                  local: true
                                 });
                               } else {
                                 console.log(res.data)
