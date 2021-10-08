@@ -85,17 +85,12 @@ function ListContact({props, page, SetPage}) {
   }, []);
 
   useEffect(() => {
-    if (search && search.length > 0) {
-      let filter = listContact.filter((data) => {
-        return (
-          data.displayName &&
-          data.displayName.toLowerCase().indexOf(search.toLowerCase()) >= 0
-        );
-      });
-      // console.log(filter)
-      setListFriend(filter);
-    } else if (search.length < 1) {
-      setListFriend(listContact);
+    if(search && search.length>0){
+      let filter = listContact.filter(data => {return data.friend && data.friend.name.toLowerCase().indexOf(search.toLowerCase()) >= 0})
+        // console.log(filter)
+      setListFriend(filter)
+    }else if(search.length<1){
+      setListFriend(listContact)
     }
   }, [search]);
 
@@ -162,9 +157,43 @@ function ListContact({props, page, SetPage}) {
                 />
               </View>
             </TouchableOpacity>
-            {listFriend.length > 0 ? (
               <FlatList
                 data={listFriend}
+                ListEmptyComponent={
+                  <View
+                  style={{
+                    flex: 1,
+                    // justifyContent: 'center',
+                    alignItems: 'center',
+                    width: Screen.width * 0.9,
+                    height: Screen.height * 0.7,
+                  }}>
+
+                <View
+                  style={{
+                    backgroundColor: '#67308F',
+                    width: Screen.width,
+                    paddingVertical: 1,
+                    paddingHorizontal: 20,
+                    marginBottom: 20,
+                    marginLeft: -15,
+                  }}
+                />
+                  <Image
+                    source={images.EmptyStateChat}
+                    style={{
+                      height: Screen.width * 0.7,
+                      width: Screen.width * 0.6,
+                    }}
+                    resizeMode="cover"
+                  />
+                  <Text style={{
+                    color:"white",
+                    padding:12,
+                    fontSize:20
+                  }}>Belum Ada List Teman</Text>
+                </View>
+                }
                 renderItem={({item, index}) => {
                   let exist = false;
 
@@ -252,28 +281,6 @@ function ListContact({props, page, SetPage}) {
                   );
                 }}
               />
-            ) : (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <View
-                  style={{
-                    backgroundColor: '#67308F',
-                    width: Screen.width,
-                    paddingVertical: 1,
-                    paddingHorizontal: 20,
-                    marginBottom: 20,
-                    marginLeft: -15,
-                  }}
-                />
-                <Text style={{color: 'white', fontSize: 32}}>
-                  Belum Ada Teman
-                </Text>
-              </View>
-            )}
           </ScrollView>
         </View>
         <OverlayPhone

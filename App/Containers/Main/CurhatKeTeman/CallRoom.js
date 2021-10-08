@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, View, Text, TextInput, Button} from 'react-native';
 import RtcEngine from 'react-native-agora';
-import {Image} from 'react-native-elements';
+import {Avatar, Image} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {TemplateBackground} from '../../../Components/TemplateBackground';
 import images from '../../../Themes/Images';
@@ -11,7 +11,7 @@ import styles from './styles';
 
 function CallRoom(props) {
   const {navigation} = props;
-  const {nama, params} = navigation.state.params;
+  const {params, name, title, pict} = navigation.state.params;
 
   const [DataProfile, setDataProfile] = useState();
   useRequestAudioHook();
@@ -67,7 +67,7 @@ function CallRoom(props) {
     <TemplateBackground cover={true}>
       <View style={styles.container}>
         <View style={styles.Main}>
-          <Image
+          {/* <Image
             source={{
               uri: DataProfile && DataProfile.photo ? DataProfile.photo : '',
             }}
@@ -80,12 +80,30 @@ function CallRoom(props) {
             }}
             resizeMode="cover"
             // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
-          />
+          /> */}
+          <Avatar
+                rounded
+                size="xlarge"
+                title={title}
+                source={pict}
+                containerStyle={
+                  {
+                    // marginRight:8,
+                    // borderWidth:1,
+                    // borderTopColor:'#DB068D',
+                    // borderLeftColor:'#DB068D',
+                    // borderRightColor:'#6F2A91',
+                    // borderBottomColor:'#6F2A91',
+                    backgroundColor:
+                DataProfile && DataProfile.photo ? null : 'purple',
+                  }
+                }
+              />
           <Text style={{color: 'white', fontSize: 32}}>
-            {DataProfile && DataProfile.col_call && DataProfile.col_call}
+            {name}
           </Text>
           {peerIds.length < 2 && (
-            <Text style={{color: 'white', fontSize: 22, marginTop: 50}}>
+            <Text style={{color: 'white', fontSize: 22, marginTop: 12}}>
               Calling ...
             </Text>
           )}

@@ -78,7 +78,7 @@ export default StyleSheet.create({
   },
   BottomFeature: {
     position:'absolute',
-    bottom:0,
+    bottom:50,
     width:Screen.width,
     flexDirection:'row',
     justifyContent:'space-around',

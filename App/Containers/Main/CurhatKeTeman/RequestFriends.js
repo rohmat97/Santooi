@@ -18,6 +18,7 @@ import {Screen} from '../../../Transforms/Screen';
 import {CustomBottomTab2} from '../../../Components/CustomBottomTab2';
 import {Avatar} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
+import { showMessage } from 'react-native-flash-message';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 export const RequestFriends = ({props,page,SetPage}) => {
@@ -59,9 +60,29 @@ export const RequestFriends = ({props,page,SetPage}) => {
               <FlatList
                 data={listRequestFriends}
                 ListEmptyComponent={
-                  <View style={{flex:1, justifyContent:"center",alignItems:"center", height:Screen.height*0.6}}>
-                    <Text style={{color:'white', fontSize:20}}> Belum Ada Permintaan Pertemanan</Text>
-                  </View>
+                  <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    width: Screen.width * 0.9,
+                    height: Screen.height * 0.7,
+                  }}>
+                  <Image
+                    source={images.EmptyStateChat}
+                    style={{
+                      height: Screen.width * 0.7,
+                      width: Screen.width * 0.6,
+                    }}
+                    resizeMode="cover"
+                  />
+                  <Text style={{
+                    color:"white",
+                    padding:12,
+                    fontSize:20,
+                    textAlign:'center'
+                  }}> Belum Ada Permintaan Pertemanan</Text>
+                </View>
                 }
                 style={{paddingBottom: Screen.height * 0.1}}
                 renderItem={({item, index}) => {
@@ -96,6 +117,7 @@ export const RequestFriends = ({props,page,SetPage}) => {
                         style={{
                           flexDirection: 'row',
                           justifyContent: 'space-between',
+                          alignItems:'center'
                         }}>
                         <View>
                           <Text style={{fontWeight: 'bold', color: 'white'}}>
@@ -115,7 +137,11 @@ export const RequestFriends = ({props,page,SetPage}) => {
                                 token:token.data.access_token
                               }).then(
                                 sucess =>{
-                                  console.log(`sucess`, sucess.data)
+                                  // console.log(`sucess`, sucess.data)
+                                  showMessage({
+                                    message: "Permintaan Ditolak",
+                                    type: "info",
+                                  });
                                   GetRequestFriends()
                                 }
                               ).catch(err => console.log(`err`, err))
@@ -141,7 +167,11 @@ export const RequestFriends = ({props,page,SetPage}) => {
                                 token:token.data.access_token
                               }).then(
                                 sucess =>{
-                                  console.log(`sucess`, sucess.data)
+                                  // console.log(`sucess`, sucess.data)
+                                  showMessage({
+                                    message: "Permintaan Diterima",
+                                    type: "info",
+                                  });
                                   GetRequestFriends()
                                 }
                               ).catch(err => console.log(`err`, err))

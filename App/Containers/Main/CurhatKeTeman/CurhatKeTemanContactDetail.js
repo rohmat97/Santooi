@@ -46,7 +46,7 @@ function CurhatKeTemanContactDetail(props) {
     setVisible(!visible);
   };
   useEffect(() => {
-    console.log('params curhat keteman detail', local);
+    console.log('params curhat keteman detail', params);
     // if (params) {
     //   api
     //     .getDetailContact({
@@ -88,6 +88,18 @@ function CurhatKeTemanContactDetail(props) {
           message: success.data.message,
           type: 'info',
         });
+        api
+        .getDetailContact({
+          id: params.id_account,
+          token: token.data.access_token,
+        })
+        .then((succ) => {
+          console.log('succ', succ.data.data.rows);
+          setDataDetail(succ.data.data.rows);
+        })
+        .catch((err) => {
+          console.log('err', err);
+        });
       })
       .catch((err) => {
         // console.log(err);
@@ -101,6 +113,7 @@ function CurhatKeTemanContactDetail(props) {
     );
   }
   let opacity = local?dataDetail.is_friend? 1 : 0.5: dataDetail.friend && dataDetail.friend.user.is_friend ? 1 : 0.5
+  // console.log(`dataDetail`, dataDetail)
   return (
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
@@ -153,11 +166,11 @@ function CurhatKeTemanContactDetail(props) {
                 {
                 local?
                     dataDetail.is_friend? 
-                    'Edit'
-                    : 'Request': 
+                    ''
+                    : dataDetail.friendship_status === 0?'Waiting Confirmation' :'Request': 
                     dataDetail.friend && dataDetail.friend.user.is_friend? 
-                    'Edit'
-                    : 'Request'
+                    ''
+                    : dataDetail.friend.friendship_status=== 0?'Waiting Confirmation' :'Request'
                 }
               </Text>
             </TouchableOpacity>
@@ -171,8 +184,13 @@ function CurhatKeTemanContactDetail(props) {
                 size="xlarge"
                 title={local?dataDetail.name.charAt(0):dataDetail.friend && dataDetail.friend.name.charAt(0)}
                 source={
+                  local?
                   dataDetail && dataDetail.photo
                     ? {uri: dataDetail.photo.url}
+                    : ''
+                    :
+                  dataDetail && dataDetail.friend.photo
+                    ? {uri: dataDetail.friend.photo.url}
                     : ''
                 }
                 containerStyle={
@@ -249,7 +267,19 @@ function CurhatKeTemanContactDetail(props) {
                 // console.log(dataDetail)
                 if (local?dataDetail.is_friend:dataDetail.friend.user.is_friend) {
                   // console.log(`dataDetail`, dataDetail)
-                  navigation.navigate('CallRoom', {params: dataDetail});
+                  navigation.navigate('CallRoom', {
+                    params: dataDetail, 
+                    name: local?dataDetail.name : dataDetail.friend&& dataDetail.friend.name,
+                    title: local?dataDetail.name.charAt(0):dataDetail.friend && dataDetail.friend.name.charAt(0),
+                    pict: local?
+                    dataDetail && dataDetail.photo
+                      ? {uri: dataDetail.photo.url}
+                      : ''
+                      :
+                    dataDetail && dataDetail.friend.photo
+                      ? {uri: dataDetail.friend.photo.url}
+                      : ''
+                  });
                 }
               }}>
               <View style={{alignItems: 'center'}}>

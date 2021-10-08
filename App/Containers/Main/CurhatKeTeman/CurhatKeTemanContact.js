@@ -57,11 +57,30 @@ function CurhatKeTemanContact(props) {
     api
       .listContact({
         token: token.data.access_token,
+        request: '',
       })
       .then((success) => {
-        // console.log(`success`, success.data.data)
-        setlistContact(success.data.data.rows);
-        setListFriend(success.data.data.rows);
+        // Platform.OS==='ios'&& console.log(`success ios`, success.data)
+        // Platform.OS==='android'&& console.log(`success android`, success.data.data)
+        const data = success.data.data.rows.sort((a, b) => {
+          if (
+            a.friend.name &&
+            b.friend.name &&
+            a.friend.name.toLowerCase() > b.friend.name.toLowerCase()
+          ) {
+            return 1;
+          }
+          if (
+            a.friend.name &&
+            b.friend.name &&
+            a.friend.name.toLowerCase() < b.friend.name.toLowerCase()
+          ) {
+            return -1;
+          }
+          return 0;
+        });
+        setlistContact(data);
+        setListFriend(data);
       })
       .catch((err) => {
         console.log('err', err);
@@ -69,17 +88,12 @@ function CurhatKeTemanContact(props) {
   }, []);
 
   useEffect(() => {
-    if (search && search.length > 0) {
-      let filter = listContact.filter((data) => {
-        return (
-          data.friend.name &&
-          data.friend.name.toLowerCase().indexOf(search.toLowerCase()) >= 0
-        );
-      });
-      // console.log(filter)
-      setListFriend(filter);
-    } else if (search.length < 1) {
-      setListFriend(listContact);
+    if(search && search.length>0){
+      let filter = listContact.filter(data => {return data.friend && data.friend.name.toLowerCase().indexOf(search.toLowerCase()) >= 0})
+        // console.log(filter)
+      setListFriend(filter)
+    }else if(search.length<1){
+      setListFriend(listContact)
     }
   }, [search]);
 
@@ -167,9 +181,43 @@ function CurhatKeTemanContact(props) {
                 />
               </View>
             </TouchableOpacity>
-            {listFriend.length > 0 ? (
-              <FlatList
-                data={listFriend}
+            <FlatList
+                data={listContact}
+                ListEmptyComponent={
+                  <View
+                  style={{
+                    flex: 1,
+                    // justifyContent: 'center',
+                    alignItems: 'center',
+                    width: Screen.width * 0.9,
+                    height: Screen.height * 0.7,
+                  }}>
+
+                <View
+                  style={{
+                    backgroundColor: '#67308F',
+                    width: Screen.width,
+                    paddingVertical: 1,
+                    paddingHorizontal: 20,
+                    marginBottom: 20,
+                    marginLeft: -15,
+                  }}
+                />
+                  <Image
+                    source={images.EmptyStateChat}
+                    style={{
+                      height: Screen.width * 0.7,
+                      width: Screen.width * 0.6,
+                    }}
+                    resizeMode="cover"
+                  />
+                  <Text style={{
+                    color:"white",
+                    padding:12,
+                    fontSize:20
+                  }}>Belum Ada List Teman</Text>
+                </View>
+                }
                 renderItem={({item, index}) => {
                   let exist = false;
 
@@ -210,35 +258,36 @@ function CurhatKeTemanContact(props) {
                         </View>
                       )}
                       <TouchableOpacity
-                        onPress={
-                          () => {
-                            api
-                              .findFriend({
-                                no:
-                                  item.friend && item.friend.user.phone_number,
-                                token: token.data.access_token,
-                              })
-                              .then((res) => {
-                                if (res.data.data.rows.length > 0) {
-                                  // alert('user found')
-                                  // toggleOverlayPhone()
-                                  navigation.navigate(
-                                    'CurhatKeTemanContactDetail',
-                                    {
-                                      params: res.data.data.rows[0],
-                                    },
-                                  );
-                                } else {
-                                  Alert.alert('user not found');
-                                }
-                                // console.log(res.data.data.rows)
-                              })
-                              .catch((err) => console.log('error', err.data));
-                          }
-                          // navigation.navigate('CurhatKeTemanContactDetail', {
-                          //   nama: item.friend.name,
-                          // })
-                        }>
+                        onPress={() => {
+                          // console.log(item.friend)
+                          //   api
+                          //     .findFriend({
+                          //       no:
+                          //         item.friend && item.friend.user.phone_number,
+                          //       token: token.data.access_token,
+                          //     })
+                          //     .then((res) => {
+                          //       if (res.data.data.rows.length > 0) {
+                          //         // alert('user found')
+                          //         // toggleOverlayPhone()
+                          //         // console.log(item)
+                          //         navigation.navigate(
+                          //           'CurhatKeTemanContactDetail',
+                          //           {
+                          //             params: res.data.data.rows[0],
+                          //           },
+                          //         );
+                          //       } else {
+                          //         Alert.alert('user not found');
+                          //       }
+                          //       // console.log(res.data.data.rows)
+                          //     })
+                          //     .catch((err) => console.log('error', err.data));
+                          // }
+                          navigation.navigate('CurhatKeTemanContactDetail', {
+                            params: item,
+                          });
+                        }}>
                         <Text style={{color: 'white'}}>{item.friend.name}</Text>
                         <View
                           style={{
@@ -256,28 +305,6 @@ function CurhatKeTemanContact(props) {
                   );
                 }}
               />
-            ) : (
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <View
-                  style={{
-                    backgroundColor: '#67308F',
-                    width: Screen.width,
-                    paddingVertical: 1,
-                    paddingHorizontal: 20,
-                    marginBottom: 20,
-                    marginLeft: -15,
-                  }}
-                />
-                <Text style={{color: 'white', fontSize: 32}}>
-                  Belum Ada Teman
-                </Text>
-              </View>
-            )}
           </ScrollView>
         </View>
         <OverlayPhone
