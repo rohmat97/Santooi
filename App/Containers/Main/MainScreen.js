@@ -15,6 +15,7 @@ import { bindActionCreators } from 'redux';
 import { Dashboard } from './Dashboard'
 import AccountScreen from '../Account/AccountScreen'
 
+import {BASEURL} from '@root/env';
 function MainScreen (props) {
   const { EmoticonRequest, emoticon, token,navigation, status,UpdateStatusRequest,StatusRequest,UpdateStatusSuccess,UpdateStatus,UpdateStatusfetching } = props
   const { navigate } = navigation
@@ -153,6 +154,7 @@ function MainScreen (props) {
     
     EmoticonRequest(token && token.data.access_token)
     setImageProfile(token && token.data.user.photo && token.data.user.photo.url)
+    console.log(`object`,BASEURL)
   },[])
   // useEffect(()=>{
   //   if(token){
@@ -181,7 +183,7 @@ function MainScreen (props) {
 
   useEffect(()=>{
 
-    console.log('filterAuto',picked)
+    // console.log('filterAuto',picked)
 
   },[picked])
   useEffect(()=>{
