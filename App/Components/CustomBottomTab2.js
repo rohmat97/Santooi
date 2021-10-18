@@ -6,7 +6,7 @@ import images from '../Themes/Images';
 import { TouchableOpacity } from 'react-native';
 
 
-export const CustomBottomTab2 = ({page, SetPage }) => {
+export const CustomBottomTab2 = ({page, SetPage,listRequestFriends }) => {
     return (
         <View style={{ width: Screen.width, alignItems: 'center' }}>
             <View style={{ backgroundColor: 'white', width: "100%", alignItems: 'center', justifyContent: 'space-around', height:70, flexDirection: 'row', paddingHorizontal: 12,position:'absolute',bottom:0,marginBottom:-6 }}>
@@ -41,6 +41,9 @@ export const CustomBottomTab2 = ({page, SetPage }) => {
 
                 <TouchableOpacity onPress={()=> SetPage('Request')}>
                     <View style={{ alignItems: 'center' }}>
+                        {
+                            listRequestFriends && listRequestFriends.length>0 && <View style={{backgroundColor:'red',width:12,height:12,position:'absolute',right:0,borderRadius:100}}/>
+                        }
                         <Image
                             source={images.request}
                             style={{ width: Screen.height * 0.035, height: Screen.height * 0.035,tintColor:page==='Request'?'#DD118C':'gray' }} resizeMode='contain'

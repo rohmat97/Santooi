@@ -7,10 +7,6 @@ import {
   FlatList,
 } from 'react-native';
 
-import API from '../../../Services/Api';
-import FixtureAPI from '../../../Services/FixtureApi';
-import DebugConfig from '../../../Config/DebugConfig';
-
 import {TemplateBackground} from '../../../Components/TemplateBackground';
 import images from '../../../Themes/Images';
 import styles from '../../Styles/LaunchScreenStyles';
@@ -20,27 +16,14 @@ import {Avatar} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 import { showMessage } from 'react-native-flash-message';
 
+import API from '../../../Services/Api';
+import FixtureAPI from '../../../Services/FixtureApi';
+import DebugConfig from '../../../Config/DebugConfig';
+
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
-export const RequestFriends = ({props,page,SetPage}) => {
+export const RequestFriends = ({props,page,SetPage,listRequestFriends, GetRequestFriends}) => {
   const {navigation, token} = props;
-  const {pop} = navigation;
-  const [listRequestFriends, setlistRequestFriends] = useState([])
-  const GetRequestFriends =() =>{
-    api.listContact({
-      token: token.data.access_token,
-      request: '?&request_follow=1'
-    }).then((success) => {
-      console.log(`success`, success.data.data.rows)
-      setlistRequestFriends(success.data.data.rows)
-    })
-    .catch((err) => {
-      // console.log('err', err);
-    });
-  }
-  useEffect(()=>{
-    GetRequestFriends()
-    // 
-  },[])
+
   let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
       return (
         <TemplateBackground cover={true}>
@@ -205,7 +188,7 @@ export const RequestFriends = ({props,page,SetPage}) => {
               />
             </View>
           </View>
-          <CustomBottomTab2 page={page} SetPage={SetPage}/>
+          <CustomBottomTab2 page={page} SetPage={SetPage} listRequestFriends={listRequestFriends}/>
         </TemplateBackground>
       );
 }

@@ -7,10 +7,6 @@ import {
   FlatList,
 } from 'react-native';
 
-import API from '../../../Services/Api';
-import FixtureAPI from '../../../Services/FixtureApi';
-import DebugConfig from '../../../Config/DebugConfig';
-
 import {TemplateBackground} from '../../../Components/TemplateBackground';
 import images from '../../../Themes/Images';
 import styles from '../../Styles/LaunchScreenStyles';
@@ -19,24 +15,9 @@ import {CustomBottomTab2} from '../../../Components/CustomBottomTab2';
 import {Avatar} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 
-const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
-export const HistoryCall = ({props,page,SetPage}) => {
+export const HistoryCall = ({props,page,SetPage,listRequestFriends}) => {
   const {navigation, token} = props;
   const {pop} = navigation;
-  const [listRequestFriends, setlistRequestFriends] = useState([])
-
-  useEffect(()=>{
-    api.listContact({
-      token: token.data.access_token,
-    }).then((success) => {
-      console.log(`success`, success.data.data.rows)
-      setlistRequestFriends(success.data.data.rows)
-    })
-    .catch((err) => {
-      console.log('err', err);
-    });
-    // 
-  },[])
   let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
       return (
         <TemplateBackground cover={true}>
@@ -57,7 +38,7 @@ export const HistoryCall = ({props,page,SetPage}) => {
                 data={listRequestFriends}
                 ListEmptyComponent={
                   <View style={{flex:1, justifyContent:"center",alignItems:"center", height:Screen.height*0.6}}>
-                    <Text style={{color:'white', fontSize:20}}> Belum Ada Permintaan Pertemanan</Text>
+                    <Text style={{color:'white', fontSize:20}}>Belum Ada Riwayat Panggilan</Text>
                   </View>
                 }
                 style={{paddingBottom: Screen.height * 0.1}}
@@ -126,7 +107,7 @@ export const HistoryCall = ({props,page,SetPage}) => {
               />
             </View>
           </View>
-          <CustomBottomTab2 page={page} SetPage={SetPage}/>
+          <CustomBottomTab2 page={page} SetPage={SetPage}  listRequestFriends={listRequestFriends} />
         </TemplateBackground>
       );
 }

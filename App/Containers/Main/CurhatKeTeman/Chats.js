@@ -14,7 +14,7 @@ import FixtureAPI from '../../../Services/FixtureApi';
 import DebugConfig from '../../../Config/DebugConfig';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
-export const Chats = ({props, page, SetPage}) => {
+export const Chats = ({props, page, SetPage, listRequestFriends}) => {
   const {navigation, token} = props;
   const {pop} = navigation;
   const [listChat, setlistChat] = useState([]);
@@ -56,7 +56,7 @@ export const Chats = ({props, page, SetPage}) => {
               </Text>
             </TouchableOpacity>
           </View>
-          {/* <TouchableOpacity
+          <TouchableOpacity
                 onPress={() => navigation.navigate('CurhatKeTemanContact')}
                 style={{
                   alignSelf: 'flex-end',
@@ -67,7 +67,7 @@ export const Chats = ({props, page, SetPage}) => {
                   style={{height: 40, width: Screen.width * 0.3}}
                   resizeMode="contain"
                 />
-              </TouchableOpacity> */}
+              </TouchableOpacity>
           <FlatList
             data={listChat}
             ListEmptyComponent={
@@ -117,6 +117,7 @@ export const Chats = ({props, page, SetPage}) => {
                   height: 60,
                   justifyContent: 'center',
                 }}>
+                  
                 <LinearGradient
                   colors={['#DB068D', '#6F2A91']}
                   style={{borderRadius: 100, width: 52, height:51,alignItems:'center'}}>
@@ -174,7 +175,7 @@ export const Chats = ({props, page, SetPage}) => {
           />
         </View>
       </View>
-      <CustomBottomTab2 page={page} SetPage={SetPage} />
+      <CustomBottomTab2 page={page} SetPage={SetPage}  listRequestFriends={listRequestFriends}/>
     </TemplateBackground>
   );
 };

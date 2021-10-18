@@ -19,7 +19,6 @@ target 'Santooi' do
   pod 'RNSound', :path => '../node_modules/react-native-sound'
   pod 'react-native-image-picker', :path => '../node_modules/react-native-image-picker'
   pod 'rn-fetch-blob', :path => '../node_modules/rn-fetch-blob'
-  pod 'agora-react-native-rtm', :path => '../node_modules/agora-react-native-rtm'
   pod 'react-native-contacts', :path => '../node_modules/react-native-contacts'
   permissions_path = '../node_modules/react-native-permissions/ios'
 
@@ -34,6 +33,9 @@ target 'Santooi' do
   pod 'Permission-PhotoLibrary', :path => "#{permissions_path}/PhotoLibrary"
   pod 'Permission-PhotoLibraryAddOnly', :path => "#{permissions_path}/PhotoLibraryAddOnly"
   
+  pod 'react-native-agora', :path => '../node_modules/react-native-agora'
+  pod 'agora-react-native-rtm', :path => '../node_modules/agora-react-native-rtm'
+
   target 'SantooiTests' do
     inherit! :complete
     # Pods for testing

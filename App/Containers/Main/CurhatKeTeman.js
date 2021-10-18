@@ -23,11 +23,14 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Chats } from './CurhatKeTeman/Chats';
 import ListContact from './CurhatKeTeman/ListContact';
 
+import API from '../../Services/Api';
+
 import TokenRedux from '../../Redux/Authentication/TokenRedux';
 import { bindActionCreators } from 'redux';
 import { RequestFriends } from './CurhatKeTeman/RequestFriends';
 import { HistoryCall } from './CurhatKeTeman/HistoryCall';
 
+const api = API.create();
 function CurhatKeTeman(props) {
   const {navigation, token} = props;
   const {pop} = navigation;
@@ -38,6 +41,7 @@ function CurhatKeTeman(props) {
   const [secureTextEntry, setSecureTextEntry] = useState(true);
   const [visible, setVisible] = useState(false);
 
+  const [listRequestFriends, setlistRequestFriends] = useState([])
   let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
   const InitiatorAgora = async () => {
     this.rtmEngine = new RtmEngine();
@@ -45,21 +49,35 @@ function CurhatKeTeman(props) {
     await this.rtmEngine?.login({uid: 'santooi'});
     await this.rtmEngine?.joinChannel('rd');
   };
+  const GetRequestFriends =() =>{
+    api.listContact({
+      token: token.data.access_token,
+      request: '?&request_follow=1'
+    }).then((success) => {
+      console.log(`success`, success.data.data.rows)
+      setlistRequestFriends(success.data.data.rows)
+    })
+    .catch((err) => {
+      // console.log('err', err);
+    });
+  }
   useEffect(() => {
     InitiatorAgora();
+
+    GetRequestFriends()
   }, []);
   switch (page) {
     case 'Chats':
-      return <Chats props={props} page={page} SetPage={SetPage}/>
+      return <Chats props={props} page={page} SetPage={SetPage} listRequestFriends={listRequestFriends}/>
       break;
     case 'Contacts':
-      return <ListContact props={props} page={page} SetPage={SetPage} />
+      return <ListContact props={props} page={page} SetPage={SetPage} listRequestFriends={listRequestFriends} />
       break;
     case 'HistoryCalls':
-      return <HistoryCall props={props} page={page} SetPage={SetPage} token={token} />
+      return <HistoryCall props={props} page={page} SetPage={SetPage} token={token} listRequestFriends={listRequestFriends} />
       break;
     case 'Request':
-      return <RequestFriends props={props} page={page} SetPage={SetPage} token={token}  />
+      return <RequestFriends props={props} page={page} SetPage={SetPage} token={token}  listRequestFriends={listRequestFriends} GetRequestFriends={GetRequestFriends}/>
       break;
     default:
       return  <CustomBottomTab2 page={page} SetPage={SetPage}/>

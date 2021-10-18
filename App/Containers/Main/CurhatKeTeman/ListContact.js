@@ -32,7 +32,7 @@ import {Alert} from 'react-native';
 import {CustomBottomTab2} from '../../../Components/CustomBottomTab2';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
-function ListContact({props, page, SetPage}) {
+function ListContact({props, page, SetPage, listRequestFriends}) {
   const {navigation, token} = props;
   const [search, setsearch] = useState('');
   const [listFriend, setListFriend] = useState([]);
@@ -114,7 +114,6 @@ function ListContact({props, page, SetPage}) {
               // inputRef={(ref) => (this.number = ref)}
             />
           </View>
-
           <ScrollView>
             <TouchableOpacity onPress={toggleOverlayPhone}>
               <View
@@ -159,6 +158,7 @@ function ListContact({props, page, SetPage}) {
             </TouchableOpacity>
               <FlatList
                 data={listFriend}
+                contentContainerStyle={{paddingBottom:200}}
                 ListEmptyComponent={
                   <View
                   style={{
@@ -296,7 +296,7 @@ function ListContact({props, page, SetPage}) {
           toggleOverlay={toggleOverlayInvite}
         />
       </View>
-      <CustomBottomTab2 page={page} SetPage={SetPage} />
+      <CustomBottomTab2 page={page} SetPage={SetPage} listRequestFriends={listRequestFriends} />
     </TemplateBackground>
   );
 }

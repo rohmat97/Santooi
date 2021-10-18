@@ -48,8 +48,9 @@ class Video extends Component<{}, State> {
         console.log('requested!');
         this.init();
       });
-      await this.startCall();
     }
+    
+    await this.startCall();
   }
 
   /**
@@ -249,12 +250,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonHolder: {
-    height: 100,
-    alignItems: 'center',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    marginTop: -120,
+    position:'absolute',
+    bottom:40,
+    width:Screen.width,
+    flexDirection:'row',
+    justifyContent:'space-around',
+    marginBottom:20,
+    alignItems:'center',
+    paddingHorizontal:Screen.width*0.1
   },
   button: {
     paddingHorizontal: 20,

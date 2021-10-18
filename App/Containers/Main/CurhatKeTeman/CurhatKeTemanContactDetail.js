@@ -149,7 +149,11 @@ function CurhatKeTemanContactDetail(props) {
                 } else {
                   addToContact();
                 }
-              }}>
+              }}
+              disabled={local?
+                dataDetail.is_friend && dataDetail.friendship_status === 0?true:false: 
+                dataDetail.friend && dataDetail.friend.user.is_friend&& dataDetail.friend.friendship_status=== 0?true:false}
+              >
               <Text
                 style={{
                   color:
@@ -337,7 +341,7 @@ function CurhatKeTemanContactDetail(props) {
             />
             <Text style={{fontWeight: 'bold', color: 'white'}}>Phone</Text>
             <Text style={{color: 'white'}}>
-              {local?dataDetail.phone_number:dataDetail && dataDetail.account_2_phone_number}
+              {local?dataDetail.phone_number:dataDetail && dataDetail.friend.user.phone_number}
             </Text>
             <View
               style={{
@@ -352,7 +356,7 @@ function CurhatKeTemanContactDetail(props) {
             />
             <Text style={{fontWeight: 'bold', color: 'white'}}>Email</Text>
             <Text style={{color: 'white'}}>
-              {local?dataDetail.email:dataDetail && dataDetail.account_2_email}
+              {local?dataDetail.email:dataDetail && dataDetail.friend.email}
             </Text>
             <View
               style={{

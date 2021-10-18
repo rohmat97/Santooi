@@ -1,70 +1,202 @@
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView, View, Text, TextInput, Button} from 'react-native';
-import RtcEngine from 'react-native-agora';
-import {Avatar, Image} from 'react-native-elements';
-import {TouchableOpacity} from 'react-native-gesture-handler';
-import {TemplateBackground} from '../../../Components/TemplateBackground';
+import React, {Component} from 'react';
+import {Alert, BackHandler, Button, Dimensions, Image, StyleSheet} from 'react-native';
+import {Platform, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import RtcEngine, {
+  RtcLocalView,
+  RtcRemoteView,
+  VideoRenderMode,
+} from 'react-native-agora';
+import { Avatar } from 'react-native-elements';
+import { TemplateBackground } from '../../../Components/TemplateBackground';
 import images from '../../../Themes/Images';
 import {Screen} from '../../../Transforms/Screen';
-import {useInitializeAgora, useRequestAudioHook} from './Agora';
+import {requestAudioPermission} from './permissions';
 import styles from './styles';
+const _engine = RtcEngine;
+interface State {
+  appId: string;
+  token: string;
+  channelName: string;
+  joinSucceed: boolean;
+  peerIds: number[];
+}
+class CallRoom extends Component<{}, State>  {
+  constructor(props) {
+    super(props);
+    this.state = {
+      appId: '4ede35933b9e4e009c0522f13c42f778',
+      token:
+        '0064ede35933b9e4e009c0522f13c42f778IAC6fmFeo2Qa1TdGHGA5dkDbPWJVc275qJOqCRlpvgo+a1kVm9QAAAAAEAC+QOqNnQkbYQEAAQCdCRth',
+      channelName: 'santooi',
+      joinSucceed: false,
+      peerIds: [],
+      isMute: false,
+      isSpeakerEnable: false,
+      openMicrophone: true,
+      enableSpeakerphone: true,
+    };
+  }
 
-function CallRoom(props) {
-  const {navigation} = props;
-  const {params, name, title, pict} = navigation.state.params;
+  // const [isMute, setIsMute] = useState(false);
+  // const [isSpeakerEnable, setIsSpeakerEnable] = useState(true);
+  async componentDidMount() {
+    const {nama, params} = this.props.navigation.state.params;
+    await this.setState({
+      appId: params.friend.user.agora.app_id,
+      token: params.friend.user.agora.token,
+      channelName: params.friend.user.agora.channel,
+    });
+    if (Platform.OS === 'android') {
+      // Request required permissions from Android
+      await requestAudioPermission().then(() => {
+        console.log('requested!');
+        this.init();
+      });
+    }
+    
+    await this.startCall();
+    this.backHandler()
+   
+  }
 
-  const [DataProfile, setDataProfile] = useState();
-  useRequestAudioHook();
-  const {
-    channelName,
-    isMute,
-    isSpeakerEnable,
-    joinSucceed,
-    peerIds,
-    setChannelName,
-    joinChannel,
-    leaveChannel,
-    toggleIsMute,
-    toggleIsSpeakerEnable,
-  } = useInitializeAgora(
-    params.friend.user.agora.app_id,
-    params.friend.user.agora.token,
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+   backAction = () => {
+    Alert.alert("Hold on!", "Are you sure you want to go back?", [
+      {
+        text: "Cancel",
+        onPress: () => null,
+        style: "cancel"
+      },
+      { text: "YES", onPress: () => this.props.navigation.pop() }
+    ]);
+    return true;
+  };
+  backHandler = BackHandler.addEventListener(
+    "hardwareBackPress",
+    this.backAction
   );
 
-  const init = async () => {
-    // await setDataProfile(params)
-    // await setChannelName(params.agora.channel)
-    // setTimeout(() => {
-    //   alert('join')
-    //   joinChannel()
-    // }, 2000);
-    // const rtcEngine = await RtcEngine.create(params.agora.app_id)
-    // rtcEngine.joinChannel(params.agora.token, params.agora.channel, null, 0);
+  
+  /**
+   * @name init
+   * @description Function to initialize the Rtc Engine, attach event listeners and actions
+   */
+  init = async () => {
+    const _engine = await RtcEngine.create(this.state.appId);
+    await _engine.enableVideo();
+    await _engine.muteLocalAudioStream(false);
+    await _engine.isSpeakerphoneEnabled(true);
+
+    _engine.addListener('Warning', (warn) => {
+      console.log('Warning', warn);
+    });
+
+    _engine.addListener('Error', (err) => {
+      console.log('Error', err);
+    });
+
+    _engine.addListener('UserJoined', (uid, elapsed) => {
+      console.log('UserJoined', uid, elapsed);
+      // Get current peer IDs
+      const {peerIds} = this.state;
+      // If new user
+      if (peerIds.indexOf(uid) === -1) {
+        this.setState({
+          // Add peer ID to state array
+          peerIds: [...peerIds, uid],
+        });
+      }
+    });
+    _engine.addListener('UserOffline', (uid, reason) => {
+      console.log('UserOffline', uid, reason);
+      const {peerIds} = this.state;
+      this.setState({
+        // Remove peer ID from state array
+        peerIds: peerIds.filter((id) => id !== uid),
+      });
+    });
+
+    // If Local user joins RTC channel
+    _engine.addListener('JoinChannelSuccess', (channel, uid, elapsed) => {
+      console.log('JoinChannelSuccess', channel, uid, elapsed);
+      // Set state variable to true
+      this.setState({
+        joinSucceed: true,
+      });
+    });
   };
-  useEffect(() => {
-    console.log('params call', params);
-    // alert(params.agora.channel)
-    // init()
-    setDataProfile(params.friend.user);
-    setChannelName(params.friend.user.agora.channel);
-    // init()
-  }, []);
 
-  useEffect(() => {
-    console.log('peerIds', peerIds);
-  }, [peerIds]);
+  /**
+   * @name startCall
+   * @description Function to start the call
+   */
+  startCall = async () => {
+    // Join Channel using null token and channel name
 
-  useEffect(() => {
-    if (joinSucceed) {
-      console.log('joinSucceed', joinSucceed);
+    const _engine = await RtcEngine.create(this.state.appId);
+    await _engine?.joinChannel(
+      this.state.token,
+      this.state.channelName,
+      null,
+      0,
+    );
+  };
+
+  /**
+   * @name endCall
+   * @description Function to end the call
+   */
+  endCall = async () => {
+    const _engine = await RtcEngine.create(this.state.appId);
+    await _engine?.leaveChannel();
+    this.setState({peerIds: [], joinSucceed: false});
+  };
+
+  toggleIsMute = async () => {
+    const _engine = await RtcEngine.create(this.state.appId);
+    await _engine.muteLocalAudioStream(!this.state.isMute);
+    // setIsMute(!isMute);
+    this.setState({isMute: !this.state.isMute});
+  };
+
+  toggleIsSpeakerEnable = async () => {
+    // const _engine = await RtcEngine.create(this.state.appId);
+    // await _engine.setEnableSpeakerphone(!this.state.isSpeakerEnable);
+    // setIsSpeakerEnable(!isSpeakerEnable);
+    if(this.state.isSpeakerEnable){
+      this._switchMicrophone()
+    }else{
+      this._switchSpeakerphone()
     }
-  }, [joinSucceed]);
-  setTimeout(() => {
-    joinChannel();
-    // alert('join');
-  }, 1000);
-  return (
-    <TemplateBackground cover={true}>
+    this.setState({isSpeakerEnable: !this.state.isSpeakerEnable});
+  };
+
+  _switchMicrophone = () => {
+    const { openMicrophone } = this.state
+    this._engine?.enableLocalAudio(!openMicrophone).then(() => {
+        this.setState({ openMicrophone: !openMicrophone })
+      }).catch((err) => {
+        console.warn('enableLocalAudio', err)
+      })
+  }
+
+// Switch the audio playback device.
+  _switchSpeakerphone = () => {
+      const { enableSpeakerphone } = this.state
+      this._engine?.setEnableSpeakerphone(!enableSpeakerphone).then(() => {
+          this.setState({ enableSpeakerphone: !enableSpeakerphone })
+        }).catch((err) => {
+          console.warn('setEnableSpeakerphone', err)
+        })
+    }
+  render() {
+    const { navigation } = this.props
+    const {params, name, title, pict} = navigation.state.params
+
+    return (
+      <TemplateBackground cover={true}>
       <View style={styles.container}>
         <View style={styles.Main}>
           {/* <Image
@@ -94,15 +226,14 @@ function CallRoom(props) {
                     // borderLeftColor:'#DB068D',
                     // borderRightColor:'#6F2A91',
                     // borderBottomColor:'#6F2A91',
-                    backgroundColor:
-                DataProfile && DataProfile.photo ? null : 'purple',
+                    backgroundColor:'purple',
                   }
                 }
               />
           <Text style={{color: 'white', fontSize: 32}}>
             {name}
           </Text>
-          {peerIds.length < 2 && (
+          {this.state.peerIds.length < 2 && (
             <Text style={{color: 'white', fontSize: 22, marginTop: 12}}>
               Calling ...
             </Text>
@@ -111,14 +242,14 @@ function CallRoom(props) {
         <View style={styles.BottomFeature}>
           <TouchableOpacity
             onPress={() => {
-              toggleIsSpeakerEnable();
+              this.toggleIsSpeakerEnable();
             }}>
             <Image
               source={images.Sound}
               style={{
                 width: Screen.width * 0.08,
                 height: Screen.width * 0.08,
-                opacity: isSpeakerEnable ? 1 : 0.5,
+                opacity: this.state.isSpeakerEnable ? 1 : 0.5,
               }}
               resizeMode="contain"
               // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
@@ -126,7 +257,7 @@ function CallRoom(props) {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              leaveChannel();
+              this.endCall();
               navigation.pop();
             }}>
             <Image
@@ -139,7 +270,7 @@ function CallRoom(props) {
               // containerStyle={{opacity:dataDetail.is_friend?1:0.5}}
             />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => toggleIsMute()}>
+          <TouchableOpacity onPress={() => this.toggleIsMute()}>
             <Image
               source={images.Mic}
               style={{
@@ -147,53 +278,19 @@ function CallRoom(props) {
                 height: Screen.width * 0.08,
               }}
               resizeMode="contain"
-              containerStyle={{opacity: isMute ? 1 : 0.5}}
+              containerStyle={{opacity: this.state.isMute ? 1 : 0.5}}
             />
           </TouchableOpacity>
         </View>
-
-        {/* <View style={styles.channelInputContainer}>
-          <Text>Enter Channel Name:</Text>
-
-          <TextInput
-            style={styles.input}
-            // onChangeText={(text) => setChannelName(params.agora.channel)}
-            placeholder={'Channel Name'}
-            value={channelName}
-          />
-        </View>
-
-        <View style={styles.joinLeaveButtonContainer}>
-          <Button
-            onPress={()=>{
-              joinSucceed ? leaveChannel() : joinChannel()}}
-            title={`${joinSucceed ? 'Leave' : 'Join'} channel`}
-          />
-        </View>
-
-        <View style={styles.floatRight}>
-          <Button onPress={toggleIsMute} title={isMute ? 'UnMute' : 'Mute'} />
-        </View>
-
-        <View style={styles.floatLeft}>
-          <Button
-            onPress={toggleIsSpeakerEnable}
-            title={isSpeakerEnable ? 'Disable Speaker' : 'Enable Speaker'}
-          />
-        </View> */}
-
-        <View style={styles.usersListContainer}>
-          {peerIds.map((peerId) => {
-            return (
-              <View key={peerId}>
-                <Text>{`Joined User ${peerId}`}</Text>
-              </View>
-            );
-          })}
-        </View>
       </View>
     </TemplateBackground>
-  );
+    );
+  }
 }
 
 export default CallRoom;
+
+const dimensions = {
+  width: Dimensions.get('screen').width,
+  height: Dimensions.get('screen').height,
+};
