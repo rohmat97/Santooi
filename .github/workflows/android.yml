@@ -10,7 +10,7 @@ jobs:
     needs: install-and-test
     runs-on: ubuntu-latest
     steps: 
-      - uses: reactnativecommunity/react-native-android
+      - uses: https://github.com/react-native-community/docker-android
       - name: Install npm dependencies
         run: |
           yarn install
