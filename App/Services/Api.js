@@ -85,8 +85,10 @@ const create = (baseURL = staging) => {
       headers: {Authorization: `Bearer ${payload.token}`},
     });
   const getChat = (payload) => api.get(`/account/user/chat?page=${payload.page}&limit=${payload.limit}&id=${payload.id}`,'',{ headers: {Authorization: `Bearer ${payload.token}`},})
+  const getHistoryCall = (payload) => api.get(`/account/user/call?limit=${payload.limit}&page=${payload.page}`,'',{headers: { Authorization: `Bearer ${payload.token}`}})
+  
   // ------
-  // STEP 3
+  // STEP 3s
   // ------
   //
   // Return back a collection of functions that we would consider our
@@ -138,7 +140,8 @@ const create = (baseURL = staging) => {
     getDetailContact,
     acceptFriend,
     sendChat,
-    getChat
+    getChat,
+    getHistoryCall
   }
 }
 

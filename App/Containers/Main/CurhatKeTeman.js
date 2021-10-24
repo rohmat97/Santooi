@@ -35,11 +35,12 @@ function CurhatKeTeman(props) {
   const {navigation, token} = props;
   const {pop} = navigation;
   const [page, SetPage ] =useState('Chats')
-  const [conselingCode, setConselingCode] = useState(false);
-  const [password, setPassword] = useState('');
-  const [errorPassword, setErrorPassword] = useState();
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
-  const [visible, setVisible] = useState(false);
+  // const [conselingCode, setConselingCode] = useState(false);
+  // const [password, setPassword] = useState('');
+  // const [errorPassword, setErrorPassword] = useState();
+  // const [secureTextEntry, setSecureTextEntry] = useState(true);
+  // const [visible, setVisible] = useState(false);
+  const [listHistoryCall, setlistHistoryCall] = useState([])
 
   const [listRequestFriends, setlistRequestFriends] = useState([])
   let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
@@ -49,6 +50,7 @@ function CurhatKeTeman(props) {
     await this.rtmEngine?.login({uid: 'santooi'});
     await this.rtmEngine?.joinChannel('rd');
   };
+  
   const GetRequestFriends =() =>{
     api.listContact({
       token: token.data.access_token,
@@ -61,29 +63,43 @@ function CurhatKeTeman(props) {
       // console.log('err', err);
     });
   }
+
+  const GetHistoryCall =() =>{
+    api.getHistoryCall({
+      token: token.data.access_token,
+      page: '1',
+      limit: '50'
+    }).then((success) => {
+      setlistHistoryCall(success.data.data.rows)
+    })
+    .catch((err) => {
+      // console.log('err', err);
+    });
+  }
+
   useEffect(() => {
     InitiatorAgora();
-
+    GetHistoryCall()
     GetRequestFriends()
   }, []);
+
   switch (page) {
     case 'Chats':
       return <Chats props={props} page={page} SetPage={SetPage} listRequestFriends={listRequestFriends}/>
       break;
     case 'Contacts':
-      return <ListContact props={props} page={page} SetPage={SetPage} listRequestFriends={listRequestFriends} />
+      return <ListContact props={props} page={page} SetPage={SetPage} listHistoryCall={listHistoryCall} />
       break;
     case 'HistoryCalls':
       return <HistoryCall props={props} page={page} SetPage={SetPage} token={token} listRequestFriends={listRequestFriends} />
       break;
     case 'Request':
-      return <RequestFriends props={props} page={page} SetPage={SetPage} token={token}  listRequestFriends={listRequestFriends} GetRequestFriends={GetRequestFriends}/>
+      return <RequestFriends props={props} page={page} SetPage={SetPage} token={token} listRequestFriends={listRequestFriends} GetRequestFriends={GetRequestFriends}/>
       break;
     default:
-      return  <CustomBottomTab2 page={page} SetPage={SetPage}/>
+      return <CustomBottomTab2 page={page} SetPage={SetPage} />
       break;
   }
-  
 }
 const mapStateToProps = (state) => {
   return {

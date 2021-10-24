@@ -15,7 +15,7 @@ import {CustomBottomTab2} from '../../../Components/CustomBottomTab2';
 import {Avatar} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 
-export const HistoryCall = ({props,page,SetPage,listRequestFriends}) => {
+export const HistoryCall = ({props,page,SetPage,listHistoryCall}) => {
   const {navigation, token} = props;
   const {pop} = navigation;
   let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
@@ -35,10 +35,18 @@ export const HistoryCall = ({props,page,SetPage,listRequestFriends}) => {
                   </Text>
               </View>
               <FlatList
-                data={listRequestFriends}
+                data={listHistoryCall}
                 ListEmptyComponent={
                   <View style={{flex:1, justifyContent:"center",alignItems:"center", height:Screen.height*0.6}}>
-                    <Text style={{color:'white', fontSize:20}}>Belum Ada Riwayat Panggilan</Text>
+                    <Image
+                      source={images.EmptyStateChat}
+                      style={{
+                        height: Screen.width * 0.7,
+                        width: Screen.width * 0.6,
+                      }}
+                      resizeMode="cover"
+                    />
+                    <Text style={{color:'white', fontSize:20,marginTop:24}}>Belum Ada Riwayat Panggilan</Text>
                   </View>
                 }
                 style={{paddingBottom: Screen.height * 0.1}}
