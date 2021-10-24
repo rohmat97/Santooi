@@ -6,19 +6,13 @@ on:
       - master
       - merging
 jobs:
-  build-android:
-    needs: install-and-test
+  build:
     runs-on: ubuntu-latest
     container: reactnativecommunity/react-native-android
-    steps: 
-      - uses: actions/checkout@v2
-      - name: Envinfo
-        run: npx envinfo
-      - name: Build application
-        run: yarn install && cd android && chmod +x gradlew && ./gradlew assembleRelease
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v1
-        with:
-          name: app-release.apk
-          path: android/app/build/outputs/apk/release/
+    steps:
+    - uses: actions/checkout@v2
+    - name: Envinfo
+      run: npx envinfo
+    - name: Build application
+      run: yarn install && cd android && chmod +x gradlew && ./gradlew assembleRelease
 
