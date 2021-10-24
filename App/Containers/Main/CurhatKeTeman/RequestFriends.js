@@ -23,6 +23,7 @@ import DebugConfig from '../../../Config/DebugConfig';
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 export const RequestFriends = ({props,page,SetPage,listRequestFriends, GetRequestFriends}) => {
   const {navigation, token} = props;
+  const { pop } = navigation
 
   let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
       return (
@@ -30,15 +31,24 @@ export const RequestFriends = ({props,page,SetPage,listRequestFriends, GetReques
           <View style={styles.mainContainer}>
             <View style={styles.section}>
               <View style={{flexDirection: 'row', paddingBottom:24}}>
-                  <Text
-                    style={{
-                      color: '#67308F',
-                      marginLeft: 15,
-                      fontWeight: '500',
-                      fontSize: 16,
-                    }}>
-                    Permintaan Pertemanan
-                  </Text>
+              <TouchableOpacity
+                onPress={() => pop()}
+                style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Image
+                  source={images.arrowBack}
+                  style={{width: 18, height: 18}}
+                  resizeMode="contain"
+                />
+                <Text
+                  style={{
+                    color: '#67308F',
+                    marginLeft: 15,
+                    fontWeight: '500',
+                    fontSize: 16,
+                  }}>
+                  Permintaan Pertemanan
+                </Text>
+              </TouchableOpacity>
               </View>
               <FlatList
                 data={listRequestFriends}

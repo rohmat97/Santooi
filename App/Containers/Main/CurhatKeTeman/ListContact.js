@@ -20,9 +20,7 @@ import images from '../../../Themes/Images';
 import styles from '../../Styles/LaunchScreenStyles';
 import {Screen} from '../../../Transforms/Screen';
 import {connect} from 'react-redux';
-import Images from '../../../Themes/Images';
-import RoundedButton from '../../../Components/RoundedButton';
-import {Fonts, Colors, Metrics} from '../../../Themes';
+import {Metrics} from '../../../Themes';
 import {OverlayInvite} from '../../../Components/OverlayInvite';
 import {OverlayPhone} from '../../../Components/OverlayPhone';
 import {bindActionCreators} from 'redux';
@@ -30,14 +28,17 @@ import {FlatList} from 'react-native';
 import {check, PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 import {Alert} from 'react-native';
 import {CustomBottomTab2} from '../../../Components/CustomBottomTab2';
+import { ActivityIndicator, Colors } from 'react-native-paper';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 function ListContact({props, page, SetPage, listRequestFriends}) {
   const {navigation, token} = props;
+  const { pop } = navigation
   const [search, setsearch] = useState('');
   const [listFriend, setListFriend] = useState([]);
   const [listContact, setlistContact] = useState([]);
   const [visiblePhone, setVisiblePhone] = useState(false);
+  const [fetching, setfetching] = useState(true)
   const toggleOverlayPhone = () => {
     // setVisiblePhone(!visiblePhone);
     navigation.navigate('FindUserByContact');
@@ -51,6 +52,7 @@ function ListContact({props, page, SetPage, listRequestFriends}) {
   let newName = '';
 
   useEffect(() => {
+    setfetching(true)
     api
       .listContact({
         token: token.data.access_token,
@@ -78,9 +80,11 @@ function ListContact({props, page, SetPage, listRequestFriends}) {
         });
         setlistContact(data);
         setListFriend(data);
+        setfetching(false)
       })
       .catch((err) => {
         console.log('err', err);
+        setfetching(false)
       });
   }, []);
 
@@ -97,7 +101,25 @@ function ListContact({props, page, SetPage, listRequestFriends}) {
   return (
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
-        <View style={styles.section}>
+        <View style={styles.section}> 
+          <TouchableOpacity
+            onPress={() => pop()}
+            style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image
+              source={images.arrowBack}
+              style={{width: 18, height: 18}}
+              resizeMode="contain"
+            />
+            <Text
+              style={{
+                color: '#67308F',
+                marginLeft: 15,
+                fontWeight: '500',
+                fontSize: 16,
+              }}>
+              Kontak
+            </Text>
+          </TouchableOpacity>
           <View style={styles.containerSearch}>
             <Image
               source={images.search}
@@ -156,7 +178,11 @@ function ListContact({props, page, SetPage, listRequestFriends}) {
                 />
               </View>
             </TouchableOpacity>
-              <FlatList
+            {
+            fetching ?
+            <ActivityIndicator animating={true} color={Colors.purple900} size={40} style={{marginTop: Metrics.screenHeight*0.2}} />
+            :
+            <FlatList
                 data={listFriend}
                 contentContainerStyle={{paddingBottom:200}}
                 ListEmptyComponent={
@@ -281,6 +307,8 @@ function ListContact({props, page, SetPage, listRequestFriends}) {
                   );
                 }}
               />
+            }
+              
           </ScrollView>
         </View>
         <OverlayPhone

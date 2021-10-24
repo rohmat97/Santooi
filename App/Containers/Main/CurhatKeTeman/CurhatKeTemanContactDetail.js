@@ -150,9 +150,14 @@ function CurhatKeTemanContactDetail(props) {
                   addToContact();
                 }
               }}
-              disabled={local?
-                dataDetail.is_friend && dataDetail.friendship_status === 0?true:false: 
-                dataDetail.friend && dataDetail.friend.user.is_friend&& dataDetail.friend.friendship_status=== 0?true:false}
+              disabled={
+                local?
+                    dataDetail.friendship_status === 0?
+                    true:false
+                  :
+                    dataDetail.friend && dataDetail.friend.user.friendship_status? 
+                    true:false
+              }
               >
               <Text
                 style={{

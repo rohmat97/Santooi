@@ -9,7 +9,7 @@ import RtcEngine, {
 import images from '../../../Themes/Images';
 import {Screen} from '../../../Transforms/Screen';
 import {requestCameraAndAudioPermission} from './permissions';
-
+import {request, PERMISSIONS, RESULTS, check} from 'react-native-permissions';
 interface State {
   appId: string;
   token: string;
@@ -48,8 +48,21 @@ class Video extends Component<{}, State> {
         console.log('requested!');
         this.init();
       });
-    }
-    
+    }else{
+      check(PERMISSIONS.IOS.CAMERA)
+      .then((result) => {
+        if(!RESULTS.GRANTED){
+          request(PERMISSIONS.IOS.CAMERA).then((result) => {
+            console.log(`result`, result)
+            // …
+          });
+          request(PERMISSIONS.IOS.MICROPHONE).then((result) => {
+            console.log(`result`, result)
+            // …
+          });
+          }
+        })
+      }
     await this.startCall();
   }
 
@@ -60,9 +73,10 @@ class Video extends Component<{}, State> {
   init = async () => {
     const _engine = await RtcEngine.create(this.state.appId);
     await _engine.enableVideo();
-    await _engine.muteLocalAudioStream(false);
-    await _engine.isSpeakerphoneEnabled(true);
-
+    await _engine.muteLocalAudioStream(false)
+    await _engine.isSpeakerphoneEnabled(true)
+    await _engine.isCameraFocusSupported(true)
+    await _engine.enableAudio()
     _engine.addListener('Warning', (warn) => {
       console.log('Warning', warn);
     });

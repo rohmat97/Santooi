@@ -88,7 +88,7 @@ function CurhatKeTeman(props) {
       return <Chats props={props} page={page} SetPage={SetPage} listRequestFriends={listRequestFriends}/>
       break;
     case 'Contacts':
-      return <ListContact props={props} page={page} SetPage={SetPage} listHistoryCall={listHistoryCall} />
+      return <ListContact props={props} page={page} SetPage={SetPage} listHistoryCall={listHistoryCall} listRequestFriends={listRequestFriends}/>
       break;
     case 'HistoryCalls':
       return <HistoryCall props={props} page={page} SetPage={SetPage} token={token} listRequestFriends={listRequestFriends} />

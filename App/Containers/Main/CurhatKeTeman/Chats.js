@@ -12,14 +12,18 @@ import LinearGradient from 'react-native-linear-gradient';
 import API from '../../../Services/Api';
 import FixtureAPI from '../../../Services/FixtureApi';
 import DebugConfig from '../../../Config/DebugConfig';
+import { ActivityIndicator, Colors } from 'react-native-paper';
+import { Metrics } from '../../../Themes';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 export const Chats = ({props, page, SetPage, listRequestFriends}) => {
   const {navigation, token} = props;
   const {pop} = navigation;
   const [listChat, setlistChat] = useState([]);
+  const [fetching, setfetching] = useState(true)
 
   useEffect(() => {
+    setfetching(true)
     api
       .getChat({
         // page: 1,
@@ -30,7 +34,9 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
       .then((success) => {
         // console.log(`success`, success.data.data.rows);
         setlistChat(success.data.data.rows);
-      });
+        setfetching(false)
+      })
+      .catch( ()=> setfetching(false))
   }, []);
   return (
     <TemplateBackground cover={true}>
@@ -56,18 +62,22 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
               </Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-                onPress={() => navigation.navigate('CurhatKeTemanContact')}
-                style={{
-                  alignSelf: 'flex-end',
-                  marginBottom: 20,
-                }}>
-                <Image
-                  source={images.newMessage}
-                  style={{height: 40, width: Screen.width * 0.3}}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
+          {listChat.length>0 &&<TouchableOpacity
+            onPress={() => navigation.navigate('CurhatKeTemanContact')}
+            style={{
+              alignSelf: 'flex-end',
+              marginBottom: 20,
+            }}>
+            <Image
+              source={images.newMessage}
+              style={{height: 40, width: Screen.width * 0.3}}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>}
+          {
+            fetching ?
+            <ActivityIndicator animating={true} color={Colors.purple900} size={40} style={{marginTop: Metrics.screenHeight*0.2}} />
+            :
           <FlatList
             data={listChat}
             ListEmptyComponent={
@@ -78,6 +88,7 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
                   alignItems: 'center',
                   width: Screen.width * 0.9,
                   height: Screen.height * 0.7,
+                  marginTop:-20
                 }}>
                 <Image
                   source={images.EmptyStateChat}
@@ -94,7 +105,7 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
                     style={{
                       height: Screen.height * 0.075,
                       width: Screen.width * 0.8,
-                      marginTop: 40,
+                      marginTop: 12,
                     }}
                     resizeMode="cover"
                   />
@@ -154,8 +165,8 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
                       </Text>
                      {item.last_message ? <Text style={{color: 'white'}}>{item.last_message.message}</Text>:<Text></Text>}
                     </View>
-                    <View style={{marginEnd: 10}}>
-                      <Text style={{color: 'white', fontSize: 13}}>{item.total_unread_message}</Text>
+                    <View style={{marginEnd: 10, backgroundColor:'white',alignItems:'center', justifyContent:'center', width:20, height:20, borderRadius: 100}}>
+                      <Text style={{ fontSize: 13 }}>{item.total_unread_message}</Text>
                     </View>
                   </View>
                   <View
@@ -173,6 +184,8 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
               </TouchableOpacity>
             )}
           />
+          }
+          
         </View>
       </View>
       <CustomBottomTab2 page={page} SetPage={SetPage}  listRequestFriends={listRequestFriends}/>

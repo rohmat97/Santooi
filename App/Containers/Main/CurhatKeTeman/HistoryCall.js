@@ -15,7 +15,7 @@ import {CustomBottomTab2} from '../../../Components/CustomBottomTab2';
 import {Avatar} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 
-export const HistoryCall = ({props,page,SetPage,listHistoryCall}) => {
+export const HistoryCall = ({props,page,SetPage,listHistoryCall, listRequestFriends}) => {
   const {navigation, token} = props;
   const {pop} = navigation;
   let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
@@ -24,7 +24,15 @@ export const HistoryCall = ({props,page,SetPage,listHistoryCall}) => {
           <View style={styles.mainContainer}>
             <View style={styles.section}>
               <View style={{flexDirection: 'row', paddingBottom:24}}>
-                  <Text
+              <TouchableOpacity
+                onPress={() => pop()}
+                style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Image
+                  source={images.arrowBack}
+                  style={{width: 18, height: 18}}
+                  resizeMode="contain"
+                />
+                <Text
                     style={{
                       color: '#67308F',
                       marginLeft: 15,
@@ -33,6 +41,8 @@ export const HistoryCall = ({props,page,SetPage,listHistoryCall}) => {
                     }}>
                     Riwayat Panggilan
                   </Text>
+              </TouchableOpacity>
+                  
               </View>
               <FlatList
                 data={listHistoryCall}
