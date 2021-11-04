@@ -1,4 +1,6 @@
-export const CheckEmail =(setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess)=>{
+import messaging from '@react-native-firebase/messaging';
+export const CheckEmail = async (setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess)=>{
+    const fcmToken = await messaging().getToken()
     if(type === 'login'){
         setsubmitted(true)
         console.log('login')
@@ -8,7 +10,8 @@ export const CheckEmail =(setavail, type, check,email,password,LoginRequest,setv
         }else{
             LoginRequest({
                 'email': email?email:'user1@mailinator.com',
-                'password': password?password:'123456'
+                'password': password?password:'123456',
+                'firebase_token': fcmToken
             })
             setavail(false)
             setvisible(false)
@@ -31,7 +34,8 @@ export const CheckEmail =(setavail, type, check,email,password,LoginRequest,setv
     CheckEmailSuccess(null)
 }
 
-export const CheckPhone =(setavailPhone,checkPhone,setsubmitted,LoginRequest,email,password,setvisible)=>{
+export const CheckPhone = async (setavailPhone,checkPhone,setsubmitted,LoginRequest,email,password,setvisible)=>{
+    const fcmToken = await messaging().getToken()
     setsubmitted(true)
     if(checkPhone.status){
         setavailPhone(true)
@@ -39,7 +43,8 @@ export const CheckPhone =(setavailPhone,checkPhone,setsubmitted,LoginRequest,ema
     }else{
         LoginRequest({
             'email': email?email:'user1@mailinator.com',
-            'password': password?password:'123456'
+            'password': password?password:'123456',
+            'firebase_token': fcmToken
         })
         setavailPhone(false)
         setvisible(false)

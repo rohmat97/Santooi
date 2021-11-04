@@ -13,8 +13,8 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		1FE990DC4A3315EDD8D6255B /* libPods-Santooi-SantooiTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FD69FCCCA326925EDD8F804 /* libPods-Santooi-SantooiTests.a */; };
-		2C0EEB3E264BB4AF00D4F57F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2C0EEB3D264BB4AF00D4F57F /* GoogleService-Info.plist */; };
-		2C0EEB3F264BB4AF00D4F57F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2C0EEB3D264BB4AF00D4F57F /* GoogleService-Info.plist */; };
+		2C6D3265272A1638005AD3FB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2C6D3264272A1638005AD3FB /* GoogleService-Info.plist */; };
+		2C6D3266272A1638005AD3FB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2C6D3264272A1638005AD3FB /* GoogleService-Info.plist */; };
 		2CD771C1264FB20C003EAF5A /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD771C0264FB20C003EAF5A /* File.swift */; };
 		2CD771C2264FB20C003EAF5A /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD771C0264FB20C003EAF5A /* File.swift */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -63,7 +63,7 @@
 		1DEEF46EFB1E4701A0494987 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		27B4B8DBFF79055E73231058 /* libPods-Santooi-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Santooi-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		28801221562E49D5BACC3951 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
-		2C0EEB3D264BB4AF00D4F57F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		2C6D3264272A1638005AD3FB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2CD771C0264FB20C003EAF5A /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		2CFADE162657EFAF00ECB728 /* Santooi.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Santooi.entitlements; path = Santooi/Santooi.entitlements; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* Santooi-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Santooi-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,8 +163,8 @@
 		13B07FAE1A68108700A75B9A /* Santooi */ = {
 			isa = PBXGroup;
 			children = (
+				2C6D3264272A1638005AD3FB /* GoogleService-Info.plist */,
 				2CFADE162657EFAF00ECB728 /* Santooi.entitlements */,
-				2C0EEB3D264BB4AF00D4F57F /* GoogleService-Info.plist */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -397,7 +397,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				2C0EEB3E264BB4AF00D4F57F /* GoogleService-Info.plist in Resources */,
+				2C6D3265272A1638005AD3FB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -406,7 +406,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */,
-				2C0EEB3F264BB4AF00D4F57F /* GoogleService-Info.plist in Resources */,
+				2C6D3266272A1638005AD3FB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -900,7 +900,7 @@
 				CODE_SIGN_ENTITLEMENTS = Santooi/Santooi.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEVELOPMENT_TEAM = HAKUL8SVC3;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = armv7;
@@ -936,7 +936,7 @@
 				CODE_SIGN_ENTITLEMENTS = Santooi/Santooi.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 33;
+				CURRENT_PROJECT_VERSION = 34;
 				DEVELOPMENT_TEAM = HAKUL8SVC3;
 				EXCLUDED_ARCHS = armv7;
 				INFOPLIST_FILE = Santooi/Info.plist;

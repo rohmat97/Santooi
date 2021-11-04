@@ -79,7 +79,7 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
             <ActivityIndicator animating={true} color={Colors.purple900} size={40} style={{marginTop: Metrics.screenHeight*0.2}} />
             :
           <FlatList
-            data={listChat}
+            data={[]}
             ListEmptyComponent={
               <View
                 style={{
@@ -107,7 +107,7 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
                       width: Screen.width * 0.8,
                       marginTop: 12,
                     }}
-                    resizeMode="cover"
+                    resizeMode="contain"
                   />
                 </TouchableOpacity>
               </View>

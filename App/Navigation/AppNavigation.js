@@ -27,7 +27,6 @@ import DetailAlbum from '../Containers/Main/Foto/DetailAlbum';
 import Chat from '../Containers/Main/Chat';
 import CallRoom from '../Containers/Main/CurhatKeTeman/CallRoom';
 import VideoRoom from '../Containers/Main/CurhatKeTeman/VideoRoom';
-import SampleChat from '../Containers/Main/CurhatKeTeman/SampleChat';
 import DetailChat from '../Containers/Main/CurhatKeTeman/Chat/DetailChat';
 
 // Manifest of possible screens
@@ -68,7 +67,6 @@ const MainNavigator = createStackNavigator(
     DetailAlbum: {screen: DetailAlbum},
     CallRoom: {screen: CallRoom},
     VideoRoom: {screen: VideoRoom},
-    SampleChat: {screen: SampleChat},
     FindUserByContact: {screen: FindUserByContact},
     DetailChat: {screen: DetailChat},
   },

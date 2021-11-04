@@ -35,6 +35,9 @@ target 'Santooi' do
   
   pod 'react-native-agora', :path => '../node_modules/react-native-agora'
   pod 'agora-react-native-rtm', :path => '../node_modules/agora-react-native-rtm'
+  
+  pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
+  pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
 
   target 'SantooiTests' do
     inherit! :complete

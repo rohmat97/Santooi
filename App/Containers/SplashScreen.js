@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Text, Image, View, ImageBackground } from 'react-native'
+import { Text, Image, View, ImageBackground, Alert } from 'react-native'
 import { TemplateBackground } from '../Components/TemplateBackground'
 
 // import Geolocation from '@react-native-community/geolocation';
@@ -12,6 +12,7 @@ import images from '../Themes/Images';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleDeeplink';
+import messaging from '@react-native-firebase/messaging';
 
  function SplashScreen(props) {
     const { navigation, token } = props
@@ -21,11 +22,50 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
     const [came, setCame] = useState(false);
     const [nextStep, setnextStep] = useState(false);
     const [params, setParam] = useState(false);
+
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+        console.log('Message handled in the background!', remoteMessage);
+      });
+    
+    const requestUserPermission = async () => {
+        const authStatus = await messaging().requestPermission({
+            alert: true,
+            announcement: true,
+            badge: true,
+            carPlay: true,
+            provisional: true,
+            sound: true
+          });
+        const enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+    
+        if (enabled) {
+          getFcmToken()
+        //   console.log('Authorization status:', authStatus);
+        }
+      }
+    
+    const getFcmToken = async () => {
+        const fcmToken = await messaging().getToken();
+        // if (fcmToken) {
+        //  console.log(fcmToken);
+        //  console.log("Your Firebase Token is:", fcmToken);
+        // } else {
+        //  console.log("Failed", "No token received");
+        // }
+      }
       useEffect(() => {
         // Geolocation.requestAuthorization()
         Initiate(setUrl,setCame,navigate,routeName,goBack)
         const pars = getParam('params')
         setParam(pars)
+
+        requestUserPermission();
+        messaging().onMessage(async remoteMessage => {
+          Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+        });
+        // return unsubscribe;
         // return () => {
         // RemoveEvent(setUrl)
         // };
@@ -60,9 +100,6 @@ import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleD
                         initial: true,
                     }) 
                 }
-                // navigate('KalimatBijak')
-                // setCame(false)
-                // setnextStep(false) 
             }, 3000 );
         }
     },[nextStep,token])

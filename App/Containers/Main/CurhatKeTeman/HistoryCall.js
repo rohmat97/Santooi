@@ -15,10 +15,12 @@ import {CustomBottomTab2} from '../../../Components/CustomBottomTab2';
 import {Avatar} from 'react-native-elements';
 import LinearGradient from 'react-native-linear-gradient';
 
-export const HistoryCall = ({props,page,SetPage,listHistoryCall, listRequestFriends}) => {
+export const HistoryCall = ({props,page,SetPage,listHistoryCall, listRequestFriends, GetHistoryCall}) => {
   const {navigation, token} = props;
   const {pop} = navigation;
-  let x = [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}];
+  useEffect(() => {
+    GetHistoryCall()
+  }, [])
       return (
         <TemplateBackground cover={true}>
           <View style={styles.mainContainer}>
