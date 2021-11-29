@@ -1,9 +1,38 @@
 import './App/Config/ReactotronConfig'
-import { AppRegistry } from 'react-native'
+import { Alert, AppRegistry } from 'react-native'
 import App from './App/Containers/App'
-import messaging from '@react-native-firebase/messaging';
-// Register background handler
-messaging().setBackgroundMessageHandler(async remoteMessage => {
-    console.log('Message handled in the background!', remoteMessage);
-  });
+
+import OverlayPermissionModule from 'rn-android-overlay-permission';
+import RNCallKeep from 'react-native-callkeep';
+
+if (Platform.OS === 'android') {
+    OverlayPermissionModule.isRequestOverlayPermissionGranted((status) => {
+      // if (status) {
+      //   Alert.alert(
+      //     'Permissions',
+      //     'Overlay Permission',
+      //     [
+      //       {
+      //         text: 'Cancel',
+      //         onPress: () => console.log('Cancel Pressed'),
+      //         style: 'cancel',
+      //       },
+      //       {
+      //         text: 'OK',
+      //         onPress: () => OverlayPermissionModule.requestOverlayPermission(),
+      //       },
+      //     ],
+      //     {cancelable: false},
+      //   );
+      // }
+    });
+  } else {
+    const options = {
+      ios: {
+        appName: 'My app name',
+      },
+    };
+    RNCallKeep.setup(options).then((accepted) => {});
+  }
+
 AppRegistry.registerComponent('Santooi', () => App)

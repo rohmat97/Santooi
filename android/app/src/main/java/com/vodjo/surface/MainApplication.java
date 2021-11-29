@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import io.wazo.callkeep.RNCallKeepPackage;
 import io.agora.rtc.react.RCTAgoraRtcPackage;
 import io.agora.agora_rtm.AgoraRTMPackage;
 import com.imagepicker.ImagePickerPackage;

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Text, Image, View, ImageBackground, Alert } from 'react-native'
+import { Text, Image, View, ImageBackground, Alert, Platform, DeviceEventEmitter, Linking } from 'react-native'
 import { TemplateBackground } from '../Components/TemplateBackground'
+import messaging from '@react-native-firebase/messaging';
+import inAppMessaging from '@react-native-firebase/in-app-messaging';
 
 // import Geolocation from '@react-native-community/geolocation';
 //redux
@@ -11,24 +13,33 @@ import { Screen } from '../Transforms/Screen'
 import images from '../Themes/Images';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Initiate,RemoveEvent,Transition, ExtractURL } from '../Services/HandleDeeplink';
-import messaging from '@react-native-firebase/messaging';
+import { Initiate,Transition, ExtractURL } from '../Services/HandleDeeplink';
+import { CallIncoming, handleRemoteMessage } from '../Services/IncomingCall';
+import PushNotification from "react-native-push-notification";
+
+  messaging().setBackgroundMessageHandler(async remoteMessage => {
+    // console.log('Message handled in the background!', remoteMessage);
+    handleRemoteMessage(remoteMessage)
+  });
+  
 
  function SplashScreen(props) {
     const { navigation, token } = props
-    const { navigate, getParam,state,goBack } = navigation
+    const { getParam,state,goBack, navigate } = navigation
     const { routeName } = state
     const [url, setUrl] = useState(null);
     const [came, setCame] = useState(false);
     const [nextStep, setnextStep] = useState(false);
     const [params, setParam] = useState(false);
 
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-        console.log('Message handled in the background!', remoteMessage);
-      });
-    
+    const checkToken = async () => {
+        const fcmToken = await messaging().getToken();
+        if (fcmToken) {
+           console.log(fcmToken);
+        } 
+       }
     const requestUserPermission = async () => {
-        const authStatus = await messaging().requestPermission({
+        await messaging().requestPermission({
             alert: true,
             announcement: true,
             badge: true,
@@ -36,41 +47,38 @@ import messaging from '@react-native-firebase/messaging';
             provisional: true,
             sound: true
           });
-        const enabled =
-          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-          authStatus === messaging.AuthorizationStatus.PROVISIONAL;
-    
-        if (enabled) {
-          getFcmToken()
-        //   console.log('Authorization status:', authStatus);
-        }
       }
-    
-    const getFcmToken = async () => {
-        const fcmToken = await messaging().getToken();
-        // if (fcmToken) {
-        //  console.log(fcmToken);
-        //  console.log("Your Firebase Token is:", fcmToken);
-        // } else {
-        //  console.log("Failed", "No token received");
-        // }
-      }
+
       useEffect(() => {
-        // Geolocation.requestAuthorization()
         Initiate(setUrl,setCame,navigate,routeName,goBack)
         const pars = getParam('params')
         setParam(pars)
-
+        checkToken()
         requestUserPermission();
-        messaging().onMessage(async remoteMessage => {
-          Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-        });
-        // return unsubscribe;
-        // return () => {
-        // RemoveEvent(setUrl)
-        // };
+        PushNotification.configure({
+            onRegister: async (token) => {
+              console.log('TOKEN:', token);
+            },
+            onNotification: function (notification) {
+              console.log('NOTIFICATION:', notification);
+            },
+            onAction: function (notification) {
+              console.log('ACTION:', notification.action);
+              console.log('NOTIFICATION:', notification);
+            },
+            onRegistrationError: function (err) {
+              console.error(err.message, err);
+            },
+            permissions: {
+              alert: true,
+              badge: true,
+              sound: true,
+            },
+            popInitialNotification: true,
+            requestPermissions: true,
+          });
       }, []);
-
+      
     useEffect(()=>{
         if(came){
             if(url){
@@ -84,11 +92,38 @@ import messaging from '@react-native-firebase/messaging';
     useEffect(()=>{
         if(nextStep){
             setTimeout(() => {
+                console.log(`token`, token)
                 if(token) {
-                    // navigate('Main', {
-                    //     screen: 'MainScreen',
-                    //     initial: true,
-                    // })
+                    inAppMessaging().setMessagesDisplaySuppressed(true);
+                    messaging().onMessage(async remoteMessage => {
+                    //   console.log('A new FCM message arrived!', JSON.stringify(remoteMessage))
+                    
+                    PushNotification.localNotification({
+                        title: remoteMessage.data.title,
+                        message: remoteMessage.data.body,
+                    })
+                      if(remoteMessage?.data?.title === 'end_call'){
+                        Linking.openURL('santooi://MainScreen')
+                      }else{
+                        CallIncoming( navigate, remoteMessage, token )
+                      }
+                    });
+                    messaging().onNotificationOpenedApp(remoteMessage => {
+                        console.log(
+                          'Notification caused app to open from background state:',
+                          remoteMessage,
+                        );
+                      });
+                    messaging()
+                        .getInitialNotification()
+                            .then(remoteMessage => {
+                            if (remoteMessage) {
+                                console.log(
+                                'Notification caused app to open from quit state:',
+                                remoteMessage,
+                                );
+                            }
+                    });
                     navigate('Main', {
                         screen: 'MainScreen',
                         initial: true,
@@ -109,6 +144,7 @@ import messaging from '@react-native-firebase/messaging';
             Transition(navigate, getParam)
         }
     },[params])
+
     return (
         <TemplateBackground cover={false}>
             <View style={styles.mainContainer}>
@@ -131,6 +167,7 @@ import messaging from '@react-native-firebase/messaging';
 
 
 const mapStateToProps = (state) => {
+  // console.log(`state.nav`, state.nav)
     return {
       token: state.token.payload
     }

@@ -6,6 +6,7 @@ import {
   Text,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from 'react-native';
 import API from '../../../Services/Api';
 import FixtureAPI from '../../../Services/FixtureApi';
@@ -33,37 +34,12 @@ import LinearGradient from 'react-native-linear-gradient';
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 function CurhatKeTemanContactDetail(props) {
   const {navigation, token} = props;
-  const {nama, params, local} = navigation.state.params;
-  const {pop} = navigation;
-  const [conselingCode, setConselingCode] = useState(false);
-  const [password, setPassword] = useState('');
-  const [errorPassword, setErrorPassword] = useState();
-  const [secureTextEntry, setSecureTextEntry] = useState(true);
+  const { params, local} = navigation.state.params;
+  const {pop} = navigation;;
   const [dataDetail, setDataDetail] = useState();
 
-  const [visible, setVisible] = useState(false);
-  const toggleOverlay = () => {
-    setVisible(!visible);
-  };
   useEffect(() => {
     console.log('params curhat keteman detail', params);
-    // if (params) {
-    //   api
-    //     .getDetailContact({
-    //       id: params.id_account,
-    //       token: token.data.access_token,
-    //     })
-    //     .then((succ) => {
-    //       console.log('succ', succ.data.data.rows);
-    //       setDataDetail(succ.data.data.rows);
-    //     })
-    //     .catch((err) => {
-    //       console.log('err', err);
-    //     });
-    // }
-    // // {
-    // // }
-
     setDataDetail(params);
   }, []);
 
@@ -202,26 +178,8 @@ function CurhatKeTemanContactDetail(props) {
                     ? {uri: dataDetail.friend.photo.url}
                     : ''
                 }
-                containerStyle={
-                  {
-                    // marginRight:8,
-                    // borderWidth:1,
-                    // borderTopColor:'#DB068D',
-                    // borderLeftColor:'#DB068D',
-                    // borderRightColor:'#6F2A91',
-                    // borderBottomColor:'#6F2A91',
-                  }
-                }
               />
             </LinearGradient>
-            {/* <Image
-              source={dataDetail&&dataDetail.photo? {uri: dataDetail.photo.url} : images.pp}
-              style={{width: 100, height: 100, alignSelf: 'center', borderRadius:100}}
-              resizeMode="contain"
-              PlaceholderContent={
-                <ActivityIndicator color={'white'} size={32} />
-              }
-            /> */}
             <Text
               style={{
                 fontWeight: '500',
@@ -273,22 +231,37 @@ function CurhatKeTemanContactDetail(props) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                // console.log(dataDetail)
                 if (local?dataDetail.is_friend:dataDetail.friend.user.is_friend) {
-                  // console.log(`dataDetail`, dataDetail)
-                  navigation.navigate('CallRoom', {
-                    params: dataDetail, 
-                    name: local?dataDetail.name : dataDetail.friend&& dataDetail.friend.name,
-                    title: local?dataDetail.name.charAt(0):dataDetail.friend && dataDetail.friend.name.charAt(0),
-                    pict: local?
-                    dataDetail && dataDetail.photo
-                      ? {uri: dataDetail.photo.url}
-                      : ''
-                      :
-                    dataDetail && dataDetail.friend.photo
-                      ? {uri: dataDetail.friend.photo.url}
-                      : ''
-                  });
+                  api.checkUserCall({
+                    id: local?dataDetail.id : dataDetail.friend&& dataDetail.friend.id,
+                    type: 'call',
+                    status: 'start',
+                    token: token.data.access_token,
+                  }).then(
+                    success =>{
+                      console.log(`success`, success.data)
+                      if(success.data.status){
+                        navigation.navigate('CallRoom', {
+                          params: dataDetail, 
+                          name: local?dataDetail.name : dataDetail.friend&& dataDetail.friend.name,
+                          title: local?dataDetail.name.charAt(0):dataDetail.friend && dataDetail.friend.name.charAt(0),
+                          pict: local?
+                          dataDetail && dataDetail.photo
+                            ? {uri: dataDetail.photo.url}
+                            : ''
+                            :
+                          dataDetail && dataDetail.friend.photo
+                            ? {uri: dataDetail.friend.photo.url}
+                            : '' ,
+                          inApp: true
+                        });
+                      }else{
+                        Alert.alert('',success.data.message)
+                      }
+                    }
+                  ).catch(err =>{
+                    console.log(`err`, err)
+                  })
                 }
               }}>
               <View style={{alignItems: 'center'}}>
@@ -311,7 +284,37 @@ function CurhatKeTemanContactDetail(props) {
             <TouchableOpacity
               onPress={() => {
                 if (local?dataDetail.is_friend:dataDetail.friend.user.is_friend) {
-                  navigation.navigate('VideoRoom', {params: dataDetail});
+                  api.checkUserCall({
+                    id: local?dataDetail.id : dataDetail.friend&& dataDetail.friend.id,
+                    type: 'v_call',
+                    status: 'start',
+                    token: token.data.access_token,
+                  }).then(
+                    success =>{
+                      console.log(`success`, success.data)
+                      if(success.data.status){
+                        navigation.navigate('VideoRoom', {
+                          params: dataDetail,
+                          name: local?dataDetail.name : dataDetail.friend&& dataDetail.friend.name,
+                          title: local?dataDetail.name.charAt(0):dataDetail.friend && dataDetail.friend.name.charAt(0),
+                          pict: local?
+                          dataDetail && dataDetail.photo
+                            ? {uri: dataDetail.photo.url}
+                            : ''
+                            :
+                          dataDetail && dataDetail.friend.photo
+                            ? {uri: dataDetail.friend.photo.url}
+                            : '',
+                          inApp: true
+                        });
+                      }else{
+                        Alert.alert('',success.data.message)
+                      }
+                    }
+                  ).catch(err =>{
+                    console.log(`err`, err)
+                  })
+                  
                 }
               }}>
               <View style={{alignItems: 'center'}}>

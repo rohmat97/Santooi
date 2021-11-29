@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import StartupActions from '../Redux/StartupRedux'
 import SplashScreen from 'react-native-splash-screen'
 
+
 // Styles
 import styles from './Styles/RootContainerStyles'
 
@@ -18,7 +19,8 @@ class RootContainer extends Component {
     return (
       <View style={styles.applicationView}>
         <StatusBar barStyle='light-content' />
-        <ReduxNavigation uriPrefix={'santooi://'} />
+        <ReduxNavigation 
+          uriPrefix={'santooi://'} />
       </View>
     )
   }

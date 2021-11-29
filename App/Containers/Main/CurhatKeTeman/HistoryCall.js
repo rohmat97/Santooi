@@ -20,6 +20,7 @@ export const HistoryCall = ({props,page,SetPage,listHistoryCall, listRequestFrie
   const {pop} = navigation;
   useEffect(() => {
     GetHistoryCall()
+    console.log(`listHistoryCall`, listHistoryCall)
   }, [])
       return (
         <TemplateBackground cover={true}>

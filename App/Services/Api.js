@@ -80,6 +80,7 @@ const create = (baseURL = staging) => {
   const addFriend = payload => api.post(`/account/user/friend`,payload.body,{headers: { Authorization: `Bearer ${payload.token}`}})
   const acceptFriend = payload => api.patch(`/account/user/friend`,payload.body,{headers: { Authorization: `Bearer ${payload.token}`}})
   const getDetailContact = payload => api.get(`/account/user?id=${payload.id}`,'',{headers: { Authorization: `Bearer ${payload.token}`}})
+  const checkUserCall = payload => api.post(`/account/user/call/${payload.id}`,{ type: payload.type, status: payload.status },{headers: { Authorization: `Bearer ${payload.token}`}})
 
   const sendChat = (payload) => api.post(`/account/user/chat/${payload.id}`, payload.body, {
       headers: {Authorization: `Bearer ${payload.token}`},
@@ -141,7 +142,8 @@ const create = (baseURL = staging) => {
     acceptFriend,
     sendChat,
     getChat,
-    getHistoryCall
+    getHistoryCall,
+    checkUserCall
   }
 }
 

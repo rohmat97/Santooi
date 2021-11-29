@@ -1,7 +1,7 @@
 import React from 'react';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
-import {createBottomTabNavigator} from 'react-navigation-tabs';
+
 import CreateNewPassword from '../Containers/Auth/CreateNewPassword';
 import {CreateNewPasswordSuccess} from '../Containers/Auth/CreateNewPasswordSuccess';
 import {FirstLoginScreen} from '../Containers/Auth/FirstLoginScreen';

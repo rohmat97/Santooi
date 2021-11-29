@@ -8,9 +8,6 @@ import createStore from '../Redux'
 import FlashMessage from "react-native-flash-message";
 // create our store
 const store = createStore()
-import messaging from '@react-native-firebase/messaging';
-import auth from '@react-native-firebase/auth';
-import { Alert } from 'react-native'
 
 /**
  * Provides an entry point into our application.  Both index.ios.js and index.android.js

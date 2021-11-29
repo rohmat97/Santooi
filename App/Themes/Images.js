@@ -108,9 +108,13 @@ const images = {
   Outcall: require('../Images/curhatKeTeman/Out-call.png'),
   Check: require('../Images/curhatKeTeman/Check.png'),
   Decline: require('../Images/curhatKeTeman/Decline.png'),
+  DeleteChat: require('../Images/curhatKeTeman/DeleteChat.png'),
   endCall: require('../Images/Call/endCall.png'),
   Mic: require('../Images/Call/Mic.png'),
-  Sound: require('../Images/Call/Sound.png')
+  Sound: require('../Images/Call/Sound.png'),
+  Cam: require('../Images/Call/Cam.png'),
+  Recall: require('../Images/Call/Recall.png'),
+  CancelRecall: require('../Images/Call/CancelRecall.png')
 }
 
 export default images

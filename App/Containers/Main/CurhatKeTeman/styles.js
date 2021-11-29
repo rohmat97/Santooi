@@ -90,6 +90,6 @@ export default StyleSheet.create({
     justifyContent:"center",
     width:Screen.width,
     alignItems:'center',
-    marginTop:Screen.height*0.1
+    marginTop:Screen.height*0.2
   }
 });

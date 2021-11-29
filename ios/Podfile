@@ -39,6 +39,8 @@ target 'Santooi' do
   pod 'RNFBApp', :path => '../node_modules/@react-native-firebase/app'
   pod 'RNFBMessaging', :path => '../node_modules/@react-native-firebase/messaging'
 
+  pod 'RNCallKeep', :path => '../node_modules/react-native-callkeep'
+
   target 'SantooiTests' do
     inherit! :complete
     # Pods for testing
