@@ -145,5 +145,9 @@
 	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+  <key>UIBackgroundModes</key>
+  <array>
+    <string>voip</string>
+  </array>
 </dict>
 </plist>

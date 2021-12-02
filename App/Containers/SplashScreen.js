@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { Initiate,Transition, ExtractURL } from '../Services/HandleDeeplink';
 import { CallIncoming, handleRemoteMessage } from '../Services/IncomingCall';
 import PushNotification from "react-native-push-notification";
+import PushNotificationIOS from '@react-native-community/push-notification-ios';
 
   messaging().setBackgroundMessageHandler(async remoteMessage => {
     // console.log('Message handled in the background!', remoteMessage);
@@ -39,14 +40,23 @@ import PushNotification from "react-native-push-notification";
         } 
        }
     const requestUserPermission = async () => {
+      if(Platform.OS==='ios'){
         await messaging().requestPermission({
-            alert: true,
-            announcement: true,
-            badge: true,
-            carPlay: true,
-            provisional: true,
-            sound: true
-          });
+          sound: false,
+          announcement: true,
+          // ... other permission settings
+        });
+      }else{
+        await messaging().requestPermission({
+          alert: true,
+          announcement: true,
+          badge: true,
+          carPlay: true,
+          provisional: true,
+          sound: true
+        });
+      }
+      
       }
 
       useEffect(() => {
@@ -55,12 +65,34 @@ import PushNotification from "react-native-push-notification";
         setParam(pars)
         checkToken()
         requestUserPermission();
-        PushNotification.configure({
+        if( Platform.OS==='ios'){
+          PushNotificationIOS.setNotificationCategories([
+            {
+              id: 'userAction',
+              actions: [
+                {id: 'open', title: 'Open', options: {foreground: true}},
+                {
+                  id: 'ignore',
+                  title: 'Desruptive',
+                  options: {foreground: true, destructive: true},
+                },
+                {
+                  id: 'text',
+                  title: 'Text Input',
+                  options: {foreground: true},
+                  textInput: {buttonTitle: 'Send'},
+                },
+              ],
+            },
+          ])
+        }else{
+          PushNotification.configure({
             onRegister: async (token) => {
               console.log('TOKEN:', token);
             },
             onNotification: function (notification) {
               console.log('NOTIFICATION:', notification);
+              notification.finish(PushNotificationIOS.FetchResult.NoData);
             },
             onAction: function (notification) {
               console.log('ACTION:', notification.action);
@@ -77,6 +109,8 @@ import PushNotification from "react-native-push-notification";
             popInitialNotification: true,
             requestPermissions: true,
           });
+        }
+        
       }, []);
       
     useEffect(()=>{

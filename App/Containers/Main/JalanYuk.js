@@ -284,9 +284,9 @@ function JalanYuk(props) {
                             <View style={{ backgroundColor: '#67308F', width: 140,height:30, alignItems: 'center', borderRadius: 100, padding: 5, flexDirection: 'row', justifyContent: 'center' }}>
                                 <Text style={{ color: 'white', fontWeight: 'bold',fontSize:14 }}>Recommended</Text>
                             </View>
-                            {/* <TouchableOpacity>
+                            <TouchableOpacity onPress={()=>SearchPlace(' ')}>
                                 <Text style={{ color: '#67308F', marginLeft: 10, fontWeight: 'bold' }}>See All</Text>
-                            </TouchableOpacity> */}
+                            </TouchableOpacity>
                         </View>
 
                         <View style={{ marginBottom: 10 }}>

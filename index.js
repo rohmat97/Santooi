@@ -29,7 +29,7 @@ if (Platform.OS === 'android') {
   } else {
     const options = {
       ios: {
-        appName: 'My app name',
+        appName: 'Santooi',
       },
     };
     RNCallKeep.setup(options).then((accepted) => {});
