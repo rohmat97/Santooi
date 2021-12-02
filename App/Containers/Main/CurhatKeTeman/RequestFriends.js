@@ -19,6 +19,7 @@ import { showMessage } from 'react-native-flash-message';
 import API from '../../../Services/Api';
 import FixtureAPI from '../../../Services/FixtureApi';
 import DebugConfig from '../../../Config/DebugConfig';
+import { Metrics } from '../../../Themes';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 export const RequestFriends = ({props,page,SetPage,listRequestFriends, GetRequestFriends}) => {
@@ -84,7 +85,7 @@ export const RequestFriends = ({props,page,SetPage,listRequestFriends, GetReques
                   <View style={{flexDirection:'row', paddingVertical:12}}>
                     <LinearGradient
                       colors={['#DB068D', '#6F2A91']}
-                      style={{borderRadius: 100, width: 40, height: 40}}>
+                      style={{borderRadius: 100, width: 60, height: 60}}>
                       <Avatar
                         rounded
                         size="medium"
@@ -113,7 +114,7 @@ export const RequestFriends = ({props,page,SetPage,listRequestFriends, GetReques
                           alignItems:'center'
                         }}>
                         <View>
-                          <Text style={{fontWeight: 'bold', color: 'white'}}>
+                          <Text style={{fontWeight: 'bold', color: 'white',width:Metrics.screenWidth*0.3}}>
                             {item.friend.name}
                           </Text>
                           {/* <Text style={{color: 'white'}}>Ok</Text> */}
@@ -140,15 +141,11 @@ export const RequestFriends = ({props,page,SetPage,listRequestFriends, GetReques
                               ).catch(err => console.log(`err`, err))
                             }}
                             >
-                            <Image
-                                source={images.Decline}
-                                style={{
-                                  width: 32,
-                                  height: 32,
-                                  marginRight:10
-                                }}
-                                resizeMode="contain"
-                              />
+                              <View  style={{borderColor:'white', borderWidth:1,borderRadius: 12, width: 72, height: 48,alignItems:'center', justifyContent:'center',marginRight:4}}>
+                                <Text style={{color:'white'}}>
+                                    Tolak
+                                </Text>
+                              </View>
                           </TouchableOpacity>
                           <TouchableOpacity
                             onPress={()=>{
@@ -170,14 +167,11 @@ export const RequestFriends = ({props,page,SetPage,listRequestFriends, GetReques
                               ).catch(err => console.log(`err`, err))
                             }}
                             >
-                            <Image
-                                source={images.Check}
-                                style={{
-                                  width: 32,
-                                  height: 32,
-                                }}
-                                resizeMode="contain"
-                              />
+                            <LinearGradient
+                            colors={['#00BEE8', '#30DD80','#00FF85']}
+                            style={{borderRadius: 12, width: 72, height: 48, alignItems:'center',justifyContent:'center'}}>
+                              <Text style={{color:'white'}}>Terima</Text>
+                            </LinearGradient>
                           </TouchableOpacity>
                         </View>
                       </View>

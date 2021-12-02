@@ -6,6 +6,8 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <React/RCTLinkingManager.h>
 #import "RNFBMessagingModule.h"
+#import <React/RCTUIManager.h>
+#import "RNCallKeep.h"
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -62,6 +64,8 @@ static void InitializeFlipper(UIApplication *application) {
   
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   NSDictionary *appProperties = [RNFBMessagingModule addCustomPropsToUserProps:nil withLaunchOptions:launchOptions];
+
+  
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                             		                       moduleName:@"Santooi"
                                             initialProperties:appProperties];
@@ -108,5 +112,12 @@ static void InitializeFlipper(UIApplication *application) {
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
 }
-
+- (BOOL)application:(UIApplication *)application
+ continueUserActivity:(NSUserActivity *)userActivity
+   restorationHandler:(void(^)(NSArray * __nullable restorableObjects))restorationHandler
+ {
+   return [RNCallKeep application:application
+            continueUserActivity:userActivity
+              restorationHandler:restorationHandler];
+ }
 @end
