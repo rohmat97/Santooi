@@ -71,6 +71,8 @@ const images = {
   call: require('../Images/ItemHome/call.png'),
   CallsMenu: require('../Images/ItemHome/calls.png'),
   ChatMenu: require('../Images/ItemHome/chat.png'),
+  bgChat: require('../Images/Chat/extendBgChat.png'),
+  sendChat: require('../Images/Chat/sendChat.png'),
   ContactMenu: require('../Images/ItemHome/contacts.png'),
   dotRed: require('../Images/ItemHome/dot-red.png'),
   findByPhone: require('../Images/ItemHome/find-by-phone.png'),

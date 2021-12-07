@@ -9,6 +9,8 @@ import {
   TextInput,
   Button,
   ActivityIndicator,
+  ImageBackground,
+  TouchableOpacity,
 } from 'react-native';
 import Pusher from 'pusher-js/react-native';
 
@@ -18,11 +20,16 @@ import DebugConfig from '../../../../Config/DebugConfig';
 
 import pusherConfig from './pusher.json';
 import metrics from '../../../../Themes/Metrics';
+import { TemplateBackground } from '../../../../Components/TemplateBackground';
+import images from '../../../../Themes/Images';
+import { Screen } from '../../../../Transforms/Screen';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 
 function DetailChat(props) {
   const flatlistRef = useRef();
+  const { navigation } = props
+  const { pop } = navigation
   const {params, token} = props.navigation.state.params;
   const {id} = token.data.user;
   const [messages_array, setmessages_array] = useState([]);
@@ -67,6 +74,7 @@ function DetailChat(props) {
   };
 
   useEffect(() => {
+    console.log(`params`, params)
     api
       .getChat({
         page: 1,
@@ -145,16 +153,51 @@ function DetailChat(props) {
   //   }
   // }, [messages_array]);
   return (
+    
+  <TemplateBackground cover={true}>
+    <Image source={images.bgChat} resizeMode="cover" style={styles.bgChat} />
     <View style={styles.container}>
       <View
         style={{
-          flex: 1,
-          justifyContent: 'center',
+          // flex: 1,
+          justifyContent: 'space-between',
           alignItems: 'center',
-          paddingTop: 48,
           paddingBottom: 12,
+          paddingHorizontal:12,
+          flexDirection:'row',
+          height:Screen.height*0.05,
+          // backgroundColor:'red'
         }}>
-        <Text>{params.friend.name}</Text>
+          <View style={{flexDirection:'row',width:'70%'}}>
+            <TouchableOpacity onPress={()=> pop()}>
+              <Image source={images.arrowBack} style={{width:20,height:20, tintColor:'white',marginRight:12}} resizeMode='contain'/>
+            </TouchableOpacity>
+            <Text style={{color:'white',fontSize:16, fontWeight:'bold'}}>{params.friend.name}</Text>
+          </View>
+          { params?.friend?.photo ? (
+              <Image
+                source={{uri: params?.friend?.photo}}
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                }}
+              />
+            ) : (
+              <View
+                style={{
+                  backgroundColor: '#662D91',
+                  width: 40,
+                  height: 40,
+                  borderRadius: 20,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <Text style={{color: 'white', fontSize: 14}}>
+                  {params?.friend?.name.charAt(0)}
+                </Text>
+              </View>
+            )}
       </View>
       <FlatList
         ref={flatlistRef}
@@ -187,7 +230,7 @@ function DetailChat(props) {
                   alignItems: 'center',
                   justifyContent: 'flex-end',
                 }}>
-                {id !== item.id_sender ? (
+                {/* {id !== item.id_sender ? (
                   picture ? (
                     <Image
                       source={{uri: picture}}
@@ -212,25 +255,29 @@ function DetailChat(props) {
                       </Text>
                     </View>
                   )
-                ) : null}
+                ) : null} */}
                 <View
                   style={{
                     flexDirection: 'column',
                     paddingHorizontal: 12,
                     alignItems:
                       id === item.id_sender ? 'flex-end' : 'flex-start',
+                    backgroundColor:id !== item.id_sender ?'white':'#662D91',
+                    padding:12,
+                    borderRadius: 16
                   }}>
-                  <Text style={{fontWeight: 'bold'}}>{name}</Text>
+                  {/* <Text style={{fontWeight: 'bold'}}>{name}</Text> */}
                   <Text
                     style={{
                       maxWidth: metrics.screenWidth * 0.5,
                       textAlign: id === item.id_sender ? 'right' : 'left',
+                      color:id !== item.id_sender ?'black':'white'
                     }}
                     numberOfLines={5}>
                     {item.message}
                   </Text>
                 </View>
-                {id === item.id_sender ? (
+                {/* {id === item.id_sender ? (
                   picture ? (
                     <Image
                       source={{uri: picture}}
@@ -255,7 +302,7 @@ function DetailChat(props) {
                       </Text>
                     </View>
                   )
-                ) : null}
+                ) : null} */}
               </View>
             </View>
           );
@@ -264,16 +311,20 @@ function DetailChat(props) {
       {/* <Pressable android_ripple style={styles.button} onPress={onPressFunction}>
         <Text style={styles.arrow}>v</Text>
       </Pressable> */}
-      <View>
+      <View style={{backgroundColor:'white',flexDirection:'row',alignItems:'center'}}>
         <TextInput
           value={text}
-          style={{width: '80%'}}
+          style={{width: '80%',backgroundColor:'#9A5EBA',alignSelf:'center',margin:8, borderRadius:16,color:'white',paddingHorizontal:8}}
+          placeholderTextColor={'white'}
           placeholder="Enter Your message!"
           onChangeText={(text) => settext(text)}
         />
-        <Button onPress={() => send_message()} title="send text" />
+        <TouchableOpacity onPress={() => send_message()}>
+          <Image source={images.sendChat} style={{width:40,height:40}}/>
+        </TouchableOpacity>
       </View>
     </View>
+</TemplateBackground>
   );
 }
 
@@ -298,6 +349,12 @@ const styles = StyleSheet.create({
   arrow: {
     fontSize: 36,
   },
+  bgChat:{
+    flex: 1,
+    justifyContent: "center",
+    opacity:0.5,
+    position:'absolute'
+  }
 });
 
 export default DetailChat;
