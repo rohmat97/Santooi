@@ -43,7 +43,9 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
       .catch( ()=> setfetching(false))
   }, []);
 
-  const renderRightActions = () => {
+  const renderRightActions = (progress, item) => {
+    // console.log(`progress`, progress)
+    // console.log(`item`, item)
     return (
       <RectButton>
         <Animated.View
@@ -55,6 +57,10 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
             <Avatar
                 // size='small'
                 // title={'Nissa'}
+                onPress={()=> api.deleteChat({
+                  token: token.data.access_token,
+                  id: item.id
+                }).then(success => console.log(`success`, success).catch(err => console.log(`err`, err)))}
                 source={Images.DeleteChat}
                 avatarStyle={{width:20,height:20}}
                 containerStyle={{alignItems:'center',justifyContent:"center",marginTop:20}}
@@ -144,7 +150,7 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
               if(item && item.friend){
                 return(
                   <Swipeable
-                  renderRightActions={renderRightActions}>
+                  renderRightActions={(progress) => renderRightActions(progress, item)}>
                   <TouchableOpacity
                     onPress={() =>{
                       console.log(`item`, item)

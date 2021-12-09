@@ -86,6 +86,7 @@ const create = (baseURL = staging) => {
       headers: {Authorization: `Bearer ${payload.token}`},
     });
   const getChat = (payload) => api.get(`/account/user/chat?page=${payload.page}&limit=${payload.limit}&id=${payload.id}`,'',{ headers: {Authorization: `Bearer ${payload.token}`},})
+  const deleteChat = (payload) => api.delete(`/account/user/chat/${payload.id}`,'',{headers: { Authorization: `Bearer ${payload.token}`}});
   const getHistoryCall = (payload) => api.get(`/account/user/call?limit=${payload.limit}&page=${payload.page}`,'',{headers: { Authorization: `Bearer ${payload.token}`}})
   
   // ------
@@ -143,7 +144,8 @@ const create = (baseURL = staging) => {
     sendChat,
     getChat,
     getHistoryCall,
-    checkUserCall
+    checkUserCall,
+    deleteChat
   }
 }
 
