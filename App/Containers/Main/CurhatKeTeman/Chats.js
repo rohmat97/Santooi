@@ -25,10 +25,9 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
   const {pop} = navigation;
   const [listChat, setlistChat] = useState([]);
   const [fetching, setfetching] = useState(true)
-
-  useEffect(() => {
-    setfetching(true)
-    api
+  const LoadChat =() =>{
+     setfetching(true)
+     api
       .getChat({
         // page: 1,
         // limit: 100,
@@ -41,6 +40,9 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
         setfetching(false)
       })
       .catch( ()=> setfetching(false))
+  }
+  useEffect(() => {
+    LoadChat()
   }, []);
 
   const renderRightActions = (progress, item) => {
@@ -59,8 +61,8 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
                 // title={'Nissa'}
                 onPress={()=> api.deleteChat({
                   token: token.data.access_token,
-                  id: item.id
-                }).then(success => console.log(`success`, success).catch(err => console.log(`err`, err)))}
+                  id: item?.last_message?.id_user_friend
+                }).then(success => LoadChat()).catch(err => console.log(`err`, err.data))}
                 source={Images.DeleteChat}
                 avatarStyle={{width:20,height:20}}
                 containerStyle={{alignItems:'center',justifyContent:"center",marginTop:20}}
@@ -111,7 +113,7 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
             <ActivityIndicator animating={true} color={Colors.purple900} size={40} style={{marginTop: Metrics.screenHeight*0.2}} />
             :
           <FlatList
-            data={[...listChat,{}]}
+            data={listChat.length>0?[...listChat,{}]:listChat}
             ListEmptyComponent={
               <View
                 style={{
@@ -155,8 +157,7 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
                     onPress={() =>{
                       console.log(`item`, item)
                       navigation.navigate('DetailChat', {
-                        params: item,
-                        token: token,
+                        params: item
                       })}
                     }
                     key={index}

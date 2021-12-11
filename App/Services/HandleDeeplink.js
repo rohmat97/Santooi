@@ -67,7 +67,14 @@ export const ExtractURL =(url, navigate, routeName,goBack) =>{
                 title: params?.friend?.user?.name.charAt(0),
                 pict: params?.friend?.user?.photo?.url,
               })
-        } else{
+        } else if (paramName[0] === 'DetailChat') {
+            let data = JSON.parse(paramName[1])
+            console.log(`data deeplink`, data)
+              navigate('DetailChat',{
+                  params: data
+              })
+        }
+        else{
             const email = paramName&& paramName[1].match(/email=([^&]*)/)
             const token = paramName&& paramName[1].match(/token=([^&]*)/)
             const id_user = paramName && paramName[1].match(/id_user=([^&]*)/)

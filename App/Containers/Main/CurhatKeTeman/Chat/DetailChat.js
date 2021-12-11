@@ -18,19 +18,23 @@ import API from '../../../../Services/Api';
 import FixtureAPI from '../../../../Services/FixtureApi';
 import DebugConfig from '../../../../Config/DebugConfig';
 
+import TokenRedux from '../../../../Redux/Authentication/TokenRedux';
+
 import pusherConfig from './pusher.json';
 import metrics from '../../../../Themes/Metrics';
 import { TemplateBackground } from '../../../../Components/TemplateBackground';
 import images from '../../../../Themes/Images';
 import { Screen } from '../../../../Transforms/Screen';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 
 function DetailChat(props) {
   const flatlistRef = useRef();
-  const { navigation } = props
+  const { navigation, token } = props
   const { pop } = navigation
-  const {params, token} = props.navigation.state.params;
+  const {params} = props.navigation.state.params;
   const {id} = token.data.user;
   const [messages_array, setmessages_array] = useState([]);
   const [text, settext] = useState('');
@@ -214,10 +218,10 @@ function DetailChat(props) {
         keyExtractor={(item) => item.id}
         renderItem={({item, index}) => {
           // console.log(`item`, item)
-          let picture =
-            id === item.id_sender ? token.data.user.photo : params.friend.photo;
-          let name =
-            id === item.id_sender ? token.data.user.name : params.friend.name;
+          // let picture =
+          //   id === item.id_sender ? token.data.user.photo : params.friend.photo;
+          // let name =
+          //   id === item.id_sender ? token.data.user.name : params.friend.name;
           return (
             <View
               style={{
@@ -357,4 +361,14 @@ const styles = StyleSheet.create({
   }
 });
 
-export default DetailChat;
+const mapStateToProps = (state) => {
+  // console.log(`state.nav`, state.nav)
+    return {
+      token: state.token.payload
+    }
+  }
+  
+  const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators(Object.assign(TokenRedux), dispatch)
+  }
+export default connect(mapStateToProps, mapDispatchToProps)(DetailChat)

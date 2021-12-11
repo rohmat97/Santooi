@@ -91,7 +91,17 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
               console.log('TOKEN:', token);
             },
             onNotification: function (notification) {
-              console.log('NOTIFICATION:', notification);
+              // console.log('NOTIFICATION:', notification);
+              if(notification.userInteraction){
+                let data = JSON.parse(notification.data.data) 
+                let params = {
+                    id: data?.chat_detail?.id_user_friend,
+                    friend: data?.user
+                }
+                Linking.openURL('santooi://DetailChat?'+JSON.stringify(params))
+
+                console.log(`notification open`, params)
+              }
               notification.finish(PushNotificationIOS.FetchResult.NoData);
             },
             onAction: function (notification) {
@@ -135,6 +145,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
                     PushNotification.localNotification({
                         title: remoteMessage.data.title,
                         message: remoteMessage.data.body,
+                        userInfo: remoteMessage.data,
                     })
                       if(remoteMessage?.data?.title === 'end_call'){
                         Linking.openURL('santooi://MainScreen')
