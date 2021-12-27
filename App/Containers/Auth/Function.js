@@ -1,6 +1,11 @@
 import messaging from '@react-native-firebase/messaging';
 export const CheckEmail = async (setavail, type, check,email,password,LoginRequest,setvisible,setsubmitted,navigate,CheckEmailSuccess)=>{
     const fcmToken = await messaging().getToken()
+    console.log(`paramss`,`{
+        'email': ${email},
+        'password': ${password},
+        'firebase_token': ${fcmToken}
+    }` )
     if(type === 'login'){
         setsubmitted(true)
         console.log('login')

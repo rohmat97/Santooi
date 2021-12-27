@@ -7,6 +7,7 @@ import RNCallKeep from 'react-native-callkeep';
 import API from '../Services/Api';
 const api =  API.create();
 export function handleRemoteMessage(remoteMessage) {
+  console.log(`remoteMessage bgtask`, remoteMessage)
     if (Platform.OS === 'android') {
       if(remoteMessage?.data?.title === 'incoming_call') {
         IncomingCall.display(
@@ -41,11 +42,14 @@ export function handleRemoteMessage(remoteMessage) {
         }
       });
     } else {
-      // if (remoteMessage?.data?.type === 'meeting') {
+        if(remoteMessage?.data?.title === 'incoming_call') {
+        const data = JSON.parse(remoteMessage?.data?.data)
+        // console.log(`data handleRemoteMessage`, data)
+        const nav = data?.call_detail?.type
         RNCallKeep.displayIncomingCall(
           '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
           remoteMessage?.data?.body,
-          'Santooi',
+          remoteMessage.notification.title,
           'number',
           false,
         );
@@ -62,13 +66,32 @@ export function handleRemoteMessage(remoteMessage) {
           RNCallKeep.rejectCall(callUUID);
           RNCallKeep.endAllCalls();
           RNCallKeep.endCall(callUUID);
+          console.log(`callUUID`, callUUID)
           // Do your normal `Answering` actions here.
-          // navigator.navigate('jitsi', {link: remoteMessage?.data?.link});
+            RNCallKeep.backToForeground();
+            if(nav === 'v_call'){
+              Linking.openURL('santooi://VideoRoom?'+JSON.stringify(data))
+            }
+            if(nav === 'call'){
+              Linking.openURL('santooi://CallRoom?'+JSON.stringify(data))
+            }
         });
-      }
+      }    
+      if(remoteMessage?.data?.title  === 'chat'){
+        let data = JSON.parse(remoteMessage?.data?.data) 
+        let params = {
+            id: data?.chat_detail?.id_user_friend,
+            friend: data
+        }
+        // console.log(`params`, params)
+        Linking.openURL('santooi://DetailChat?'+JSON.stringify(params))
+    }
+    }
   }
 
 export function CallIncoming(navigate, remoteMessage, token ){
+
+  const data = JSON.parse(remoteMessage?.data?.data)
     if (Platform.OS === 'android') {
       if(remoteMessage?.data?.title === 'incoming_call') {
         IncomingCall.display(
@@ -80,7 +103,6 @@ export function CallIncoming(navigate, remoteMessage, token ){
         ); 
       }
      
-      const data = JSON.parse(remoteMessage?.data?.data)
       // console.log(`data`, data)
       DeviceEventEmitter.addListener('answerCall', async(payload) => {
         await api.checkUserCall({
@@ -120,15 +142,50 @@ export function CallIncoming(navigate, remoteMessage, token ){
       RNCallKeep.displayIncomingCall(
         '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d',
         remoteMessage.notification.body,
-        'Santooi',
+        remoteMessage.notification.title,
         'number',
         false,
       );
-      RNCallKeep.addEventListener('answerCall', () => {
+      RNCallKeep.addEventListener('answerCall', async({callUUID}) => {
         // navigator.navigate('jitsi', {link: notification.data.link});
-        RNCallKeep.rejectCall('9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d');
+        console.log(`data?.call_detail`, data?.call_detail)
+        await api.checkUserCall({
+          id: data?.user?.id,
+          type: data?.call_detail?.type,
+          status: 'pickup',
+          token: token?.data?.access_token,
+        }).then(
+          success =>{
+            console.log(`success CallIncoming`, success.data)
+            if(success.data.status === true){
+              if(data?.call_detail?.type === 'v_call'){
+                navigate('VideoRoom',{
+                  params: data, 
+                  name: data?.user?.name,
+                  title: data?.user?.name.charAt(0),
+                  pict: data?.user?.photo?.url,
+                });
+              }else if(data?.call_detail?.type === 'call'){
+                navigate('CallRoom', {
+                  params: data, 
+                  name: data?.user?.name,
+                  title: data?.user?.name.charAt(0),
+                  pict: data?.user?.photo?.url,
+                });
+              }
+            }else{
+              console.log(`success CallIncoming`, success.data)
+              // Alert.alert('',success.data)
+            }
+          }
+        ).catch(err =>{
+          console.log(`err`, err)
+        })
+        console.log(`answerCall`)
+        RNCallKeep.rejectCall(callUUID);
         RNCallKeep.endAllCalls();
-        RNCallKeep.endCall('9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d');
+        RNCallKeep.endCall(callUUID);
+        
       });
     }
   }

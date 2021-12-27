@@ -176,7 +176,7 @@ function DetailChat(props) {
             <TouchableOpacity onPress={()=> pop()}>
               <Image source={images.arrowBack} style={{width:20,height:20, tintColor:'white',marginRight:12}} resizeMode='contain'/>
             </TouchableOpacity>
-            <Text style={{color:'white',fontSize:16, fontWeight:'bold'}}>{params.friend.name}</Text>
+            <Text style={{color:'white',fontSize:16, fontWeight:'bold'}}>{params?.friend?.name}</Text>
           </View>
           { params?.friend?.photo ? (
               <Image
@@ -318,7 +318,7 @@ function DetailChat(props) {
       <View style={{backgroundColor:'white',flexDirection:'row',alignItems:'center'}}>
         <TextInput
           value={text}
-          style={{width: '80%',backgroundColor:'#9A5EBA',alignSelf:'center',margin:8, borderRadius:16,color:'white',paddingHorizontal:8}}
+          style={{width: '80%',backgroundColor:'#9A5EBA',alignSelf:'center',margin:8, borderRadius:16,color:'white',padding:8}}
           placeholderTextColor={'white'}
           placeholder="Enter Your message!"
           onChangeText={(text) => settext(text)}

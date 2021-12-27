@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Text, Image, View, ImageBackground, Alert, Platform, DeviceEventEmitter, Linking } from 'react-native'
 import { TemplateBackground } from '../Components/TemplateBackground'
 import messaging from '@react-native-firebase/messaging';
-import inAppMessaging from '@react-native-firebase/in-app-messaging';
+import {check, PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 
 // import Geolocation from '@react-native-community/geolocation';
 //redux
@@ -22,8 +22,6 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
     // console.log('Message handled in the background!', remoteMessage);
     handleRemoteMessage(remoteMessage)
   });
-  
-
  function SplashScreen(props) {
     const { navigation, token } = props
     const { getParam,state,goBack, navigate } = navigation
@@ -40,58 +38,45 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
         } 
        }
     const requestUserPermission = async () => {
-      if(Platform.OS==='ios'){
-        await messaging().requestPermission({
-          sound: false,
-          announcement: true,
-          // ... other permission settings
-        });
-      }else{
-        await messaging().requestPermission({
-          alert: true,
-          announcement: true,
-          badge: true,
-          carPlay: true,
-          provisional: true,
-          sound: true
-        });
-      }
-      
+        const authorizationStatus = await messaging().requestPermission();
+        if (authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED) {
+          console.log('User has notification permissions enabled.');
+        } else if (authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL) {
+          console.log('User has provisional notification permissions.');
+        } else {
+          console.log('User has notification permissions disabled');
+        }
       }
 
+      const onLocalNotification = (notification) => {
+        const isClicked = notification.getData().userInteraction === 1;
+        let data = JSON.parse(notification._data.data) 
+        let params = {
+            id: data?.chat_detail?.id_user_friend,
+            friend: data?.user
+        }
+        if(isClicked) {
+          navigate('DetailChat',{
+            params: params
+          })
+        }
+        console.log('notionLocalNotificationfication',notification)
+        // console.log(`isClicked`, isClicked)
+
+      };
       useEffect(() => {
-        Initiate(setUrl,setCame,navigate,routeName,goBack)
         const pars = getParam('params')
+        Initiate(setUrl,setCame,navigate,routeName,goBack)
         setParam(pars)
         checkToken()
         requestUserPermission();
-        if( Platform.OS==='ios'){
-          PushNotificationIOS.setNotificationCategories([
-            {
-              id: 'userAction',
-              actions: [
-                {id: 'open', title: 'Open', options: {foreground: true}},
-                {
-                  id: 'ignore',
-                  title: 'Desruptive',
-                  options: {foreground: true, destructive: true},
-                },
-                {
-                  id: 'text',
-                  title: 'Text Input',
-                  options: {foreground: true},
-                  textInput: {buttonTitle: 'Send'},
-                },
-              ],
-            },
-          ])
-        }else{
+        if( Platform.OS==='android'){
           PushNotification.configure({
             onRegister: async (token) => {
               console.log('TOKEN:', token);
             },
             onNotification: function (notification) {
-              // console.log('NOTIFICATION:', notification);
+              console.log('NOTIFICATION:', notification);
               if(notification.userInteraction){
                 let data = JSON.parse(notification.data.data) 
                 let params = {
@@ -99,7 +84,6 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
                     friend: data?.user
                 }
                 Linking.openURL('santooi://DetailChat?'+JSON.stringify(params))
-
                 console.log(`notification open`, params)
               }
               notification.finish(PushNotificationIOS.FetchResult.NoData);
@@ -119,8 +103,12 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
             popInitialNotification: true,
             requestPermissions: true,
           });
+        }else{
+          PushNotificationIOS.addEventListener(
+            'localNotification',
+            onLocalNotification,
+          );
         }
-        
       }, []);
       
     useEffect(()=>{
@@ -138,22 +126,41 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
             setTimeout(() => {
                 console.log(`token`, token)
                 if(token) {
-                    inAppMessaging().setMessagesDisplaySuppressed(true);
                     messaging().onMessage(async remoteMessage => {
-                    //   console.log('A new FCM message arrived!', JSON.stringify(remoteMessage))
-                    
-                    PushNotification.localNotification({
+                    console.log('remoteMessage onMessage', JSON.stringify(remoteMessage))
+                    if(Platform.OS === 'android'){
+                      console.log(`android`)
+                      PushNotification.localNotification({
                         title: remoteMessage.data.title,
                         message: remoteMessage.data.body,
                         userInfo: remoteMessage.data,
-                    })
+                      })
                       if(remoteMessage?.data?.title === 'end_call'){
                         Linking.openURL('santooi://MainScreen')
                       }else{
                         CallIncoming( navigate, remoteMessage, token )
                       }
-                    });
+                    }else{
+                      if(remoteMessage?.data?.title === 'end_call'){
+                        Linking.openURL('santooi://MainScreen')
+                      }
+                      if(remoteMessage?.data?.title === 'incoming_call'){
+                        CallIncoming( navigate, remoteMessage, token )
+                      }
+                      if(remoteMessage.data?.title  === 'chat'){
+                        PushNotificationIOS.presentLocalNotification({
+                          alertTitle: remoteMessage.data?.title ,
+                          alertBody: remoteMessage.data?.body ,
+                          userInfo: {
+                            data: remoteMessage.data.data
+                          }
+                        });
+                      }
+                    
+                    }
+                  });
                     messaging().onNotificationOpenedApp(remoteMessage => {
+                      console.log(`remoteMessage onNotificationOpenedApp`, remoteMessage)
                         console.log(
                           'Notification caused app to open from background state:',
                           remoteMessage,
@@ -162,11 +169,21 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
                     messaging()
                         .getInitialNotification()
                             .then(remoteMessage => {
-                            if (remoteMessage) {
-                                console.log(
-                                'Notification caused app to open from quit state:',
-                                remoteMessage,
-                                );
+                              console.log(`remoteMessage getInitialNotification`, remoteMessage)
+                              if(remoteMessage?.data?.title === 'v_call'){
+                                Linking.openURL('santooi://VideoRoom?'+JSON.stringify(data))
+                              }
+                              if(remoteMessage?.data?.title  === 'call'){
+                                Linking.openURL('santooi://CallRoom?'+JSON.stringify(data))
+                              }
+                              if(remoteMessage?.data?.title  === 'chat'){
+                                let data = JSON.parse(remoteMessage?.data?.data) 
+                                let params = {
+                                    id: data?.chat_detail?.id_user_friend,
+                                    friend: data?.user
+                                }
+                                console.log(`params`, params)
+                                Linking.openURL('santooi://DetailChat?'+JSON.stringify(params))
                             }
                     });
                     navigate('Main', {

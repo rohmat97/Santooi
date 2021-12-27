@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "prepare-env": "cp ./App/env/env.$CONF.js ./App/env.js",
-    "dev": "SET CONF=dev yarn prepare-env && react-native run-android",
+    "dev": " CONF=dev yarn prepare-env && react-native run-android",
     "prod": "CONF=prod yarn prepare-env && react-native run-android",
     "apk": "yarn && npm i  && cd android && ./gradlew clean && ./gradlew assembleRelease",
     "ios": "react-native run-ios",
