@@ -103,8 +103,10 @@ export function CallIncoming(navigate, remoteMessage, token ){
         ); 
       }
      
-      console.log(`data`, data)
       DeviceEventEmitter.addListener('answerCall', async(payload) => {
+
+      console.log(`data`, data)
+      console.log(`payload`, payload)
         await api.checkUserCall({
           id: data?.user?.id,
           type: data?.call_detail?.type,
@@ -118,14 +120,14 @@ export function CallIncoming(navigate, remoteMessage, token ){
                 navigate('VideoRoom',{
                   params: data, 
                   name: data?.user?.name,
-                  title: data?.user?.name.charAt(0),
+                  title: data?.user?.name?.charAt(0),
                   pict: data?.user?.photo?.url,
                 });
               }else if(data?.call_detail?.type === 'call'){
                 navigate('CallRoom', {
                   params: data, 
                   name: data?.friend?.user?.name,
-                  title: data?.friend?.user?.name.charAt(0),
+                  title: data?.friend?.user?.name?.charAt(0),
                   pict: data?.friend?.user?.photo?.url,
                 });
               }
@@ -162,14 +164,14 @@ export function CallIncoming(navigate, remoteMessage, token ){
                 navigate('VideoRoom',{
                   params: data, 
                   name: data?.user?.name,
-                  title: data?.user?.name.charAt(0),
+                  title: data?.user?.name?.charAt(0),
                   pict: data?.user?.photo?.url,
                 });
               }else if(data?.call_detail?.type === 'call'){
                 navigate('CallRoom', {
                   params: data, 
                   name: data?.user?.name,
-                  title: data?.user?.name.charAt(0),
+                  title: data?.user?.name?.charAt(0),
                   pict: data?.user?.photo?.url,
                 });
               }

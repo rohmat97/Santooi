@@ -239,7 +239,7 @@ class CallRoom extends Component<{}, State>  {
     }
   render() {
     const { navigation } = this.props
-    const {params, name, title, pict} = navigation.state.params
+    const { name, title, pict} = navigation.state.params
 
     if(this.state.EndCall){
       return(
