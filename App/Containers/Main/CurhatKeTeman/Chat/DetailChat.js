@@ -11,8 +11,11 @@ import {
   ActivityIndicator,
   ImageBackground,
   TouchableOpacity,
+  Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 import Pusher from 'pusher-js/react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 import API from '../../../../Services/Api';
 import FixtureAPI from '../../../../Services/FixtureApi';
@@ -27,6 +30,8 @@ import images from '../../../../Themes/Images';
 import { Screen } from '../../../../Transforms/Screen';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Header, useHeaderHeight } from 'react-navigation-stack';
+import moment from 'moment';
 
 const api = DebugConfig.useFixtures ? FixtureAPI : API.create();
 
@@ -41,6 +46,7 @@ function DetailChat(props) {
   const [loading, setloading] = useState(true);
   const [isFetching, setisFetching] = useState(false);
   const [data, setdata] = useState([]);
+  const [active, setactive] = useState(false)
 
   const onPressFunction = (index) => {
     flatlistRef.current.scrollToEnd({animating: true});
@@ -172,12 +178,12 @@ function DetailChat(props) {
           height:Screen.height*0.05,
           // backgroundColor:'red'
         }}>
-          <View style={{flexDirection:'row',width:'70%'}}>
-            <TouchableOpacity onPress={()=> pop()}>
-              <Image source={images.arrowBack} style={{width:20,height:20, tintColor:'white',marginRight:12}} resizeMode='contain'/>
-            </TouchableOpacity>
-            <Text style={{color:'white',fontSize:16, fontWeight:'bold'}}>{params?.friend?.name}</Text>
-          </View>
+          <TouchableOpacity onPress={()=> pop()}>
+            <View style={{flexDirection:'row',width:'70%'}}>
+                <Image source={images.arrowBack} style={{width:20,height:20, tintColor:'white',marginRight:12}} resizeMode='contain'/>
+                <Text style={{color:'white',fontSize:16, fontWeight:'bold'}}>{params?.friend?.name}</Text>
+            </View>
+          </TouchableOpacity>
           { params?.friend?.photo ? (
               <Image
                 source={{uri: params?.friend?.photo}}
@@ -203,130 +209,165 @@ function DetailChat(props) {
               </View>
             )}
       </View>
-      <FlatList
-        ref={flatlistRef}
-        data={loading ? [] : messages_array}
-        onRefresh={onRefresh}
-        refreshing={isFetching}
-        contentContainerStyle={{marginHorizontal:12}}
-        ListEmptyComponent={
-          <View
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-            <ActivityIndicator color={'red'} size={48} />
-          </View>
-        }
-        keyExtractor={(item) => item.id}
-        renderItem={({item, index}) => {
-          // console.log(`item`, item)
-          // let picture =
-          //   id === item.id_sender ? token.data.user.photo : params.friend.photo;
-          // let name =
-          //   id === item.id_sender ? token.data.user.name : params.friend.name;
-          return (
+      <KeyboardAvoidingView
+        style = {{ flex: 1 }}
+        // keyboardVerticalOffset = {useHeaderHeight()}
+        behavior={Platform.OS === "ios" ? "padding" : null}
+        enabled
+        >
+        <FlatList
+          ref={flatlistRef}
+          data={loading ? [] : messages_array}
+          onRefresh={onRefresh}
+          refreshing={isFetching}
+          contentContainerStyle={{marginHorizontal:12}}
+          ListEmptyComponent={
             <View
-              style={{
-                alignItems: id === item.id_sender ? 'flex-end' : 'flex-start',
-                marginVertical: 12,
-              }}>
+              style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+              <ActivityIndicator color={'red'} size={48} />
+            </View>
+          }
+          keyExtractor={(item) => item.id}
+          renderItem={({item, index}) => {
+            console.log(`item`, item)
+            // console.log(`item`, item)
+            // let picture =
+            //   id === item.id_sender ? token.data.user.photo : params.friend.photo;
+            // let name =
+            //   id === item.id_sender ? token.data.user.name : params.friend.name;
+            return (
               <View
                 style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-end',
+                  alignItems: id === item.id_sender ? 'flex-end' : 'flex-start',
+                  marginVertical: 12,
                 }}>
-                {/* {id !== item.id_sender ? (
-                  picture ? (
-                    <Image
-                      source={{uri: picture}}
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
-                      }}
-                    />
-                  ) : (
-                    <View
-                      style={{
-                        backgroundColor: '#662D91',
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
-                      <Text style={{color: 'white', fontSize: 14}}>
-                        {name.charAt(0)}
-                      </Text>
-                    </View>
-                  )
-                ) : null} */}
                 <View
                   style={{
-                    flexDirection: 'column',
-                    paddingHorizontal: 12,
-                    alignItems:
-                      id === item.id_sender ? 'flex-end' : 'flex-start',
-                    backgroundColor:id !== item.id_sender ?'white':'#662D91',
-                    padding:12,
-                    borderRadius: 16
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
                   }}>
-                  {/* <Text style={{fontWeight: 'bold'}}>{name}</Text> */}
-                  <Text
+                  {/* {id !== item.id_sender ? (
+                    picture ? (
+                      <Image
+                        source={{uri: picture}}
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: 20,
+                        }}
+                      />
+                    ) : (
+                      <View
+                        style={{
+                          backgroundColor: '#662D91',
+                          width: 40,
+                          height: 40,
+                          borderRadius: 20,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <Text style={{color: 'white', fontSize: 14}}>
+                          {name.charAt(0)}
+                        </Text>
+                      </View>
+                    )
+                  ) : null} */}
+                  <LinearGradient 
+                    start={{x: 0, y: 0.75}} end={{x: 1, y: 0.25}} 
+                    colors={id !== item.id_sender ?['#fff','#DCE3FB']:['#662D91', '#EB0D8C']}  
                     style={{
-                      maxWidth: metrics.screenWidth * 0.5,
-                      textAlign: id === item.id_sender ? 'right' : 'left',
-                      color:id !== item.id_sender ?'black':'white'
-                    }}
-                    numberOfLines={5}>
-                    {item.message}
-                  </Text>
-                </View>
-                {/* {id === item.id_sender ? (
-                  picture ? (
-                    <Image
-                      source={{uri: picture}}
-                      style={{
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
-                      }}
-                    />
-                  ) : (
-                    <View
-                      style={{
-                        backgroundColor: '#662D91',
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
-                        alignItems: 'center',
-                        justifyContent: 'center',
+                        flexDirection: 'row',
+                        paddingHorizontal: 30,
+                        paddingBottom:20,
+                        alignItems:
+                          id === item.id_sender ? 'flex-end' : 'flex-start',
+                        // backgroundColor:id !== item.id_sender ?'white':'#662D91',
+                        padding:12,
+                        borderRadius: 16
                       }}>
-                      <Text style={{color: 'white', fontSize: 14}}>
-                        {name.charAt(0)}
-                      </Text>
-                    </View>
-                  )
-                ) : null} */}
+                    <Text
+                      style={{
+                        maxWidth: metrics.screenWidth * 0.5,
+                        textAlign: id === item.id_sender ? 'left' : 'left',
+                        color:id !== item.id_sender ?'black':'white'
+                      }}
+                      numberOfLines={5}>
+                      {item.message}
+                    </Text>
+                    <Text style={{color:id === item.id_sender ? '#E0E0E0':'#939598', fontSize:8, position:'absolute', bottom:5, right:5}}>{ moment(new Date(item.created_at), 'ddd DD-MMM-YYYY, hh:mm A').format('hh:mm A')}</Text>
+                  </LinearGradient>
+                  {/* <View
+                    style={{
+                      flexDirection: 'column',
+                      paddingHorizontal: 12,
+                      alignItems:
+                        id === item.id_sender ? 'flex-end' : 'flex-start',
+                      backgroundColor:id !== item.id_sender ?'white':'#662D91',
+                      padding:12,
+                      borderRadius: 16
+                    }}>
+                    <Text
+                      style={{
+                        maxWidth: metrics.screenWidth * 0.5,
+                        textAlign: id === item.id_sender ? 'left' : 'left',
+                        color:id !== item.id_sender ?'black':'white'
+                      }}
+                      numberOfLines={5}>
+                      {item.message}
+                    </Text>
+                  </View> */}
+                  {/* {id === item.id_sender ? (
+                    picture ? (
+                      <Image
+                        source={{uri: picture}}
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: 20,
+                        }}
+                      />
+                    ) : (
+                      <View
+                        style={{
+                          backgroundColor: '#662D91',
+                          width: 40,
+                          height: 40,
+                          borderRadius: 20,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <Text style={{color: 'white', fontSize: 14}}>
+                          {name.charAt(0)}
+                        </Text>
+                      </View>
+                    )
+                  ) : null} */}
+                </View>
               </View>
-            </View>
-          );
-        }}
-      />
+            );
+          }}
+        />
       {/* <Pressable android_ripple style={styles.button} onPress={onPressFunction}>
         <Text style={styles.arrow}>v</Text>
       </Pressable> */}
-      <View style={{backgroundColor:'white',flexDirection:'row',alignItems:'center'}}>
+      <View style={{backgroundColor:'white',flexDirection:'row',alignItems:'center', justifyContent:'space-between', padding: 8}}>
         <TextInput
           value={text}
-          style={{width: '80%',backgroundColor:'#9A5EBA',alignSelf:'center',margin:8, borderRadius:16,color:'white',padding:8}}
+          style={{width: '80%',backgroundColor:'#9A5EBA',alignSelf:'center', borderRadius:16,color:'white',padding:8}}
           placeholderTextColor={'white'}
           placeholder="Enter Your message!"
           onChangeText={(text) => settext(text)}
+          onTouchStart={()=> setactive(true)}
+          onEndEditing={()=> setactive(false)}
         />
         <TouchableOpacity onPress={() => send_message()}>
           <Image source={images.sendChat} style={{width:40,height:40}}/>
         </TouchableOpacity>
       </View>
+
+      {Platform.OS==='ios' && <View style={{height: active?50:0}}/>}
+    </KeyboardAvoidingView>
     </View>
 </TemplateBackground>
   );

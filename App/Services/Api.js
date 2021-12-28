@@ -70,7 +70,7 @@ const create = (baseURL = staging) => {
   const deleteAlbum= payload=>api.delete('/account/user/gallery/album/'+payload.idAlbum,'',{headers: { Authorization: `Bearer ${payload.token}`}})
   const getDetailAlbum = payload => api.get(`/account/user/gallery?id_user_gallery_album=${payload.id}&limit=10&page=${payload.page}`,'',{headers:{Authorization:`Bearer ${payload.token}`}})
   //jalanyuks
-  const getPlace = payload => api.get(`/place?key=${payload.key}&id=${payload.id}&lat=${payload.lat}&lng=${payload.long}&limit=${payload.limit}&page=${payload.page}`,'',{headers:{Authorization:`Bearer ${payload.token}`}})
+  const getPlace = (payload) => api.get(`/place?key=${payload.key}&id=${payload.id}&lat=${payload.lat}&lng=${payload.long}&limit=${payload.limit}&page=${payload.page}`,'',{headers:{Authorization:`Bearer ${payload.token}`}})
   const getHistoryPlace = payload => api.get(`/account/user/place?limit=10&page=${payload.page}`,'',{headers:{Authorization:`Bearer ${payload.token}`}})
   const updateHistory = payload => api.post('/account/user/place',payload.body,{headers: { Authorization: `Bearer ${payload.token}`}})
   //curhat ke teman

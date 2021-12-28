@@ -103,7 +103,7 @@ export function CallIncoming(navigate, remoteMessage, token ){
         ); 
       }
      
-      // console.log(`data`, data)
+      console.log(`data`, data)
       DeviceEventEmitter.addListener('answerCall', async(payload) => {
         await api.checkUserCall({
           id: data?.user?.id,
@@ -112,7 +112,7 @@ export function CallIncoming(navigate, remoteMessage, token ){
           token: token?.data?.access_token,
         }).then(
           success =>{
-            console.log(`success CallIncoming`, success.data)
+            console.log(`success CallIncoming ANDROID`, success.data)
             if(success.data.status === true){
               if(data?.call_detail?.type === 'v_call'){
                 navigate('VideoRoom',{

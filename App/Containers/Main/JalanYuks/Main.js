@@ -50,14 +50,18 @@ export const ComponentMain = ({listHistory, listPlaces, setseeAll, toggleOverlay
                 </View>
             </View>
             {
-                listHistory.length>0?
                 <FlatList 
                 data={listHistory}
+                ListEmptyComponent={ 
+                    <View style={{flex:1,paddingBottom:Screen.height*0.6}}>
+                        <Text style={{color:'white', textAlign:'center', fontSize:20}}>Tidak ada History</Text>
+                    </View>
+                }
                 contentContainerStyle={{
                     paddingBottom:Screen.height*0.1
                 }}
                 renderItem={({ item, index, separators }) => {
-                    console.log('data', item)
+                    // console.log('data', item)
                     let formatedDate  =new Date (item.updated_at)
                     let monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
                     let date =formatedDate.getDate()+' '+monthNames[formatedDate.getMonth()]+' '+formatedDate.getFullYear()+', '+formatedDate.getHours()+':'+formatedDate.getMinutes()
@@ -120,10 +124,7 @@ export const ComponentMain = ({listHistory, listPlaces, setseeAll, toggleOverlay
 
                 
                     )}}
-            />  :
-            <View style={{flex:1,paddingBottom:Screen.height*0.6}}>
-                <Text style={{color:'white', textAlign:'center', fontSize:20}}>Tidak ada History</Text>
-            </View>
+            /> 
             }
         </ScrollView>  
     )

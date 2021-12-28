@@ -7,7 +7,6 @@ export const ComponentSearch = ({listPlaces, toggleOverlay}) =>{
     return(
         <FlatList 
             data={listPlaces}
-            contentContainerStyle={{height:Screen.height}}
             renderItem={({ item, index, separators }) => 
             {
                 if(item.status ==1){

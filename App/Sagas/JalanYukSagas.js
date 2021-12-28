@@ -7,6 +7,7 @@ import UpdateHistoryRedux from '../Redux/JalanYuk/UpdateHistoryRedux'
 export function * getPlace (api, action) {
   // make the call to the api
   const { data } = action
+  console.log(`data`, data)
   const response = yield call(api.getPlace, data)
 
   if (response.ok) {
@@ -36,7 +37,7 @@ export function * updateHistory (api, action) {
   const response = yield call(api.updateHistory, data)
 
   if (response.ok) {
-    console.log('response updateHistory',response.data)
+    // console.log('response updateHistory',response.data)
     // do data conversion here if needed
     yield put(UpdateHistoryRedux.UpdateHistorySuccess(response.data))
   }

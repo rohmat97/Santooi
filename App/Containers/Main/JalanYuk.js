@@ -4,8 +4,6 @@ import { Image } from 'react-native-elements'
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import images from '../../Themes/Images';
 import styles from '../Styles/LaunchScreenStyles'
-import Colors from '../../Themes/Colors'
-import { Screen } from '../../Transforms/Screen'
 import { connect } from 'react-redux';
 import { OverlayJalanYuk } from '../../Components/OverlayJalanYuk';
 import Geolocation from '@react-native-community/geolocation';
@@ -15,22 +13,23 @@ import TokenRedux from '../../Redux/Authentication/TokenRedux'
 import GetPlaceRedux from '../../Redux/JalanYuk/GetPlaceRedux'
 import HistoryPlaceRedux from '../../Redux/JalanYuk/HistoryPlaceRedux'
 import UpdateHistoryRedux from '../../Redux/JalanYuk/UpdateHistoryRedux'
-import { set } from 'seamless-immutable';
-import { ActivityIndicator } from 'react-native';
-import moment from 'moment';
 import { RefreshControl } from 'react-native';
 import { ComponentSearch } from './JalanYuks/Search';
 import { ComponentMain } from './JalanYuks/Main';
 import { ComponentSeeALl } from './JalanYuks/SeeAll';
 
 
+import API from '../../Services/Api';
+const api = API.create();
 function JalanYuk(props) {
-    const { navigation,token,listplace,listhistory,GetPlaceRequest,HistoryPlaceRequest,UpdateHistoryRequest } = props
+    const { navigation,token } = props
     const { navigate,pop } = navigation
 
     const [latlong, setlatlong] = useState()
     const [listPlaces, setlistPlaces] = useState([])
     const [listHistory, setlistHistory] = useState([])
+    const [listSeeAll, setlistSeeAll] = useState([])
+    const [dataSeeall, setdataSeeall] = useState()
     const [selected, setselected] = useState()
     const [search, setsearch] = useState(null)
     const [visible, setVisible] = useState(false);
@@ -40,6 +39,50 @@ function JalanYuk(props) {
     const wait = (timeout) => {
         return new Promise(resolve => setTimeout(resolve, timeout));
       }
+    const getHistory=(payload)=>{
+        api.getHistoryPlace(payload)
+        .then(success =>{
+            setlistHistory(success.data.data.rows)
+        })
+    }
+    const updateHistory=(payload)=>{
+        api.updateHistory(payload)
+    }
+    
+    const onFetch =()=>{
+        if(search && search.length>0){
+            const payload ={
+                'token':token && token.data.access_token,
+                'page':parseInt(dataSeeall.current_page)+1,
+                'limit':10,
+                'lat':latlong &&latlong.latitude,
+                'long':latlong && latlong.longitude,
+                'key':search,
+                'id':''
+              }
+              api.getPlace(payload)
+              .then(success=>{
+                  setlistSeeAll([...success.data.data.rows.data, ...listSeeAll])
+                  setdataSeeall(success.data.data.rows)
+              })
+        }else{
+            const payloadPlace ={
+                'token':token && token.data.access_token,
+                'page':parseInt(dataSeeall.current_page)+1,
+                'limit':10,
+                'lat':latlong&&latlong.latitude,
+                'long':latlong&&latlong.longitude,
+                'key':'',
+                'id':''
+              }
+            api.getPlace(payloadPlace)
+            .then(success=>{
+                setlistSeeAll([...success.data.data.rows.data, ...listSeeAll])
+                setdataSeeall(success.data.data.rows)
+            })
+        }
+       
+    }
     const onRefresh = React.useCallback(() => {
         setRefreshing(true);
         const payloadPlace ={
@@ -51,12 +94,17 @@ function JalanYuk(props) {
                 'key':'',
                 'id':''
               }
-        GetPlaceRequest(payloadPlace)
+        api.getPlace(payloadPlace)
+        .then(success=>{
+            setlistPlaces(success.data.data.rows)
+        })
+        // GetPlaceRequest(payloadPlace)
         const payloadHistory ={
                 'token':token && token.data.access_token,
                 'page':1,
               }
-        HistoryPlaceRequest(payloadHistory)
+        getHistory(payloadHistory)
+        // HistoryPlaceRequest(payloadHistory)
         wait(2000).then(() => setRefreshing(false));
     }, []);
 
@@ -64,6 +112,27 @@ function JalanYuk(props) {
         setVisible(!visible);
         setselected(params)
     };
+    useEffect(() => {
+        if(seeAll){
+        const payloadPlace ={
+            'token':token && token.data.access_token,
+            'page':1,
+            'limit':10,
+            'lat':latlong&&latlong.latitude,
+            'long':latlong&&latlong.longitude,
+            'key':'',
+            'id':''
+            }
+        api.getPlace(payloadPlace)
+        .then(success=>{
+            setdataSeeall(success.data.data.rows)
+            setlistSeeAll(success.data.data.rows.data)
+        })
+        }else{
+            setlistSeeAll([])
+            setdataSeeall([])
+        }
+    }, [seeAll])
     const request = async() =>{
         if(Platform.OS==='android'){
              await PermissionsAndroid.request(
@@ -88,41 +157,50 @@ function JalanYuk(props) {
     }, [])
 
     useEffect(() => {
+        console.log(`latlong`, latlong)
         if(latlong){
             const payloadPlace ={
                 'token':token && token.data.access_token,
                 'page':1,
                 'limit':5,
-                'lat':latlong.latitude,
-                'long':latlong.longitude,
+                'lat':latlong&&latlong.latitude,
+                'long':latlong&&latlong.longitude,
                 'key':'',
                 'id':''
               }
-            GetPlaceRequest(payloadPlace)
+            api.getPlace(payloadPlace)
+            .then(success=>{
+                setlistPlaces(success.data.data.rows)
+            })
             const payloadHistory ={
-                'token':token && token.data.access_token,
-                'page':1,
-              }
-            HistoryPlaceRequest(payloadHistory)
-            // console.log('latlong',latlong)
+                    'token':token && token.data.access_token,
+                    'page':1,
+                }
+            api.getHistoryPlace(payloadHistory)
+            .then(success =>{
+                setlistHistory(success.data.data.rows)
+            })
         }
     }, [latlong])
-    
-    useEffect(() => {
-        if(listplace){
-            setlistPlaces(listplace.data)
-        }
-    }, [listplace])
 
-    useEffect(() => {
-       if(listhistory){
-           setlistHistory(listhistory.data)
-            // console.log('listhistory',listhistory.data[0])
-       }
-    }, [listhistory])
     const SearchPlace = (text) => {
         // console.log(text)
-        if(text.length>0){
+        if(seeAll){
+            const payloadPlace ={
+                'token':token && token.data.access_token,
+                'page':1,
+                'limit':10,
+                'lat':latlong&&latlong.latitude,
+                'long':latlong&&latlong.longitude,
+                'key':text,
+                'id':''
+                }
+            api.getPlace(payloadPlace)
+            .then(success=>{
+                setdataSeeall(success.data.data.rows)
+                setlistSeeAll(success.data.data.rows.data)
+            })
+        }else if(text.length>0){
             const payload ={
                 'token':token && token.data.access_token,
                 'page':1,
@@ -132,7 +210,10 @@ function JalanYuk(props) {
                 'key':text,
                 'id':''
               }
-            GetPlaceRequest(payload)
+              api.getPlace(payload)
+              .then(success=>{
+                  setlistPlaces(success.data.data.rows)
+              })
             setsearch(text)
         }else{
             const payload ={
@@ -144,7 +225,10 @@ function JalanYuk(props) {
                 'key':'',
                 'id':''
               }
-            GetPlaceRequest(payload)
+              api.getPlace(payload)
+              .then(success=>{
+                  setlistPlaces(success.data.data.rows)
+              })
             setsearch(null)
         }
        
@@ -205,15 +289,15 @@ function JalanYuk(props) {
                 </ScrollView>
                     {   
                        seeAll?
-                       <ComponentSeeALl listPlaces={listPlaces} toggleOverlay={toggleOverlay}/>
+                       <ComponentSeeALl listPlaces={listSeeAll} toggleOverlay={toggleOverlay} onFetch={onFetch}/>
                        :
                        search?
-                        <ComponentSearch listPlaces={listPlaces} toggleOverlay={toggleOverlay} />
+                        <ComponentSearch listPlaces={listPlaces?listPlaces?.data:[]} toggleOverlay={toggleOverlay} />
                         :
-                        <ComponentMain listHistory={listHistory} listPlaces={listPlaces} setseeAll={setseeAll} toggleOverlay={toggleOverlay} />
+                        <ComponentMain listHistory={listHistory?listHistory.data:[]} listPlaces={listPlaces?listPlaces?.data:[]} setseeAll={setseeAll} toggleOverlay={toggleOverlay} />
                     }
                     
-                    <OverlayJalanYuk visible={visible} toggleOverlay={toggleOverlay} selected={selected} openMaps={openMaps} UpdateHistoryRequest={UpdateHistoryRequest} token={token} HistoryPlaceRequest={HistoryPlaceRequest} />
+                    <OverlayJalanYuk visible={visible} toggleOverlay={toggleOverlay} selected={selected} openMaps={openMaps} token={token} getHistory={getHistory} updateHistory={updateHistory}/>
                 </View>
             </View>
         </TemplateBackground>
