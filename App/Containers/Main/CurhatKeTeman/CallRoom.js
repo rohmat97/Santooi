@@ -305,6 +305,7 @@ class CallRoom extends Component<{}, State>  {
         </TemplateBackground>
       )
     }
+    console.log('this.state.peerIds.length :>> ', this.state.peerIds);
     return (
       <TemplateBackground cover={true}>
       <View style={styles.container}>
@@ -329,7 +330,7 @@ class CallRoom extends Component<{}, State>  {
           <Text style={{color: 'white', fontSize: 32}}>
             {name}
           </Text>
-          {this.state.peerIds.length < 2 && (
+          {this.state.peerIds.length < 1 && (
             <Text style={{color: 'white', fontSize: 22, marginTop: 12}}>
               Calling ...
             </Text>
