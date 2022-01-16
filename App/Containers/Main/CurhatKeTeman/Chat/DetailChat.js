@@ -175,7 +175,7 @@ function DetailChat(props) {
           paddingBottom: 12,
           paddingHorizontal:12,
           flexDirection:'row',
-          height:Screen.height*0.05,
+          paddingTop:24
           // backgroundColor:'red'
         }}>
           <TouchableOpacity onPress={()=> pop()}>
@@ -284,7 +284,9 @@ function DetailChat(props) {
                           id === item.id_sender ? 'flex-end' : 'flex-start',
                         // backgroundColor:id !== item.id_sender ?'white':'#662D91',
                         padding:12,
-                        borderRadius: 16
+                        borderRadius: 16,
+                        borderBottomRightRadius:id === item.id_sender ? 0:16,
+                        borderBottomLeftRadius:id === item.id_sender ? 16:0,
                       }}>
                     <Text
                       style={{
@@ -366,7 +368,7 @@ function DetailChat(props) {
         </TouchableOpacity>
       </View>
 
-      {Platform.OS==='ios' && <View style={{height: active?50:0}}/>}
+      {/* {Platform.OS==='ios' && <View style={{height: active?50:0}}/>} */}
     </KeyboardAvoidingView>
     </View>
 </TemplateBackground>

@@ -147,8 +147,8 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
               }
               style={{paddingBottom: Screen.height * 0.2}}
               renderItem={({item, index}) =>{ 
-                
                 if(item && item.friend){
+                  // console.log(`item`, item)
                   return(
                     <Swipeable
                       childrenContainerStyle={{justifyContent:"center",alignContent:'space-between'}}
@@ -212,7 +212,7 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
                             </View>
                           }
                         </View>
-                        <Text style={{color:'white', textAlign:'right', marginRight:10}}>{moment(new Date(item.created_at), 'ddd DD-MMM-YYYY, hh:mm A').format('hh:mm A')}</Text>
+                        <Text style={{color:'white', textAlign:'right', marginRight:10, fontSize:10}}>{moment(new Date(item.last_message.created_at), 'ddd DD-MMM-YYYY, hh:mm A').format('hh:mm A')}</Text>
                       </View>
                     </TouchableOpacity>
                   </Swipeable>

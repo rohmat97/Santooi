@@ -186,12 +186,10 @@ function FindUserByContact(props) {
               keyboardType={'default'}
             />
           </View>
-
-          <ScrollView>
             {listFriend.length > 0 ? (
               <FlatList
                 data={listFriend}
-                contentContainerStyle={{height:'100%',paddingBottom:100}}
+                contentContainerStyle={{paddingBottom:''}}
                 renderItem={({item, index}) => {
                   let exist = false;
 
@@ -288,7 +286,6 @@ function FindUserByContact(props) {
                 </Text>
               </View>
             )}
-          </ScrollView>
         </View>
         <OverlayPhone
           api={api.findFriend}

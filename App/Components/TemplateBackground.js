@@ -10,14 +10,14 @@ export const TemplateBackground = ({ children, cover }) => (
     
         <ImageBackground source={Images.backgroundMain} style={styles.backgroundImage} >
             <SafeAreaView style={{flex:1}}>
-                <View style={{margin:Platform.OS==='android'?Metrics.baseMargin*2.5:0}}/>
+                {/* <View style={{margin:Platform.OS==='android'?Metrics.baseMargin*2.5:0}}/> */}
                 <StatusBar
-                animated={true}
-                backgroundColor="transparent"
-                barStyle={'dark-content'}
-                showHideTransition={'slide'}
-                // hidden={false}
-                translucent ={true}
+                // animated={true}
+                // backgroundColor="transparent"
+                // barStyle={'dark-content'}
+                // showHideTransition={'slide'}
+                hidden
+                // translucent ={true}
              />
             { cover == false &&
                 <View style={styles.backgroundImage}>

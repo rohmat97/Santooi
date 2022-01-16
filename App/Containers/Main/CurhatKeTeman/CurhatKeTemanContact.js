@@ -183,6 +183,7 @@ function CurhatKeTemanContact(props) {
             </TouchableOpacity>
             <FlatList
                 data={listContact}
+                contentContainerStyle={{paddingBottom: Screen.height*0.1}}
                 ListEmptyComponent={
                   <View
                   style={{
