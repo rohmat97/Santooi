@@ -38,14 +38,14 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
         } 
        }
     const requestUserPermission = async () => {
-        const authorizationStatus = await messaging().requestPermission();
-        if (authorizationStatus === messaging.AuthorizationStatus.AUTHORIZED) {
-          console.log('User has notification permissions enabled.');
-        } else if (authorizationStatus === messaging.AuthorizationStatus.PROVISIONAL) {
-          console.log('User has provisional notification permissions.');
-        } else {
-          console.log('User has notification permissions disabled');
-        }
+        await messaging().requestPermission({
+          alert: true,
+          announcement: false,
+          badge: true,
+          carPlay: false,
+          provisional: false,
+          sound: true
+        })
       }
 
       const onLocalNotification = (notification) => {
@@ -68,9 +68,29 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
         const pars = getParam('params')
         Initiate(setUrl,setCame,navigate,routeName,goBack)
         setParam(pars)
-        checkToken()
         requestUserPermission();
-        if( Platform.OS==='android'){
+        checkToken()
+        if( Platform.OS==='ios'){
+          PushNotificationIOS.setNotificationCategories([
+            {
+              id: 'userAction',
+              actions: [
+                {id: 'open', title: 'Open', options: {foreground: true}},
+                {
+                  id: 'ignore',
+                  title: 'Desruptive',
+                  options: {foreground: true, destructive: true},
+                },
+                {
+                  id: 'text',
+                  title: 'Text Input',
+                  options: {foreground: true},
+                  textInput: {buttonTitle: 'Send'},
+                },
+              ],
+            },
+          ])
+        }else if( Platform.OS==='android'){
           PushNotification.configure({
             onRegister: async (token) => {
               console.log('TOKEN:', token);

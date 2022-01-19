@@ -43,7 +43,8 @@ class Video extends Component<{}, State> {
       isSpeakerEnable: false,
       Video: true,
       dataFriend: {},
-      EndCall: false
+      EndCall: false,
+      timer: 90
     };
   }
 
@@ -51,7 +52,25 @@ class Video extends Component<{}, State> {
   // const [isSpeakerEnable, setIsSpeakerEnable] = useState(true);
   componentDidMount() {
     this._Join()
+    this.interval = setInterval(
+      () => this.setState((prevState)=> ({ timer: prevState.timer - 1 })),
+      1000
+    );
   }
+  componentDidUpdate(){
+    if(this.state.peerIds.length>0){
+      clearInterval(this.interval);
+    
+    } else if(this.state.timer === 1){ 
+      this.endCall();
+      clearInterval(this.interval);
+    }
+  }
+  
+  componentWillUnmount(){
+   clearInterval(this.interval);
+  }
+
   _Join = async() => {
     const { params,inApp } = this.props.navigation.state.params;
     if(this.state.EndCall){
@@ -333,9 +352,9 @@ class Video extends Component<{}, State> {
               <Text style={{color: 'white', fontSize: 32}}>
                 {name}
               </Text>
-              {this.state.peerIds.length < 2 && (
+              {this.state.peerIds.length < 1 && (
                 <Text style={{color: 'white', fontSize: 22, marginTop: 12}}>
-                  Calling ...
+                  Calling ... {this.state.timer} 
                 </Text>
               )}
             </View>

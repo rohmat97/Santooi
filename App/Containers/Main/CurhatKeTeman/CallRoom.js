@@ -39,7 +39,8 @@ class CallRoom extends Component<{}, State>  {
       isSpeakerEnable: false,
       openMicrophone: true,
       enableSpeakerphone: true,
-      EndCall: false
+      EndCall: false,
+      timer: 90
     };
   }
 
@@ -47,10 +48,25 @@ class CallRoom extends Component<{}, State>  {
   // const [isSpeakerEnable, setIsSpeakerEnable] = useState(true);
   componentDidMount() {
    this._Join()
+   this.interval = setInterval(
+     () => this.setState((prevState)=> ({ timer: prevState.timer - 1 })),
+     1000
+   );
+  }
+
+  componentDidUpdate(){
+    if(this.state.peerIds.length>0){
+      clearInterval(this.interval);
+    
+    } else if(this.state.timer === 1){ 
+      this.endCall();
+      clearInterval(this.interval);
+    }
   }
 
   componentWillUnmount() {
     this.backHandler.remove()
+    clearInterval(this.interval);
   }
 
   _Join = async() => {
@@ -305,7 +321,7 @@ class CallRoom extends Component<{}, State>  {
         </TemplateBackground>
       )
     }
-    console.log('this.state.peerIds.length :>> ', this.state.peerIds);
+    // console.log('this.state.peerIds.length :>> ', this.state.peerIds);
     return (
       <TemplateBackground cover={true}>
       <View style={styles.container}>
@@ -332,7 +348,7 @@ class CallRoom extends Component<{}, State>  {
           </Text>
           {this.state.peerIds.length < 1 && (
             <Text style={{color: 'white', fontSize: 22, marginTop: 12}}>
-              Calling ...
+              Calling ... {this.state.timer}
             </Text>
           )}
         </View>

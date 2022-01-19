@@ -11,6 +11,7 @@
 #import <UserNotifications/UserNotifications.h>
 #import <RNCPushNotificationIOS.h>
 #import "FirebaseMessaging.h"
+#import "RNFBMessagingModule.h"
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -64,8 +65,9 @@ static void InitializeFlipper(UIApplication *application) {
   [application registerForRemoteNotifications];
   // use facebook library
   [FBSDKApplicationDelegate initializeSDK:launchOptions];
-  
+  //init brigde connection
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
+  
   NSDictionary *appProperties = [RNFBMessagingModule addCustomPropsToUserProps:nil withLaunchOptions:launchOptions];
 
   

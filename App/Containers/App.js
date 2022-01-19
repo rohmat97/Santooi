@@ -1,6 +1,6 @@
 import '../Config'
 import DebugConfig from '../Config/DebugConfig'
-import React, { useEffect } from 'react'
+import React, { Component } from 'react'
 import { Provider } from 'react-redux'
 import RootContainer from './RootContainer'
 import createStore from '../Redux'
@@ -19,23 +19,25 @@ const store = createStore()
  * We separate like this to play nice with React Native's hot reloading.
  */
 
- function App() {
+//  function App() {
   
-  return (
-    <Provider store={store} uriPrefix={'santooi://'}>
-      <RootContainer/>
-      <FlashMessage position="bottom" /> 
-    </Provider>
-  )
-}
-// class App extends Component {
-//   componentDidMount(){
-//     requestUserPermission()
-//   }
-//   render () {
-   
-//   }
+//   return (
+//     <Provider store={store} uriPrefix={'santooi://'}>
+//       <RootContainer/>
+//       <FlashMessage position="bottom" /> 
+//     </Provider>
+//   )
 // }
+class App extends Component {
+  render () {
+    return(
+      <Provider store={store} uriPrefix={'santooi://'}>
+        <RootContainer/>
+        <FlashMessage position="bottom" /> 
+      </Provider>
+      )
+  }
+}
 
 // allow reactotron overlay for fast design in dev mode
 export default DebugConfig.useReactotron

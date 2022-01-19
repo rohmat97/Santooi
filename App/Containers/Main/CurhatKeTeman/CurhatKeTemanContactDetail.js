@@ -206,7 +206,7 @@ function CurhatKeTemanContactDetail(props) {
             }}>
             <TouchableOpacity
               onPress={() => {
-                if (local?dataDetail.is_friend:dataDetail.friend.user.is_friend) {
+                if (opacity === 1) {
                   navigation.navigate('DetailChat', {
                     params: dataDetail,
                     token: token,
@@ -231,7 +231,7 @@ function CurhatKeTemanContactDetail(props) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                if (local?dataDetail.is_friend:dataDetail.friend.user.is_friend) {
+                if (opacity === 1) {
                   api.checkUserCall({
                     id: local?dataDetail.id : dataDetail.friend&& dataDetail.friend.id,
                     type: 'call',
@@ -283,7 +283,7 @@ function CurhatKeTemanContactDetail(props) {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                if (local?dataDetail.is_friend:dataDetail.friend.user.is_friend) {
+                if (opacity === 1) {
                   api.checkUserCall({
                     id: local?dataDetail.id : dataDetail.friend&& dataDetail.friend.id,
                     type: 'v_call',
@@ -314,7 +314,6 @@ function CurhatKeTemanContactDetail(props) {
                   ).catch(err =>{
                     console.log(`err`, err)
                   })
-                  
                 }
               }}>
               <View style={{alignItems: 'center'}}>

@@ -41,6 +41,16 @@ target 'Santooi' do
 
   pod 'RNCallKeep', :path => '../node_modules/react-native-callkeep'
 
+  pod 'react-native-netinfo', :path => '../node_modules/@react-native-community/netinfo'
+
+  pod 'RNReanimated', :path => '../node_modules/react-native-reanimated'
+
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
+  pod 'RNScreens', :path => '../node_modules/react-native-screens'
+
+  pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
+
   target 'SantooiTests' do
     inherit! :complete
     # Pods for testing

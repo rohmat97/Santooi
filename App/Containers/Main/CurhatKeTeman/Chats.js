@@ -47,15 +47,13 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
   }, []);
 
   const renderRightActions = (progress, item) => {
-    // console.log(`progress`, progress)
-    // console.log(`item`, item)
     return (
       <RectButton style={{alignItems:'center',justifyContent:'center'}}>
         <Animated.View
           style={ { translateX: 0}}>
            <LinearGradient
             colors={['#E7515B', '#EB0D8C']}
-            style={{alignItems:'center',justifyContent:"center", height:'100%',width: Screen.width*0.3}}
+            style={{alignItems:'center',justifyContent:"center", height:100,width: 100}}
             >
             <Avatar
                 onPress={()=> api.deleteChat({
@@ -158,7 +156,8 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
                       onPress={() =>{
                         console.log(`item`, item)
                         navigation.navigate('DetailChat', {
-                          params: item
+                          params: item,
+                          LoadChat: LoadChat
                         })}
                       }
                       style={{

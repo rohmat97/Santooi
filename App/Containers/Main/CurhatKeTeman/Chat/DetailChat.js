@@ -39,7 +39,7 @@ function DetailChat(props) {
   const flatlistRef = useRef();
   const { navigation, token } = props
   const { pop } = navigation
-  const {params} = props.navigation.state.params;
+  const {params,LoadChat} = props.navigation.state.params;
   const {id} = token.data.user;
   const [messages_array, setmessages_array] = useState([]);
   const [text, settext] = useState('');
@@ -48,8 +48,11 @@ function DetailChat(props) {
   const [data, setdata] = useState([]);
   const [active, setactive] = useState(false)
 
-  const onPressFunction = (index) => {
-    flatlistRef.current.scrollToEnd({animating: true});
+  const onPressFunction = () => {
+    if(flatlistRef && flatlistRef.current){
+      flatlistRef.current.scrollToEnd({animating: true});
+    }
+    
     // if (index === 'add') {
     //   flatlistRef.current.scrollToEnd({animating: true});
     // } else {
@@ -75,7 +78,10 @@ function DetailChat(props) {
           message.push(responseJson.data.data);
           settext('');
           setmessages_array(message);
-          onPressFunction('add');
+          LoadChat()
+          setTimeout(() => {
+            onPressFunction();
+          }, 1000);
         })
         .catch((error) => {
           console.error(error);
@@ -120,8 +126,15 @@ function DetailChat(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps\
     return () => {
       console.log(`backto chat list`)
+      LoadChat()
     }
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      onPressFunction();
+    }, 1000);
+  }, [active])
   const onRefresh = () => {
     console.log(
       'data.current_page <= data.last_page',
@@ -149,19 +162,6 @@ function DetailChat(props) {
         .catch((err) => setisFetching(false));
     }
   };
-  // useEffect(() => {
-  //   if (messages_array.length > 0) {
-  //     setTimeout(() => {
-  //       onPressFunction();
-  //       setTimeout(() => {
-  //         onPressFunction();
-  //         setTimeout(() => {
-  //           onPressFunction();
-  //         }, 1000);
-  //       }, 1000);
-  //     }, 1000);
-  //   }
-  // }, [messages_array]);
   return (
     
   <TemplateBackground cover={true}>
@@ -211,9 +211,9 @@ function DetailChat(props) {
       </View>
       <KeyboardAvoidingView
         style = {{ flex: 1 }}
-        // keyboardVerticalOffset = {useHeaderHeight()}
+        keyboardVerticalOffset = {useHeaderHeight()}
         behavior={Platform.OS === "ios" ? "padding" : null}
-        enabled
+        enabled={active}
         >
         <FlatList
           ref={flatlistRef}

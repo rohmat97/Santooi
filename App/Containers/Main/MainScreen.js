@@ -154,7 +154,7 @@ function MainScreen (props) {
     
     EmoticonRequest(token && token.data.access_token)
     setImageProfile(token && token.data.user.photo && token.data.user.photo.url)
-    console.log(`object`,BASEURL)
+    // console.log(`object`,BASEURL)
   },[])
   // useEffect(()=>{
   //   if(token){

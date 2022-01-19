@@ -15,7 +15,7 @@ export function handleRemoteMessage(remoteMessage) {
           remoteMessage.notification.title, // Username
           'https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg', // Avatar URL
           remoteMessage.notification.body, // Info text
-          20000, // Timeout for end call after 20s
+          90000, // Timeout for end call after 20s
         ); 
       }
       const data = JSON.parse(remoteMessage?.data?.data)
@@ -99,7 +99,7 @@ export function CallIncoming(navigate, remoteMessage, token ){
           remoteMessage.notification.title, // Username
           'https://png.pngtree.com/png-vector/20190710/ourmid/pngtree-user-vector-avatar-png-image_1541962.jpg', // Avatar URL
           remoteMessage.notification.body, // Info text
-          20000, // Timeout for end call after 20s
+          90000, // Timeout for end call after 20s
         ); 
       }
      
