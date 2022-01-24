@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, TextInput,Platform,FlatList,Linking,PermissionsAndroid } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, TextInput,Platform,FlatList,Linking } from 'react-native'
 import { Image } from 'react-native-elements'
 import { TemplateBackground } from '../../Components/TemplateBackground'
 import images from '../../Themes/Images';
@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { OverlayJalanYuk } from '../../Components/OverlayJalanYuk';
 import Geolocation from '@react-native-community/geolocation';
 import { bindActionCreators } from 'redux';
+import {check, PERMISSIONS, RESULTS, request, openSettings} from 'react-native-permissions';
 //redux
 import TokenRedux from '../../Redux/Authentication/TokenRedux'
 import GetPlaceRedux from '../../Redux/JalanYuk/GetPlaceRedux'
@@ -133,15 +134,7 @@ function JalanYuk(props) {
             setdataSeeall([])
         }
     }, [seeAll])
-    const request = async() =>{
-        if(Platform.OS==='android'){
-             await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-            )
-        }else{
-            await Geolocation.requestAuthorization()
-        }
-        
+    const getGeoloc= async() =>{
         await Geolocation.watchPosition((position) => {
             let region = {
                 latitude:       position.coords.latitude,
@@ -152,8 +145,24 @@ function JalanYuk(props) {
             !latlong && setlatlong(region)   
           });
     }
+    const requestLocation = async() =>{
+        if(Platform.OS==='android'){
+             request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+             .then(async status =>
+               status === RESULTS.GRANTED
+                 ? { status, precise: true }
+                 : { status: await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION), precise: false },
+             )
+             .then(({ status, precise }) => console.log("location status: ", status)).catch(err => 
+                openSettings().catch(() => console.warn('cannot open settings')))
+             
+   }else{
+            await Geolocation.requestAuthorization()
+        }
+        
+    }
     useEffect(() => {
-        request()
+        requestLocation()
     }, [])
 
     useEffect(() => {

@@ -70,10 +70,11 @@ function CurhatKeTeman(props) {
       page: '1',
       limit: '50'
     }).then((success) => {
-      setlistHistoryCall(success.data.data.rows)
+      // console.log('success.data', success.data.data.rows);
+      setlistHistoryCall(success.data.data.rows.data)
     })
     .catch((err) => {
-      // console.log('err', err);
+      console.log('err', err);
     });
   }
 
@@ -91,7 +92,7 @@ function CurhatKeTeman(props) {
       return <ListContact props={props} page={page} SetPage={SetPage} listHistoryCall={listHistoryCall} listRequestFriends={listRequestFriends}/>
       break;
     case 'HistoryCalls':
-      return <HistoryCall props={props} page={page} SetPage={SetPage} token={token} listRequestFriends={listRequestFriends} GetHistoryCall={GetHistoryCall}/>
+      return <HistoryCall props={props} page={page} SetPage={SetPage} token={token} listRequestFriends={listRequestFriends} GetHistoryCall={GetHistoryCall} listHistoryCall={listHistoryCall}/>
       break;
     case 'Request':
       return <RequestFriends props={props} page={page} SetPage={SetPage} token={token} listRequestFriends={listRequestFriends} GetRequestFriends={GetRequestFriends}/>

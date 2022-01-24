@@ -285,7 +285,7 @@ function CurhatKeTemanContact(props) {
                           //     })
                           //     .catch((err) => console.log('error', err.data));
                           // }
-                          navigation.navigate('CurhatKeTemanContactDetail', {
+                          navigation.replace('CurhatKeTemanContactDetail', {
                             params: item,
                           });
                         }}>

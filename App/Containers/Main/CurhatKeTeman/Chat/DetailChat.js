@@ -65,7 +65,7 @@ function DetailChat(props) {
     if (text != '') {
       api
         .sendChat({
-          id: params.friend.id,
+          id: params?.friend?.id,
           body: {
             message: text,
           },
@@ -78,7 +78,7 @@ function DetailChat(props) {
           message.push(responseJson.data.data);
           settext('');
           setmessages_array(message);
-          LoadChat()
+          LoadChat
           setTimeout(() => {
             onPressFunction();
           }, 1000);
@@ -125,7 +125,7 @@ function DetailChat(props) {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps\
     return () => {
-      console.log(`backto chat list`)
+      // console.log(`backto chat list`)
       LoadChat()
     }
   }, []);
@@ -136,11 +136,11 @@ function DetailChat(props) {
     }, 1000);
   }, [active])
   const onRefresh = () => {
-    console.log(
-      'data.current_page <= data.last_page',
-      data.rows.current_page,
-      data.rows.last_page,
-    );
+    // console.log(
+    //   'data.current_page <= data.last_page',
+    //   data.rows.current_page,
+    //   data.rows.last_page,
+    // );
     if (data.rows.current_page <= data.rows.last_page) {
       setisFetching(true);
       api
@@ -229,7 +229,6 @@ function DetailChat(props) {
           }
           keyExtractor={(item) => item.id}
           renderItem={({item, index}) => {
-            console.log(`item`, item)
             // console.log(`item`, item)
             // let picture =
             //   id === item.id_sender ? token.data.user.photo : params.friend.photo;

@@ -20,13 +20,17 @@ export const HistoryCall = ({props,page,SetPage,listHistoryCall, listRequestFrie
   const {pop} = navigation;
   useEffect(() => {
     GetHistoryCall()
-    console.log(`listHistoryCall`, listHistoryCall)
   }, [])
+
+useEffect(() => {
+  console.log(`listHistoryCall`, listHistoryCall[0])
+}, [listHistoryCall]);
+
       return (
         <TemplateBackground cover={true}>
           <View style={styles.mainContainer}>
-            <View style={styles.section}>
-              <View style={{flexDirection: 'row', paddingBottom:24}}>
+            <View style={[styles.section,{height:'95%'}]}>
+              <View style={{flexDirection: 'row'}}>
               <TouchableOpacity
                 onPress={() => pop()}
                 style={{flexDirection: 'row', alignItems: 'center'}}>
@@ -62,7 +66,6 @@ export const HistoryCall = ({props,page,SetPage,listHistoryCall, listRequestFrie
                     <Text style={{color:'white', fontSize:20,marginTop:24}}>Belum Ada Riwayat Panggilan</Text>
                   </View>
                 }
-                style={{paddingBottom: Screen.height * 0.1}}
                 renderItem={({item, index}) => {
                   // console.log(item)
                   return(
@@ -73,18 +76,14 @@ export const HistoryCall = ({props,page,SetPage,listHistoryCall, listRequestFrie
                       <Avatar
                         rounded
                         size="medium"
-                        // title={'Nissa'}
+                        title={item?.account_1_name.substring(0, 1)}
                         // source={{
                         //   uri:ImageProfile?ImageProfile:'',
                         // }}
                         containerStyle={
                           {
-                            // marginRight:8,
-                            // borderWidth:1,
-                            // borderTopColor:'#DB068D',
-                            // borderLeftColor:'#DB068D',
-                            // borderRightColor:'#6F2A91',
-                            // borderBottomColor:'#6F2A91',
+                            alignSelf:'center',
+                            marginTop:-6
                           }
                         }
                       />
@@ -98,14 +97,14 @@ export const HistoryCall = ({props,page,SetPage,listHistoryCall, listRequestFrie
                         }}>
                         <View>
                           <Text style={{fontWeight: 'bold', color: 'white'}}>
-                            {item.friend.name}
+                            {item?.account_1_name}
                           </Text>
-                          <Text style={{color: 'white'}}>Ok</Text>
+                          <Text style={{color: 'white', fontSize:12}}>{item.status}</Text>
                         </View>
                         <View style={{marginEnd: 10}}>
                           {/* <Text style={{color: 'white', fontSize: 13}}>07.00</Text> */}
                           <Image
-                            source={images.InCall}
+                            source={item?.status ==='Incoming Call'?images.InCall: images.Outcall}
                             style={{width: 32, height: 32}}
                             resizeMode="contain"
                           />

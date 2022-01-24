@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Text, Image, View, ImageBackground, Alert, Platform, DeviceEventEmitter, Linking } from 'react-native'
 import { TemplateBackground } from '../Components/TemplateBackground'
 import messaging from '@react-native-firebase/messaging';
-import {check, PERMISSIONS, RESULTS, request} from 'react-native-permissions';
 
 // import Geolocation from '@react-native-community/geolocation';
 //redux
@@ -101,7 +100,7 @@ import PushNotificationIOS from '@react-native-community/push-notification-ios';
                 let data = JSON.parse(notification.data.data) 
                 let params = {
                     id: data?.chat_detail?.id_user_friend,
-                    friend: data?.user
+                    friend: data
                 }
                 Linking.openURL('santooi://DetailChat?'+JSON.stringify(params))
                 console.log(`notification open`, params)

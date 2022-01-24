@@ -5,12 +5,15 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import images from '../../Themes/Images'
 import { Screen } from '../../Transforms/Screen'
+
+import API from '../../Services/Api';
 //redux
 import TokenRedux from '../../Redux/Authentication/TokenRedux';
 
 // Styles
 import styles from '../Styles/LaunchScreenStyles'
 
+const api = API.create();
 function AccountScreen ({props}) {
   const { TokenSuccess, navigation, token } = props
   const { navigate } = navigation
@@ -23,6 +26,15 @@ function AccountScreen ({props}) {
     })
     }
   }, [token])
+
+  const SignOut =() =>{
+    api.getLogout(token.data.access_token)
+    .then(success =>{
+      console.log('success', success);
+      TokenSuccess(null)
+    })
+    .catch(err => console.log('err', err))
+  }
     return (
         <ScrollView style={styles.container}>
           <View style={[styles.section,{justifyContent:'center'}]} >
@@ -32,6 +44,7 @@ function AccountScreen ({props}) {
             </Text> */}
             <TouchableOpacity 
               onPress={()=> {
+
                 TokenSuccess(null)
               }}
               style={{flexDirection:'row', justifyContent:'space-around'}}>

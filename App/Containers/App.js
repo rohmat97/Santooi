@@ -8,7 +8,7 @@ import createStore from '../Redux'
 import FlashMessage from "react-native-flash-message";
 // create our store
 const store = createStore()
-
+// console.disableYellowBox = true;
 /**
  * Provides an entry point into our application.  Both index.ios.js and index.android.js
  * call this component first.

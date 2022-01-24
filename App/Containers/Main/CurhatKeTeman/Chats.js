@@ -73,7 +73,7 @@ export const Chats = ({props, page, SetPage, listRequestFriends}) => {
     <TemplateBackground cover={true}>
       <View style={styles.mainContainer}>
         <View style={styles.section}>
-          <View style={{flexDirection: 'row', marginBottom: 24}}>
+          <View style={{flexDirection: 'row'}}>
             <TouchableOpacity
               onPress={() => pop()}
               style={{flexDirection: 'row', alignItems: 'center'}}>

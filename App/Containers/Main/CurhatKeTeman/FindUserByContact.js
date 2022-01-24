@@ -189,7 +189,7 @@ function FindUserByContact(props) {
             {listFriend.length > 0 ? (
               <FlatList
                 data={listFriend}
-                contentContainerStyle={{paddingBottom:''}}
+                contentContainerStyle={{paddingBottom:100}}
                 renderItem={({item, index}) => {
                   let exist = false;
 
